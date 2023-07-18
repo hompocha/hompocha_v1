@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Client</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<form id="session-form">
+    <label for="session-id">Session ID:</label>
+    <input type="text" id="session-id" name="session-id">
+    <input type="submit" value="Create Session">
+</form>
+
+<script>
+    document.getElementById('session-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var sessionId = document.getElementById('session-id').value;
+        axios.post('https://localhost:5000/api/sessions', { customSessionId: sessionId })
+            .then(function(response) {
+                console.log('Session created: ', response.data);
+                return axios.post('https://localhost:5000/api/sessions/' + sessionId + '/connections');
+            })
+            .then(function(response) {
+                console.log('Connection created: ', response.data);
+            })
+            .catch(function(error) {
+                console.error('Error: ', error);
+            });
+    });
+</script>
+</body>
+</html>
