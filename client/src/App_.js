@@ -7,8 +7,8 @@ import UserVideoComponent from "./UserVideoComponent";
 import Cam from "./Cam";
 
 console.log(process.env.NODE_ENV);
-const APPLICATION_SERVER_URL = "https://seomik.shop/api/";
-// const APPLICATION_SERVER_URL = "http://13.125.79.9:8080/openvidu/"; //"https://seomik.shop/";
+const APPLICATION_SERVER_URL = "https://seomik.shop/";
+//const APPLICATION_SERVER_URL = "http://localhost:5000/openvidu/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
 class App extends Component {
@@ -352,10 +352,11 @@ class App extends Component {
   }
 
   async createSession(sessionId) {
-    const connect = await axios.get(APPLICATION_SERVER_URL+'openvidu/');
+    console.log(APPLICATION_SERVER_URL,'api/');
+    const connect = await axios.get(APPLICATION_SERVER_URL+'api/');
     console.log(connect, 'createSession');
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "openvidu/sessions",
+      APPLICATION_SERVER_URL + "api/sessions",
       { customSessionId: sessionId ,
         headers: { "Content-Type": "application/json" },
       }
@@ -364,9 +365,9 @@ class App extends Component {
   }
 
   async createToken(sessionId) {
-    console.log(APPLICATION_SERVER_URL, "openvidu/sessions/", sessionId, "/connections");
+    console.log(APPLICATION_SERVER_URL, "api/sessions/", sessionId, "/connections");
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "openvidu/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },
@@ -378,4 +379,3 @@ class App extends Component {
 }
 
 export default App;
-

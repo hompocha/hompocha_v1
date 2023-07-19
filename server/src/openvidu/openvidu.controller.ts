@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Param, Get } from '@nestjs/common';
 import { OpenviduService } from './openvidu.service';
 
-@Controller('openvidu/api')
+@Controller('/openvidu')
 export class OpenviduController {
     constructor(private readonly openviduService: OpenviduService) {}
   
@@ -12,6 +12,7 @@ export class OpenviduController {
 
     @Post('sessions')
     async createSession(@Body() body: any) {
+      console.log("controller: create sessions");
       return this.openviduService.createSession(body);
     }
   
@@ -20,6 +21,7 @@ export class OpenviduController {
       @Param('sessionId') sessionId: string,
       @Body() body: any,
     ) {
+      console.log("controller: create connection");
       return this.openviduService.createConnection(sessionId, body);
     }
   }

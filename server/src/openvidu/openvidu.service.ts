@@ -1,8 +1,8 @@
 import { OpenVidu } from 'openvidu-node-client';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
-const OPENVIDU_URL = 'http://localhost:4443';
-const OPENVIDU_SECRET = 'MY_SECRET';
+const OPENVIDU_URL = 'https://seomik.shop:8443';
+const OPENVIDU_SECRET = '8782';
 
 @Injectable()
 export class OpenviduService {
@@ -14,6 +14,7 @@ export class OpenviduService {
 
   async createSession(body: any) {
     try {
+      console.log("create session", OPENVIDU_URL);
       const session = await this.openvidu.createSession(body);
       return session.sessionId;
     } catch (err) {
@@ -25,8 +26,9 @@ export class OpenviduService {
     }
   }
 
-  // CREATESSION
+  // CREATE SESSION
   async createConnection(sessionId: string, body: any) {
+    console.log("createConnection");
     const session = this.openvidu.activeSessions.find(
       (s) => s.sessionId === sessionId,
     );
