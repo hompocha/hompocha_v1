@@ -1,0 +1,22 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvasBallRef {
+  margin-top: 20vh;
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+  height: 500px;
+  background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}

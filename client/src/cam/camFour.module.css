@@ -1,0 +1,70 @@
+/* CamFour.module.css */
+
+/* Container for the whole component */
+.container {
+    max-width: 700px;
+    margin-left: 0;
+    margin-top: -10%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+/* Styles for the form group */
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formControl {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.btnLgBtnSuccess {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+/* Styles for the join dialog */
+.jumbotronVerticalCenter {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styles for the session header (if needed) */
+/* #session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+  } */
+
+  /* Styles for the video container */
+#video-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+}
+
+/* Styles for the video components */
+/* Styles for UserVideoComponent or Cam component can be added here */
+
+/* Styles for any other elements you want to add */
+
+/* Add more styles as needed */
