@@ -8,7 +8,7 @@ import styles from "./camFour.module.css";
 import {Link} from "react-router-dom";
 
 console.log(process.env.NODE_ENV);
-const APPLICATION_SERVER_URL = "https://seomik.shop/api/"; //"https://seomik.shop/";
+const APPLICATION_SERVER_URL = "https://hompocha.site/api/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
 class CamFour extends Component {

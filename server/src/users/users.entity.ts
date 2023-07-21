@@ -1,0 +1,19 @@
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+
+@Entity('User')
+export class UsersEntity {
+  @PrimaryColumn()
+  idx: string;
+
+  @Column({ length: 30 })
+  name: string;
+
+  @Column({ length: 60 })
+  id: string;
+
+  @Column({ length: 30 })
+  password: string;
+  //
+  // @Column({ length: 60 })
+  // phonenumber: string;
+}

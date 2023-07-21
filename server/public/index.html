@@ -15,10 +15,10 @@
     document.getElementById('session-form').addEventListener('submit', function(e) {
         e.preventDefault();
         var sessionId = document.getElementById('session-id').value;
-        axios.post('https://seomik.shop/api/openvidu/sessions', { customSessionId: sessionId })
+        axios.post('https://hompocha.site/api/openvidu/sessions', { customSessionId: sessionId })
             .then(function(response) {
                 console.log('Session created: ', response.data);
-                return axios.post('https://seomik.shop/api/openvidu/sessions/' + sessionId + '/connections');
+                return axios.post('https://hompocha.site/api/openvidu/sessions/' + sessionId + '/connections');
             })
             .then(function(response) {
                 console.log('Connection created: ', response.data);
