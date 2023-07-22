@@ -19,6 +19,6 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[A-Za-z\d!@#$%^&*()]{8,30}$/) // 8-30 자리
+  // @Matches(/^[A-Za-z\d!@#$%^&*()]{8,30}$/) // 8-30 자리
   readonly password: string;
 }
