@@ -33,7 +33,7 @@ const Lobby = () => {
     fetchData();
   }, []);
 
-  return (
+  return  (
     <>
       <h4> {loginId} </h4>
 

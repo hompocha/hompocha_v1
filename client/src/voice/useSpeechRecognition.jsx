@@ -43,10 +43,10 @@ const Example = () => {
       }
     }
     console.log("Value:", value); // 추가된 부분
-  }, [value]);
+  }, [value]); 
 
 
-  useEffect(() => {
+  useEffect(() =>  {
     if (extractedValue !== '') {
       const timeout = setTimeout(() => {
         setExtractedValue("1");
