@@ -4,17 +4,27 @@ import { join } from 'path';
 import * as express from 'express';
 import { readFileSync } from 'fs';
 import * as https from 'https';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
-const OPENVIDU_URL = process.env.OPENVIDU_URL || 'https://seomik.shop/api';
+
+/*env 설정*/
+dotenv.config({
+  path: path.resolve(
+    process.env.NODE_ENV == 'production'
+      ? '.production.env'
+      : '.development.env',
+  ),
+});
 
 async function bootstrap() {
-  console.log('server run!');
-//  const httpsOptions = {
-//     key: readFileSync('/etc/letsencrypt/live/seomik.shop/key.pem'),
-//     cert: readFileSync('/etc/letsencrypt/live/seomik.shop/cert.pem'),
-//   };
 
-  const app = await NestFactory.create(AppModule)//, { httpsOptions });
+
+  const OPENVIDU_URL = process.env.OPENVIDU_URL;
+
+  console.log('server run!');
+
+  const app = await NestFactory.create(AppModule); //, { httpsOptions });
 
   app.enableCors({
     origin: '*',

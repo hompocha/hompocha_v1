@@ -7,6 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from './users/users.entity';
 import { RoomsModule } from './rooms/rooms.module';
 import { RoomsEntity } from './rooms/rooms.entity';
+import * as dotenv from 'dotenv';
+import path from 'path';
+
 
 @Module({
   controllers: [AppController],
@@ -17,13 +20,13 @@ import { RoomsEntity } from './rooms/rooms.entity';
     RoomsModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'hompochadb.cluster-cyde9iiaq1yc.ap-northeast-2.rds.amazonaws.com',
+      host: process.env.DATABSE_HOST,
       port: 3306,
       username: 'admin',
       password: 'hompocha229',
       database: 'test_DB',
       entities: [UsersEntity, RoomsEntity],
-      synchronize: true
+      synchronize: true,
     }),
   ],
 })
