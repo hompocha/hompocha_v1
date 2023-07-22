@@ -5,6 +5,7 @@ import styles from './Lobby.module.css';
 import RoomInfo from './RoomInfo';
 import RoomCreate from './RoomCreate';
 import UserList from './UserList';
+import RoomList from './RoomList';
 // import {Link} from 'react-router-dom';
 import axios from 'axios';
 
@@ -36,7 +37,9 @@ const Lobby = () => {
   return  (
     <>
       <h4> {loginId} </h4>
-
+      <div>
+        <RoomList/>
+      </div>
       <div>
         <UserList />
       </div>

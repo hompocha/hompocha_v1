@@ -10,7 +10,6 @@ export class RoomsController {
     const { room_name } = dto;
     await this.roomService.createRoom(room_name);
   }
-
   @Get()
   async getAllRooms() {
     return await this.roomService.findAllRooms();
