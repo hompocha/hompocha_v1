@@ -21,6 +21,11 @@ const Example = (props) => {
   const [value, setValue] = useState('');
   const [blocked, setBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState('');
+  const [cats, setCats] = useState([]);
+  const [showCat, setShowCat] = useState(false);
+  const [showCloud, setShowCloud] = useState(false);
+  const [showCherryBlossom, setShowCherryBlossom] = useState(false);
+
 
 
 
@@ -28,13 +33,38 @@ const Example = (props) => {
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
+        
+        setValue("");
+        const timeout = setTimeout(() => {
+        }, 1000);
+        if (word === "고양이") {
+          value = ""
+          setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
+        } else if (word === "구름") {
+          value = ""
+          setShowCloud(true);
+        } else if (word === "벚꽃") {
+          value = ""
+          setShowCherryBlossom(true);
+        }
         props.sendSignal(word);
-        break;
+    
+        return () => clearTimeout(timeout);
       }
     }
-  }, [value]);
+    console.log("Value:", value); // 추가된 부분
+  }, [value]); 
 
-  
+
+  useEffect(() =>  {
+    if (extractedValue !== '') {
+      const timeout = setTimeout(() => {
+        setExtractedValue("1");
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [extractedValue]);
+
   const onEnd = () => {
     // You could do something here after listening has finished
   };
@@ -66,13 +96,19 @@ const Example = (props) => {
     <>
 
 
-      <div className={styles.CherryBlossom}>
-      {/* <Room extractedValue = {extractedValue}/> */}
-      { extractedValue === "벚꽃" && (<CherryBlossom/>)}
+    <div>
+      <input
+        onChange={(e) => setValue(e.target.value)}
+      ></input>
+    </div>
+    <div className={styles.CherryBlossom}>
+      { showCherryBlossom && (<CherryBlossom/>)}
     </div>
     <div>
-      { extractedValue === "구름" && ( <CloudCanvas/>)}
-      { extractedValue === "고양이" && ( <Cat/>)} 
+      { showCloud && ( <CloudCanvas/>)}  
+      {cats.map((cat, index) => (
+        <Cat key={index} x={cat.x} y={cat.y} />
+      ))}
     </div>
     <div className={styles.container}>
       <form id="speech-recognition-form">
