@@ -26,7 +26,7 @@ function onSubmitEnterRoom(event: React.MouseEvent<HTMLButtonElement>) {
 }
 return (
     <div>
-        <SpeechRecognitionExample/>
+        {/*<SpeechRecognitionExample/>*/}
         <CamFour />
     </div>
 );

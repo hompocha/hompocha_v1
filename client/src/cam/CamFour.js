@@ -6,10 +6,12 @@ import UserVideoComponent from "./UserVideoComponent";
 import Cam from "./Cam";
 import styles from "./camFour.module.css";
 import {Link} from "react-router-dom";
+import Example from "../voice/useSpeechRecognition";
 
 console.log(process.env.NODE_ENV);
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+
 
 class CamFour extends Component {
   constructor(props) {
@@ -32,8 +34,8 @@ class CamFour extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.sendSignal= this.sendSignal.bind(this);
   }
-
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
   }
@@ -76,7 +78,6 @@ class CamFour extends Component {
       });
     }
   }
-
   joinSession() {
     // --- 1) Get an OpenVidu object ---
 
@@ -89,7 +90,8 @@ class CamFour extends Component {
         session: this.OV.initSession(),
       },
       () => {
-        var mySession = this.state.session;
+        let mySession = this.state.session;
+
 
         // --- 3) Specify the actions when events take place in the session ---
 
@@ -128,6 +130,24 @@ class CamFour extends Component {
           mySession
             .connect(token, { clientData: this.state.myUserName })
             .then(async () => {
+              /* signal 코드 추가 */
+              mySession.signal({
+                data: 'My custom message',  // Any string (optional)
+                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+                type: 'my-chat'             // The type of message (optional)
+              })
+                  .then(() => {
+                    console.log('Message successfully sent');
+                  })
+                  .catch(error => {
+                    console.error(error);
+                  });
+
+              mySession.on('signal:my-chat', (event) => {
+                console.log(event.data); // Message
+                console.log(event.from); // Connection object of the sender
+                console.log(event.type); // The type of message ("my-chat")
+              });
               // --- 5) Get your own camera stream ---
 
               // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
@@ -178,6 +198,8 @@ class CamFour extends Component {
     );
   }
 
+
+
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
 
@@ -199,6 +221,21 @@ class CamFour extends Component {
     });
   }
 
+  sendSignal(string) {
+    if (this.state.session) {
+      this.state.session.signal({
+        data: string,
+        to: [],
+        type: 'my-chat'
+      })
+          .then(() => {
+            console.log('Message successfully sent');
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    }
+  }
   async switchCamera() {
     try {
       const devices = await this.OV.getDevices();
@@ -246,12 +283,14 @@ class CamFour extends Component {
 
     return (
       <div className={styles.container}>
+        <Example sendSignal = {this.sendSignal}/>
         {this.state.session === undefined ? (
           <div id="join">
             <div id="join-dialog" className={styles.jumbotronVerticalCenter}>
               <form className={styles.formGroup} onSubmit={this.joinSession}>
                 <p>
                   <label>Participant: </label>
+
                   <input
                     className={styles.formControl}
                     type="text"
@@ -302,8 +341,13 @@ class CamFour extends Component {
         {
           /* 방 접속 */
           this.state.session !== undefined ? (
+
+
             <div id="session">
-              {/* <div id="session-header">
+
+              {
+
+                /* <div id="session-header">
                 <h1 id="session-title">{mySessionId}</h1>
                 <h2>{this.state.subscribers.length + 1}</h2>
                 <input
@@ -321,7 +365,9 @@ class CamFour extends Component {
               </div> */}
 
               <div id="video-container">
-                {/* publisher */
+
+                {
+                  /* publisher */
                 /* this.state.publisher !== undefined ? (
                     <UserVideoComponent streamManager={this.state.publisher} />
                   ) : null */}
@@ -329,18 +375,32 @@ class CamFour extends Component {
                 /* this.state.subscribers.map((sub, i) => (
                     <UserVideoComponent streamManager={sub} />
                   )) */}
+
                 {this.state.publisher !== undefined ? (
                   <Cam
                     num={this.state.subscribers.length + 1}
                     publisher={this.state.publisher}
                     subscribers={this.state.subscribers}
                   />
+
                 ) : null}
               </div>
+
+              <div id ="send-signal">
+                <input
+                    type="button"
+                    id="signal-button"
+                    onClick={this.sendSignal}
+                    value="Send Signal"
+                />
+              </div>
+
+
             </div>
           ) : null
         }
       </div>
+
     );
   }
 
@@ -393,3 +453,5 @@ class CamFour extends Component {
 }
 
 export default CamFour;
+
+
