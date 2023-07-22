@@ -44,7 +44,7 @@ const Lobby = () => {
             {flag === 0 && <button type='submit' onClick={RoomListOrCreate}> 방 생성</button>}
             {flag !== 0 && <button type='submit' onClick={RoomListOrCreate}> 닫기</button>}
           </div>
-          <div>
+          <div style={{position : "fixed", marginLeft : "30%" , marginTop : "30%"}}>
             {flag === 0 && (<RoomInfo />)}
             {flag !== 0 && (<RoomCreate />)}
       </div>
