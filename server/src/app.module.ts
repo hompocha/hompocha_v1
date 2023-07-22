@@ -7,8 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from './users/users.entity';
 import { RoomsModule } from './rooms/rooms.module';
 import { RoomsEntity } from './rooms/rooms.entity';
-import * as dotenv from 'dotenv';
-import path from 'path';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 

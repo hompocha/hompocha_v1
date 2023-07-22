@@ -8,9 +8,9 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(
-      private dataSource: DataSource,
-      @InjectRepository(UsersEntity)
-      private userRepository: Repository<UsersEntity>,
+    private dataSource: DataSource,
+    @InjectRepository(UsersEntity)
+    private userRepository: Repository<UsersEntity>,
   ) {}
   async createUser(id: string, password: string) {
     const hashedPassword = await this.hashPassword(password);
@@ -50,4 +50,3 @@ export class UsersService {
     console.log(user);
   }
 }
-

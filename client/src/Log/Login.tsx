@@ -27,8 +27,10 @@ const Login: React.FC = () => {
             alert("비밀번호를 입력해주세요.");
             return;
         }
+
         try {
-            const response = await axios.post("https://hompocha.site/api/user/login", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/login`, {
+            //const response = await axios.post("https://hompocha.site/api/user/login", {
                 id,
                 password,
             });
@@ -54,7 +56,8 @@ const Login: React.FC = () => {
         // 중복된 아이디인지 확인
         try {
             const response = await axios.get(
-                `https://hompocha.site/api/user/${id}`
+                // `https://hompocha.site/api/user/${id}`
+                `${process.env.REACT_APP_API_URL}/user/${id}`
             );
             if (response.data.exists) {
                 alert("중복된 아이디입니다.");
@@ -66,7 +69,7 @@ const Login: React.FC = () => {
         }
         // 비밀번호 일치 여부 확인
         try {
-            const response = await axios.post("https://hompocha.site/api/user/signup", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/signup`, {
                 id,
                 name,
                 password,

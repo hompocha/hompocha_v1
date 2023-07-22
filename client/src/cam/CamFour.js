@@ -8,7 +8,7 @@ import styles from "./camFour.module.css";
 import {Link} from "react-router-dom";
 
 console.log(process.env.NODE_ENV);
-const APPLICATION_SERVER_URL = "https://hompocha.site/api/"; //"https://seomik.shop/";
+const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
 class CamFour extends Component {
@@ -366,11 +366,11 @@ class CamFour extends Component {
   }
 
   async createSession(sessionId) {
-    console.log(APPLICATION_SERVER_URL,'openvidu/');
-    const connect = await axios.get(APPLICATION_SERVER_URL+'openvidu/');
+    console.log(APPLICATION_SERVER_URL,'/openvidu/');
+    const connect = await axios.get(APPLICATION_SERVER_URL+'/openvidu/');
     console.log(connect, 'createSession');
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "openvidu/sessions",
+      APPLICATION_SERVER_URL + "/openvidu/sessions",
       { customSessionId: sessionId ,
         headers: { "Content-Type": "application/json" },
       }
@@ -379,9 +379,9 @@ class CamFour extends Component {
   }
 
   async createToken(sessionId) {
-    console.log(APPLICATION_SERVER_URL, "openvidu/sessions/", sessionId, "/connections");
+    console.log(APPLICATION_SERVER_URL, "/openvidu/sessions/", sessionId, "/connections");
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "openvidu/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL + "/openvidu/sessions/" + sessionId + "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },

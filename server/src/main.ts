@@ -8,15 +8,6 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 
 
-/*env 설정*/
-dotenv.config({
-  path: path.resolve(
-    process.env.NODE_ENV == 'production'
-      ? '.production.env'
-      : '.development.env',
-  ),
-});
-
 async function bootstrap() {
 
 

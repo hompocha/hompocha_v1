@@ -44,7 +44,7 @@ const Example = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/keyword');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/keyword`);
         const { keywords } = response.data;
         for (const keyword of keywords) {
           if (value.indexOf(keyword) !== -1) {

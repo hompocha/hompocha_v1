@@ -25,7 +25,7 @@ const Lobby = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/idPost');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/idPost`);
         setLoginId(response.data.id);
       } catch (error) {
         console.error(error);

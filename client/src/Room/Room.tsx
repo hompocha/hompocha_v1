@@ -22,7 +22,7 @@ function showCam(userNumValue:number){
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:3001/api/keyword');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/keyword`);
             const { keywords } = response.data;
             for (const keyword of keywords) {
                 setExtractedValue(keyword);
