@@ -7,7 +7,7 @@ import Cam from "./Cam";
 import styles from "./camFour.module.css";
 import {Link} from "react-router-dom";
 import Example from "../voice/useSpeechRecognition";
-
+import CatCanvas from "../keyword/cat";
 console.log(process.env.NODE_ENV);
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
@@ -131,23 +131,27 @@ class CamFour extends Component {
             .connect(token, { clientData: this.state.myUserName })
             .then(async () => {
               /* signal 코드 추가 */
-              mySession.signal({
-                data: 'My custom message',  // Any string (optional)
-                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'my-chat'             // The type of message (optional)
-              })
-                  .then(() => {
-                    console.log('Message successfully sent');
-                  })
-                  .catch(error => {
-                    console.error(error);
-                  });
+              // mySession.signal({
+              //   data: 'My custom message',  // Any string (optional)
+              //   to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
+              //   type: 'my-chat'             // The type of message (optional)
+              // })
+              //     .then(() => {
+              //       console.log('Message successfully sent');
+              //     })
+              //     .catch(error => {
+              //       console.error(error);
+              //     });
 
               mySession.on('signal:my-chat', (event) => {
                 console.log(event.data); // Message
                 console.log(event.from); // Connection object of the sender
                 console.log(event.type); // The type of message ("my-chat")
+                return(
+                    <CatCanvas/>
+                );
               });
+
               // --- 5) Get your own camera stream ---
 
               // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
