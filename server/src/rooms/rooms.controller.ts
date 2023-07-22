@@ -16,12 +16,14 @@ export class RoomsController {
     const { room_name } = dto;
     await this.roomService.createRoom(room_name);
   }
+
   @Get()
   async getUserJwt(@Headers() headers: any): Promise<any> {
     const jwtstring = headers.authorization.split('Bearer ')[1];
     const verifiedToken = this.authService.verify(jwtstring);
     return await this.roomService.getUserJwt(verifiedToken.userId);
   }
+  
 
   @Get()
   async getAllRooms() {

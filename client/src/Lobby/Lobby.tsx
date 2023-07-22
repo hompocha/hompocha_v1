@@ -5,6 +5,7 @@ import styles from './Lobby.module.css';
 import RoomInfo from './RoomInfo';
 import RoomCreate from './RoomCreate';
 import UserList from './UserList';
+import RoomList from './RoomList';
 // import {Link} from 'react-router-dom';
 import axios from 'axios';
 
@@ -39,10 +40,12 @@ const Lobby = () => {
     fetchData();
   }, []);
 
-  return (
+  return  (
     <>
       <h4> {loginId} </h4>
-
+      <div>
+        <RoomList/>
+      </div>
       <div>
         <UserList />
       </div>
@@ -50,7 +53,7 @@ const Lobby = () => {
             {flag === 0 && <button type='submit' onClick={RoomListOrCreate}> 방 생성</button>}
             {flag !== 0 && <button type='submit' onClick={RoomListOrCreate}> 닫기</button>}
           </div>
-          <div>
+          <div style={{position : "fixed", marginLeft : "30%" , marginTop : "30%"}}>
             {flag === 0 && (<RoomInfo />)}
             {flag !== 0 && (<RoomCreate />)}
       </div>

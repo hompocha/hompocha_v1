@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, Component, useRef} from 'react';
 import  useSpeechRecognition  from './useSpeechRecognitions';
 import styles from './voice.module.css';
 import axios from 'axios';
@@ -6,27 +6,65 @@ import 'regenerator-runtime/runtime';
 import Cat from '../keyword/cat';
 import CloudCanvas from '../keyword/cloud';
 import CherryBlossom from '../keyword/cherryBlossom'; 
-import Rain from '../keyword/rain'; 
+import Rain from '../keyword/rain';
+import CamFour from '../cam/CamFour.js';
+
+
+
 
 const keyword = ["고양이", "구름", "벚꽃"];
 const languageOptions = [{ label: '한국어 - ', value: 'ko-KR' }];
 
-const Example = () => {
+const Example = (props) => {
+
   const [lang, setLang] = useState('ko-KR');
   const [value, setValue] = useState('');
   const [blocked, setBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState('');
+  const [cats, setCats] = useState([]);
+  const [showCat, setShowCat] = useState(false);
+  const [showCloud, setShowCloud] = useState(false);
+  const [showCherryBlossom, setShowCherryBlossom] = useState(false);
+
+
+
 
   useEffect(() => {
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
-        break;
+        
+        setValue("");
+        const timeout = setTimeout(() => {
+        }, 1000);
+        if (word === "고양이") {
+          setValue("");
+          setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
+        } else if (word === "구름") {
+          setValue("");
+          setShowCloud(true);
+        } else if (word === "벚꽃") {
+          setValue("");
+          setShowCherryBlossom(true);
+        }
+        props.sendSignal(word);
+    
+        return () => clearTimeout(timeout);
       }
     }
-  }, [value]);
+    console.log("Value:", value); // 추가된 부분
+  }, [value]); 
 
-  
+
+  useEffect(() =>  {
+    if (extractedValue !== '') {
+      const timeout = setTimeout(() => {
+        setExtractedValue("1");
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [extractedValue]);
+
   const onEnd = () => {
     // You could do something here after listening has finished
   };
@@ -56,14 +94,21 @@ const Example = () => {
   
   return (
     <>
-    
+
+
+    <div>
+      <input
+        onChange={(e) => setValue(e.target.value)}
+      ></input>
+    </div>
     <div className={styles.CherryBlossom}>
-      {/* <Room extractedValue = {extractedValue}/> */}
-      { extractedValue === "벚꽃" && (<CherryBlossom/>)}
+      { showCherryBlossom && (<CherryBlossom/>)}
     </div>
     <div>
-      { extractedValue === "구름" && ( <CloudCanvas/>)} 
-      { extractedValue === "고양이" && ( <Cat/>)} 
+      { showCloud && ( <CloudCanvas/>)}  
+      {cats.map((cat, index) => (
+        <Cat key={index} x={cat.x} y={cat.y} />
+      ))}
     </div>
     <div className={styles.container}>
       <form id="speech-recognition-form">
@@ -107,6 +152,7 @@ const Example = () => {
           </React.Fragment>
         )}
       </form>
+
     </div>
     </>
   );
