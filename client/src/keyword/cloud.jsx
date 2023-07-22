@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import styles from "./cloud.module.css";
+import styles from "./cat.module.css";
 
 function CloudCanvas() {
   const canvasRef = useRef(null);
@@ -37,7 +37,7 @@ function CloudCanvas() {
     return () => clearInterval(interval);
   }, []);
 
-  return <canvas className={styles.cloud} ref={canvasRef} width="1950" height="500" />;
+  return <canvas className={styles.cat} ref={canvasRef} width="1950" height="500" />;
 }
 
 export default CloudCanvas;

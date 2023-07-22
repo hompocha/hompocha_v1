@@ -12,7 +12,12 @@
     max-width: 300px;
     color: black;
 }
-
+.CherryBlossom{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
 .container button {
     border-radius: 4px;
     font-size: 16px;

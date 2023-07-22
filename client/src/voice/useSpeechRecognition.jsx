@@ -3,8 +3,12 @@ import  useSpeechRecognition  from './useSpeechRecognitions';
 import styles from './voice.module.css';
 import axios from 'axios';
 import 'regenerator-runtime/runtime';
+import Cat from '../keyword/cat';
 import CloudCanvas from '../keyword/cloud';
+import CherryBlossom from '../keyword/cherryBlossom'; 
+import Rain from '../keyword/rain'; 
 
+const keyword = ["고양이", "구름", "벚꽃"];
 const languageOptions = [{ label: '한국어 - ', value: 'ko-KR' }];
 
 const Example = () => {
@@ -13,6 +17,16 @@ const Example = () => {
   const [blocked, setBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState('');
 
+  useEffect(() => {
+    for (const word of keyword) {
+      if (value.includes(word)) {
+        setExtractedValue(word);
+        break;
+      }
+    }
+  }, [value]);
+
+  
   const onEnd = () => {
     // You could do something here after listening has finished
   };
@@ -39,32 +53,19 @@ const Example = () => {
         setBlocked(false);
         listen({ lang });
       };
-
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/keyword`);
-        const { keywords } = response.data;
-        for (const keyword of keywords) {
-          if (value.indexOf(keyword) !== -1) {
-            setExtractedValue(keyword);
-            break;
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (value) {
-      fetchData();
-    }
-  }, [value]);
   
   return (
-    <div className={styles.container}>
+    <>
+    
+    <div className={styles.CherryBlossom}>
+      {/* <Room extractedValue = {extractedValue}/> */}
+      { extractedValue === "벚꽃" && (<CherryBlossom/>)}
+    </div>
+    <div>
       { extractedValue === "구름" && ( <CloudCanvas/>)} 
-      {/* <CloudCanvas/> */}
+      { extractedValue === "고양이" && ( <Cat/>)} 
+    </div>
+    <div className={styles.container}>
       <form id="speech-recognition-form">
       <h2>음성 인식</h2>
         {!supported && (
@@ -107,6 +108,7 @@ const Example = () => {
         )}
       </form>
     </div>
+    </>
   );
 };
 
