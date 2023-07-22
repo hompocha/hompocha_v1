@@ -36,5 +36,6 @@ async function bootstrap() {
 
   console.log('Application started on port: ', SERVER_PORT);
   console.warn('Application server connecting to OpenVidu at ' + OPENVIDU_URL);
+
 }
 bootstrap();
