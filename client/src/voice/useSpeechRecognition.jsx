@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, Component, useRef} from 'react';
 import  useSpeechRecognition  from './useSpeechRecognitions';
 import styles from './voice.module.css';
 import axios from 'axios';
@@ -6,21 +6,29 @@ import 'regenerator-runtime/runtime';
 import Cat from '../keyword/cat';
 import CloudCanvas from '../keyword/cloud';
 import CherryBlossom from '../keyword/cherryBlossom'; 
-import Rain from '../keyword/rain'; 
+import Rain from '../keyword/rain';
+import CamFour from '../cam/CamFour.js';
+
+
+
 
 const keyword = ["고양이", "구름", "벚꽃"];
 const languageOptions = [{ label: '한국어 - ', value: 'ko-KR' }];
 
-const Example = () => {
+const Example = (props) => {
+
   const [lang, setLang] = useState('ko-KR');
   const [value, setValue] = useState('');
   const [blocked, setBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState('');
 
+
+
   useEffect(() => {
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
+        props.sendSignal(word);
         break;
       }
     }
@@ -56,13 +64,14 @@ const Example = () => {
   
   return (
     <>
-    
-    <div className={styles.CherryBlossom}>
+
+
+      <div className={styles.CherryBlossom}>
       {/* <Room extractedValue = {extractedValue}/> */}
       { extractedValue === "벚꽃" && (<CherryBlossom/>)}
     </div>
     <div>
-      { extractedValue === "구름" && ( <CloudCanvas/>)} 
+      { extractedValue === "구름" && ( <CloudCanvas/>)}
       { extractedValue === "고양이" && ( <Cat/>)} 
     </div>
     <div className={styles.container}>
@@ -107,6 +116,7 @@ const Example = () => {
           </React.Fragment>
         )}
       </form>
+
     </div>
     </>
   );
