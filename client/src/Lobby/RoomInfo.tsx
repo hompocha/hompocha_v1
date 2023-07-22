@@ -13,7 +13,7 @@ const RoomInfo: React.FC = () => {
 
     const fetchRoomInfo = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/roomInfo');
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/lobby/roomInfo`);
             const { room } = response.data;
             setTitle(room.title);
             setInPeople(room.inpeople);

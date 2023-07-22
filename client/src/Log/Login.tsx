@@ -39,7 +39,9 @@ const Login: React.FC = () => {
             });
             console.log(response.data);
 
+            localStorage.setItem('jwtToken', response.data);
             alert("로그인 성공");
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data}`;
             navigate("/Lobby");
         } catch (error) {
             console.error("로그인 오류:", error);
