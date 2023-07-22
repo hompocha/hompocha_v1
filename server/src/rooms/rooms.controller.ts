@@ -3,7 +3,7 @@ import { CreateRoomDto } from './dto/createroomdto';
 import { RoomsService } from './rooms.service';
 import { AuthService } from '../auth/auth.service';
 import { UserInfo } from '../users/user.info';
-import {UserLoginDto} from "./dto/roomfind.dto";
+import { UserLoginDto } from './dto/roomfind.dto';
 
 @Controller('lobby')
 export class RoomsController {
@@ -23,15 +23,14 @@ export class RoomsController {
     const verifiedToken = this.authService.verify(jwtstring);
     return await this.roomService.getUserJwt(verifiedToken.userId);
   }
-  
 
   @Get()
   async getAllRooms() {
     return await this.roomService.findAllRooms();
   }
-  @Post('/roomInfo')
-  async getRoomInfo(@Body() dto: UserLoginDto) {
-    const { title } = dto;
-    return await this.roomService.createRoom(room_name);
-  }
+  // @Post('/roomInfo')
+  // async getRoomInfo(@Body() dto: UserLoginDto) {
+  //   const { title } = dto;
+  //   return await this.roomService.createRoom(room_name);
+  // }
 }
