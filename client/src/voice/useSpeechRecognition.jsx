@@ -30,13 +30,13 @@ const Example = () => {
         const timeout = setTimeout(() => {
         }, 1000);
         if (word === "고양이") {
-          value = ""
+          setValue("");
           setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
         } else if (word === "구름") {
-          value = ""
+          setValue("");
           setShowCloud(true);
         } else if (word === "벚꽃") {
-          value = ""
+          setValue("");
           setShowCherryBlossom(true);
         }
         return () => clearTimeout(timeout);
