@@ -14,8 +14,8 @@ export class UsersController {
   }
   @Post('/login')
   async login(@Body() dto: UserLoginDto): Promise<string> {
-    const { id, password } = dto;
-    const jwt_log = await this.userService.login(id, password);
+    const { loginId, loginPassword } = dto;
+    const jwt_log = await this.userService.login(loginId, loginPassword);
     console.log(jwt_log);
     return jwt_log;
   }
