@@ -9,6 +9,7 @@ import { RoomsModule } from './rooms/rooms.module';
 import { RoomsEntity } from './rooms/rooms.entity';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import authConfig from './config/auth.config';
 
 @Module({
   controllers: [AppController],
@@ -17,6 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true, // 이를 설정하면 다른 모듈에서 ConfigService를 import하지 않고도 환경 변수에 접근할 수 있습니다.
       envFilePath: `${__dirname}/config/env/.${process.env.NODE_ENV}.env`, // NODE_ENV에 따라 다른 .env 파일을 사용합니다.
+      load: [authConfig],
     }),
     OpenviduModule,
     UsersModule,
