@@ -5,6 +5,7 @@ import styles from './Lobby.module.css';
 import RoomInfo from './RoomInfo';
 import RoomCreate from './RoomCreate';
 import UserList from './UserList';
+import RoomList from './RoomList';
 // import {Link} from 'react-router-dom';
 import axios from 'axios';
 
@@ -24,8 +25,14 @@ const Lobby = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/idPost');
-        setLoginId(response.data.id);
+          const jwtToken = localStorage.getItem('jwtToken');
+          if(jwtToken){
+              axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+          }
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/lobby`);
+          console.log(response.data)
+          setLoginId(response.data);
+
       } catch (error) {
         console.error(error);
       }
@@ -33,10 +40,12 @@ const Lobby = () => {
     fetchData();
   }, []);
 
-  return (
+  return  (
     <>
       <h4> {loginId} </h4>
-
+      <div>
+        <RoomList/>
+      </div>
       <div>
         <UserList />
       </div>

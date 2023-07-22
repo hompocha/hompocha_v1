@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, Component, useRef} from 'react';
 import  useSpeechRecognition  from './useSpeechRecognitions';
 import styles from './voice.module.css';
 import axios from 'axios';
@@ -6,12 +6,17 @@ import 'regenerator-runtime/runtime';
 import Cat from '../keyword/cat';
 import CloudCanvas from '../keyword/cloud';
 import CherryBlossom from '../keyword/cherryBlossom'; 
-import Rain from '../keyword/rain'; 
+import Rain from '../keyword/rain';
+import CamFour from '../cam/CamFour.js';
+
+
+
 
 const keyword = ["고양이", "구름", "벚꽃"];
 const languageOptions = [{ label: '한국어 - ', value: 'ko-KR' }];
 
-const Example = () => {
+const Example = (props) => {
+
   const [lang, setLang] = useState('ko-KR');
   const [value, setValue] = useState('');
   const [blocked, setBlocked] = useState(false);
@@ -22,31 +27,36 @@ const Example = () => {
   const [showCherryBlossom, setShowCherryBlossom] = useState(false);
 
 
+
+
   useEffect(() => {
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
+        
         setValue("");
         const timeout = setTimeout(() => {
         }, 1000);
         if (word === "고양이") {
-          value = ""
+          setValue("");
           setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
         } else if (word === "구름") {
-          value = ""
+          setValue("");
           setShowCloud(true);
         } else if (word === "벚꽃") {
-          value = ""
+          setValue("");
           setShowCherryBlossom(true);
         }
+        props.sendSignal(word);
+    
         return () => clearTimeout(timeout);
       }
     }
     console.log("Value:", value); // 추가된 부분
-  }, [value]);
+  }, [value]); 
 
 
-  useEffect(() => {
+  useEffect(() =>  {
     if (extractedValue !== '') {
       const timeout = setTimeout(() => {
         setExtractedValue("1");
@@ -84,6 +94,8 @@ const Example = () => {
   
   return (
     <>
+
+
     <div>
       <input
         onChange={(e) => setValue(e.target.value)}
@@ -140,6 +152,7 @@ const Example = () => {
           </React.Fragment>
         )}
       </form>
+
     </div>
     </>
   );
