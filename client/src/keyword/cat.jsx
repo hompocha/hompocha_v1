@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./cat.module.css";
 
-function CatCanvas({ x = 1100, y = 200 }) {
+export function CatCanvas() {
+    const x = 1100, y = 200
     const canvasRef = useRef(null);
 
     function loadImage(src) {

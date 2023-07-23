@@ -1,9 +1,6 @@
 import React, { useState,useEffect } from "react";
-import CamFour from "../cam/CamFour";
-import SpeechRecognitionExample from '../voice/useSpeechRecognition';
-import CloudCanvas from '../keyword/cloud';
-import CheeryBlossom from "../keyword/cherryBlossom";
-import axios from 'axios';
+
+import ParentComponent from "../ParentComponent";
 function Room() {
 const [userNum, setUserNum] = useState<number>(0);
 // const [flag, setFlag] = useState<number>(0);
@@ -26,8 +23,7 @@ function onSubmitEnterRoom(event: React.MouseEvent<HTMLButtonElement>) {
 }
 return (
     <div>
-        {/*<SpeechRecognitionExample/>*/}
-        <CamFour />
+        <ParentComponent />
     </div>
 );
 }

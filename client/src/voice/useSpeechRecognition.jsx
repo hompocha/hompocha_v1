@@ -9,7 +9,7 @@ import CherryBlossom from '../keyword/cherryBlossom';
 import Rain from '../keyword/rain';
 import CamFour from '../cam/CamFour.js';
 
-
+import {CatCanvas} from "../keyword/cat";
 
 
 const keyword = ["고양이", "구름", "벚꽃"];
