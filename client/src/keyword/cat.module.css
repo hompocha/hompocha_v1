@@ -1,6 +1,5 @@
 canvas { 
     position: absolute;
-    /* background: #eee; */
-    margin-top: 36%;
-    margin-left: 00%;
+    bottom: 3%;
+    z-index: -100;
 }
