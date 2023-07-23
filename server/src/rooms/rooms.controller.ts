@@ -28,9 +28,4 @@ export class RoomsController {
   async getAllRooms() {
     return await this.roomService.findAllRooms();
   }
-  // @Post('/roomInfo')
-  // async getRoomInfo(@Body() dto: UserLoginDto) {
-  //   const { title } = dto;
-  //   return await this.roomService.createRoom(room_name);
-  // }
 }

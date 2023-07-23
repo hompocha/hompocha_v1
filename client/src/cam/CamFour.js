@@ -16,16 +16,20 @@ console.log(process.env.NODE_ENV);
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 const localUser = new UserModel();
-
 export default class CamFour extends Component {
   constructor(props) {
     super(props);
-
+    
+    console.log([props.roomName]);
+    console.log([props.idx]);
+    const roomName = props.roomName;
+    const idx = props.idx;
+    console.log(roomName);
     // These properties are in the state's component in order to re-render the HTML whenever their values change
     this.state = {
-      mySessionId: "SessionA",
+      mySessionId: idx,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
-      session: undefined,
+      session: idx,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
       subscribers: [],
@@ -92,6 +96,7 @@ export default class CamFour extends Component {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    this.joinSession();
   }
 
   componentWillUnmount() {
@@ -352,7 +357,7 @@ export default class CamFour extends Component {
                       className={styles.formControl}
                       type="text"
                       id="sessionId"
-                      value={mySessionId}
+                      value={this.state.mySessionId}
                       onChange={this.handleChangeSessionId}
                       required
                     />

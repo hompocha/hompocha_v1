@@ -1,30 +1,16 @@
 import React, { useState,useEffect } from "react";
-
+import { useLocation} from "react-router-dom";
 import ParentComponent from "../ParentComponent";
 function Room() {
-const [userNum, setUserNum] = useState<number>(0);
-// const [flag, setFlag] = useState<number>(0);
-const [value, setValue] = useState('');
-const [extractedValue, setExtractedValue] = useState('');
 
-function showCam(userNumValue:number){
-    switch (userNumValue) {
-    case 1:
-        console.log('입장', userNumValue);
-        break;
+const location = useLocation();
+const roomName = location.state.roomName;
+const idx = location.state.idx;
 
-    default:
-        break;
-    }
-}
-function onSubmitEnterRoom(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-    showCam(userNum);
-}
 return (
-    <div>
-        <ParentComponent />
-    </div>
+    <>
+        <ParentComponent roomName = {roomName} idx = {idx}/>
+    </>
 );
 }
 
