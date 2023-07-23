@@ -1,7 +1,18 @@
-video {
-  /* width: 500px;
-  height: 700px; */
-  height: 100%;
+.videoCanvas {
+  position: absolute;
+  margin-top: 20vh;
+  margin-left: 10%;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  width: 960px;
+  height: 720px;
   transform: rotateY(180deg);
-  /* border-radius: 50%; */
+  border-radius: 10px;
+}
+
+.paddle {
+  width: 960px;
+  height: 720px;
 }

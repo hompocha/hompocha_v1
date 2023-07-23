@@ -1,15 +1,16 @@
 import { OpenVidu } from "openvidu-browser";
 
 import axios from "axios";
-import React, {Component, useState} from "react";
+import React, { Component, useState } from "react";
 import UserVideoComponent from "./UserVideoComponent";
 import Cam from "./Cam";
 import styles from "./camFour.module.css";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Example from "../voice/useSpeechRecognition";
 import CatCanvas from "../keyword/cat";
-import UserModel from '../models/user-model';
+import UserModel from "../models/user-model";
 import ChatComponent from "../Chat/ChatComponent";
+import GameCam from "../Games/GameCam";
 
 console.log(process.env.NODE_ENV);
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
@@ -17,7 +18,6 @@ const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://h
 const localUser = new UserModel();
 
 export default class CamFour extends Component {
-
   constructor(props) {
     super(props);
 
@@ -31,6 +31,7 @@ export default class CamFour extends Component {
       subscribers: [],
       videoComponentLoaded: false,
 
+      mode: undefined,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -40,13 +41,55 @@ export default class CamFour extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.sendSignal= this.sendSignal.bind(this);
+    this.sendSignal = this.sendSignal.bind(this);
+    this.enterAirHockey = this.enterAirHockey.bind(this);
+    this.enterMovingDuck = this.enterMovingDuck.bind(this);
+    this.returnToRoom = this.returnToRoom.bind(this);
+  }
+
+  /* 생성함수 --------------------------- */
+  sendSignal(string) {
+    if (this.state.session) {
+      this.state.session
+        .signal({
+          data: string,
+          to: [],
+          type: "my-chat",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
+
+  enterAirHockey(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: "airHockey",
+    });
+  }
+  enterMovingDuck(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: "movingDuck",
+    });
+  }
+  returnToRoom(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: undefined,
+    });
   }
 
   handleVideoLoaded = () => {
     this.setState({ videoComponentLoaded: true });
     this.props.onVideoLoad(localUser);
-  }
+  };
+  /* ---------------------------------- */
+
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
   }
@@ -98,7 +141,6 @@ export default class CamFour extends Component {
       () => {
         let mySession = this.state.session;
 
-
         // --- 3) Specify the actions when events take place in the session ---
 
         // On every new Stream received...
@@ -130,14 +172,27 @@ export default class CamFour extends Component {
 
         // Get a token from the OpenVidu deployment
         this.getToken().then((token) => {
-          console.log('gettoken', token);
+          console.log("gettoken", token);
           // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
           mySession
             .connect(token, { clientData: this.state.myUserName })
             .then(async () => {
+              /* signal 코드 추가 */
+              mySession
+                .signal({
+                  data: "My custom message", // Any string (optional)
+                  to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+                  type: "my-chat", // The type of message (optional)
+                })
+                .then(() => {
+                  console.log("Message successfully sent");
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
 
-              mySession.on('signal:my-chat', (event) => {
+              mySession.on("signal:my-chat", (event) => {
                 console.log(event.data); // Message
                 console.log(event.from); // Connection object of the sender
                 console.log(event.type); // The type of message ("my-chat")
@@ -161,11 +216,16 @@ export default class CamFour extends Component {
 
               mySession.publish(publisher);
               localUser.setNickname(this.state.myUserName);
-              localUser.setConnectionId(this.state.session.connection.connectionId);
+              localUser.setConnectionId(
+                this.state.session.connection.connectionId
+              );
               localUser.setScreenShareActive(false);
               localUser.setStreamManager(publisher);
               this.handleVideoLoaded();
-              console.log("local Stream 세숀 : ",localUser.getStreamManager().stream); //세션 및 stream 제대로 들어감
+              console.log(
+                "local Stream 세숀 : ",
+                localUser.getStreamManager().stream
+              ); //세션 및 stream 제대로 들어감
 
               // Obtain the current video device in use
               var devices = await this.OV.getDevices();
@@ -197,9 +257,8 @@ export default class CamFour extends Component {
         });
       }
     );
+    console.log(this.state);
   }
-
-
 
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
@@ -222,21 +281,6 @@ export default class CamFour extends Component {
     });
   }
 
-  sendSignal(string) {
-    if (this.state.session) {
-      this.state.session.signal({
-        data: string,
-        to: [],
-        type: 'my-chat'
-      })
-          .then(() => {
-            console.log('Message successfully sent');
-          })
-          .catch(error => {
-            console.error(error);
-          });
-    }
-  }
   async switchCamera() {
     try {
       const devices = await this.OV.getDevices();
@@ -284,123 +328,146 @@ export default class CamFour extends Component {
 
     return (
       <div className={styles.container}>
-        <Example sendSignal = {this.sendSignal}/>
-        {this.state.session === undefined ? (
-          <div id="join">
-            <div id="join-dialog" className={styles.jumbotronVerticalCenter}>
-              <form className={styles.formGroup} onSubmit={this.joinSession}>
-                <p>
-                  <label>Participant: </label>
+        {
+          /* 방 생성 화면 */
+          this.state.session === undefined ? (
+            <div id="join">
+              <div id="join-dialog" className={styles.jumbotronVerticalCenter}>
+                <form className={styles.formGroup} onSubmit={this.joinSession}>
+                  <p>
+                    <label>Participant: </label>
 
-                  <input
-                    className={styles.formControl}
-                    type="text"
-                    id="userName"
-                    value={myUserName}
-                    onChange={this.handleChangeUserName}
-                    required
-                  />
-                </p>
-                <p>
-                  <label> Session: </label>
-                  <input
-                    className={styles.formControl}
-                    type="text"
-                    id="sessionId"
-                    value={mySessionId}
-                    onChange={this.handleChangeSessionId}
-                    required
-                  />
-                </p>
-                <p className={styles.textCenter}>
-                  <input
-                    className={styles.btnLgBtnSuccess}
-                    name="commit"
-                    type="submit"
-                    value="영상출력 키워드"
-                  />
-                  
-                </p>
-                <p className={styles.textCenter}>
-                  <Link to="/GameCam">
-
-                  <input
-                    className={styles.btnLgBtnSuccess}
-                    name="commit"
-                    type="submit"
-                    value="게임화면"
+                    <input
+                      className={styles.formControl}
+                      type="text"
+                      id="userName"
+                      value={myUserName}
+                      onChange={this.handleChangeUserName}
+                      required
                     />
-                  </Link>
-                  
-                </p>
-              </form>
+                  </p>
+                  <p>
+                    <label> Session: </label>
+                    <input
+                      className={styles.formControl}
+                      type="text"
+                      id="sessionId"
+                      value={mySessionId}
+                      onChange={this.handleChangeSessionId}
+                      required
+                    />
+                  </p>
+                  <p className={styles.textCenter}>
+                    <input
+                      className={styles.btnLgBtnSuccess}
+                      name="commit"
+                      type="submit"
+                      value="영상출력 키워드"
+                    />
+                  </p>
+                  <p className={styles.textCenter}>
+                    <Link to="/GameCam">
+                      <input
+                        className={styles.btnLgBtnSuccess}
+                        name="commit"
+                        type="submit"
+                        value="게임화면"
+                      />
+                    </Link>
+                  </p>
+                </form>
+              </div>
             </div>
-            
-          </div>
-        ) : null}
+          ) : null
+        }
 
         {
-          /* 방 접속 */
-          this.state.session !== undefined ? (
-
-
-            <div id="session">
-
-              {
-
-                /* <div id="session-header">
-                <h1 id="session-title">{mySessionId}</h1>
-                <h2>{this.state.subscribers.length + 1}</h2>
-                <input
-                  type="button"
-                  id="buttonLeaveSession"
-                  onClick={this.leaveSession}
-                  value="Leave session"
-                />
-                <input
-                  type="button"
-                  id="buttonSwitchCamera"
-                  onClick={this.switchCamera}
-                  value="Switch Camera"
-                />
-              </div> */}
-
-              <div id="video-container">
-
-                {
-                  /* publisher */
-                /* this.state.publisher !== undefined ? (
-                    <UserVideoComponent streamManager={this.state.publisher} />
-                  ) : null */}
-                {/* subscribers */
-                /* this.state.subscribers.map((sub, i) => (
-                    <UserVideoComponent streamManager={sub} />
-                  )) */}
-
-                {this.state.publisher !== undefined ? (
-                  <Cam
-                    num={this.state.subscribers.length + 1}
-                    publisher={this.state.publisher}
-                    subscribers={this.state.subscribers}
-                  />
-
-                ) : null}
-              </div>
-              <div id ="send-signal">
-                <input
+          /* 대화가 이뤄지는 기본 공간 */
+          this.state.session !== undefined && this.state.mode === undefined ? (
+            <>
+              {" "}
+              <div id="session">
+                <div id="session-header">
+                  <h1 id="session-title">{mySessionId}</h1>
+                  <h2>{this.state.subscribers.length + 1}</h2>
+                  <input
                     type="button"
-                    id="signal-button"
-                    onClick={this.sendSignal}
-                    value="Send Signal"
+                    id="buttonLeaveSession"
+                    onClick={this.leaveSession}
+                    value="Leave session"
+                  />
+                  <input
+                    type="button"
+                    id="buttonSwitchCamera"
+                    onClick={this.switchCamera}
+                    value="Switch Camera"
+                  />
+                  <input
+                    onClick={this.enterAirHockey}
+                    type="button"
+                    value="에어하키"
+                  />
+                  <input
+                    onClick={this.enterMovingDuck}
+                    type="button"
+                    value="오리옮기기"
+                  />
+                  <Example sendSignal={this.sendSignal} />
+                </div>
+
+                <Cam
+                  state={this.state}
+                  num={this.state.subscribers.length + 1}
+                  publisher={this.state.publisher}
+                  subscribers={this.state.subscribers}
                 />
               </div>
+              <div id="send-signal">
+                <input
+                  type="button"
+                  id="signal-button"
+                  onClick={this.sendSignal}
+                  value="Send Signal"
+                />
+              </div>
+            </>
+          ) : null
+        }
 
+        {
+          /* 에어하키 구현 */
+          this.state.session !== undefined &&
+          this.state.mode === "airHockey" ? (
+            <div>
+              <GameCam state={this.state} />
+              <form>
+                <input
+                  onClick={this.returnToRoom}
+                  type="button"
+                  value="방으로 이동"
+                />
+              </form>
+            </div>
+          ) : null
+        }
 
+        {
+          /* 오리 옮기기 구현 */
+          this.state.session !== undefined &&
+          this.state.mode === "movingDuck" ? (
+            <div>
+              <GameCam state={this.state} />
+              <form>
+                <input
+                  onClick={this.returnToRoom}
+                  type="button"
+                  value="방으로 이동"
+                />
+              </form>
             </div>
           ) : null
         }
       </div>
-
     );
   }
 
@@ -426,12 +493,13 @@ export default class CamFour extends Component {
   }
 
   async createSession(sessionId) {
-    console.log(APPLICATION_SERVER_URL,'/openvidu/');
-    const connect = await axios.get(APPLICATION_SERVER_URL+'/openvidu/');
-    console.log(connect, 'createSession');
+    console.log(APPLICATION_SERVER_URL, "/openvidu/");
+    const connect = await axios.get(APPLICATION_SERVER_URL + "/openvidu/");
+    console.log(connect, "createSession");
     const response = await axios.post(
       APPLICATION_SERVER_URL + "/openvidu/sessions",
-      { customSessionId: sessionId ,
+      {
+        customSessionId: sessionId,
         headers: { "Content-Type": "application/json" },
       }
     );
@@ -439,9 +507,17 @@ export default class CamFour extends Component {
   }
 
   async createToken(sessionId) {
-    console.log(APPLICATION_SERVER_URL, "/openvidu/sessions/", sessionId, "/connections");
+    console.log(
+      APPLICATION_SERVER_URL,
+      "/openvidu/sessions/",
+      sessionId,
+      "/connections"
+    );
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "/openvidu/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL +
+        "/openvidu/sessions/" +
+        sessionId +
+        "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },
@@ -451,7 +527,3 @@ export default class CamFour extends Component {
     return response.data; // The token
   }
 }
-
-
-
-
