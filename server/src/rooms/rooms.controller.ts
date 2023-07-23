@@ -24,7 +24,7 @@ export class RoomsController {
     return await this.roomService.getUserJwt(verifiedToken.userId);
   }
 
-  @Get()
+  @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
   }
