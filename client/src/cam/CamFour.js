@@ -328,7 +328,6 @@ export default class CamFour extends Component {
 
     return (
       <div className={styles.container}>
-        <Example sendSignal={this.sendSignal} />
         {
           /* 방 생성 화면 */
           this.state.session === undefined ? (
@@ -413,6 +412,7 @@ export default class CamFour extends Component {
                     type="button"
                     value="오리옮기기"
                   />
+                  <Example sendSignal={this.sendSignal} />
                 </div>
 
                 <Cam
