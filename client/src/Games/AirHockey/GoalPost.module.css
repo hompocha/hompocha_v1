@@ -10,10 +10,10 @@ body {
 
 .goalPost {
   margin-top: 20vh;
-  margin-left: auto;
+  margin-left: 10%;
   margin-right: auto;
-  width: 800px;
-  height: 600px;
+  width: 960px;
+  height: 720px;
   position: absolute;
   left: 0;
   right: 0;
