@@ -23,14 +23,9 @@ export class RoomsController {
     const verifiedToken = this.authService.verify(jwtstring);
     return await this.roomService.getUserJwt(verifiedToken.userId);
   }
-
+  
   @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
   }
-  // @Post('/roomInfo')
-  // async getRoomInfo(@Body() dto: UserLoginDto) {
-  //   const { title } = dto;
-  //   return await this.roomService.createRoom(room_name);
-  // }
 }

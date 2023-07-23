@@ -54,8 +54,12 @@ const Login: React.FC = () => {
             alert("모든 정보를 입력해주세요.");
             return;
         }
-        if (password !== confirmPassword) {
+        else if (password !== confirmPassword) {
             alert("비밀번호가 다릅니다.");
+            return;
+        }
+        else if (password.length <= 8){
+            alert("비밀번호를 8자리 이상으로 입력해주세요!")
             return;
         }
         // 중복된 아이디인지 확인
@@ -96,6 +100,7 @@ const Login: React.FC = () => {
                 value={id}
                 onChange={e => setId(e.target.value)}
                 />
+            
                 <input
                 type="Password"
                 placeholder="비밀번호"
