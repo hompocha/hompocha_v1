@@ -61,7 +61,7 @@ const RoomList = () => {
     }
   };
   return (
-    <div>
+    <div className={styles.position}>
 
       <button onClick={handlePrevClick}>이전</button>
       <div className={styles.container}>
@@ -73,10 +73,10 @@ const RoomList = () => {
         {flag === 0 && <RoomInfo selectedTitle={selectedTitle} currentIdx= {currentIdx}/>}
         {flag !== 0 && (<RoomCreate />)}
       </div>
-      <div>
-            {flag === 0 && <button type='submit' onClick={RoomListOrCreate}> 방 생성</button>}
-            {flag !== 0 && <button type='submit' onClick={RoomListOrCreate}> 닫기</button>}
-          </div>
+      <div className={styles.roomCreate}>
+        {flag === 0 && <button type='submit' onClick={RoomListOrCreate}> 방 생성</button>}
+        {flag !== 0 && <button type='submit' onClick={RoomListOrCreate}> 닫기</button>}
+      </div>
       <button onClick={handleNextClick}>다음</button>
     </div>
   );

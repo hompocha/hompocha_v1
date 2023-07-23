@@ -12,8 +12,8 @@ const CherryBlossom = () => {
     }
 
     const canvas = canvasRef.current;
-    // canvas.width = window.innerWidth;
-    // canvas.height = window.innerHeight;
+    canvas.width = 3400; // 원하는 너비로 설정
+    canvas.height = 1500; // 원하는 높이로 설정
     const ctx = canvas.getContext("2d");
 
     const petalImg = new Image();
@@ -44,8 +44,8 @@ const CherryBlossom = () => {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = (Math.random() * canvas.height * 2) - canvas.height;
-        this.w = 25 + Math.random() * 15;
-        this.h = 20 + Math.random() * 10;
+        this.w = (25 + Math.random() * 15) / 2; // 이미지 넓이 절반으로 줄이기
+        this.h = (20 + Math.random() * 10) / 2; // 이미지 높이 절반으로 줄이기
         this.opacity = this.w / 30;
         this.flip = Math.random();
 
@@ -81,7 +81,7 @@ const CherryBlossom = () => {
     }
   }, [canvasRef]);
 
-  return <canvas ref={canvasRef} style={{ width: '3400px', height: '1500px' }} />;
+  return <canvas ref={canvasRef} />
 };
 
 export default CherryBlossom;

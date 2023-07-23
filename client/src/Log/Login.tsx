@@ -91,7 +91,7 @@ const Login: React.FC = () => {
 
     return (
         <>
-            <div>
+            <div className={styles.login}>
                 <input
                 type="text"
                 placeholder="Id"
@@ -116,7 +116,7 @@ const Login: React.FC = () => {
                 <br />
                     <button onClick={handleSignUp}>SIGN UP</button>
             </div>
-            <div>
+            <div className={styles.signup}>
                 <br/>
                 <input
                 type="text"
