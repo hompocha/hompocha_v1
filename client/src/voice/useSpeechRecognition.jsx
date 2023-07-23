@@ -9,7 +9,7 @@ import CherryBlossom from '../keyword/cherryBlossom';
 import Rain from '../keyword/rain';
 import CamFour from '../cam/CamFour.js';
 
-
+import {CatCanvas} from "../keyword/cat";
 
 
 const keyword = ["고양이", "구름", "벚꽃"];
@@ -35,21 +35,21 @@ const Example = (props) => {
         setExtractedValue(word);
         
         setValue("");
-        const timeout = setTimeout(() => {
-        }, 1000);
-        if (word === "고양이") {
-          setValue("");
-          setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
-        } else if (word === "구름") {
-          setValue("");
-          setShowCloud(true);
-        } else if (word === "벚꽃") {
-          setValue("");
-          setShowCherryBlossom(true);
-        }
+        // const timeout = setTimeout(() => {
+        // }, 1000);
+        // if (word === "고양이") {
+        //   setValue("");
+        //   setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
+        // } else if (word === "구름") {
+        //   setValue("");
+        //   setShowCloud(true);
+        // } else if (word === "벚꽃") {
+        //   setValue("");
+        //   setShowCherryBlossom(true);
+        // }
         props.sendSignal(word);
     
-        return () => clearTimeout(timeout);
+        // return () => clearTimeout(timeout);
       }
     }
     console.log("Value:", value); // 추가된 부분

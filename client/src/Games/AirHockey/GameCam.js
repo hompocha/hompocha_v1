@@ -38,7 +38,7 @@ function GameCam() {
   useEffect(() => {
     const runHandpose = async () => {
       const net = await handpose.load();
-      console.log("Handpose model loaded.");
+      console.log("Handpose models loaded.");
       detect(net); // 최초 한 번 호출
     };
 
