@@ -5,5 +5,5 @@ export class CreateRoomDto {
   @IsString()
   @MinLength(1)
   @MaxLength(20)
-  readonly room_name: string;
+  room_name: string;
 }

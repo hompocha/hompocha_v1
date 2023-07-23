@@ -19,7 +19,7 @@ class CamFour extends Component {
 
     // These properties are in the state's component in order to re-render the HTML whenever their values change
     this.state = {
-      mySessionId: "SessionA",
+      mySessionId: "",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
@@ -284,24 +284,13 @@ class CamFour extends Component {
     return (
       <div className={styles.container}>
         <Example sendSignal = {this.sendSignal}/>
-        {this.state.session === undefined ? (
+        {this.state.sessionId === "" ? (
           <div id="join">
             <div id="join-dialog" className={styles.jumbotronVerticalCenter}>
               <form className={styles.formGroup} onSubmit={this.joinSession}>
+            
                 <p>
-                  <label>Participant: </label>
-
-                  <input
-                    className={styles.formControl}
-                    type="text"
-                    id="userName"
-                    value={myUserName}
-                    onChange={this.handleChangeUserName}
-                    required
-                  />
-                </p>
-                <p>
-                  <label> Session: </label>
+                  <label> 방 제목: </label>
                   <input
                     className={styles.formControl}
                     type="text"
@@ -312,13 +301,14 @@ class CamFour extends Component {
                   />
                 </p>
                 <p className={styles.textCenter}>
+                {/* <Link to="/CamF" mySessionId = {mySessionId}> */}
                   <input
                     className={styles.btnLgBtnSuccess}
                     name="commit"
                     type="submit"
-                    value="영상출력 키워드"
+                    value="방 생성"
                   />
-                  
+                {/* </Link> */}
                 </p>
                 <p className={styles.textCenter}>
                   <Link to="/GameCam">
@@ -337,11 +327,9 @@ class CamFour extends Component {
             
           </div>
         ) : null}
-
         {
           /* 방 접속 */
-          this.state.session !== undefined ? (
-
+          this.state.sessionId !== "" ? (
 
             <div id="session">
 

@@ -11,6 +11,7 @@ export class RoomsController {
     private roomService: RoomsService,
     private authService: AuthService,
   ) {}
+  
   @Post('/create')
   async createRoom(@Body() dto: CreateRoomDto): Promise<void> {
     const { room_name } = dto;
@@ -25,13 +26,13 @@ export class RoomsController {
   }
   
 
-  @Get()
+  @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
   }
-  @Post('/roomInfo')
-  async getRoomInfo(@Body() dto: UserLoginDto) {
-    const { title } = dto;
-    return await this.roomService.createRoom(room_name);
-  }
+  // @Post('/roomInfo')
+  // async getRoomInfo(@Body() dto: UserLoginDto) {
+  //   const { title } = dto;
+  //   return await this.roomService.createRoom(room_name);
+  // }
 }

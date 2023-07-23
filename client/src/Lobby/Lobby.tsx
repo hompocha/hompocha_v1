@@ -15,11 +15,9 @@ const Lobby = () => {
   const [flag, setFlag] = useState<number>(0);
   const navigate = useNavigate();
 
-  const RoomListOrCreate = () => {
-    setFlag((prevFlag) => (prevFlag === 0 ? 1 : 0));
-  }
   const handleLogout = useCallback(() => {
-    navigate(-1);
+    localStorage.removeItem("jwtToken");
+    navigate("/");
   }, [navigate])
 
   useEffect(() => {
@@ -48,14 +46,6 @@ const Lobby = () => {
       </div>
       <div>
         <UserList />
-      </div>
-      <div>
-            {flag === 0 && <button type='submit' onClick={RoomListOrCreate}> 방 생성</button>}
-            {flag !== 0 && <button type='submit' onClick={RoomListOrCreate}> 닫기</button>}
-          </div>
-          <div style={{position : "fixed", marginLeft : "30%" , marginTop : "30%"}}>
-            {flag === 0 && (<RoomInfo />)}
-            {flag !== 0 && (<RoomCreate />)}
       </div>
         <button type='submit' onClick={handleLogout}>로그아웃</button>
     </>

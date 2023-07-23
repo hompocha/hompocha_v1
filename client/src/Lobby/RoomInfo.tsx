@@ -2,7 +2,11 @@ import React,{useState, useEffect} from 'react';
 import styles from './RoomInfo.module.css';
 import {Link} from "react-router-dom";
 import axios from 'axios';
-const RoomInfo: React.FC = () => {
+interface RoomInfoProps {
+    selectedTitle: string;
+}
+
+const RoomInfo: React.FC<RoomInfoProps> = ({ selectedTitle }) => {
     const [title, setTitle] = useState('');
     const [inpeople, setInPeople] = useState('');
     const [maxpeople, setMaxPeople] = useState('');
@@ -26,7 +30,7 @@ const RoomInfo: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <h2>{title}</h2>
+            <h2>{selectedTitle}</h2>
             <ul>
                 <h3>👤 {inpeople}/{maxpeople} </h3>
             </ul>
