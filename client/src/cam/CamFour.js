@@ -1,19 +1,23 @@
 import { OpenVidu } from "openvidu-browser";
 
 import axios from "axios";
-import React, { Component } from "react";
+import React, {Component, useState} from "react";
 import UserVideoComponent from "./UserVideoComponent";
 import Cam from "./Cam";
 import styles from "./camFour.module.css";
 import {Link} from "react-router-dom";
 import Example from "../voice/useSpeechRecognition";
+import CatCanvas from "../keyword/cat";
+import UserModel from '../models/user-model';
+import ChatComponent from "../Chat/ChatComponent";
 
 console.log(process.env.NODE_ENV);
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+const localUser = new UserModel();
 
+export default class CamFour extends Component {
 
-class CamFour extends Component {
   constructor(props) {
     super(props);
 
@@ -25,6 +29,8 @@ class CamFour extends Component {
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
       subscribers: [],
+      videoComponentLoaded: false,
+
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -35,6 +41,11 @@ class CamFour extends Component {
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.sendSignal= this.sendSignal.bind(this);
+  }
+
+  handleVideoLoaded = () => {
+    this.setState({ videoComponentLoaded: true });
+    this.props.onVideoLoad(localUser);
   }
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
@@ -79,12 +90,7 @@ class CamFour extends Component {
     }
   }
   joinSession() {
-    // --- 1) Get an OpenVidu object ---
-
     this.OV = new OpenVidu();
-
-    // --- 2) Init a session ---
-
     this.setState(
       {
         session: this.OV.initSession(),
@@ -130,24 +136,13 @@ class CamFour extends Component {
           mySession
             .connect(token, { clientData: this.state.myUserName })
             .then(async () => {
-              /* signal 코드 추가 */
-              mySession.signal({
-                data: 'My custom message',  // Any string (optional)
-                to: [],                     // Array of Connection objects (optional. Broadcast to everyone if empty)
-                type: 'my-chat'             // The type of message (optional)
-              })
-                  .then(() => {
-                    console.log('Message successfully sent');
-                  })
-                  .catch(error => {
-                    console.error(error);
-                  });
 
               mySession.on('signal:my-chat', (event) => {
                 console.log(event.data); // Message
                 console.log(event.from); // Connection object of the sender
                 console.log(event.type); // The type of message ("my-chat")
               });
+
               // --- 5) Get your own camera stream ---
 
               // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
@@ -165,6 +160,12 @@ class CamFour extends Component {
               // --- 6) Publish your stream ---
 
               mySession.publish(publisher);
+              localUser.setNickname(this.state.myUserName);
+              localUser.setConnectionId(this.state.session.connection.connectionId);
+              localUser.setScreenShareActive(false);
+              localUser.setStreamManager(publisher);
+              this.handleVideoLoaded();
+              console.log("local Stream 세숀 : ",localUser.getStreamManager().stream); //세션 및 stream 제대로 들어감
 
               // Obtain the current video device in use
               var devices = await this.OV.getDevices();
@@ -385,7 +386,6 @@ class CamFour extends Component {
 
                 ) : null}
               </div>
-
               <div id ="send-signal">
                 <input
                     type="button"
@@ -452,6 +452,6 @@ class CamFour extends Component {
   }
 }
 
-export default CamFour;
+
 
 
