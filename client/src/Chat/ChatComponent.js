@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styles from './ChatComponent.module.css'
 export default class ChatComponent extends Component {
     constructor(props) {
         super(props);
@@ -10,6 +9,7 @@ export default class ChatComponent extends Component {
         this.chatScroll = React.createRef();
         this.handleChange = this.handleChange.bind(this);
         this.handlePressKey = this.handlePressKey.bind(this);
+        this.close = this.close.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
     }
     componentDidMount(){
@@ -58,16 +58,16 @@ export default class ChatComponent extends Component {
             } catch (err) {}
         }, 20);
     }
-
+    close() {
+        this.props.close(undefined);
+    }
     render() {
         const styleChat = { display: this.props.chatDisplay };
         return (
-            <div id="chatContainer" className={styles.container}>
+            <div id="chatContainer">
                 <div id="chatComponent" style={styleChat}>
                     <div id="chatToolbar">
                         <span>{this.props.user.getStreamManager().stream.session.sessionId} - CHAT</span>
-                        <button id="closeButton" onClick={this.close}>
-                        </button>
                     </div>
                     <div className="message-wrap" ref={this.chatScroll}>
                         {this.state.messageList.map((data, i) => (

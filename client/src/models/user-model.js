@@ -1,8 +1,9 @@
+
 class UserModel {
     connectionId;
     audioActive;
     videoActive;
-    screenShareActive;
+    screenShareActive;s
     nickname;
     streamManager;
     type; // 'remote' | 'local'
@@ -15,10 +16,14 @@ class UserModel {
         this.nickname = '';
         this.streamManager = null;
         this.type = 'local';
+        this.subscribers = null;
     }
 
     isAudioActive() {
         return this.audioActive;
+    }
+    getSubscriber(){
+        return this.subscribers;
     }
 
     isVideoActive() {
@@ -62,6 +67,9 @@ class UserModel {
 
     setConnectionId(conecctionId) {
         this.connectionId = conecctionId;
+    }
+    setSubscriber(subscribers){
+        this.subscribers = subscribers;
     }
     setNickname(nickname) {
         this.nickname = nickname;

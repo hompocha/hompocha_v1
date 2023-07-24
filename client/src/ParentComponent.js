@@ -2,6 +2,7 @@ import React from "react";
 import ChatComponent from "./Chat/ChatComponent";
 import CamFour from "./cam/CamFour";
 import EffectComponent from "./Chat/EffectComponent";
+import Speechgame from "./Games/speechgame/speechgame";
 
 export default class ParentComponent extends React.Component {
     state = {
@@ -17,11 +18,14 @@ export default class ParentComponent extends React.Component {
     render() {
         return (
             <div>
-                <CamFour onVideoLoad={this.handleSessionConnected} />
-                {this.state.sessionConnected && <ChatComponent user={this.state.camFourStream}/> &&
-                     <EffectComponent user={this.state.camFourStream}/>
+                <CamFour onVideoLoad={this.handleSessionConnected} roomName ={this.state.roomName} idx ={this.state.idx} />
+                {this.state.sessionConnected && (
+                    <><ChatComponent user={this.state.camFourStream}/>
+                        <EffectComponent user={this.state.camFourStream}/>
+                        <Speechgame user ={this.state.camFourStream}/>
+                    </>
+                )
                 }
-
             </div>
         );
     }

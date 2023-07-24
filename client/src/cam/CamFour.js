@@ -45,6 +45,7 @@ export default class CamFour extends Component {
     this.enterAirHockey = this.enterAirHockey.bind(this);
     this.enterMovingDuck = this.enterMovingDuck.bind(this);
     this.returnToRoom = this.returnToRoom.bind(this);
+    this.sendSpeech = this.sendSpeech.bind(this);
   }
 
   /* 생성함수 --------------------------- */
@@ -62,6 +63,22 @@ export default class CamFour extends Component {
         .catch((error) => {
           console.error(error);
         });
+    }
+  }
+  sendSpeech(string) {
+    if (this.state.session) {
+      this.state.session
+          .signal({
+            data: string,
+            to: [],
+            type: "speech",
+          })
+          .then(() => {
+            console.log("Message successfully sent");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     }
   }
 
@@ -201,6 +218,7 @@ export default class CamFour extends Component {
               );
               localUser.setScreenShareActive(false);
               localUser.setStreamManager(publisher);
+              localUser.setSubscriber(this.state.subscribers);
               this.handleVideoLoaded();
               console.log(
                 "local Stream 세숀 : ",
@@ -260,7 +278,6 @@ export default class CamFour extends Component {
       publisher: undefined,
     });
   }
-
   async switchCamera() {
     try {
       const devices = await this.OV.getDevices();
@@ -392,7 +409,8 @@ export default class CamFour extends Component {
                     type="button"
                     value="오리옮기기"
                   />
-                  <Example sendSignal={this.sendSignal} />
+                  <Example sendSignal={this.sendSignal} sendSpeech={this.sendSpeech}/>
+                  {/*<Example sendSpeech={this.sendSpeech}/>*/}
                 </div>
 
                 <Cam
