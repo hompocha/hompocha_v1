@@ -1,7 +1,17 @@
+.position{
+    position: fixed;
+    left: 1%;
+    top: 25%;
+}
+
 .container {
     background-color: yellow;
     border-radius: 12px;
     height: 200px;
     width: 200px;
-
+}
+.roomCreate{
+    position: fixed;
+    left: 47%;
+    top: 30%;
 }

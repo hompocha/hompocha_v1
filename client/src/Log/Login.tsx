@@ -10,7 +10,6 @@ const Login: React.FC = () => {
     const [loginPassword, setLoginPassword] = useState<string>("");
 
     const [id, setId] = useState<string>("");
-    const [name, setName] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     
@@ -54,8 +53,12 @@ const Login: React.FC = () => {
             alert("모든 정보를 입력해주세요.");
             return;
         }
-        if (password !== confirmPassword) {
+        else if (password !== confirmPassword) {
             alert("비밀번호가 다릅니다.");
+            return;
+        }
+        else if (password.length < 8){
+            alert("비밀번호를 8자리 이상으로 입력해주세요!")
             return;
         }
         // 중복된 아이디인지 확인
@@ -76,7 +79,6 @@ const Login: React.FC = () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/signup`, {
                 id,
-                name,
                 password,
             });
             console.log(response.data);
@@ -89,13 +91,14 @@ const Login: React.FC = () => {
 
     return (
         <>
-            <div>
+            <div className={styles.login}>
                 <input
                 type="text"
                 placeholder="Id"
                 value={id}
                 onChange={e => setId(e.target.value)}
                 />
+            
                 <input
                 type="Password"
                 placeholder="비밀번호"
@@ -113,7 +116,7 @@ const Login: React.FC = () => {
                 <br />
                     <button onClick={handleSignUp}>SIGN UP</button>
             </div>
-            <div>
+            <div className={styles.signup}>
                 <br/>
                 <input
                 type="text"

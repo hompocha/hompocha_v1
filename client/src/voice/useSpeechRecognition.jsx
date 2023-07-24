@@ -47,9 +47,10 @@ const Example = (props) => {
         //   setValue("");
         //   setShowCherryBlossom(true);
         // }
+
         props.sendSignal(word);
     
-        // return () => clearTimeout(timeout);
+        return () => clearTimeout(timeout);
       }
     }
     console.log("Value:", value); // 추가된 부분

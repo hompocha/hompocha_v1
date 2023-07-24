@@ -36,14 +36,18 @@ const Lobby = () => {
 
   return  (
     <>
-      <h4> {loginId} </h4>
-      <div>
+      <div className={styles.name}>
+        <h4> {loginId} </h4>
+      </div>
+      <div className={styles.roomList}>
         <RoomList/>
       </div>
-      <div>
+      <div className={styles.userList}>
         <UserList />
       </div>
+      <div className={styles.logout}>
         <button type='submit' onClick={handleLogout}>로그아웃</button>
+      </div>
     </>
   );
 };

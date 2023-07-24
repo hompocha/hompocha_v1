@@ -1,0 +1,18 @@
+.login{
+    position: fixed;
+    background-color: greenyellow;
+    width: 300px;
+    border-radius: 5%;
+    padding: 2%;
+    left: 25%;
+    top: 25%;
+}
+.signup{
+    position: fixed;
+    background-color: yellowgreen;
+    width: 300px;
+    border-radius: 5%;
+    padding: 2%;
+    left: 50%;
+    top: 25%;
+}

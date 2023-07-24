@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './ChatComponent.module.css'
 export default class ChatComponent extends Component {
     constructor(props) {
         super(props);
@@ -61,7 +62,7 @@ export default class ChatComponent extends Component {
     render() {
         const styleChat = { display: this.props.chatDisplay };
         return (
-            <div id="chatContainer">
+            <div id="chatContainer" className={styles.container}>
                 <div id="chatComponent" style={styleChat}>
                     <div id="chatToolbar">
                         <span>{this.props.user.getStreamManager().stream.session.sessionId} - CHAT</span>

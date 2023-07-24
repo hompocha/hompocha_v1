@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
-import { drawConnectors, drawLandmarks, lerp } from "@mediapipe/drawing_utils";
 import styles from "./OvVideo.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { drawPaddle } from "../Games/AirHockey/drawPaddle";
+import NewDrawBalls from "../Games/AirHockey/NewDrawBalls";
 
 const OpenViduVideoComponent = (props) => {
-  // let x_value;
-  // let y_value;
   const [videoReady, setVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
@@ -57,7 +55,7 @@ const OpenViduVideoComponent = (props) => {
         onFrame: async () => {
           await hands.send({ image: videoRef.current });
         },
-        width: 1280,
+        width: 960,
         height: 720,
       });
       camera.start();
@@ -77,36 +75,6 @@ const OpenViduVideoComponent = (props) => {
         const y_value = results.multiHandLandmarks[0][8].y;
         drawPaddle(x_value, y_value, paddleCtx, canvasRef);
       }
-      // canvasCtx.current.save();
-      // canvasCtx.current.clearRect(
-      //   0,
-      //   0,
-      //   canvasRef.current.width,
-      //   canvasRef.current.height
-      // );
-      // canvasCtx.current.drawImage(
-      //   results.image,
-      //   0,
-      //   0,
-      //   canvasRef.current.width,
-      //   canvasRef.current.height
-      // );
-      // for (let index = 0; index < results.multiHandLandmarks.length; index++) {
-      //   const classification = results.multiHandedness[index];
-      //   const isRightHand = classification.label === "Right";
-      //   const landmarks = results.multiHandLandmarks[index];
-      //   drawConnectors(canvasCtx.current, landmarks, HAND_CONNECTIONS, {
-      //     color: isRightHand ? "#00FF00" : "#FF0000",
-      //   });
-      //   drawLandmarks(canvasCtx.current, landmarks, {
-      //     color: isRightHand ? "#00FF00" : "#FF0000",
-      //     fillColor: isRightHand ? "#FF0000" : "#00FF00",
-      //     radius: (data) => {
-      //       return lerp(data.from.z, -0.15, 0.1, 10, 1);
-      //     },
-      //   });
-      // }
-      // canvasCtx.current.restore();
     }
   };
 
@@ -125,8 +93,7 @@ const OpenViduVideoComponent = (props) => {
       {
         /* 하키게임할 때 플레이어 캠 */
         props.state.mode === "airHockey" ? (
-          <div>
-            <span>에어하키 모드</span>
+          <>
             <video
               className={styles.videoCanvas}
               autoPlay={true}
@@ -147,7 +114,8 @@ const OpenViduVideoComponent = (props) => {
               width={960}
               height={720}
             />
-          </div>
+            <NewDrawBalls />
+          </>
         ) : null
       }
 

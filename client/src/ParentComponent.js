@@ -6,13 +6,14 @@ import EffectComponent from "./Chat/EffectComponent";
 export default class ParentComponent extends React.Component {
     state = {
         sessionConnected: false,
-        camFourStream: null
+        camFourStream: null,
+        roomName: this.props.roomName,
+        idx: this.props.idx,
     }
-
+    
     handleSessionConnected = (localUser) => {
         this.setState({ sessionConnected: true , camFourStream: localUser});
     }
-
     render() {
         return (
             <div>
@@ -20,6 +21,7 @@ export default class ParentComponent extends React.Component {
                 {this.state.sessionConnected && <ChatComponent user={this.state.camFourStream}/> &&
                      <EffectComponent user={this.state.camFourStream}/>
                 }
+
             </div>
         );
     }

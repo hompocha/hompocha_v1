@@ -1,7 +1,9 @@
-.container {
+.position {
+    position: fixed;
     background-color: #7ca4d789;
     border-radius: 12px;
     height: 200px;
     width: 200px;
-
+    top: 30%;
+    right: 1%;
 }

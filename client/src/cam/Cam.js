@@ -4,8 +4,6 @@ import styles from "./Cam.module.css";
 
 function Cam({ state, num, publisher, subscribers }) {
 
-
-
   return (
     <>
       <div className={styles.main}>
