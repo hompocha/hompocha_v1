@@ -27,18 +27,18 @@ const OpenViduVideoComponent = (props) => {
         `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
     });
     // console.log(hands);
-    const sendToMediaPipe = async () => {
-      if (videoRef.current) {
-        if (!videoRef.current.videoWidth) {
-          console.log(videoRef.videoWidth);
-          requestAnimationFrame(sendToMediaPipe);
-        } else {
-          console.log(videoRef);
-          await hands.send({ image: videoRef.current });
-          requestAnimationFrame(sendToMediaPipe);
-        }
-      }
-    };
+    // const sendToMediaPipe = async () => {
+    //   if (videoRef.current) {
+    //     if (!videoRef.current.videoWidth) {
+    //       console.log(videoRef.videoWidth);
+    //       requestAnimationFrame(sendToMediaPipe);
+    //     } else {
+    //       console.log(videoRef);
+    //       await hands.send({ image: videoRef.current });
+    //       requestAnimationFrame(sendToMediaPipe);
+    //     }
+    //   }
+    // };
 
     if (videoRef.current && canvasRef.current) {
       canvasCtx.current = canvasRef.current.getContext("2d");
