@@ -72,7 +72,7 @@ const OpenViduVideoComponent = (props) => {
         props.state.mode === undefined ? (
           <div>
             <span>대화모드</span>
-            <video autoPlay={true} ref={videoRef} />
+            <video className={styles.roomCam} autoPlay={true} ref={videoRef} />
           </div>
         ) : null
       }
@@ -89,18 +89,8 @@ const OpenViduVideoComponent = (props) => {
                 setVideoReady(!!el);
               }}
             />
-            <canvas
-              className={styles.videoCanvas}
-              ref={canvasRef}
-              width={960}
-              height={720}
-            />
-            <canvas
-              className={styles.videoCanvas}
-              ref={paddleRef}
-              width={960}
-              height={720}
-            />
+            <canvas className={styles.videoCanvas} ref={canvasRef} />
+            <canvas className={styles.videoCanvas} ref={paddleRef} />
             <NewDrawBalls />
           </>
         ) : null

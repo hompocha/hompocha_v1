@@ -3,7 +3,6 @@ import UserVideoComponent from "./UserVideoComponent";
 import styles from "./Cam.module.css";
 
 function Cam({ state, num, publisher, subscribers }) {
-
   return (
     <>
       <div className={styles.main}>
@@ -22,7 +21,10 @@ function Cam({ state, num, publisher, subscribers }) {
             style={{ weight: "450px", height: "450px" }}
           >
             {num > 1 ? (
-              <UserVideoComponent streamManager={subscribers[0]} />
+              <UserVideoComponent
+                className={styles.userVideo}
+                streamManager={subscribers[0]}
+              />
             ) : null}
           </div>
         </div>
@@ -32,7 +34,10 @@ function Cam({ state, num, publisher, subscribers }) {
             style={{ weight: "450px", height: "450px" }}
           >
             {num > 2 ? (
-              <UserVideoComponent streamManager={subscribers[1]} />
+              <UserVideoComponent
+                className={styles.userVideo}
+                streamManager={subscribers[1]}
+              />
             ) : null}
           </div>
           <div
@@ -40,7 +45,10 @@ function Cam({ state, num, publisher, subscribers }) {
             style={{ weight: "450px", height: "450px" }}
           >
             {num > 3 ? (
-              <UserVideoComponent streamManager={subscribers[2]} />
+              <UserVideoComponent
+                className={styles.userVideo}
+                streamManager={subscribers[2]}
+              />
             ) : null}
           </div>
         </div>

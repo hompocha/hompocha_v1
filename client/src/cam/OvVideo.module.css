@@ -1,3 +1,7 @@
+.roomCam {
+  transform: rotateY(180deg);
+}
+
 .videoCanvas {
   position: absolute;
   margin-top: 20vh;
