@@ -1,53 +1,43 @@
-import React, { Component } from 'react';
-import KeywordCanvas from "../keyword/KeywordCanvas";
+import React, { useState, useEffect } from 'react';
 import CherryBlossom from "../keyword/cherryBlossom";
 import CloudCanvas from "../keyword/cloud";
 import CatCanvas from "../keyword/cat";
 
-export default class EffectComponent extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            effectWord: '',
-            keywordList: [],
+const EffectComponent = ({ user }) => {
+    const [effectWord, setEffectWord] = useState('');
+    const [keywordList, setKeywordList] = useState([]);
+
+    useEffect(() => {
+        const handleEffect = (event) => {
+            const data = event.data;
+            console.log("뭘받는지 보자:", event.data);
+            setKeywordList(prevKeywordList => [
+                ...prevKeywordList,
+                { x: Math.random() * 100, y: Math.random() * 100 },
+            ]);
+            setEffectWord(data);
         };
-        // this.sendEffect = this.sendEffect.bind(this);
-    }
 
-    componentDidMount(){
-        this.props.user.getStreamManager().stream.session.on("signal:effect",(event)=>{
-            const data= event.data;
-            console.log("뭘받는지 보자:",event.data);
-            this.setState(prevState => ({
-                keywordList: [...prevState.keywordList , {x: Math.random() * 100, y: Math.random() * 100}],
-                effectWord: data,
-            }));
-        });
-    }
+        const streamManager = user.getStreamManager().stream.session;
+        streamManager.on("signal:effect", handleEffect);
 
-    render() {
-        return (
-            <div>
-                {this.state.effectWord === '고양이' && (
-                    <React.Fragment>
-                        {this.state.keywordList.map((cat, index) => (
-                            <CatCanvas key={index}  />
-                        ))}
-                    </React.Fragment>
-                )}
-                {this.state.effectWord === '구름' ? <CloudCanvas/> : null}
-                {this.state.effectWord === '벚꽃' ? <CherryBlossom/> : null}
+        // Cleanup function
+        return () => streamManager.off("signal:effect", handleEffect);
+    }, [user]);
 
-                {/*{this.state.effectWord !== '' && (*/}
-                {/*    <React.Fragment>*/}
-                {/*        {this.state.keywordList.map((word,index) => (*/}
+    return (
+        <div>
+            {effectWord === '고양이' && (
+                <React.Fragment>
+                    {keywordList.map((cat, index) => (
+                        <CatCanvas key={index} />
+                    ))}
+                </React.Fragment>
+            )}
+            {effectWord === '구름' ? <CloudCanvas /> : null}
+            {effectWord === '벚꽃' ? <CherryBlossom /> : null}
+        </div>
+    );
+};
 
-                {/*            <KeywordCanvas key={index} keyword={this.state.effectWord}/>*/}
-                {/*        ))}*/}
-                {/*    </React.Fragment>*/}
-                {/*)}*/}
-            </div>
-        );
-    }
-}
-
+export default EffectComponent;
