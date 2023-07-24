@@ -1,15 +1,11 @@
 import { OpenVidu } from "openvidu-browser";
-
 import axios from "axios";
 import React, { Component, useState } from "react";
-import UserVideoComponent from "./UserVideoComponent";
 import Cam from "./Cam";
 import styles from "./camFour.module.css";
 import { Link } from "react-router-dom";
 import Example from "../voice/useSpeechRecognition";
-import CatCanvas from "../keyword/cat";
 import UserModel from "../models/user-model";
-import ChatComponent from "../Chat/ChatComponent";
 import GameCam from "../Games/GameCam";
 
 console.log(process.env.NODE_ENV);
@@ -58,7 +54,7 @@ export default class CamFour extends Component {
         .signal({
           data: string,
           to: [],
-          type: "my-chat",
+          type: "effect",
         })
         .then(() => {
           console.log("Message successfully sent");
@@ -183,27 +179,6 @@ export default class CamFour extends Component {
           mySession
             .connect(token, { clientData: this.state.myUserName })
             .then(async () => {
-              /* signal 코드 추가 */
-              mySession
-                .signal({
-                  data: "My custom message", // Any string (optional)
-                  to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-                  type: "my-chat", // The type of message (optional)
-                })
-                .then(() => {
-                  console.log("Message successfully sent");
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
-
-              mySession.on("signal:my-chat", (event) => {
-                console.log(event.data); // Message
-                console.log(event.from); // Connection object of the sender
-                console.log(event.type); // The type of message ("my-chat")
-              });
-
-              // --- 5) Get your own camera stream ---
 
               // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
               // element: we will manage it on our own) and with the desired properties
@@ -427,14 +402,7 @@ export default class CamFour extends Component {
                   subscribers={this.state.subscribers}
                 />
               </div>
-              <div id="send-signal">
-                <input
-                  type="button"
-                  id="signal-button"
-                  onClick={this.sendSignal}
-                  value="Send Signal"
-                />
-              </div>
+
             </>
           ) : null
         }

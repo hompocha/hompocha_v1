@@ -1,25 +1,27 @@
 import React from "react";
 import ChatComponent from "./Chat/ChatComponent";
 import CamFour from "./cam/CamFour";
-
+import EffectComponent from "./Chat/EffectComponent";
 
 export default class ParentComponent extends React.Component {
     state = {
-        videoLoaded: false,
+        sessionConnected: false,
         camFourStream: null,
         roomName: this.props.roomName,
         idx: this.props.idx,
     }
     
-    handleVideoLoad = (localUser) => {
-        this.setState({ videoLoaded: true , camFourStream: localUser});
+    handleSessionConnected = (localUser) => {
+        this.setState({ sessionConnected: true , camFourStream: localUser});
     }
     render() {
         return (
             <div>
-                <CamFour onVideoLoad={this.handleVideoLoad} roomName = {this.state.roomName} idx = {this.state.idx}/>
-                {this.state.videoLoaded &&
-                    <ChatComponent user={this.state.camFourStream} /> }
+                <CamFour onVideoLoad={this.handleSessionConnected} />
+                {this.state.sessionConnected && <ChatComponent user={this.state.camFourStream}/> &&
+                     <EffectComponent user={this.state.camFourStream}/>
+                }
+
             </div>
         );
     }

@@ -17,9 +17,9 @@ const languageOptions = [{ label: '한국어 - ', value: 'ko-KR' }];
 
 const Example = (props) => {
 
-  const [lang, setLang] = useState('ko-KR');
+  // const [lang, setLang] = useState('ko-KR');
   const [value, setValue] = useState('');
-  const [blocked, setBlocked] = useState(false);
+  const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState('');
   const [cats, setCats] = useState([]);
   const [showCat, setShowCat] = useState(false);
@@ -28,25 +28,26 @@ const Example = (props) => {
 
 
 
-
+  const lang = 'ko-Kr';
   useEffect(() => {
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
         
-        setValue("");
-        const timeout = setTimeout(() => {
-        }, 1000);
-        if (word === "고양이") {
-          setValue("");
-          setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
-        } else if (word === "구름") {
-          setValue("");
-          setShowCloud(true);
-        } else if (word === "벚꽃") {
-          setValue("");
-          setShowCherryBlossom(true);
-        }
+        // setValue("");
+        // const timeout = setTimeout(() => {
+        // }, 1000);
+        // if (word === "고양이") {
+        //   setValue("");
+        //   setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
+        // } else if (word === "구름") {
+        //   setValue("");
+        //   setShowCloud(true);
+        // } else if (word === "벚꽃") {
+        //   setValue("");
+        //   setShowCherryBlossom(true);
+        // }
+
         props.sendSignal(word);
     
         return () => clearTimeout(timeout);
@@ -59,7 +60,7 @@ const Example = (props) => {
   useEffect(() =>  {
     if (extractedValue !== '') {
       const timeout = setTimeout(() => {
-        setExtractedValue("1");
+        setExtractedValue(" ");
       }, 500);
       return () => clearTimeout(timeout);
     }
@@ -75,7 +76,7 @@ const Example = (props) => {
 
   const onError = (event) => {
     if (event.error === 'not-allowed') {
-      setBlocked(true);
+      setListenBlocked(true);
     }
   };
 
@@ -88,7 +89,7 @@ const Example = (props) => {
   const toggle = listening
     ? stop
     : () => {
-        setBlocked(false);
+        setListenBlocked(false);
         listen({ lang });
       };
   
@@ -107,7 +108,7 @@ const Example = (props) => {
     <div>
       { showCloud && ( <CloudCanvas/>)}  
       {cats.map((cat, index) => (
-        <Cat key={index} x={cat.x} y={cat.y} />
+        <CatCanvas key={index} x={cat.x} y={cat.y} />
       ))}
     </div>
     <div className={styles.container}>
@@ -121,13 +122,13 @@ const Example = (props) => {
         {supported && (
           <React.Fragment>
             <p>{`'듣기'를 클릭하고 말하기 시작..`}</p>
-            <select form="speech-recognition-form" id="language" value={lang}  onChange={(e) => setLang(e.target.value)}>
-              {languageOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            {/*<select form="speech-recognition-form" id="language" value={lang}  onChange={(e) => setLang(e.target.value)}>*/}
+            {/*  {languageOptions.map((option) => (*/}
+            {/*    <option key={option.value} value={option.value}>*/}
+            {/*      {option.label}*/}
+            {/*    </option>*/}
+            {/*  ))}*/}
+            {/*</select>*/}
             <label htmlFor="transcript">기록</label>
             <textarea
               id="transcript"
@@ -137,10 +138,10 @@ const Example = (props) => {
               rows={3}
               disabled             
               />
-            <button disabled={blocked} type="button" onClick={toggle}>
+            <button disabled={listenBlocked} type="button" onClick={toggle}>
               {listening ? '정지' : '듣기'}
             </button>
-            {blocked && <p style={{ color: 'red' }}>The microphone is blocked for this site in your browser.</p>}
+            {listenBlocked && <p style={{ color: 'red' }}>The microphone is blocked for this site in your browser.</p>}
             <textarea
               id="extractedValue"
               name="extractedValue"

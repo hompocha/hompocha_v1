@@ -10,7 +10,6 @@ export default class ChatComponent extends Component {
         this.chatScroll = React.createRef();
         this.handleChange = this.handleChange.bind(this);
         this.handlePressKey = this.handlePressKey.bind(this);
-        this.close = this.close.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
     }
     componentDidMount(){
@@ -59,9 +58,7 @@ export default class ChatComponent extends Component {
             } catch (err) {}
         }, 20);
     }
-    close() {
-        this.props.close(undefined);
-    }
+
     render() {
         const styleChat = { display: this.props.chatDisplay };
         return (
