@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatComponent.module.css'
 
@@ -9,6 +10,7 @@ export default function ChatComponent(props) {
     useEffect(() => {
         if(props.sessionConnected){
             props.user.getStreamManager().stream.session.on('signal:chat', (event) => {
+
             const data= JSON.parse(event.data);
             setMessageList(prevMessageList => [...prevMessageList, { connectionId: event.from.connectionId, message:data.message }]);
             scrollToBottom();
@@ -48,6 +50,7 @@ export default function ChatComponent(props) {
             } catch (err) {}
         }, 20);
     }
+
 
     const styleChat = { display: props.chatDisplay };
 

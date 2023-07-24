@@ -13,6 +13,7 @@ import {CatCanvas} from "../keyword/cat";
 
 
 const keyword = ["고양이", "구름", "벚꽃"];
+const speech_sentence =["우현이"]
 
 const UseSpeechRecognition = (props) => {
 
@@ -29,24 +30,15 @@ const UseSpeechRecognition = (props) => {
 
   const lang = 'ko-Kr';
   useEffect(() => {
+    for (const sentence of speech_sentence){
+      if (value.includes(sentence)){
+        setExtractedValue(sentence);
+        props.sendSpeech(sentence);
+      }
+    }
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
-        
-        // setValue("");
-        // const timeout = setTimeout(() => {
-        // }, 1000);
-        // if (word === "고양이") {
-        //   setValue("");
-        //   setCats((prevCats) => [...prevCats, { x: 1100, y: 200 }]);
-        // } else if (word === "구름") {
-        //   setValue("");
-        //   setShowCloud(true);
-        // } else if (word === "벚꽃") {
-        //   setValue("");
-        //   setShowCherryBlossom(true);
-        // }
-
         props.sendSignal(word);
     
         // return () => clearTimeout(timeout);
