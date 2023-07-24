@@ -1,6 +1,5 @@
 import styles from "./GameCam.module.css";
 import { GoalPostBlue, GoalPostRed } from "./AirHockey/GoalPost";
-import DrawBalls from "./AirHockey/DrawBalls";
 import OpenViduVideoComponent from "../cam/OvVideo";
 
 function GameCam(props) {
@@ -14,7 +13,6 @@ function GameCam(props) {
           />
           <GoalPostBlue />
           <GoalPostRed />
-          <DrawBalls />
         </>
       ) : null}
     </>

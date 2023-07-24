@@ -2,17 +2,16 @@ import React, { Component } from "react";
 import OpenViduVideoComponent from "./OvVideo";
 import "./UserVideo.css";
 
-export default class UserVideoComponent extends Component {
-  render() {
-    return (
+const UserVideoComponent = (props) => {
+  return (
       <>
-        {this.props.streamManager !== undefined ? (
-          <OpenViduVideoComponent
-            state={this.props}
-            streamManager={this.props.streamManager}
-          />
+        {props.streamManager !== undefined ? (
+            <OpenViduVideoComponent
+                state={props}
+                streamManager={props.streamManager}
+            />
         ) : null}
       </>
-    );
-  }
-}
+  );
+};
+export default UserVideoComponent;

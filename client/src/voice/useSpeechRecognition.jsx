@@ -14,9 +14,8 @@ import {CatCanvas} from "../keyword/cat";
 
 const keyword = ["고양이", "구름", "벚꽃"];
 const speech_sentence =["우현이"]
-const languageOptions = [{ label: '한국어 - ', value: 'ko-KR' }];
 
-const Example = (props) => {
+const UseSpeechRecognition = (props) => {
 
   // const [lang, setLang] = useState('ko-KR');
   const [value, setValue] = useState('');
@@ -114,13 +113,6 @@ const Example = (props) => {
         {supported && (
           <React.Fragment>
             <p>{`'듣기'를 클릭하고 말하기 시작..`}</p>
-            {/*<select form="speech-recognition-form" id="language" value={lang}  onChange={(e) => setLang(e.target.value)}>*/}
-            {/*  {languageOptions.map((option) => (*/}
-            {/*    <option key={option.value} value={option.value}>*/}
-            {/*      {option.label}*/}
-            {/*    </option>*/}
-            {/*  ))}*/}
-            {/*</select>*/}
             <label htmlFor="transcript">기록</label>
             <textarea
               id="transcript"
@@ -151,4 +143,4 @@ const Example = (props) => {
   );
 };
 
-export default Example;
+export default UseSpeechRecognition;
