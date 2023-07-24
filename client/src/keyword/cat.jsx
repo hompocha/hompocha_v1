@@ -42,7 +42,7 @@ export function CatCanvas() {
             x = 0;
             y = 200;
         }
-    
+
 
         function animate() {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
