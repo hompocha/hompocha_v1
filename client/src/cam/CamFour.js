@@ -4,7 +4,7 @@ import React, { Component, useState } from "react";
 import Cam from "./Cam";
 import styles from "./camFour.module.css";
 import { Link } from "react-router-dom";
-import Example from "../voice/useSpeechRecognition";
+import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import UserModel from "../models/user-model";
 import GameCam from "../Games/GameCam";
 
@@ -392,7 +392,7 @@ export default class CamFour extends Component {
                     type="button"
                     value="오리옮기기"
                   />
-                  <Example sendSignal={this.sendSignal} />
+                  <UseSpeechRecognition sendSignal={this.sendSignal} />
                 </div>
 
                 <Cam

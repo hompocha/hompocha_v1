@@ -17,11 +17,15 @@ export default class ParentComponent extends React.Component {
     render() {
         return (
             <div>
-                <CamFour onVideoLoad={this.handleSessionConnected} />
-                {this.state.sessionConnected && <ChatComponent user={this.state.camFourStream}/> &&
-                     <EffectComponent user={this.state.camFourStream}/>
+                <CamFour onVideoLoad={this.handleSessionConnected} roomName = {this.state.roomName} idx = {this.state.idx} />
+                {
+                    this.state.sessionConnected && (
+                        <>
+                            <ChatComponent user={this.state.camFourStream} />
+                            <EffectComponent user={this.state.camFourStream} />
+                        </>
+                    )
                 }
-
             </div>
         );
     }

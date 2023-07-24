@@ -1,6 +1,3 @@
-//
-//
-//
 import React, { Component } from 'react';
 import KeywordCanvas from "../keyword/KeywordCanvas";
 import CherryBlossom from "../keyword/cherryBlossom";
