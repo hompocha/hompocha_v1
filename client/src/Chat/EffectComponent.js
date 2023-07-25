@@ -26,6 +26,23 @@ const EffectComponent = ({ user }) => {
         return () => streamManager.off("signal:effect", handleEffect);
     }, [user]);
 
+    const sendSignal = (string) => {
+        if (this.state.session) {
+            this.state.session
+                .signal({
+                    data: string,
+                    to: [],
+                    type: "effect",
+                })
+                .then(() => {
+                    console.log("Message successfully sent");
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }
+
     return (
         <div>
             {effectWord === '고양이' && (

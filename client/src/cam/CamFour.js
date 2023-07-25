@@ -31,7 +31,9 @@ export default class CamFour extends Component {
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
       subscribers: [],
-      videoComponentLoaded: false,
+
+      sessionConnected: false,
+
       mode: undefined,
     };
 
@@ -125,9 +127,9 @@ export default class CamFour extends Component {
     });
   }
 
-  handleVideoLoaded = () => {
-    this.setState({ videoComponentLoaded: true });
-    this.props.onVideoLoad(localUser);
+  handleSessionConnected = () => {
+    this.setState({ sessionConnected: true });
+    this.props.onSessionConnect(localUser);
   };
   /* ---------------------------------- */
 
@@ -240,10 +242,9 @@ export default class CamFour extends Component {
               localUser.setConnectionId(
                 this.state.session.connection.connectionId
               );
-              localUser.setScreenShareActive(false);
               localUser.setStreamManager(publisher);
               localUser.setSubscriber(this.state.subscribers);
-              this.handleVideoLoaded();
+              this.handleSessionConnected();
               console.log(
                 "local Stream 세숀 : ",
                 localUser.getStreamManager().stream
@@ -368,6 +369,7 @@ export default class CamFour extends Component {
                     />
                   </p>
                   <p>
+                    {/*세션 수동입력하는 창  (일단안뜸) */}
                     <label> Session: </label>
                     <input
                       className={styles.formControl}
