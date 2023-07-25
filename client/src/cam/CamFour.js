@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import UserModel from "../models/user-model";
 import GameCam from "../Games/GameCam";
+import UserVideoComponent from "./UserVideoComponent";
+import SpeechCam from "../Games/speechgame/speechCam";
 
 console.log(process.env.NODE_ENV);
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
@@ -30,7 +32,6 @@ export default class CamFour extends Component {
       publisher: undefined,
       subscribers: [],
       videoComponentLoaded: false,
-
       mode: undefined,
     };
 
@@ -44,6 +45,8 @@ export default class CamFour extends Component {
     this.sendSignal = this.sendSignal.bind(this);
     this.enterAirHockey = this.enterAirHockey.bind(this);
     this.enterMovingDuck = this.enterMovingDuck.bind(this);
+    this.enterSpeech = this.enterSpeech.bind(this);
+
     this.returnToRoom = this.returnToRoom.bind(this);
     this.sendSpeech = this.sendSpeech.bind(this);
   }
@@ -67,20 +70,34 @@ export default class CamFour extends Component {
   }
   sendSpeech(string) {
     if (this.state.session) {
+      const randomConnectionId = this.pickRandom();
       this.state.session
           .signal({
             data: string,
-            to: [],
+            to: [randomConnectionId],
             type: "speech",
           })
           .then(() => {
-            console.log("Message successfully sent");
+            console.log("Message successfully sent",randomConnectionId);
           })
           .catch((error) => {
             console.error(error);
           });
     }
   }
+
+  pickRandom(){
+    const listPeople =[];
+    this.state.subscribers.forEach((subscriber) => {
+      listPeople.push(subscriber.stream.connection.connectionId);
+    });
+    listPeople.push(this.state.session.connection.connectionId);
+
+    const sortedPeople = [...listPeople].sort();
+    console.log(sortedPeople)
+    return sortedPeople[0];
+  }
+
 
   enterAirHockey(e) {
     // e.preventDefault();
@@ -92,6 +109,13 @@ export default class CamFour extends Component {
     // e.preventDefault();
     this.setState({
       mode: "movingDuck",
+    });
+  }
+
+  enterSpeech(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: "speech",
     });
   }
   returnToRoom(e) {
@@ -409,8 +433,14 @@ export default class CamFour extends Component {
                     type="button"
                     value="오리옮기기"
                   />
+
+                  <input
+                      onClick={this.enterSpeech}
+                      type="button"
+                      value="발음게임"
+                  />
                   {/*<Example sendSpeech={this.sendSpeech}/>*/}
-                  <UseSpeechRecognition sendSignal={this.sendSignal} sendSpeech={this.sendSpeech} />
+                  <UseSpeechRecognition sendSignal={this.sendSignal} />
                 </div>
 
                 <Cam
@@ -456,6 +486,25 @@ export default class CamFour extends Component {
                 />
               </form>
             </div>
+          ) : null
+        }
+
+        {
+          /* 발음 게임 구현 */
+          this.state.session !== undefined &&
+          this.state.mode === "speech" ? (
+              <div>
+                <h1> 안뇽 </h1>
+                <form>
+                  <SpeechCam key ={this.pickRandom()} subscribers={this.state.subscribers}/>
+                  <UseSpeechRecognition sendSpeech={this.sendSpeech} />
+                  <input
+                      onClick={this.returnToRoom}
+                      type="button"
+                      value="방으로 이동"
+                  />
+                </form>
+              </div>
           ) : null
         }
       </div>

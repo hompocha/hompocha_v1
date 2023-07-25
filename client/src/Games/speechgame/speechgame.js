@@ -11,6 +11,7 @@ const Speechgame = (props) => {
             const people = props.user.getSubscriber();
             const randomElement = getRandomElement(people);
             console.log("test:" ,randomElement.stream.connection.connectionId);
+            console.log("my ID : ", props.user.getStreamManager().stream.connection.connectionId)
             setRandom(randomElement);
         });
     }, [props.user]);
@@ -36,10 +37,12 @@ const Speechgame = (props) => {
 
     return (
         <div>
+            {/* UserVideoComponent 위에 불투명 레이어를 추가합니다. */}
             {/*다른 사람 나오는거 같긴한데 잘모르겠다*/}
             <UserVideoComponent streamManager={random}/>
 
         </div>
+
     );
 };
 
