@@ -10,8 +10,16 @@ function Cam(props) {
   const publisher = props.user.getStreamManager();
   const subscribers = props.user.getSubscriber();
   const num = props.user.getSubscriber().length+1;
-  // const members = [publisher, ...subscribers];
-  //  members sort
+  const members = [publisher, ...subscribers];
+  console.log(members);
+  // members.sort((a, b) => {
+  //   return a.stream.connection.connectionId < b.stream.connection.connectionId ?
+  //       -1 : (a.stream.connection.connectionId > b.stream.connection.connectionId ? 1 : 0) });
+  // members.forEach((member) => {
+  //   if(member!==undefined){
+  //     console.log('member',member.stream.connection.connectionId);
+  //   }
+  // });
   return (
     <>
       <div className={styles.main}>
@@ -23,7 +31,7 @@ function Cam(props) {
             <UserVideoComponent
               className={styles.userVideo}
               mode={mode}
-              streamManager={publisher}
+              streamManager={members[0]}
             />
           </div>
           <div
@@ -34,7 +42,7 @@ function Cam(props) {
               <UserVideoComponent
                 className={styles.userVideo}
                 mode={mode}
-                streamManager={subscribers[0]}
+                streamManager={members[1]}
               />
             ) : null}
           </div>
@@ -48,7 +56,7 @@ function Cam(props) {
               <UserVideoComponent
                 className={styles.userVideo}
                 mode={mode}
-                streamManager={subscribers[1]}
+                streamManager={members[2]}
               />
             ) : null}
           </div>
@@ -60,7 +68,7 @@ function Cam(props) {
               <UserVideoComponent
                 className={styles.userVideo}
                 mode={mode}
-                streamManager={subscribers[2]}
+                streamManager={members[3]}
               />
             ) : null}
           </div>
