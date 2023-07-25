@@ -86,12 +86,8 @@ const UseSpeechRecognition = (props) => {
   
   return (
     <>
-
-
     <div>
-      <input
-        onChange={(e) => setValue(e.target.value)}
-      ></input>
+        <input onChange={(e) => setValue(e.target.value)}/>
     </div>
     <div className={styles.CherryBlossom}>
       { showCherryBlossom && (<CherryBlossom/>)}

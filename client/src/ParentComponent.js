@@ -16,7 +16,7 @@ const ParentComponent = ({ roomName, idx }) => {
 
     return (
         <div>
-            <CamFour onVideoLoad={handleSessionConnected} roomName={roomName} idx={idx} />
+            <CamFour onSessionConnect={handleSessionConnected} roomName={roomName} idx={idx} />
             {
                 sessionConnected && camFourStream && (
                     <>
