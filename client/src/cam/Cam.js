@@ -1,7 +1,17 @@
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./Cam.module.css";
 
-function Cam({  num, publisher, subscribers }) {
+function Cam(props) {
+
+// num={this.props.user.getSubscriber().length + 1}
+// publisher={this.props.user.getStreamManager()}
+// subscribers={this.props.user.getSubscriber()}
+  const mode = props.user.mode;
+  const publisher = props.user.getStreamManager();
+  const subscribers = props.user.getSubscriber();
+  const num = props.user.getSubscriber().length+1;
+  // const members = [publisher, ...subscribers];
+  //  members sort
   return (
     <>
       <div className={styles.main}>
@@ -12,6 +22,7 @@ function Cam({  num, publisher, subscribers }) {
           >
             <UserVideoComponent
               className={styles.userVideo}
+              mode={mode}
               streamManager={publisher}
             />
           </div>
@@ -22,6 +33,7 @@ function Cam({  num, publisher, subscribers }) {
             {num > 1 ? (
               <UserVideoComponent
                 className={styles.userVideo}
+                mode={mode}
                 streamManager={subscribers[0]}
               />
             ) : null}
@@ -35,6 +47,7 @@ function Cam({  num, publisher, subscribers }) {
             {num > 2 ? (
               <UserVideoComponent
                 className={styles.userVideo}
+                mode={mode}
                 streamManager={subscribers[1]}
               />
             ) : null}
@@ -46,6 +59,7 @@ function Cam({  num, publisher, subscribers }) {
             {num > 3 ? (
               <UserVideoComponent
                 className={styles.userVideo}
+                mode={mode}
                 streamManager={subscribers[2]}
               />
             ) : null}

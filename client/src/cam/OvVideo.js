@@ -69,7 +69,7 @@ const OpenViduVideoComponent = (props) => {
     <>
       {
         /* 대화 모드일 때 불러와 지는 캠 */
-        props.state.mode === undefined ? (
+        props.mode === undefined ? (
           <div>
             <span>대화모드</span>
             <video className={styles.roomCam} autoPlay={true} ref={videoRef} />
@@ -79,7 +79,7 @@ const OpenViduVideoComponent = (props) => {
 
       {
         /* 하키게임할 때 플레이어 캠 */
-        props.state.mode === "airHockey" ? (
+        props.mode === "airHockey" ? (
           <>
             <video
               className={styles.videoCanvas}
@@ -98,7 +98,7 @@ const OpenViduVideoComponent = (props) => {
 
       {
         /* 오리옮기기 게임할 때 불러와지는 플레이어 캠 */
-        props.state.mode === "movingDuck" ? (
+        props.mode === "movingDuck" ? (
           <div>
             <span>오리 옮기기 모드</span>
             <video autoPlay={true} ref={videoRef} />

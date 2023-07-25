@@ -1,6 +1,7 @@
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import Cam from "./Cam";
 import React, {Component} from "react";
+import GameCam from "../Games/GameCam";
 
 export default class CamMain extends Component{
     constructor(props){
@@ -11,15 +12,17 @@ export default class CamMain extends Component{
     }
     enterAirHockey(e) {
         // e.preventDefault();
-        this.setState({
-            mode: "airHockey",
-        });
+        // this.setState({
+        //     mode: "airHockey",
+        // });
+        this.props.user.mode = "airHockey";
     }
     enterMovingDuck(e) {
         // e.preventDefault();
-        this.setState({
-            mode: "movingDuck",
-        });
+        // this.setState({
+        //     mode: "movingDuck",
+        // });
+        this.props.user.mode = "movingDuck";
     }
     sendEffectSignal(string) {
         if (this.props.user.getStreamManager().session) {
@@ -41,7 +44,7 @@ export default class CamMain extends Component{
     render(){
         return(
             <div>
-                {
+                {   /* Main Room */
                     this.props.user.mode === undefined ? (
                         <>
 
@@ -76,13 +79,53 @@ export default class CamMain extends Component{
                             </div>
 
                             <Cam
-                                num={this.props.user.getSubscriber().length + 1}
-                                publisher={this.props.user.getStreamManager()}
-                                subscribers={this.props.user.getSubscriber()}
+                                user={this.props.user}
+                                // num={this.props.user.getSubscriber().length + 1}
+                                // publisher={this.props.user.getStreamManager()}
+                                // subscribers={this.props.user.getSubscriber()}
                             />
                         </div>
                     </>
-                ):null}
+                    ):null
+                }
+
+                {
+                    /* 에어하키 구현 */
+                    this.props.user.mode === "airHockey" ? (
+                        <div>
+                        <GameCam 
+                            // state={this.state}
+                            user={this.props.user}
+                         />
+                        <form>
+                            <input
+                            onClick={this.returnToRoom}
+                            type="button"
+                            value="방으로 이동"
+                            />
+                        </form>
+                        </div>
+                    ) : null
+                }
+
+                {
+                    /* 오리 옮기기 구현 */
+                    this.props.user.mode === "movingDuck" ? (
+                        <div>
+                        <GameCam 
+                            // state={this.state}
+                            user={this.props.user}
+                         />
+                        <form>
+                            <input
+                            onClick={this.returnToRoom}
+                            type="button"
+                            value="방으로 이동"
+                            />
+                        </form>
+                        </div>
+                    ) : null
+                }
             </div>
         )
     }

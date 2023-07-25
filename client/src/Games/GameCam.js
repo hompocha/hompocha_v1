@@ -5,11 +5,11 @@ import OpenViduVideoComponent from "../cam/OvVideo";
 function GameCam(props) {
   return (
     <>
-      {props.state.mode === "airHockey" ? (
+      {props.user.mode === "airHockey" ? (
         <>
           <OpenViduVideoComponent
-            state={props.state}
-            streamManager={props.state.publisher}
+            mode={props.user.mode}
+            streamManager={props.user.getStreamManager()}
           />
           <GoalPostBlue />
           <GoalPostRed />
