@@ -1,8 +1,7 @@
-import CamSlice from "./CamSlice";
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./Cam.module.css";
 
-function Cam({ state, num, publisher, subscribers }) {
+function Cam({  num, publisher, subscribers }) {
   return (
     <>
       <div className={styles.main}>
