@@ -1,6 +1,8 @@
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import Cam from "./Cam";
 import React, {Component} from "react";
+import GameCam from "../Games/GameCam";
+import UserModel from "../models/user-model";
 
 export default class CamMain extends Component{
     constructor(props){
@@ -8,19 +10,36 @@ export default class CamMain extends Component{
         this.enterAirHockey = this.enterAirHockey.bind(this);
         this.enterMovingDuck = this.enterMovingDuck.bind(this);
         this.sendEffectSignal = this.sendEffectSignal.bind(this);
+        this.state = {
+            mode: undefined
+        };
     }
-    enterAirHockey(e) {
-        // e.preventDefault();
-        this.setState({
+
+
+    enterAirHockey= ()  => {
+        this.setState(prevState => ({
             mode: "airHockey",
+        }), () => {
+            this.props.onModeChange("airHockey");
         });
-    }
-    enterMovingDuck(e) {
-        // e.preventDefault();
-        this.setState({
+    };
+
+    enterMovingDuck= ()  => {
+        this.setState(prevState => ({
             mode: "movingDuck",
+        }), () => {
+            this.props.onModeChange("movingDuck");
         });
-    }
+    };
+    // enterMovingDuck(e) {
+    //     // e.preventDefault();
+    //     this.setState({
+    //         mode: "movingDuck",
+    //     });
+    //     this.props.user.set
+    //     const localUser = Object.assign(new UserModel, 
+    //     this.props.setUserStream()
+    // }
     sendEffectSignal(string) {
         if (this.props.user.getStreamManager().session) {
             this.props.user.getStreamManager().session
@@ -39,10 +58,13 @@ export default class CamMain extends Component{
     }
 
     render(){
+        console.log('cammain rendered##########');
+        console.log(this.props);
+        console.log(this.state.mode);
         return(
             <div>
-                {
-                    this.props.user.mode === undefined ? (
+                {   /* Main Room */
+                    this.state.mode === undefined ? (
                         <>
 
                         <div id="session">
@@ -76,13 +98,55 @@ export default class CamMain extends Component{
                             </div>
 
                             <Cam
-                                num={this.props.user.getSubscriber().length + 1}
-                                publisher={this.props.user.getStreamManager()}
-                                subscribers={this.props.user.getSubscriber()}
+                                user={this.props.user}
+                                // num={this.props.user.getSubscriber().length + 1}
+                                // publisher={this.props.user.getStreamManager()}
+                                // subscribers={this.props.user.getSubscriber()}
                             />
                         </div>
                     </>
-                ):null}
+                    ):null
+                }
+
+                {
+                    /* 에어하키 구현 */
+                    this.state.mode === "airHockey" ? (
+                        <div>
+                        <GameCam 
+                            // state={this.state}
+                            mode={this.state.mode}
+                            user={this.props.user}
+                         />
+                        <form>
+                            <input
+                            onClick={this.returnToRoom}
+                            type="button"
+                            value="방으로 이동"
+                            />
+                        </form>
+                        </div>
+                    ) : null
+                }
+
+                {
+                    /* 오리 옮기기 구현 */
+                    this.state.mode === "movingDuck" ? (
+                        <div>
+                        <GameCam 
+                            // state={this.state}
+                            mode={this.state.mode}
+                            user={this.props.user}
+                         />
+                        <form>
+                            <input
+                            onClick={this.returnToRoom}
+                            type="button"
+                            value="방으로 이동"
+                            />
+                        </form>
+                        </div>
+                    ) : null
+                }
             </div>
         )
     }

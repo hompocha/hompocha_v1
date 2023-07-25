@@ -12,11 +12,13 @@ export default function ChatComponent(props) {
             props.user.getStreamManager().stream.session.on('signal:chat', (event) => {
 
             const data= JSON.parse(event.data);
+            console.log('set Message');
             setMessageList(prevMessageList => [...prevMessageList, { connectionId: event.from.connectionId, message:data.message }]);
             scrollToBottom();
         });
     }
-    }, [props.sessionConnected, props.user]);
+    }, [props.sessionConnected]);
+    // , props.user]);
 
     const handleChange = (event) => {
         setMessage(event.target.value);

@@ -3,13 +3,14 @@ import { GoalPostBlue, GoalPostRed } from "./AirHockey/GoalPost";
 import OpenViduVideoComponent from "../cam/OvVideo";
 
 function GameCam(props) {
+  console.log(props.mode);
   return (
     <>
-      {props.state.mode === "airHockey" ? (
+      {props.mode === "airHockey" ? (
         <>
           <OpenViduVideoComponent
-            state={props.state}
-            streamManager={props.state.publisher}
+            mode={props.mode}
+            streamManager={props.user.getStreamManager()}
           />
           <GoalPostBlue />
           <GoalPostRed />

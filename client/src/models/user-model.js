@@ -3,7 +3,7 @@ class UserModel {
     connectionId;
     audioActive;
     videoActive;
-    screenShareActive;s
+    screenShareActive;
     nickname;
     streamManager;
     type; // 'remote' | 'local'

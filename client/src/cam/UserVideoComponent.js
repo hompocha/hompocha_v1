@@ -7,7 +7,7 @@ const UserVideoComponent = (props) => {
       <>
         {props.streamManager !== undefined ? (
             <OpenViduVideoComponent
-                state={props}
+                mode={props.mode}
                 streamManager={props.streamManager}
             />
         ) : null}

@@ -1,7 +1,25 @@
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./Cam.module.css";
 
-function Cam({  num, publisher, subscribers }) {
+function Cam(props) {
+
+// num={this.props.user.getSubscriber().length + 1}
+// publisher={this.props.user.getStreamManager()}
+// subscribers={this.props.user.getSubscriber()}
+  const mode = props.user.mode;
+  const publisher = props.user.getStreamManager();
+  const subscribers = props.user.getSubscriber();
+  const num = props.user.getSubscriber().length+1;
+  const members = [publisher, ...subscribers];
+  console.log(members);
+  // members.sort((a, b) => {
+  //   return a.stream.connection.connectionId < b.stream.connection.connectionId ?
+  //       -1 : (a.stream.connection.connectionId > b.stream.connection.connectionId ? 1 : 0) });
+  // members.forEach((member) => {
+  //   if(member!==undefined){
+  //     console.log('member',member.stream.connection.connectionId);
+  //   }
+  // });
   return (
     <>
       <div className={styles.main}>
@@ -12,7 +30,8 @@ function Cam({  num, publisher, subscribers }) {
           >
             <UserVideoComponent
               className={styles.userVideo}
-              streamManager={publisher}
+              mode={mode}
+              streamManager={members[0]}
             />
           </div>
           <div
@@ -22,7 +41,8 @@ function Cam({  num, publisher, subscribers }) {
             {num > 1 ? (
               <UserVideoComponent
                 className={styles.userVideo}
-                streamManager={subscribers[0]}
+                mode={mode}
+                streamManager={members[1]}
               />
             ) : null}
           </div>
@@ -35,7 +55,8 @@ function Cam({  num, publisher, subscribers }) {
             {num > 2 ? (
               <UserVideoComponent
                 className={styles.userVideo}
-                streamManager={subscribers[1]}
+                mode={mode}
+                streamManager={members[2]}
               />
             ) : null}
           </div>
@@ -46,7 +67,8 @@ function Cam({  num, publisher, subscribers }) {
             {num > 3 ? (
               <UserVideoComponent
                 className={styles.userVideo}
-                streamManager={subscribers[2]}
+                mode={mode}
+                streamManager={members[3]}
               />
             ) : null}
           </div>

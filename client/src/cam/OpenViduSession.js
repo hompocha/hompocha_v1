@@ -6,7 +6,7 @@ import UseSpeechRecognition from "../voice/useSpeechRecognition";
 
 
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`;
-const localUser = new UserModel();
+let localUser = new UserModel();
 
 export default class OpenViduSession extends Component {
     constructor(props) {
@@ -47,7 +47,6 @@ export default class OpenViduSession extends Component {
     handleSessionConnected = () => {
         this.setState({ sessionConnected: true });
         this.props.onSessionConnect(localUser);
-
     };
     /* 세션 수동입력하는 함수 */
     // handleChangeSessionId(e) {
@@ -63,6 +62,9 @@ export default class OpenViduSession extends Component {
             this.setState({
                 subscribers: subscribers,
             });
+            localUser.setSubscriber(subscribers);
+            localUser = Object.assign(new UserModel, localUser);
+            this.props.setUserStream(localUser);
         }
     }
 
@@ -71,6 +73,10 @@ export default class OpenViduSession extends Component {
             this.setState({
                 mainStreamManager: stream,
             });
+
+            localUser.setStreamManager(stream);
+            localUser = Object.assign(new UserModel, localUser);
+            this.props.setUserStream(localUser);
         }
     }
     joinSession(){
@@ -83,6 +89,7 @@ export default class OpenViduSession extends Component {
                 let mySession = this.state.session;
 
                 mySession.on("streamCreated", (event) =>{
+                    console.log("stream created");
                     const subscriber = mySession.subscribe(event.stream, undefined);
                     const subscribers = this.state.subscribers;
                     subscribers.push(subscriber);
@@ -90,7 +97,10 @@ export default class OpenViduSession extends Component {
                     this.setState({
                         subscribers: subscribers,
                     });
-                })
+                    localUser.setSubscriber(subscribers);
+                    localUser = Object.assign(new UserModel, localUser);
+                    this.props.setUserStream(localUser);
+                });
                 mySession.on("streamDestroyed", (event) => {
                     // Remove the stream from 'subscribers' array
                     this.deleteSubscriber(event.stream.streamManager);

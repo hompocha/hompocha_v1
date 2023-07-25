@@ -32,7 +32,6 @@ const Login: React.FC = () => {
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/login`, {
-            //const response = await axios.post("https://hompocha.site/api/user/login", {
                 loginId,
                 loginPassword,
             });
@@ -64,7 +63,6 @@ const Login: React.FC = () => {
         // 중복된 아이디인지 확인
         try {
             const response = await axios.get(
-                // `https://hompocha.site/api/user/${id}`
                 `${process.env.REACT_APP_API_URL}/user/${id}`
             );
             if (response.data.exists) {
