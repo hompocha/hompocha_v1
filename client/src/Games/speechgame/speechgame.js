@@ -5,16 +5,19 @@ const Speechgame = (props) => {
     const [speech, setSpeech] = useState(false);
     const [random , setRandom] =useState('');
 
-    useEffect(() => {
-        props.user.getStreamManager().stream.session.on("signal:speech", (event) => {
-            const data = event.data;
-            const people = props.user.getSubscriber();
-            const randomElement = getRandomElement(people);
-            console.log("test:" ,randomElement.stream.connection.connectionId);
-            console.log("my ID : ", props.user.getStreamManager().stream.connection.connectionId)
-            setRandom(randomElement);
-        });
-    }, [props.user]);
+    // useEffect(() => {
+    //     props.user.getStreamManager().stream.session.on("signal:gameRoom", (event) => {
+    //         const data = event.data;
+    //         // const members = props.user.getSubscriber();
+    //         // const randomMember = getRandomElement(members);
+    //         if(data === "airHockey"){
+    //
+    //         }
+    //         // console.log("test:" ,randomElement.stream.connection.connectionId);
+    //         // console.log("my ID : ", props.user.getStreamManager().stream.connection.connectionId)
+    //         // setRandom(randomElement);
+    //     });
+    // }, [props.user]);
 
     // const sendPass = () => {
     //     if (props.user && speech) {

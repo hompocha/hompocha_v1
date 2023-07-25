@@ -10,11 +10,22 @@ export default class CamMain extends Component{
         this.enterAirHockey = this.enterAirHockey.bind(this);
         this.enterMovingDuck = this.enterMovingDuck.bind(this);
         this.sendEffectSignal = this.sendEffectSignal.bind(this);
+        this.sendEnterSignal = this.sendEnterSignal.bind(this);
         this.state = {
             mode: undefined
         };
     }
-
+    componentDidMount() {
+        this.props.user.getStreamManager().stream.session.on("signal:gameRoom", (event) => {
+            const data = event.data;
+            if(data === "airHockey"){
+                this.enterAirHockey();
+            }
+            else if(data === "movingDuck"){
+                this.enterMovingDuck();
+            }
+        });
+    }
 
     enterAirHockey= ()  => {
         this.setState(prevState => ({
@@ -57,6 +68,24 @@ export default class CamMain extends Component{
         }
     }
 
+
+    sendEnterSignal(string){
+        if (this.props.user.getStreamManager().session) {
+            this.props.user.getStreamManager().session
+                .signal({
+                    data: string,
+                    to: [],
+                    type: "gameRoom",
+                })
+                .then(() => {
+                    console.log("Message successfully sent");
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }
+
     render(){
         console.log('cammain rendered##########');
         console.log(this.props);
@@ -69,7 +98,7 @@ export default class CamMain extends Component{
 
                         <div id="session">
                             <div id="session-header">
-                                <h1 id="session-title">"mysession id 따와야됨"</h1>
+                                <h1 id="session-title">"mysession id 따와야됨" </h1>
                                 <h2>{this.props.user.subscribers.length + 1}</h2>
                                 {/*<input*/}
                                 {/*    type="button"*/}
@@ -84,12 +113,12 @@ export default class CamMain extends Component{
                                 {/*    value="Switch Camera"*/}
                                 {/*/>*/}
                                 <input
-                                    onClick={this.enterAirHockey}
+                                    onClick={() => this.sendEnterSignal("airHockey")}
                                     type="button"
                                     value="에어하키"
                                 />
                                 <input
-                                    onClick={this.enterMovingDuck}
+                                    onClick={() => this.sendEnterSignal("movingDuck")}
                                     type="button"
                                     value="오리옮기기"
                                 />
