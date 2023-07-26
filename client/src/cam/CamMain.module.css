@@ -1,0 +1,28 @@
+.camMainWrap {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  height: 100vh;
+}
+
+.camMainHeader {
+  width: 100vw;
+  height: 5vh;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.camMainHeader * {
+  padding-right: 50px;
+}
+
+.camAndVoice {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}

@@ -2,14 +2,13 @@ import UserVideoComponent from "./UserVideoComponent";
 import styles from "./Cam.module.css";
 
 function Cam(props) {
-
-// num={this.props.user.getSubscriber().length + 1}
-// publisher={this.props.user.getStreamManager()}
-// subscribers={this.props.user.getSubscriber()}
+  // num={this.props.user.getSubscriber().length + 1}
+  // publisher={this.props.user.getStreamManager()}
+  // subscribers={this.props.user.getSubscriber()}
   const mode = props.user.mode;
   const publisher = props.user.getStreamManager();
   const subscribers = props.user.getSubscriber();
-  const num = props.user.getSubscriber().length+1;
+  const num = props.user.getSubscriber().length + 1;
   const members = [publisher, ...subscribers];
   console.log(members);
   // members.sort((a, b) => {
@@ -21,23 +20,17 @@ function Cam(props) {
   //   }
   // });
   return (
-    <>
+    <div className={styles.camWrap}>
       <div className={styles.main}>
         <div className={styles.parentDiv}>
-          <div
-            className={styles.part1}
-            style={{ weight: "450px", height: "450px" }}
-          >
+          <div className={styles.part1}>
             <UserVideoComponent
               className={styles.userVideo}
               mode={mode}
               streamManager={members[0]}
             />
           </div>
-          <div
-            className={styles.part2}
-            style={{ weight: "450px", height: "450px" }}
-          >
+          <div className={styles.part2}>
             {num > 1 ? (
               <UserVideoComponent
                 className={styles.userVideo}
@@ -48,10 +41,7 @@ function Cam(props) {
           </div>
         </div>
         <div className={styles.parentDiv}>
-          <div
-            className={styles.part3}
-            style={{ weight: "450px", height: "450px" }}
-          >
+          <div className={styles.part3}>
             {num > 2 ? (
               <UserVideoComponent
                 className={styles.userVideo}
@@ -60,10 +50,7 @@ function Cam(props) {
               />
             ) : null}
           </div>
-          <div
-            className={styles.part4}
-            style={{ weight: "450px", height: "450px" }}
-          >
+          <div className={styles.part4}>
             {num > 3 ? (
               <UserVideoComponent
                 className={styles.userVideo}
@@ -74,7 +61,7 @@ function Cam(props) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
