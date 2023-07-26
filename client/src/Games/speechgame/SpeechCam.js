@@ -5,6 +5,7 @@ const SpeechCam = (props) => {
     const selectId = props.user.subscribers.find(
         (subscriber) => subscriber.stream.connection.connection === props.selectId
     )
+    //살려줘
     if (selectId && (!props.selectId || selectId.stream.connection.connectionId === props.user.streamManager.stream.connection.connectionId)){
     return (
         <>
