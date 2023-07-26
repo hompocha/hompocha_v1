@@ -1,7 +1,7 @@
-
-canvas { 
-    position: absolute;
-    /* background: #eee; */
-    margin-left: -1270px;
-    margin-top: -290px;
+.size { 
+    position: fixed;
+    left: 0%;
+    top: 6%;
+    z-index: 0;
+    transform: scale(130%);
 }
