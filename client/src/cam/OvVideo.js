@@ -4,16 +4,15 @@ import styles from "./OvVideo.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { drawPaddle } from "../Games/AirHockey/drawPaddle";
 import NewDrawBalls from "../Games/AirHockey/NewDrawBalls";
+import { Publisher, Subscriber } from "openvidu-browser";
 
 const OpenViduVideoComponent = (props) => {
+  console.log(props);
   const [videoReady, setVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
-
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
-  const paddleRef = useRef(null);
-  const paddleCtx = useRef(null);
 
   useEffect(() => {
     if (videoRef.current && props.streamManager) {
@@ -57,10 +56,10 @@ const OpenViduVideoComponent = (props) => {
     if (results.multiHandLandmarks && results.multiHandedness) {
       /* 패들 구현 */
       if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
-        paddleCtx.current = paddleRef.current.getContext("2d");
+        canvasCtx.current = canvasRef.current.getContext("2d");
         const x_value = results.multiHandLandmarks[0][8].x;
         const y_value = results.multiHandLandmarks[0][8].y;
-        drawPaddle(x_value, y_value, paddleCtx, canvasRef);
+        drawPaddle(x_value, y_value, canvasCtx, canvasRef);
       }
     }
   };
@@ -90,7 +89,6 @@ const OpenViduVideoComponent = (props) => {
               }}
             />
             <canvas className={styles.videoCanvas} ref={canvasRef} />
-            <canvas className={styles.videoCanvas} ref={paddleRef} />
             <NewDrawBalls />
           </>
         ) : null
@@ -107,7 +105,17 @@ const OpenViduVideoComponent = (props) => {
         ) : null
       }
 
-      {/* 게임화면에서 다른 유저의 캠 */}
+      {/* 게임화면에서 다른 유저의 캠 */
+      /* props.mode === "airHockey" && props.streamManager ===  ? (
+          <div>
+            <span>대화모드</span>
+            <video
+              className={styles.inGameSubCam}
+              autoPlay={true}
+              ref={videoRef}
+            />
+          </div>
+        ) : null */}
     </>
   );
 };

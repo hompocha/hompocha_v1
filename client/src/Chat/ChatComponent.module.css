@@ -1,11 +1,11 @@
-#chatContainer {
+.chatContainer {
   position: absolute;
   z-index: 0;
-  width: 100%;
-  height: 100%;
+  right: 3%;
+  bottom: 3%;
 }
 
-#chatToolbar {
+.chatToolbar {
   height: 30px;
   background-color: #3d3d3d;
   box-sizing: border-box;
@@ -18,61 +18,61 @@
   color: #ffffff;
 }
 
-#closeButton {
+/* #closeButton {
   position: absolute;
   right: 0;
   top: -8px;
-}
+} */
 
-#chatComponent {
+.chatComponent {
+  border: 1px solid black;
+  padding: 10px;
   background-color: #b8b8b8;
-  position: absolute;
+  position: fixed;
   z-index: 99999;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  right: 3vw;
+  bottom: 3vh;
   margin: auto;
-  height: calc(100% - 30px);
-  width: calc(100% - 30px);
+  height: 40vh;
+  width: 20vw;
   border-radius: 20px;
 }
 
-.message-wrap {
+.messageWrap {
   padding: 0 15px;
   height: calc(100% - 80px);
   overflow: auto;
 }
 
-.message {
+/* .message {
   position: relative;
   padding: 7px 0;
-}
-.user-img {
+} */
+/* .user-img {
   position: absolute;
   border-radius: 45px;
   width: 60px;
   height: 60px;
   top: 15px;
-}
+} */
 
-.msg-detail {
+.msgDetail {
   width: calc(100% - 65px);
   display: inline-block;
 }
 
-.msg-detail p {
+.msgDetail p {
   margin: 0;
   font-size: 15px;
 }
 
-.msg-info p {
+/* .msg-info p {
   font-size: 0.8em;
   color: #000000;
   font-style: italic;
-}
+} */
 
-.msg-content {
+.msgContent {
   position: relative;
   margin-top: 5px;
   border-radius: 5px;
@@ -82,7 +82,7 @@
   max-width: 80%;
 }
 
-span.triangle {
+/* spanriangle {
   border-radius: 2px;
   height: 8px;
   width: 8px;
@@ -91,7 +91,7 @@ span.triangle {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
   position: absolute;
-}
+} */
 
 .text {
   word-break: break-all;
@@ -100,59 +100,59 @@ span.triangle {
 
 /* Start message from other user */
 
-.message > .left .msg-detail .msg-info {
+/* .message > .left .msg-detail .msg-info {
   text-align: left;
-}
+} */
 
-.message.left .msg-detail {
+/* .message.left .msg-detail {
   padding-left: 65px;
-}
+} */
 
-.message.left .user-img {
+/* .message.left .user-img {
   left: -5px;
   border: 1px solid #f0f0f094;
-}
+} */
 
-.message.left .msg-detail .msg-content {
+/* .message.left .msg-detail .msg-content {
   background-color: #f0f0f0;
   float: left;
-}
-.message.left .msg-detail .msg-content span.triangle {
+} */
+/* .message.left .msg-detail .msg-content span.triangle {
   background-color: #f0f0f0;
   border-bottom-width: 0;
   border-left-width: 0;
   left: -5px;
-}
+} */
 
 /* End message from other user */
 
 /* Start my messages */
 
-.message.right .msg-detail .msg-info {
+/* .message.right .msg-detail .msg-info {
   text-align: right;
-}
-.message.right .user-img {
+} */
+/* .message.right .user-img {
   right: -5px;
   border: 1px solid #c8ffe8ab;
-}
+} */
 
-.message.right .msg-detail .msg-content {
+/* .message.right .msg-detail .msg-content {
   background-color: #c8ffe8;
   float: right;
-}
-.message.right .msg-detail .msg-content span.triangle {
+} */
+/* .message.right .msg-detail .msg-content span.triangle {
   background-color: #c8ffe8;
   border-bottom-width: 0;
   border-left-width: 0;
   right: -5px;
-}
+} */
 
 /* End my messages */
 
-#messageInput {
+.messageInput {
   position: absolute;
   bottom: 0px;
-  width: 100%;
+  width: 90%;
   background-color: #ffffff;
   text-align: center;
   padding: 10px 0px;
@@ -160,17 +160,17 @@ span.triangle {
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
-#messageInput input {
-  width: 90%;
+.messageInput input {
+  width: 70%;
   height: 100%;
   border: none;
   outline: none;
   font-size: 14px;
-  margin-left: -6%;
+  margin-left: 0%;
   color: #000000;
 }
 
-#sendButton {
+.sendButton {
   background-color: #81e9b0;
   position: absolute;
   right: 10px;
@@ -180,13 +180,14 @@ span.triangle {
   border: 1px solid #7ae2a9;
   box-shadow: none !important;
 }
-#sendButton {
+.sendButton {
   margin-left: 3px !important;
   margin-bottom: 2px !important;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  display: none;
+  /* width: 8px; */
 }
 
 ::-webkit-scrollbar-thumb {

@@ -1,19 +1,15 @@
 .roomWrap {
+  margin: 0;
+  padding: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  border: 1px solid black;
-}
-
-.effectWrap {
-  border: 1px solid black;
 }
 
 .camChatWrap {
-  border: 3px solid black;
   border-radius: 10px;
   width: 100vw;
   height: 100vh;
@@ -21,4 +17,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
 }

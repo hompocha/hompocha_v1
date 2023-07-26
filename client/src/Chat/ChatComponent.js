@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./ChatComponent.module.css";
-import "./ChatComponent.module.css";
+// import "./ChatComponent.module.css";
 
 export default function ChatComponent(props) {
   const [messageList, setMessageList] = useState([]);
@@ -64,13 +64,14 @@ export default function ChatComponent(props) {
 
   return (
     <div id="chatContainer" className={styles.chatContainer}>
-      <div id="chatComponent" style={styleChat}>
-        <div id="chatToolbar">
+      <div id="chatComponent" className={styles.chatComponent}>
+        <div id="chatToolbar" className={styles.chatToolbar}>
           <span>
-            {props.user.getStreamManager().stream.session.sessionId} - CHAT
+            {/* props.user.getStreamManager().stream.session.sessionId */}
+            채팅창
           </span>
         </div>
-        <div className="message-wrap" ref={chatScroll}>
+        <div className={styles.messageWrap} ref={chatScroll}>
           {messageList.map((data, i) => (
             <div
               key={i}
@@ -82,16 +83,16 @@ export default function ChatComponent(props) {
                   : " right")
               }
             >
-              <div className="msg-detail">
-                <div className="msg-content">
-                  <span className="triangle" />
-                  <p className="text">{data.message}</p>
+              <div className={styles.msgDetail}>
+                <div className={styles.msgContent}>
+                  <span className={styles.spanTriangle} />
+                  <p className={styles.text}>{data.message}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <div id="messageInput">
+        <div id="messageInput" className={styles.messageInput}>
           <input
             placeholder="Send a messge"
             id="chatInput"
@@ -99,7 +100,13 @@ export default function ChatComponent(props) {
             onChange={handleChange}
             onKeyPress={handlePressKey}
           />
-          <button id="sendButton" onClick={sendMessage}></button>
+          <button
+            id="sendButton"
+            className={styles.sendButton}
+            onClick={sendMessage}
+          >
+            send
+          </button>
         </div>
       </div>
     </div>

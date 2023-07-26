@@ -112,9 +112,11 @@ function NewDrawBalls(x, y) {
 
   return (
     <>
-      <span>
-        레드팀 {scoreRed} : {scoreBlue} 블루팀
-      </span>
+      <div className={styles.score}>
+        <span>
+          레드팀 {scoreRed} : {scoreBlue} 블루팀
+        </span>
+      </div>
       <canvas className={styles.canvasBallRef} ref={canvasBallRef} />
     </>
   );

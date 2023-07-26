@@ -96,9 +96,9 @@ export default class CamMain extends Component {
   }
 
   render() {
-    console.log("cammain rendered##########");
-    console.log(this.props);
-    console.log(this.state.mode);
+    // console.log("cammain rendered##########");
+    // console.log(this.props);
+    // console.log(this.state.mode);
     return (
       <>
         {

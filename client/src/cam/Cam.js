@@ -8,9 +8,9 @@ function Cam(props) {
   const mode = props.user.mode;
   const publisher = props.user.getStreamManager();
   const subscribers = props.user.getSubscriber();
-  const num = props.user.getSubscriber().length + 1;
   const members = [publisher, ...subscribers];
-  console.log(members);
+  const num = props.user.getSubscriber().length + 1;
+  // console.log(members);
   // members.sort((a, b) => {
   //   return a.stream.connection.connectionId < b.stream.connection.connectionId ?
   //       -1 : (a.stream.connection.connectionId > b.stream.connection.connectionId ? 1 : 0) });

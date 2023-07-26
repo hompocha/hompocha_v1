@@ -1,6 +1,6 @@
 function drawPaddle(x_value, y_value, paddleCtx, canvasRef) {
-  const paddleW = 40;
-  const paddleH = 140;
+  const paddleW = 10;
+  const paddleH = 40;
   paddleCtx.current.beginPath();
   paddleCtx.current.clearRect(
     0,
