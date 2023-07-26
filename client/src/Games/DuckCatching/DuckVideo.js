@@ -29,8 +29,8 @@ const DuckVideo = (props) => {
             boxLocation.topY=boxLocation.topY + 0.1;    
             // console.log(boxLocation.topY);
             console.log(2);
-        },1);
-        setTimeout(()=>{clearInterval(interval);},1000);  
+        },1000/60);
+        setTimeout(()=>{clearInterval(interval);},1000/60);  
         }
     },[pickObj]);
 
@@ -107,17 +107,17 @@ const DuckVideo = (props) => {
                 const isRightHand = classification.label === "Right";
                 const landmarks = results.multiHandLandmarks[index];
                 
-                drawConnectors(canvasCtx.current, landmarks, HAND_CONNECTIONS, {
-                    color: isRightHand ? "#00FF00" : "#FF0000",
-                });
+                // drawConnectors(canvasCtx.current, landmarks, HAND_CONNECTIONS, {
+                //     color: isRightHand ? "#00FF00" : "#FF0000",
+                // });
                 
-                drawLandmarks(canvasCtx.current, landmarks, {
-                    color: isRightHand ? "#00FF00" : "#FF0000",
-                    fillColor: isRightHand ? "#FF0000" : "#00FF00",
-                    radius: (data) => {
-                        return lerp(data.from.z, -0.15, 0.1, 10, 1);
-                    },
-                });
+                // drawLandmarks(canvasCtx.current, landmarks, {
+                //     color: isRightHand ? "#00FF00" : "#FF0000",
+                //     fillColor: isRightHand ? "#FF0000" : "#00FF00",
+                //     radius: (data) => {
+                //         return lerp(data.from.z, -0.15, 0.1, 10, 1);
+                //     },
+                // });
                 
                 objDrag(landmarks, canvasRef);
             }
@@ -174,8 +174,8 @@ const DuckVideo = (props) => {
         boxLocation.leftX = fingerX - boxLocation.lenX / 2;
         boxLocation.topY = fingerY - boxLocation.lenY / 2;
     
-        const xPos = boxLocation.leftX + boxLocation.lenX / 2;
-        const yPos = boxLocation.topY + boxLocation.lenY / 2;
+        const xPos = (boxLocation.leftX + boxLocation.lenX / 2)*w;
+        const yPos = (boxLocation.topY + boxLocation.lenY / 2)*h;
         
         if (xPos >= 0 && xPos <= (w/2) && yPos >= 0 && yPos <= h) {
             setBlue(1);
@@ -228,7 +228,7 @@ const DuckVideo = (props) => {
 
     return (
         <>
-        {props.state.mode === "movingDuck" ? (
+        {props.mode === "movingDuck" ? (
             <div>
             <span>오리 옮기기 모드</span>
             <video
