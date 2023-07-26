@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import CatCanvas from "./cat";
 import CherryBlossom from "./cherryBlossom";
+import DogCanvas from "./Dog";
 
 
 export default class KeywordCanvas extends Component{
