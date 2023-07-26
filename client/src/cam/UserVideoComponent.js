@@ -9,6 +9,8 @@ const UserVideoComponent = (props) => {
             <OpenViduVideoComponent
                 mode={props.mode}
                 streamManager={props.streamManager}
+                index = {props.index}
+                num = {props.num}
             />
         ) : null}
       </>

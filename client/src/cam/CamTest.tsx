@@ -7,18 +7,24 @@ import styles from './CamTest.module.css';
 //   members: string[]; // 적절한 타입으로 수정하세요.
 // }
 
-// const CamTwo: React.FC<CamTwoProps> = ({ state, num, members }) => {
-const CamTwo = (props:any) => {
+// const CamTest: React.FC<CamTwoProps> = ({ state, num, members }) => {
+const CamTest = (props:any) => {
   interface Props {
     index: number;
     radius: number;
     startAngle: number;
     endAngle: number;
+    num : number;
   }
   
-  const CamSlice: React.FC<Props> = ({ index, radius, startAngle, endAngle }) => {
+  const CamSlice: React.FC<Props> = ({ index, radius, startAngle, endAngle, num}) => {
     const cx = radius;
     const cy = radius;
+
+    const mode = props.user.mode;
+    const publisher = props.user.getStreamManager();
+    const subscribers = props.user.getSubscriber();
+    const members = [publisher, ...subscribers];
 
     const startAngleRad = ((startAngle - 90) * Math.PI) / 180;
     const endAngleRad = ((endAngle - 90) * Math.PI) / 180;
@@ -48,7 +54,7 @@ const CamTwo = (props:any) => {
     return (
       <g>
           <foreignObject width="100%" height="100%" clipPath={`url(#${videoClipId})`}>
-              <UserVideoComponent state={props.state} streamManager={props.members[0]} />
+            <UserVideoComponent streamManager={members[index]} index = {index} num = {num} mode ={mode} />
           </foreignObject>
           <clipPath key={videoClipId} id={videoClipId}>
             <path d={pathData} />;
@@ -58,7 +64,7 @@ const CamTwo = (props:any) => {
   };
 
   const renderCamSlices = () => {
-    let num = props.num
+    const num = props.user.getSubscriber().length + 1;
     const angle = 360 / num - 0.01;
     const pieSlices = [];
 
@@ -66,7 +72,7 @@ const CamTwo = (props:any) => {
       const startAngle = angle * i;
       const endAngle = startAngle + angle;
       pieSlices.push(
-        <CamSlice key={i} index={i} radius={350} startAngle={startAngle} endAngle={endAngle} />
+        <CamSlice key={i} index={i} radius={350} startAngle={startAngle} endAngle={endAngle} num = {num}/>
       );
     }
     return pieSlices;
@@ -89,4 +95,4 @@ const CamTwo = (props:any) => {
   );
 }
 
-export default CamTwo;
+export default CamTest;

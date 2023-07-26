@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
-import Cam from "./Cam";
+import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css"
 
@@ -105,7 +105,7 @@ export default class CamMain extends Component {
               </div>
               <div className={styles.camAndVoice}>
                 <UseSpeechRecognition sendEffectSignal={this.sendEffectSignal}/>
-                <Cam
+                <CamTest
                   user={this.props.user}
                 />
               </div>
