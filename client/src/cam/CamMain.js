@@ -3,6 +3,8 @@ import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import Cam from "./Cam";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css"
+
+
 export default class CamMain extends Component {
     constructor(props) {
         super(props);

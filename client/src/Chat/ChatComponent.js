@@ -20,6 +20,7 @@ export default function ChatComponent(props) {
           ]);
           scrollToBottom();
         });
+
     }
   }, [props.sessionConnected]);
   // , props.user]);
