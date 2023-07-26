@@ -4,44 +4,30 @@ import CherryBlossom from "../keyword/cherryBlossom";
 import CloudCanvas from "../keyword/cloud";
 import CatCanvas from "../keyword/cat";
 
-const EffectComponent = ({ user }) => {
+const EffectComponent = ({ user ,sessionConnected}) => {
     const [effectWord, setEffectWord] = useState('');
     const [keywordList, setKeywordList] = useState([]);
 
     useEffect(() => {
+
         const handleEffect = (event) => {
             const data = event.data;
-            console.log("뭘받는지 보자:", event.data);
             setKeywordList(prevKeywordList => [
                 ...prevKeywordList,
                 { x: Math.random() * 100, y: Math.random() * 100 },
             ]);
             setEffectWord(data);
         };
-
+        if(sessionConnected){
         const streamManager = user.getStreamManager().stream.session;
         streamManager.on("signal:effect", handleEffect);
 
         // Cleanup function
         return () => streamManager.off("signal:effect", handleEffect);
+        }
     }, [user]);
 
-    const sendSignal = (string) => {
-        if (this.state.session) {
-            this.state.session
-                .signal({
-                    data: string,
-                    to: [],
-                    type: "effect",
-                })
-                .then(() => {
-                    console.log("Message successfully sent");
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    }
+
 
     return (
         <div>
