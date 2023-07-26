@@ -20,7 +20,7 @@ const ParentComponent = ({ roomName, idx }) => {
             {
                 sessionConnected && camFourStream && (
                     <>
-                        <ChatComponent user={camFourStream} sessionConnected={sessionConnected} />
+                        <ChatComponent user={camFourStream} sessionConnected={sessionConnected}  roomName = {roomName}/>
                         <EffectComponent user={camFourStream} sessionConnected={sessionConnected}/>
                         <Speechgame user={camFourStream} sessionConnected={sessionConnected}/>
                     </>

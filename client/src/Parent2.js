@@ -39,10 +39,12 @@ const Parent2 = ({ roomName, idx }) => {
               sessionConnected={sessionConnected}
               setUserStream={setUserStream}
               onModeChange={onModeChange}
+              roomName={roomName}
             />
             <ChatComponent
               user={userStream}
               sessionConnected={sessionConnected}
+              roomName={roomName}
             />
           </div>
           <div className={styles.effectWrap}>

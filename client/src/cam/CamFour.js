@@ -2,7 +2,7 @@ import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import React, { Component, useState } from "react";
 import Cam from "./Cam";
-import styles from "./camFour.module.css";
+import styles from "./CamFour.module.css";
 import { Link } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import UserModel from "../models/user-model";
