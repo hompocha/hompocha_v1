@@ -11,7 +11,7 @@ import CamFour from "../cam/CamFour.js";
 
 import { CatCanvas } from "../keyword/cat";
 
-const keyword = ["고양이", "구름", "벚꽃"];
+const keyword = ["고양이", "구름", "벚꽃","강아지"];
 const speech_sentence = ["우현이"];
 
 const UseSpeechRecognition = (props) => {

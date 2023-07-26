@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import CherryBlossom from "../keyword/cherryBlossom";
 import CloudCanvas from "../keyword/cloud";
 import CatCanvas from "../keyword/cat";
+import DogCanvas from '../keyword/Dog';
 
 const EffectComponent = ({ user }) => {
     const [effectWord, setEffectWord] = useState('');
@@ -49,6 +50,13 @@ const EffectComponent = ({ user }) => {
                 <React.Fragment>
                     {keywordList.map((cat, index) => (
                         <CatCanvas key={index} />
+                    ))}
+                </React.Fragment>
+            )}
+            {effectWord === '강아지' && (
+                <React.Fragment>
+                    {keywordList.map((dog, index) => (
+                        <DogCanvas key={index} />
                     ))}
                 </React.Fragment>
             )}
