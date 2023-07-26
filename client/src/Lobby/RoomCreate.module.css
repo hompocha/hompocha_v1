@@ -1,12 +1,6 @@
-.container {
-    position: fixed;
-    background-color: #40A940;
-    border: 1px solid #78EFAD;
-    border-radius: 12px;
-    padding: 20px;
-    width: 400px;
-    height: 300px;
-    top: 35%;
-    left: 37%;
-    
+.roomCreateWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
 }

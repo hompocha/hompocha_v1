@@ -1,18 +1,52 @@
-.login{
-    position: fixed;
-    background-color: greenyellow;
-    width: 300px;
-    border-radius: 5%;
-    padding: 2%;
-    left: 25%;
-    top: 25%;
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
+
+.container {
+  display: flex;
+  flex-direction: column;
 }
-.signup{
-    position: fixed;
-    background-color: yellowgreen;
-    width: 300px;
-    border-radius: 5%;
-    padding: 2%;
-    left: 50%;
-    top: 25%;
+
+.serviceTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 45px;
+  font-family: "Gowun Dodum", sans-serif;
+}
+
+.loginWrap {
+  width: 600px;
+  height: 300px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.signup {
+  padding: 20px;
+  width: 250px;
+  height: 250px;
+  border: 3px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login {
+  padding: 20px;
+  width: 250px;
+  height: 250px;
+  border: 3px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eachInput {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+button {
+  margin-top: 10px;
 }
