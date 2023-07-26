@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-
+import styles from "./cherryBlossom.module.css";
 const TOTAL = 100;
 const petalArray = [];
 
@@ -81,7 +81,7 @@ const CherryBlossom = () => {
     }
   }, [canvasRef]);
 
-  return <canvas ref={canvasRef} />
+  return <canvas className= {styles.size} ref={canvasRef} />
 };
 
 export default CherryBlossom;

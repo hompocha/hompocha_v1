@@ -46,7 +46,7 @@ const EffectComponent = ({ user ,sessionConnected}) => {
                     ))}
                 </React.Fragment>
             )}
-            {effectWord === '구름' ? <CloudCanvas /> : null}
+            {effectWord === '구름' ? <CloudCanvas/> : null}
             {effectWord === '벚꽃' ? <CherryBlossom /> : null}
         </div>
     );
