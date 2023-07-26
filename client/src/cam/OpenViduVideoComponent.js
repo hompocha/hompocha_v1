@@ -89,6 +89,7 @@ const OpenViduVideoComponent = (props) => {
       });
       camera.start();
     }
+
   }, [videoReady]);
 
   const onResults = (results) => {

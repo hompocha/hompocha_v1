@@ -92,7 +92,7 @@ export default class CamMain extends Component {
                     this.state.mode === undefined ? (
                         <div id="session" className={styles.camMainWrap}>
                             <div id="session-header" className={styles.camMainHeader}>
-                                <h1 id="session-title">"mysession id 따와야됨" </h1>
+                                <h1 id="session-title">{this.props.roomName} </h1>
                                 <h2>{this.props.user.subscribers.length + 1}명 참여중</h2>
                                 <input
                                     onClick={() => this.sendGameTypeSignal("airHockey")}
