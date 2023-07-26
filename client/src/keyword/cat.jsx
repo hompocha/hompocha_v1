@@ -23,12 +23,14 @@ export function CatCanvas() {
     async function drawCat(ctx, x, y) {
         let count = 0;
         const frames = [
+
         "Cat/CAT1.png",
         "Cat/CAT2.png",
         "Cat/CAT3.png",
         "Cat/CAT4.png",
         "Cat/CAT5.png",
         "Cat/CAT6.png",
+
         ];
 
         const images = await Promise.all(frames.map((src) => loadImage(src)));

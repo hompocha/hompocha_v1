@@ -3,7 +3,6 @@ import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks, Data, lerp,} from "@mediapipe/drawing_utils";
 import styles from "./DuckVideo.module.css";
 import {Camera} from "@mediapipe/camera_utils"
-import DuckCanvas from "./Duck";
 
 const DuckVideo = (props) => {
     const [videoReady, setVideoReady] = useState(false);
