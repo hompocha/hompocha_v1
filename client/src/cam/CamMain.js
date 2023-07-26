@@ -3,6 +3,7 @@ import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css"
+import SpeechGame from "../Games/speechgame/SpeechGame";
 
 
 export default class CamMain extends Component {
@@ -20,6 +21,8 @@ export default class CamMain extends Component {
         this.enterAirHockey();
       } else if (data === "movingDuck") {
         this.enterMovingDuck();
+      }else if (data === "speechGame") {
+        this.enterSpeech();
       }
     });
   }
@@ -44,6 +47,13 @@ export default class CamMain extends Component {
         this.props.onModeChange("movingDuck");
       }
     );
+  };
+  enterSpeech= ()  => {
+    this.setState(prevState => ({
+      mode: "speechGame",
+    }), () => {
+      this.props.onModeChange("speechGame");
+    });
   };
 
   sendEffectSignal = (string) => {
@@ -80,6 +90,29 @@ export default class CamMain extends Component {
         });
     }
   }
+  /*======================================================*/
+  /*================== 랜덤으로 사람뽑는 애들 ==================*/
+  /*======================================================*/
+  getRandomElement(list) {
+    if (list.length === 0) {
+      console.log("여기 Null 값이다.")
+      return null;
+    }
+    const randomIndex = Math.floor(Math.random() * list.length);
+    return list[randomIndex];
+  }
+  chooseRandom() {
+    const peopleList = [...this.props.user.subscribers];
+    peopleList.push(this.props.user.streamManager);
+    console.log("ssssssssssssss", peopleList);
+    const test = this.getRandomElement(peopleList).stream.connection.connectionId;
+    console.log("test1", test);
+    console.log("test2", peopleList);
+    return test
+  }
+
+  /*======================================================*/
+  /*======================================================*/
 
   render() {
     console.log("CamMain rendered");
@@ -101,6 +134,11 @@ export default class CamMain extends Component {
                   onClick={() => this.sendGameTypeSignal("movingDuck")}
                   type="button"
                   value="오리옮기기"
+                />
+                <input
+                  onClick={() => this.sendGameTypeSignal("speechGame")}
+                  type="button"
+                  value="발음게임"
                 />
               </div>
               <div className={styles.camAndVoice}>
@@ -133,6 +171,17 @@ export default class CamMain extends Component {
             </form>
           </div>
         ) : null}
+        {
+          /* 발음 게임 */
+          this.state.mode === "speechGame" ? (
+            <div>
+              <SpeechGame selectID ={this.chooseRandom()} user ={this.props.user}/>
+              <form>
+                <input onClick={this.returnToRoom} type="button" value="방으로 이동"/>
+              </form>
+            </div>
+          ) : null
+        }
       </div>
     );
   }
