@@ -35,7 +35,7 @@ const UseSpeechRecognition = (props) => {
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
-        props.sendSignal(word);
+        props.sendEffectSignal(word);
 
         // return () => clearTimeout(timeout);
       }
