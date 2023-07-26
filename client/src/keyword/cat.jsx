@@ -64,7 +64,7 @@ export function CatCanvas() {
         drawCat(ctx, x, y);
     }, [x, y]);
 
-    return <canvas ref={canvasRef} width="2200" height="430" />;
+    return <canvas className = {styles.size} ref={canvasRef} width="2200" height="430" />;
 }
 
 export default CatCanvas;

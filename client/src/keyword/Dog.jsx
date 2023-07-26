@@ -68,7 +68,7 @@ export function DogCanvas() {
         drawDog(ctx, x, y);
     }, [x, y]);
     //캔버스를 반환하고 DogCanvas를 내보냄
-    return <canvas ref={canvasRef} width= {window.current.width} height="430" />;
+    return <canvas className= {styles.size} ref={canvasRef} width= "2200" height="430" />;
 }
 
 export default DogCanvas;
