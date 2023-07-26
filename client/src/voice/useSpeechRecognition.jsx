@@ -5,7 +5,7 @@ import axios from "axios";
 import "regenerator-runtime/runtime";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지"];
-const speech_sentence = ["우현이"];
+const speech_sentence =["시작","우현이","성균이","간장공장공장장은강공장장이다","내가그린기린그림은긴기린그림이다","철수책상철책상","상업산업사업을상상한다."]
 
 const UseSpeechRecognition = (props) => {
   // const [lang, setLang] = useState('ko-KR');
@@ -18,7 +18,7 @@ const UseSpeechRecognition = (props) => {
     for (const sentence of speech_sentence) {
       if (value.includes(sentence)) {
         setExtractedValue(sentence);
-        props.sendSpeech(sentence);
+        props.sendSpeech(props.user.streamManager.stream.connection.connectionId);
       }
     }
     for (const word of keyword) {
