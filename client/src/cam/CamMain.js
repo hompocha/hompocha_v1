@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import Cam from "./Cam";
 import GameCam from "../Games/GameCam";
-
+import styles from "../cam/CamMain.module.css"
 export default class CamMain extends Component {
     constructor(props) {
         super(props);
@@ -85,38 +85,34 @@ export default class CamMain extends Component {
         return (
             <div>
                 {/* Main Room */}
-                {this.state.mode === undefined ? (
-                    <>
-                        <div id="session">
-                            <div id="session-header">
-                                <h1 id="session-title">"mysession id 따와야됨"</h1>
-                                <h2>{this.props.user.subscribers.length + 1}</h2>
-                                {/*<input
-                                  type="button"
-                                  id="buttonLeaveSession"
-                                  onClick={this.leaveSession}
-                                  value="Leave session"
+                {
+                    /* Main Room */
+                    this.state.mode === undefined ? (
+                        <div id="session" className={styles.camMainWrap}>
+                            <div id="session-header" className={styles.camMainHeader}>
+                                <h1 id="session-title">"mysession id 따와야됨" </h1>
+                                <h2>{this.props.user.subscribers.length + 1}명 참여중</h2>
+                                <input
+                                    onClick={() => this.sendGameTypeSignal("airHockey")}
+                                    type="button"
+                                    value="에어하키"
                                 />
                                 <input
-                                  type="button"
-                                  id="buttonSwitchCamera"
-                                  onClick={this.switchCamera}
-                                  value="Switch Camera"
-                                />*/}
-                                <input onClick={() => this.sendGameTypeSignal("airHockey")} type="button" value="에어하키" />
-                                <input onClick={() => this.sendGameTypeSignal("movingDuck")} type="button" value="오리옮기기" />
-                                <UseSpeechRecognition sendSignal={this.sendEffectSignal} />
+                                    onClick={() => this.sendGameTypeSignal("movingDuck")}
+                                    type="button"
+                                    value="오리옮기기"
+                                />
                             </div>
-
-                            <Cam
-                                user={this.props.user}
-                                // num={this.props.user.getSubscriber().length + 1}
-                                // publisher={this.props.user.getStreamManager()}
-                                // subscribers={this.props.user.getSubscriber()}
-                            />
+                            <div className={styles.camAndVoice}>
+                                <UseSpeechRecognition sendSignal={this.sendEffectSignal} />
+                                <Cam
+                                    user={this.props.user}
+                                />
+                            </div>
                         </div>
-                    </>
-                ) : null}
+                    ) : null
+                }
+
 
                 {/* 에어하키 모드 */}
                 {this.state.mode === "airHockey" ? (

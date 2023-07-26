@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styles from './ChatComponent.css'
+import styles from './ChatComponent.module.css'
+
 
 export default function ChatComponent(props) {
   const [messageList, setMessageList] = useState([]);
