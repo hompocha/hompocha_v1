@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styles from './ChatComponent.module.css'
+import React, { useState, useEffect, useRef } from "react";
+import styles from "./ChatComponent.module.css";
+// import "./ChatComponent.module.css";
 
-
-const ChatComponent = (props) => {
+export default function ChatComponent(props) {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
   const chatScroll = useRef();
@@ -20,7 +20,6 @@ const ChatComponent = (props) => {
           ]);
           scrollToBottom();
         });
-
     }
   }, [props.sessionConnected]);
   // , props.user]);
@@ -61,51 +60,60 @@ const ChatComponent = (props) => {
     }, 20);
   };
 
+  const styleChat = { display: props.chatDisplay };
 
-    const styleChat = { display: props.chatDisplay };
-
-    return (
-        <div id="chatContainer" className={styles.container}>
-            <div id="chatComponent" style={styleChat}>
-                <div id="chatToolbar">
-                    <span> [{props.roomName}] - 채팅방 </span>
-
-                </div>
-                <div className="message-wrap" ref={chatScroll}>
-                    {messageList.map((data, i) => (
-                        <div
-                            key={i}
-                            id="remoteUsers"
-                            className={
-                                'message' + (data.connectionId !== props.user.getConnectionId() ? ' left' : ' right')
-                            }
-                        >
-                            <div className="msg-detail">
-                                <div className="msg-info">
-                                    <p> {data.connectionId}</p>
-                                </div>
-                                <div className="msg-content">
-                                    {/*<span className="triangle" />*/}
-                                    <p className="text">{data.message}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div id="messageInput">
-                    <input
-                        placeholder="Send a messge"
-                        id="chatInput"
-                        value={message}
-                        onChange={handleChange}
-                        onKeyUp={handlePressKey}
-                    />
-                    <button id="sendButton" onClick={sendMessage}>
-                    </button>
-                </div>
-            </div>
+  return (
+    <div id="chatContainer" className={styles.chatContainer}>
+      <div id="chatComponent" className={styles.chatComponent}>
+        <div id="chatToolbar" className={styles.chatToolbar}>
+          <span>
+            {/* props.user.getStreamManager().stream.session.sessionId */}
+            채팅창
+          </span>
         </div>
-
-
-    );}
-export default ChatComponent;
+        <div className={styles.messageWrap} ref={chatScroll}>
+          {messageList.map((data, i) => (
+            <div
+              key={i}
+              id="remoteUsers"
+              className={
+                `${styles.message} ${
+                  data.connectionId !== props.user.getConnectionId()
+                    ? styles.left
+                    : styles.right
+                }`
+                /* "message" +
+                (data.connectionId !== props.user.getConnectionId()
+                  ? " left"
+                  : " right") */
+              }
+            >
+              <div className={styles.msgDetail}>
+                <div className={styles.msgContent}>
+                  <span className={styles.spanTriangle} />
+                  <p className={styles.text}>{data.message}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div id="messageInput" className={styles.messageInput}>
+          <input
+            placeholder="Send a messge"
+            id="chatInput"
+            value={message}
+            onChange={handleChange}
+            onKeyPress={handlePressKey}
+          />
+          <button
+            id="sendButton"
+            className={styles.sendButton}
+            onClick={sendMessage}
+          >
+            send
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
