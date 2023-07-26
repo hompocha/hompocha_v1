@@ -1,0 +1,9 @@
+.position{
+    position: fixed;
+    left: 40%;
+    top: 5%;
+}
+.gps{
+    position: fixed;
+    margin-bottom: 20%;
+}

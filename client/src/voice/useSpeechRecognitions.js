@@ -102,6 +102,9 @@ const useSpeechRecognition = (props = {}) => {
       setSupported(true);
       recognition.current = new window.SpeechRecognition();
     }
+    return () => {
+      recognition.current = null;
+    };
   }, []);
 
   return {

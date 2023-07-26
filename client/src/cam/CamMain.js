@@ -1,6 +1,7 @@
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import Cam from "./Cam";
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import GameCam from "../Games/GameCam";
 import UserModel from "../models/user-model";
 import styles from "./CamMain.module.css";
@@ -106,7 +107,7 @@ export default class CamMain extends Component {
           this.state.mode === undefined ? (
             <div id="session" className={styles.camMainWrap}>
               <div id="session-header" className={styles.camMainHeader}>
-                <h1 id="session-title">"mysession id 따와야됨" </h1>
+                <h1 id="session-title">{this.props.roomName} </h1>
                 <h2>{this.props.user.subscribers.length + 1}명 참여중</h2>
                 <input
                   onClick={() => this.sendEnterSignal("airHockey")}
@@ -142,11 +143,11 @@ export default class CamMain extends Component {
                 user={this.props.user}
               />
               <form>
-                <input
-                  onClick={this.returnToRoom}
-                  type="button"
-                  value="방으로 이동"
-                />
+                  <input
+                    onClick={this.returnToRoom}
+                    type="button"
+                    value="방으로 이동"
+                  />
               </form>
             </div>
           ) : null

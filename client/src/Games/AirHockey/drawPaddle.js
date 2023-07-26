@@ -17,6 +17,9 @@ function drawPaddle(x_value, y_value, paddleCtx, canvasRef) {
   paddleCtx.current.fill();
   paddleCtx.current.fillStyle = "tomato";
   paddleCtx.current.closePath();
+  return () => {
+    paddleCtx.current = null;
+  };
 }
 
 export { drawPaddle };

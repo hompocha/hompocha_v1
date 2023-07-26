@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./ChatComponent.module.css";
-import "./ChatComponent.module.css";
 
-export default function ChatComponent(props) {
+const ChatComponent = (props) => {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
   const chatScroll = useRef();
@@ -67,7 +66,7 @@ export default function ChatComponent(props) {
       <div id="chatComponent" style={styleChat}>
         <div id="chatToolbar">
           <span>
-            {props.user.getStreamManager().stream.session.sessionId} - CHAT
+            [{props.roomName}] - 채팅방
           </span>
         </div>
         <div className="message-wrap" ref={chatScroll}>
@@ -105,3 +104,4 @@ export default function ChatComponent(props) {
     </div>
   );
 }
+export default ChatComponent
