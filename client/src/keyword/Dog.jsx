@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import styles from "./Duck.module.css";
+import styles from "./Dog.module.css";
 
-export function DuckCanvas() {
-    //DuckCanvas 컴포넌트를 생성하고 초기 x,y 좌표 및 canvasRef를 설정 
+export function DogCanvas() {
+    //DogCanvas 컴포넌트를 생성하고 초기 x,y 좌표 및 canvasRef를 설정 
     const x = 1100, y = 200    
     const canvasRef = useRef(null);
 
@@ -25,12 +25,18 @@ export function DuckCanvas() {
     }
 
     // 애니메이션 그림을 배열에 넣은 다음 Promise.all을 사용하여 모든 이미지를 로드
-    async function drawDuck(ctx, x, y) {
+    async function drawDog(ctx, x, y) {
         let count = 0;
         const frames = [
-        "/Duck/moving_duck1.png",
-        "/Duck/moving_duck2.png",
-        "/Duck/moving_duck3.png",
+        "/Dog/dog1.png",
+        "/Dog/dog2.png",
+        "/Dog/dog3.png",
+        "/Dog/dog4.png",
+        "/Dog/dog5.png",
+        "/Dog/dog6.png",
+        "/Dog/dog7.png",
+        "/Dog/dog8.png",
+        "/Dog/dog9.png",
         ];
         const images = await Promise.all(frames.map((src) => loadImage(src)));
 
@@ -54,15 +60,15 @@ export function DuckCanvas() {
         }
         setInterval(animate, 100);
     }
-    //drawDuck 함수는 캔버스를 그린 다음 연결
+    //drawDog 함수는 캔버스를 그린 다음 연결
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
 
-        drawDuck(ctx, x, y);
+        drawDog(ctx, x, y);
     }, [x, y]);
-    //캔버스를 반환하고 DuckCanvas를 내보냄
+    //캔버스를 반환하고 DogCanvas를 내보냄
     return <canvas ref={canvasRef} width="2200" height="430" />;
 }
 
-export default DuckCanvas;
+export default DogCanvas;
