@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import styles from './ChatComponent.module.css'
+import styles from './ChatComponent.css'
 
 export default function ChatComponent(props) {
     const [messageList, setMessageList] = useState([]);
@@ -73,8 +73,11 @@ export default function ChatComponent(props) {
                             }
                         >
                             <div className="msg-detail">
+                                <div className="msg-info">
+                                    <p> {data.connectionId}</p>
+                                </div>
                                 <div className="msg-content">
-                                    <span className="triangle" />
+                                    {/*<span className="triangle" />*/}
                                     <p className="text">{data.message}</p>
                                 </div>
                             </div>
@@ -87,7 +90,7 @@ export default function ChatComponent(props) {
                         id="chatInput"
                         value={message}
                         onChange={handleChange}
-                        onKeyPress={handlePressKey}
+                        onKeyUp={handlePressKey}
                     />
                     <button id="sendButton" onClick={sendMessage}>
                     </button>

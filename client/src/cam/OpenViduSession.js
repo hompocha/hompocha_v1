@@ -44,6 +44,7 @@ export default class OpenViduSession extends Component {
     onbeforeunload(event) {
         this.leaveSession();
     }
+
     handleSessionConnected = () => {
         this.setState({ sessionConnected: true });
         this.props.onSessionConnect(localUser);

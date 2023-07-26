@@ -2,7 +2,6 @@ import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import Cam from "./Cam";
 import React, {Component} from "react";
 import GameCam from "../Games/GameCam";
-import UserModel from "../models/user-model";
 
 export default class CamMain extends Component{
     constructor(props){
@@ -10,13 +9,13 @@ export default class CamMain extends Component{
         this.enterAirHockey = this.enterAirHockey.bind(this);
         this.enterMovingDuck = this.enterMovingDuck.bind(this);
         this.sendEffectSignal = this.sendEffectSignal.bind(this);
-        this.sendEnterSignal = this.sendEnterSignal.bind(this);
+        this.sendGameTypeSignal = this.sendGameTypeSignal.bind(this);
         this.state = {
             mode: undefined
         };
     }
     componentDidMount() {
-        this.props.user.getStreamManager().stream.session.on("signal:gameRoom", (event) => {
+        this.props.user.getStreamManager().stream.session.on("signal:gameType", (event) => {
             const data = event.data;
             if(data === "airHockey"){
                 this.enterAirHockey();
@@ -42,15 +41,7 @@ export default class CamMain extends Component{
             this.props.onModeChange("movingDuck");
         });
     };
-    // enterMovingDuck(e) {
-    //     // e.preventDefault();
-    //     this.setState({
-    //         mode: "movingDuck",
-    //     });
-    //     this.props.user.set
-    //     const localUser = Object.assign(new UserModel, 
-    //     this.props.setUserStream()
-    // }
+
     sendEffectSignal(string) {
         if (this.props.user.getStreamManager().session) {
             this.props.user.getStreamManager().session
@@ -69,13 +60,14 @@ export default class CamMain extends Component{
     }
 
 
-    sendEnterSignal(string){
+    /* 게임 모드 전환 신호 */
+    sendGameTypeSignal(string){
         if (this.props.user.getStreamManager().session) {
             this.props.user.getStreamManager().session
                 .signal({
                     data: string,
                     to: [],
-                    type: "gameRoom",
+                    type: "gameType",
                 })
                 .then(() => {
                     console.log("Message successfully sent");
@@ -113,12 +105,12 @@ export default class CamMain extends Component{
                                 {/*    value="Switch Camera"*/}
                                 {/*/>*/}
                                 <input
-                                    onClick={() => this.sendEnterSignal("airHockey")}
+                                    onClick={() => this.sendGameTypeSignal("airHockey")}
                                     type="button"
                                     value="에어하키"
                                 />
                                 <input
-                                    onClick={() => this.sendEnterSignal("movingDuck")}
+                                    onClick={() => this.sendGameTypeSignal("movingDuck")}
                                     type="button"
                                     value="오리옮기기"
                                 />
@@ -138,7 +130,7 @@ export default class CamMain extends Component{
                 }
 
                 {
-                    /* 에어하키 구현 */
+                    /* 에어하키 모드 */
                     this.state.mode === "airHockey" ? (
                         <div>
                         <GameCam 
@@ -158,7 +150,7 @@ export default class CamMain extends Component{
                 }
 
                 {
-                    /* 오리 옮기기 구현 */
+                    /* 오리 옮기기 모드 */
                     this.state.mode === "movingDuck" ? (
                         <div>
                         <GameCam 

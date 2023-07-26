@@ -1,6 +1,6 @@
 import styles from "./GameCam.module.css";
 import { GoalPostBlue, GoalPostRed } from "./AirHockey/GoalPost";
-import OpenViduVideoComponent from "../cam/OvVideo";
+import OpenViduVideoComponent from "../cam/OpenViduVideoComponent";
 
 function GameCam(props) {
   console.log(props.mode);
@@ -12,8 +12,7 @@ function GameCam(props) {
             mode={props.mode}
             streamManager={props.user.getStreamManager()}
           />
-          <GoalPostBlue />
-          <GoalPostRed />
+
         </>
       ) : null}
     </>
