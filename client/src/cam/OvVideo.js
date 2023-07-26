@@ -4,7 +4,7 @@ import styles from "./OvVideo.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { drawPaddle } from "../Games/AirHockey/drawPaddle";
 import NewDrawBalls from "../Games/AirHockey/NewDrawBalls";
-import { Publisher, Subscriber } from "openvidu-browser";
+
 
 const OpenViduVideoComponent = (props) => {
   console.log(props);
