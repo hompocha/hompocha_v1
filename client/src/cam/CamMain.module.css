@@ -1,3 +1,6 @@
+body {
+  background-color: #DAF7A6;
+}
 .camMainWrap {
   display: flex;
   flex-direction: column;
