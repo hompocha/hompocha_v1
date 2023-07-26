@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ChatComponent from "./Chat/ChatComponent";
 import EffectComponent from "./Chat/EffectComponent";
-import Speechgame from "./Games/speechgame/speechgame";
+import SpeechGame from "./Games/speechgame/SpeechGame";
 import CamMain from "./cam/CamMain";
 import OpenViduSession from "./cam/OpenViduSession";
 import UserModel from "./models/user-model";

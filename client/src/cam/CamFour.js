@@ -8,7 +8,7 @@ import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import UserModel from "../models/user-model";
 import GameCam from "../Games/GameCam";
 import UserVideoComponent from "./UserVideoComponent";
-import SpeechCam from "../Games/speechgame/speechCam";
+import SpeechCam from "../Games/speechgame/SpeechCam";
 
 console.log(process.env.NODE_ENV);
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ChatComponent from "./Chat/ChatComponent";
 import CamFour from "./cam/CamFour";
 import EffectComponent from "./Chat/EffectComponent";
-import Speechgame from "./Games/speechgame/speechgame";
+import SpeechGame from "./Games/speechgame/SpeechGame";
 
 
 const ParentComponent = ({ roomName, idx }) => {
@@ -22,7 +22,7 @@ const ParentComponent = ({ roomName, idx }) => {
                     <>
                         <ChatComponent user={camFourStream} sessionConnected={sessionConnected} />
                         <EffectComponent user={camFourStream} sessionConnected={sessionConnected}/>
-                        <Speechgame user={camFourStream} sessionConnected={sessionConnected}/>
+                        <SpeechGame user={camFourStream} sessionConnected={sessionConnected}/>
                     </>
                 )
             }
