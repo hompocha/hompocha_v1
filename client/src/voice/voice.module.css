@@ -4,10 +4,12 @@
 /* Container.css */
 .container {
   /* position: fixed; */
+  position: absolute;
   border-radius: 10px;
   background-color: lightgrey;
   padding: 20px;
-  bottom: 30%;
+  top: 35%;
+  left: 2%;
   /* left: 7%; */
   max-width: 150px;
   color: black;

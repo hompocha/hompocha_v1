@@ -1,7 +1,7 @@
-canvas { 
+.size { 
   position: fixed;
   left: 0%;
-  bottom: 3%;
+  bottom: 0%;
   z-index: 0;
   transform: scale(130%);
 }

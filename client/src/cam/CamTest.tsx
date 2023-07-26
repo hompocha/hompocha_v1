@@ -90,7 +90,7 @@ const CamTest = (props:any) => {
           onChange={(e) => setNum(Number(e.target.value))}
         /> */}
       </div>
-      <svg className={styles.position} width={1000} height={1000}>{renderCamSlices()}</svg>
+      <svg className={styles.position} width={800} height={800}>{renderCamSlices()}</svg>
     </div>
   );
 }
