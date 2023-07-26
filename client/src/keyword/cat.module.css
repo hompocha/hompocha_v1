@@ -1,5 +1,7 @@
-canvas { 
-    position: absolute;
-    bottom: 3%;
-    z-index: -100;
+canvas {
+  position: fixed;
+  left: 10px;
+  top: 500px;
+  bottom: 3%;
+  z-index: 0;
 }

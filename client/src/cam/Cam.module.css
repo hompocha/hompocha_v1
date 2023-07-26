@@ -1,16 +1,16 @@
-.main {
-  transform: rotate(0deg);
-  margin-top: -6%;
-  margin-left: 30%;
+.camWrap {
+  width: 50vw;
+  height: 92vh;
+  margin-left: 15px;
 }
 
 .parentDiv {
-  width: 900px;
+  width: 60vw;
 }
 
 .parentDiv div {
-  width: 450px;
-  height: 450px;
+  width: 30vw;
+  height: 45vh;
   display: block;
   margin: -1px;
   position: relative;

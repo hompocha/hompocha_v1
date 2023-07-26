@@ -1,55 +1,58 @@
+import React, { Component } from "react";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import Cam from "./Cam";
-import React, {Component} from "react";
 import GameCam from "../Games/GameCam";
 
-export default class CamMain extends Component{
-    constructor(props){
+export default class CamMain extends Component {
+    constructor(props) {
         super(props);
-        this.enterAirHockey = this.enterAirHockey.bind(this);
-        this.enterMovingDuck = this.enterMovingDuck.bind(this);
-        this.sendEffectSignal = this.sendEffectSignal.bind(this);
-        this.sendGameTypeSignal = this.sendGameTypeSignal.bind(this);
         this.state = {
-            mode: undefined
+            mode: undefined,
         };
     }
+
     componentDidMount() {
         this.props.user.getStreamManager().stream.session.on("signal:gameType", (event) => {
             const data = event.data;
-            if(data === "airHockey"){
+            if (data === "airHockey") {
                 this.enterAirHockey();
-            }
-            else if(data === "movingDuck"){
+            } else if (data === "movingDuck") {
                 this.enterMovingDuck();
             }
         });
     }
 
-    enterAirHockey= ()  => {
-        this.setState(prevState => ({
-            mode: "airHockey",
-        }), () => {
-            this.props.onModeChange("airHockey");
-        });
+    enterAirHockey = () => {
+        this.setState(
+            {
+                mode: "airHockey",
+            },
+            () => {
+                this.props.onModeChange("airHockey");
+            }
+        );
     };
 
-    enterMovingDuck= ()  => {
-        this.setState(prevState => ({
-            mode: "movingDuck",
-        }), () => {
-            this.props.onModeChange("movingDuck");
-        });
+    enterMovingDuck = () => {
+        this.setState(
+            {
+                mode: "movingDuck",
+            },
+            () => {
+                this.props.onModeChange("movingDuck");
+            }
+        );
     };
 
     sendEffectSignal(string) {
         if (this.props.user.getStreamManager().session) {
-            this.props.user.getStreamManager().session
-                .signal({
-                    data: string,
-                    to: [],
-                    type: "effect",
-                })
+            this.props.user
+                .getStreamManager()
+                .session.signal({
+                data: string,
+                to: [],
+                type: "effect",
+            })
                 .then(() => {
                     console.log("Message successfully sent");
                 })
@@ -59,9 +62,8 @@ export default class CamMain extends Component{
         }
     }
 
-
     /* 게임 모드 전환 신호 */
-    sendGameTypeSignal(string){
+    sendGameTypeSignal(string) {
         if (this.props.user.getStreamManager().session) {
             this.props.user.getStreamManager().session
                 .signal({
@@ -78,44 +80,32 @@ export default class CamMain extends Component{
         }
     }
 
-    render(){
-        console.log('cammain rendered##########');
-        console.log(this.props);
-        console.log(this.state.mode);
-        return(
+    render() {
+        console.log("CamMain rendered");
+        return (
             <div>
-                {   /* Main Room */
-                    this.state.mode === undefined ? (
-                        <>
-
+                {/* Main Room */}
+                {this.state.mode === undefined ? (
+                    <>
                         <div id="session">
                             <div id="session-header">
-                                <h1 id="session-title">"mysession id 따와야됨" </h1>
+                                <h1 id="session-title">"mysession id 따와야됨"</h1>
                                 <h2>{this.props.user.subscribers.length + 1}</h2>
-                                {/*<input*/}
-                                {/*    type="button"*/}
-                                {/*    id="buttonLeaveSession"*/}
-                                {/*    onClick={this.leaveSession}*/}
-                                {/*    value="Leave session"*/}
-                                {/*/>*/}
-                                {/*<input*/}
-                                {/*    type="button"*/}
-                                {/*    id="buttonSwitchCamera"*/}
-                                {/*    onClick={this.switchCamera}*/}
-                                {/*    value="Switch Camera"*/}
-                                {/*/>*/}
-                                <input
-                                    onClick={() => this.sendGameTypeSignal("airHockey")}
-                                    type="button"
-                                    value="에어하키"
+                                {/*<input
+                                  type="button"
+                                  id="buttonLeaveSession"
+                                  onClick={this.leaveSession}
+                                  value="Leave session"
                                 />
                                 <input
-                                    onClick={() => this.sendGameTypeSignal("movingDuck")}
-                                    type="button"
-                                    value="오리옮기기"
-                                />
-
-                                <UseSpeechRecognition sendSignal={this.sendEffectSignal}/>
+                                  type="button"
+                                  id="buttonSwitchCamera"
+                                  onClick={this.switchCamera}
+                                  value="Switch Camera"
+                                />*/}
+                                <input onClick={() => this.sendGameTypeSignal("airHockey")} type="button" value="에어하키" />
+                                <input onClick={() => this.sendGameTypeSignal("movingDuck")} type="button" value="오리옮기기" />
+                                <UseSpeechRecognition sendSignal={this.sendEffectSignal} />
                             </div>
 
                             <Cam
@@ -126,49 +116,28 @@ export default class CamMain extends Component{
                             />
                         </div>
                     </>
-                    ):null
-                }
+                ) : null}
 
-                {
-                    /* 에어하키 모드 */
-                    this.state.mode === "airHockey" ? (
-                        <div>
-                        <GameCam 
-                            // state={this.state}
-                            mode={this.state.mode}
-                            user={this.props.user}
-                         />
+                {/* 에어하키 모드 */}
+                {this.state.mode === "airHockey" ? (
+                    <div>
+                        <GameCam mode={this.state.mode} user={this.props.user} />
                         <form>
-                            <input
-                            onClick={this.returnToRoom}
-                            type="button"
-                            value="방으로 이동"
-                            />
+                            <input onClick={this.returnToRoom} type="button" value="방으로 이동" />
                         </form>
-                        </div>
-                    ) : null
-                }
+                    </div>
+                ) : null}
 
-                {
-                    /* 오리 옮기기 모드 */
-                    this.state.mode === "movingDuck" ? (
-                        <div>
-                        <GameCam 
-                            // state={this.state}
-                            mode={this.state.mode}
-                            user={this.props.user}
-                         />
+                {/* 오리 옮기기 모드 */}
+                {this.state.mode === "movingDuck" ? (
+                    <div>
+                        <GameCam mode={this.state.mode} user={this.props.user} />
                         <form>
-                            <input
-                            onClick={this.returnToRoom}
-                            type="button"
-                            value="방으로 이동"
-                            />
+                            <input onClick={this.returnToRoom} type="button" value="방으로 이동" />
                         </form>
-                        </div>
-                    ) : null
-                }
+                    </div>
+                ) : null}
             </div>
-        )
+        );
     }
 }
