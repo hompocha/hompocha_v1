@@ -77,10 +77,15 @@ export default function ChatComponent(props) {
               key={i}
               id="remoteUsers"
               className={
-                "message" +
+                `${styles.message} ${
+                  data.connectionId !== props.user.getConnectionId()
+                    ? styles.left
+                    : styles.right
+                }`
+                /* "message" +
                 (data.connectionId !== props.user.getConnectionId()
                   ? " left"
-                  : " right")
+                  : " right") */
               }
             >
               <div className={styles.msgDetail}>
