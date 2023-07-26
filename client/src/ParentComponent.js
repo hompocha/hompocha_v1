@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ChatComponent from "./Chat/ChatComponent";
 import CamFour from "./cam/CamFour";
 import EffectComponent from "./Chat/EffectComponent";
-import Speechgame from "./Games/speechgame/speechgame";
 
 
 const ParentComponent = ({ roomName, idx }) => {
