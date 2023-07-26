@@ -15,11 +15,52 @@ const OpenViduVideoComponent = (props) => {
   const paddleRef = useRef(null);
   const paddleCtx = useRef(null);
 
+  const streamId = props.streamManager.stream.streamId;
+
+  // useEffect(() => {
+  //   if (videoRef.current && props.streamManager) {
+  //     props.streamManager.addVideoElement(videoRef.current);
+  //   }
+  //   props.streamManager.stream.session.on('signal:hockeyData', (event) => {
+  //     const data = JSON.parse(event.data);
+  //     const {hand_x, hand_y} = data;
+  //     paddleCtx.current = paddleRef.current.getContext("2d");
+  //
+  //     drawPaddle(hand_x, hand_y, paddleCtx, canvasRef);
+  //     console.log('got Hockey Data');
+  //   });
+  //
+  //   },[props.streamManager]);
+
   useEffect(() => {
     if (videoRef.current && props.streamManager) {
       props.streamManager.addVideoElement(videoRef.current);
     }
-  }, [props.streamManager]);
+
+    const signalHandler = (event) => {
+      const data = JSON.parse(event.data);
+
+      const {hand_x, hand_y, connectionId} = data;
+
+      if(connectionId !== streamId){
+        paddleCtx.current = paddleRef.current.getContext("2d");
+        drawPaddle(hand_x, hand_y, paddleCtx, canvasRef);
+        console.log('got Hockey Data from others');
+      }
+      else{
+        console.log('got hockey from me ')
+      }
+
+
+    };
+
+    props.streamManager.stream.session.on('signal:hockeyData', signalHandler);
+
+    return () => {
+      // Remove the event listener when the component is unmounted or props.streamManager changes
+      props.streamManager.stream.session.off('signal:hockeyData', signalHandler);
+    };
+  },[props.streamManager]);
 
   useEffect(() => {
     const hands = new Hands({
@@ -37,6 +78,7 @@ const OpenViduVideoComponent = (props) => {
         minTrackingConfidence: 0.5,
       });
 
+      /* onResults: hands가 하나의 프레임을 처리하고 나서 바로 실행될 함수 */
       hands.onResults(onResults);
       const camera = new Camera(videoRef.current, {
         onFrame: async () => {
@@ -58,12 +100,43 @@ const OpenViduVideoComponent = (props) => {
       /* 패들 구현 */
       if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
         paddleCtx.current = paddleRef.current.getContext("2d");
-        const x_value = results.multiHandLandmarks[0][8].x;
-        const y_value = results.multiHandLandmarks[0][8].y;
-        drawPaddle(x_value, y_value, paddleCtx, canvasRef);
+        const hand_x = results.multiHandLandmarks[0][8].x;
+        const hand_y = results.multiHandLandmarks[0][8].y;
+        drawPaddle(hand_x, hand_y, paddleCtx, canvasRef);
+        // console.log(hand_x,hand_y);
+        sendHockeyData(hand_x,hand_y);
       }
     }
   };
+
+
+
+  /* 참고용  ------------*/
+  // const sendMessage = () => {
+  //   if (props.user && message){
+  //     console.log(message);
+  //     let messageStr = message.replace(/ + (?= )/g,'');
+  //     if(messageStr !== '' && messageStr !== ' '){
+  //       const data = { message: messageStr, streamId: props.user.getStreamManager().stream.streamId};
+  //       props.user.getStreamManager().stream.session.signal({
+  //         data: JSON.stringify(data),
+  //         type: 'chat',
+  //       });
+  //     }
+  //     setMessage('');
+  //   }
+  // }
+  /*  -----------------------------  */
+  const sendHockeyData = (hand_x,hand_y) =>{
+    props.streamManager.stream.session.signal({
+      data: JSON.stringify({hand_x,hand_y,streamId}),
+      type: 'hockeyData',
+    }).then(() => {
+      console.log("hockeyData successfully sent");
+    });
+  }
+
+
 
   return (
     <>

@@ -1,5 +1,5 @@
 import React from "react";
-import OpenViduVideoComponent from "../../cam/OvVideo";
+import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 
 const SpeechCam = (props) => {
     return (

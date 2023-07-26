@@ -63,10 +63,10 @@ function NewDrawBalls(x, y) {
     const ctx = canvas.current.getContext("2d");
     const balls = [
       new Ball(canvas.current),
-      new Ball(canvas.current),
-      new Ball(canvas.current),
-      new Ball(canvas.current),
-      new Ball(canvas.current),
+      // new Ball(canvas.current),
+      // new Ball(canvas.current),
+      // new Ball(canvas.current),
+      // new Ball(canvas.current),
     ];
 
     function handleGoal() {
