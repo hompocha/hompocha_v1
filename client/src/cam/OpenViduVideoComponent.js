@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
-import styles from "./OvVideo.module.css";
+import styles from "./OpenViduVideoComponent.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { drawPaddle } from "../Games/AirHockey/drawPaddle";
 import NewDrawBalls from "../Games/AirHockey/NewDrawBalls";
@@ -146,7 +146,9 @@ const OpenViduVideoComponent = (props) => {
         props.mode === undefined ? (
           <div>
             <span>대화모드</span>
-            <video className={styles.roomCam} autoPlay={true} ref={videoRef} />
+            <div className={styles.parent}>
+              <video className={styles[`webcam${props.num}__${props.index}`]} autoPlay={true} ref={videoRef} />
+            </div>
           </div>
         ) : null
       }
