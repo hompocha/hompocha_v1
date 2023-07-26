@@ -170,7 +170,7 @@ export default class CamMain extends Component {
         {/* 에어하키 모드 */}
         {this.state.mode === "airHockey" ? (
           <div>
-            <GameCam mode={this.state.mode} user={this.props.user}/>
+            <GameCam mode={this.state.mode} user={this.props.user} sessionConnected={this.props.sessionConnected}/>
             <form>
               <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
             </form>
@@ -180,7 +180,7 @@ export default class CamMain extends Component {
         {/* 오리 옮기기 모드 */}
         {this.state.mode === "movingDuck" ? (
           <div>
-            <GameCam mode={this.state.mode} user={this.props.user}/>
+            <GameCam mode={this.state.mode} user={this.props.user} sessionConnected={this.props.sessionConnected}/>
             <form>
               <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
             </form>
