@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
-import styles from "../cam/CamMain.module.css"
+import styles from ".//CamMain.module.css"
 
 
 export default class CamMain extends Component {
@@ -21,7 +21,7 @@ export default class CamMain extends Component {
       } else if (data === "movingDuck") {
         this.enterMovingDuck();
       }
-      /* data 가 undefined 일 경우 */
+      /* data 가 undefined 일 경우 방으로 돌아감 */
       else {
         this.enterMainRoom();
       }
@@ -93,25 +93,6 @@ export default class CamMain extends Component {
         });
     }
   }
-
-  // returnToRoom = () =>{
-  //   if (this.props.user.getStreamManager().session) {
-  //     this.props.user.getStreamManager().session
-  //       .signal({
-  //         data: "room",
-  //         to: [],
-  //         type: "returnToRoom",
-  //       })
-  //       .then(() => {
-  //         console.log("Message successfully sent");
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   }
-  // }
-
-
   render() {
     console.log("CamMain rendered");
     return (
@@ -160,7 +141,7 @@ export default class CamMain extends Component {
           <div>
             <GameCam mode={this.state.mode} user={this.props.user}/>
             <form>
-              <input onClick={this.returnToRoom} type="button" value="방으로 이동"/>
+              <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
             </form>
           </div>
         ) : null}
