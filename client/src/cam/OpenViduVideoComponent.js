@@ -145,7 +145,7 @@ const OpenViduVideoComponent = (props) => {
         /* 대화 모드일 때 불러와 지는 캠 */
         props.mode === undefined ? (
           <div>
-            <span>대화모드</span>
+            {/* <span>대화모드</span> */}
             <div className={styles.parent}>
               <video className={styles[`webcam${props.num}__${props.index}`]} autoPlay={true} ref={videoRef} />
             </div>

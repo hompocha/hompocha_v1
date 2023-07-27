@@ -2,10 +2,9 @@ import React, {Component} from "react";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
-
 import styles from "../cam/CamMain.module.css"
 import SpeechGame from "../Games/speechgame/SpeechGame";
-
+import { useHistory } from "react-router";
 
 
 export default class CamMain extends Component {
@@ -14,6 +13,7 @@ export default class CamMain extends Component {
     this.state = {
       mode: undefined,
     };
+
   }
 
   componentDidMount() {
@@ -127,6 +127,9 @@ export default class CamMain extends Component {
     return test
   }
 
+  ReturnLobby = () => {
+    
+  }
   /*======================================================*/
   /*======================================================*/
   render() {
@@ -155,7 +158,16 @@ export default class CamMain extends Component {
                   type="button"
                   value="발음게임"
                 />
+
+                <form className={styles.ReturnRoom}>
+                  <input
+                      onClick={this.ReturnLobby}
+                      type="button"
+                      value="로비로 이동"
+                    />
+                </form>
               </div>
+
               <div className={styles.camAndVoice}>
                 <UseSpeechRecognition sendEffectSignal={this.sendEffectSignal}/>
                 <CamTest
@@ -171,7 +183,7 @@ export default class CamMain extends Component {
         {this.state.mode === "airHockey" ? (
           <div>
             <GameCam mode={this.state.mode} user={this.props.user} sessionConnected={this.props.sessionConnected}/>
-            <form>
+            <form className={styles.ReturnRoom}>
               <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
             </form>
           </div>
@@ -181,7 +193,7 @@ export default class CamMain extends Component {
         {this.state.mode === "movingDuck" ? (
           <div>
             <GameCam mode={this.state.mode} user={this.props.user} sessionConnected={this.props.sessionConnected}/>
-            <form>
+            <form className={styles.ReturnRoom}>
               <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
             </form>
           </div>
@@ -191,8 +203,8 @@ export default class CamMain extends Component {
           this.state.mode === "speechGame" ? (
             <div>
               <SpeechGame selectID ={this.chooseRandom()} user ={this.props.user}/>
-              <form>
-                <input onClick={this.returnToRoom} type="button" value="방으로 이동"/>
+              <form className={styles.ReturnRoom}>
+                <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
               </form>
             </div>
           ) : null

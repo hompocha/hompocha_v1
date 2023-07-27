@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import UseSpeechRecognition from "../../voice/useSpeechRecognition";
 import SpeechCam from './SpeechCam';
+import styles from './SpeechGame.module.css';
 
 
 
@@ -91,9 +92,13 @@ const SpeechGame = (props) => {
         <div>
             {/* UserVideoComponent 위에 불투명 레이어를 추가합니다. */}
             {/*다른 사람 나오는거 같긴한데 잘모르겠다*/}
-            <h1>{sentenceState}</h1>
-            <UseSpeechRecognition sendSpeech={sendPass} user={props.user}/>
-            <SpeechCam selectId={randomUser} user={props.user}/>
+            <h1 className={styles.gameWord}>{sentenceState}</h1>
+            <div className={styles.speechPosition}>
+              <UseSpeechRecognition sendSpeech={sendPass} user={props.user}/>
+            </div>
+            <div className={styles.camPosition}>
+              <SpeechCam selectId={randomUser} user={props.user}/>
+            </div>
         </div>
     );
 }
