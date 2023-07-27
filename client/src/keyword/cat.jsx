@@ -41,7 +41,7 @@ export function CatCanvas() {
             x = 1500;
             y = 200;
         } else {
-            x = 0;
+            x = -1000;
             y = 200;
         }
 
@@ -64,7 +64,7 @@ export function CatCanvas() {
         drawCat(ctx, x, y);
     }, [x, y]);
 
-    return <canvas className = {styles.size} ref={canvasRef} width="2200" height="430" />;
+    return <canvas className = {styles.size} ref={canvasRef} width="4000" height="430" />;
 }
 
 export default CatCanvas;
