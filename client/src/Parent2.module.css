@@ -10,6 +10,7 @@
 
 .effectWrap {
   border: 1px solid black;
+  z-index: 0;
 }
 
 .camChatWrap {
@@ -21,4 +22,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+.zindex{
+  z-index: 1;
 }

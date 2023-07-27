@@ -1,9 +1,9 @@
 .gameWord{
   position: absolute;
-  left: 30%;
+  left: 5%;
   top: 35%;
-  width: 400px;
-  
+  width: 800px;
+  text-align: center;
 }
 .speechPosition{
   position: absolute;

@@ -33,18 +33,23 @@ const Parent2 = ({ roomName, idx }) => {
       {sessionConnected && userStream && (
         <>
           <div className={styles.camChatWrap}>
-            <CamMain
-              user={userStream}
-              sessionConnected={sessionConnected}
-              setUserStream={setUserStream}
-              onModeChange={onModeChange}
-              roomName={roomName}
-            />
-            <ChatComponent
-              user={userStream}
-              sessionConnected={sessionConnected}
-              roomName={roomName}
-            />
+            <div className={styles.zindex1}>
+              <CamMain
+                user={userStream}
+                sessionConnected={sessionConnected}
+                setUserStream={setUserStream}
+                onModeChange={onModeChange}
+                roomName={roomName}
+              />
+            </div>
+            <div className={styles.zindex}>
+              <ChatComponent
+                user={userStream}
+                sessionConnected={sessionConnected}
+                roomName={roomName}
+              />
+
+            </div>
           </div>
           <div className={styles.effectWrap}>
             <EffectComponent
