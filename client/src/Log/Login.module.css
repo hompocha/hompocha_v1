@@ -5,7 +5,7 @@
   flex-direction: column;
 }
 
-.serviceTitle {
+.serviceTitleDiv {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,17 +50,6 @@
 button {
   margin-top: 10px;
 }
-
-/* .topColor {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  width: 100%;
-  height: 11%;
-  background-color: #fd5f00;
-  z-index: 1;
-} */
 
 .bottomColor {
   position: fixed;
@@ -148,4 +137,31 @@ button {
 }
 .ten {
   left: 50vw;
+}
+.eleven {
+  left: 55vw;
+}
+.twelve {
+  left: 60vw;
+}
+.thirteen {
+  left: 65vw;
+}
+.fourteen {
+  left: 70vw;
+}
+.fifteen {
+  left: 75vw;
+}
+.sixteen {
+  left: 80vw;
+}
+.seventeen {
+  left: 85vw;
+}
+.eighteen {
+  left: 90vw;
+}
+.nineteen {
+  left: 95vw;
 }
