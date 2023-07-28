@@ -92,8 +92,46 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.serviceTitle}>
-        <h1>홈술포차</h1>
+      <div>
+        <div className={`${styles.menu} ${styles.il}`}>오 뎅 탕</div>
+        <div className={`${styles.menu} ${styles.ee}`}>계란말이</div>
+        <div className={`${styles.menu} ${styles.sam}`}>잔치국수</div>
+        <div className={`${styles.wave} ${styles.zero} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.one} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.two} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.three} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.four} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.five} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.six} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.seven} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.eight} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.nine} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.ten} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.eleven} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.twelve} ${styles.even}`}></div>
+        <div
+          className={`${styles.wave} ${styles.thirteen} ${styles.odd}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.fourteen} ${styles.even}`}
+        ></div>
+        <div className={`${styles.wave} ${styles.fifteen} ${styles.odd}`}></div>
+        <div
+          className={`${styles.wave} ${styles.sixteen} ${styles.even}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.seventeen} ${styles.odd}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.eighteen} ${styles.even}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.nineteen} ${styles.odd}`}
+        ></div>
+      </div>
+
+      <div className={styles.serviceTitleDiv}>
+        <h1 className={styles.serviceTitle}>홈술포차</h1>
       </div>
       <div className={styles.loginWrap}>
         <div className={styles.signup}>
@@ -149,6 +187,7 @@ const Login: React.FC = () => {
           <button onClick={handleLogIn}>SIGN IN</button>
         </div>
       </div>
+      <div className={styles.bottomColor}></div>
     </div>
   );
 };

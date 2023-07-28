@@ -5,11 +5,11 @@
   flex-direction: column;
 }
 
-.serviceTitle {
+.serviceTitleDiv {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 45px;
+  font-size: 50px;
   font-family: "Gowun Dodum", sans-serif;
 }
 
@@ -49,4 +49,119 @@
 }
 button {
   margin-top: 10px;
+}
+
+.bottomColor {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 7%;
+  background-color: #fd5f00;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.menu {
+  position: fixed;
+  text-align: center;
+  top: 9%;
+  width: 45px;
+  height: 170px;
+  font-size: xx-large;
+  writing-mode: vertical-lr;
+  background-color: whitesmoke;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 5px 5px;
+  font-family: "Gowun Dodum", sans-serif;
+  z-index: auto;
+}
+.il {
+  left: 17vw;
+  rotate: -3deg;
+}
+.ee {
+  left: 9vw;
+}
+.sam {
+  left: 13vw;
+}
+
+.wave {
+  position: fixed;
+  top: 0;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  width: 5vw;
+  height: 13vh;
+}
+.odd {
+  background-color: bisque;
+}
+
+.even {
+  background-color: #fd5f00;
+}
+
+.zero {
+  left: 0vw;
+}
+.one {
+  left: 5vw;
+}
+.two {
+  left: 10vw;
+}
+.three {
+  left: 15vw;
+}
+.four {
+  left: 20vw;
+}
+.five {
+  left: 25vw;
+}
+.six {
+  left: 30vw;
+}
+.seven {
+  left: 35vw;
+}
+.eight {
+  left: 40vw;
+}
+.nine {
+  left: 45vw;
+}
+.ten {
+  left: 50vw;
+}
+.eleven {
+  left: 55vw;
+}
+.twelve {
+  left: 60vw;
+}
+.thirteen {
+  left: 65vw;
+}
+.fourteen {
+  left: 70vw;
+}
+.fifteen {
+  left: 75vw;
+}
+.sixteen {
+  left: 80vw;
+}
+.seventeen {
+  left: 85vw;
+}
+.eighteen {
+  left: 90vw;
+}
+.nineteen {
+  left: 95vw;
 }

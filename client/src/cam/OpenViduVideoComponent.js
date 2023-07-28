@@ -9,6 +9,7 @@ const OpenViduVideoComponent = (props) => {
   const [videoReady, setVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+  console.log(props);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
@@ -40,27 +41,27 @@ const OpenViduVideoComponent = (props) => {
     const signalHandler = (event) => {
       const data = JSON.parse(event.data);
 
-      const {hand_x, hand_y, connectionId} = data;
+      const { hand_x, hand_y, connectionId } = data;
 
-      if(connectionId !== streamId){
+      if (connectionId !== streamId) {
         paddleCtx.current = paddleRef.current.getContext("2d");
         drawPaddle(hand_x, hand_y, paddleCtx, canvasRef);
-        console.log('got Hockey Data from others');
+        console.log("got Hockey Data from others");
+      } else {
+        console.log("got hockey from me ");
       }
-      else{
-        console.log('got hockey from me ')
-      }
-
-
     };
 
-    props.streamManager.stream.session.on('signal:hockeyData', signalHandler);
+    props.streamManager.stream.session.on("signal:hockeyData", signalHandler);
 
     return () => {
       // Remove the event listener when the component is unmounted or props.streamManager changes
-      props.streamManager.stream.session.off('signal:hockeyData', signalHandler);
+      props.streamManager.stream.session.off(
+        "signal:hockeyData",
+        signalHandler
+      );
     };
-  },[props.streamManager]);
+  }, [props.streamManager]);
 
   useEffect(() => {
     const hands = new Hands({
@@ -89,7 +90,6 @@ const OpenViduVideoComponent = (props) => {
       });
       camera.start();
     }
-
   }, [videoReady]);
 
   const onResults = (results) => {
@@ -105,12 +105,10 @@ const OpenViduVideoComponent = (props) => {
         const hand_y = results.multiHandLandmarks[0][8].y;
         drawPaddle(hand_x, hand_y, paddleCtx, canvasRef);
         // console.log(hand_x,hand_y);
-        sendHockeyData(hand_x,hand_y);
+        sendHockeyData(hand_x, hand_y);
       }
     }
   };
-
-
 
   /* 참고용  ------------*/
   // const sendMessage = () => {
@@ -128,16 +126,16 @@ const OpenViduVideoComponent = (props) => {
   //   }
   // }
   /*  -----------------------------  */
-  const sendHockeyData = (hand_x,hand_y) =>{
-    props.streamManager.stream.session.signal({
-      data: JSON.stringify({hand_x,hand_y,streamId}),
-      type: 'hockeyData',
-    }).then(() => {
-      console.log("hockeyData successfully sent");
-    });
-  }
-
-
+  const sendHockeyData = (hand_x, hand_y) => {
+    props.streamManager.stream.session
+      .signal({
+        data: JSON.stringify({ hand_x, hand_y, streamId }),
+        type: "hockeyData",
+      })
+      .then(() => {
+        console.log("hockeyData successfully sent");
+      });
+  };
 
   return (
     <>
@@ -147,7 +145,11 @@ const OpenViduVideoComponent = (props) => {
           <div>
             {/* <span>대화모드</span> */}
             <div className={styles.parent}>
-              <video className={styles[`webcam${props.num}__${props.index}`]} autoPlay={true} ref={videoRef} />
+              <video
+                className={styles[`webcam${props.num}__${props.index}`]}
+                autoPlay={true}
+                ref={videoRef}
+              />
             </div>
           </div>
         ) : null
