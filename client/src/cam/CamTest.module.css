@@ -1,5 +1,22 @@
+.scale{
+    position: fixed;
+    transform: scale(130%);
+    left: 24%;
+    top: 8%;
+}
 .position{
-    position: absolute;
+    position:fixed;
     left: 28%;
     top: 13%;
+}
+.triangleDown {
+    position: fixed;
+    width: 0;
+    height: 0;
+    top: 7.3%;
+    left: 47.2%;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 50px solid blue;
+    z-index: 1;
 }

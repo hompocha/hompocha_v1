@@ -53,19 +53,19 @@
 }
 .webcam3__0{
   position: absolute;
-  top: -13%; /* 위쪽으로부터의 거리 */
+  top: -15%; /* 위쪽으로부터의 거리 */
   left: 1%; /* 왼쪽으로부터의 거리 */
   width: 960px;
   height: 720px;
-  transform: rotateY(180deg) scale(73.3%);
+  transform: rotateY(180deg) scale(75%);
 }
 .webcam3__1{
   position: absolute;
-  top: 14%; /* 위쪽으로부터의 거리 */
-  left: -15%; /* 왼쪽으로부터의 거리 */
+  top: 18%; /* 위쪽으로부터의 거리 */
+  left: -18%; /* 왼쪽으로부터의 거리 */
   width: 960px;
   height: 720px;
-  transform: rotateY(180deg) scale(73.3%);
+  transform: rotateY(180deg) scale(75%);
 }
 .webcam3__2{
   position: absolute;
@@ -173,8 +173,8 @@
 }
 .webcam6__3{
   position: absolute;
-  top: 20%; /* 위쪽으로부터의 거리 */
-  left: -26%; /* 왼쪽으로부터의 거리 */
+  top: 25%; /* 위쪽으로부터의 거리 */
+  left: -28%; /* 왼쪽으로부터의 거리 */
   width: 960px;
   height: 720px;
   transform: rotateY(180deg)scale(50%);
