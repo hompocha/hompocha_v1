@@ -1,228 +1,195 @@
 /* Login.tsx */
 import React, { useState, useEffect } from "react";
 import styles from "./Login.module.css";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
 const Login: React.FC = () => {
-    const [flag, setFlag] = useState<number>(0);
-    const [id, setId] = useState<string>("");
-    const [name, setName] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const navigate = useNavigate();
+  const [loginId, setLoginId] = useState<string>("");
+  const [loginPassword, setLoginPassword] = useState<string>("");
 
-    const handleLogIn = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!id.trim && !password.trim){
-            alert("회원정보를 입력해주세요.");
-            return;
-        }
-        else if (!id.trim){
-            alert("아이디를 입력해주세요.");
-            return;
-        }
-        else if (!password.trim){
-            alert("비밀번호를 입력해주세요.");
-            return;
-        }
-        try {
-            const response = await axios.post("https://hompocha.site/api/user/login", {
-                id,
-                password,
-            });
-            console.log(response.data);
+  const [id, setId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-            alert("로그인 성공");
-            navigate("/Lobby");
-        } catch (error) {
-            console.error("로그인 오류:", error);
-            alert("로그인 실패");
-        }
-    };
-    const handleSignUp = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!id || !name || !password || !confirmPassword) {
-            alert("모든 정보를 입력해주세요.");
-            return;
-        }
-        if (password !== confirmPassword) {
-            alert("비밀번호가 다릅니다.");
-            return;
-        }
-        // 중복된 아이디인지 확인
-        try {
-            const response = await axios.get(
-                `https://hompocha.site/api/user/${id}`
-            );
-            if (response.data.exists) {
-                alert("중복된 아이디입니다.");
-                return;
-            }
-        } catch (error) {
-            console.error("중복 확인 오류:", error);
-            return;
-        }
-        // 비밀번호 일치 여부 확인
-        try {
-            const response = await axios.post("https://hompocha.site/api/user/signup", {
-                id,
-                name,
-                password,
-            });
-            console.log(response.data);
-            alert("회원가입이 완료되었습니다.");
-            setFlag((prevFlag) => (prevFlag === 0 ? 1 : 0));
-        } catch (error) {
-            console.error(error);
-            alert("에러");
-        }
-    };
+  const navigate = useNavigate();
 
-    const handleSignInUpChange = (): void => {
-        setFlag((prevFlag) => (prevFlag === 0 ? 1 : 0));
-    };
+  const handleLogIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginId.trim && !loginPassword.trim) {
+      alert("회원정보를 입력해주세요.");
+      return;
+    } else if (!loginId.trim) {
+      alert("아이디를 입력해주세요.");
+      return;
+    } else if (!loginPassword.trim) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
 
-    useEffect(() => {
-        const title = document.querySelector(`.${styles.title}`);
-        const light = document.querySelector(`.${styles.light}`);
-        const name = document.querySelector(`.${styles.name}`);
-        const bButton = document.querySelector(`.${styles.bButton}`);
-        const pButton = document.querySelector(`.${styles.pButton}`);
-        const forgot = document.querySelector(`.${styles.forgot}`);
-        const form = document.querySelector(`.${styles.form}`);
-        const move = document.querySelector(`.${styles.move}`);
-        if (flag === 0) {
-            setTimeout(() => {
-                if (title) title.textContent = "Create Account";
-                if (light) light.textContent = "Or use your email for registration";
-                if (name) name.classList.remove(styles.hide);
-                if (bButton) bButton.textContent = "SIGN IN";
-                if (pButton) pButton.textContent = "SIGN UP";
-                if (forgot) forgot.classList.add(styles.hide);
-                if (form) form.classList.remove(styles.rightRadius);
-                if (move) move.classList.add(styles.leftRadius);
-            }, 200);
-        } else {
-            setTimeout(() => {
-                if (title) title.textContent = "Sign-in in to Pixmy";
-                if (light) light.textContent = "Or use your email account";
-                if (name) name.classList.add(styles.hide);
-                if (bButton) bButton.textContent = "SIGN UP";
-                if (pButton) pButton.textContent = "SIGN IN";
-                if (forgot) forgot.classList.remove(styles.hide);
-                if (form) form.classList.add(styles.rightRadius);
-                if (move) move.classList.remove(styles.leftRadius);
-            }, 200);
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/user/login`,
+        {
+          loginId,
+          loginPassword,
         }
+      );
+      console.log(response.data);
 
-    }, [flag]);
+      localStorage.setItem("jwtToken", response.data);
+      alert("로그인 성공");
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${response.data}`;
+      navigate("/Lobby");
+    } catch (error) {
+      console.error("로그인 오류:", error);
+      alert("로그인 실패");
+    }
+  };
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!id || !password || !confirmPassword) {
+      alert("모든 정보를 입력해주세요.");
+      return;
+    } else if (password !== confirmPassword) {
+      alert("비밀번호가 다릅니다.");
+      return;
+    } else if (password.length < 8) {
+      alert("비밀번호를 8자리 이상으로 입력해주세요!");
+      return;
+    }
+    // 중복된 아이디인지 확인
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/user/${id}`
+      );
+      if (response.data.exists) {
+        alert("중복된 아이디입니다.");
+        return;
+      }
+    } catch (error) {
+      console.error("중복 확인 오류:", error);
+      return;
+    }
+    // 비밀번호 일치 여부 확인
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/user/signup`,
+        {
+          id,
+          password,
+        }
+      );
+      console.log(response.data);
+      alert("회원가입이 완료되었습니다.");
+    } catch (error) {
+      console.error(error);
+      alert("에러");
+    }
+  };
 
-    return (
-        <div className={styles.container}>
-            <div
-                className={`${styles.move} ${
-                    flag === 1 ? styles.moving : styles.start
-                }`}
-                onClick={handleSignInUpChange}
-            >
-                <div
-                    className={`${styles.pButton} ${styles.normal} ${styles.signin} ${styles.animated} ${styles.pulse}`}
-                >
-                    SIGN IN
-                </div>
-            </div>
+  return (
+    <div className={styles.container}>
+      <div>
+        <div className={`${styles.menu} ${styles.il}`}>오 뎅 탕</div>
+        <div className={`${styles.menu} ${styles.ee}`}>계란말이</div>
+        <div className={`${styles.menu} ${styles.sam}`}>잔치국수</div>
+        <div className={`${styles.wave} ${styles.zero} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.one} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.two} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.three} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.four} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.five} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.six} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.seven} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.eight} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.nine} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.ten} ${styles.even}`}></div>
+        <div className={`${styles.wave} ${styles.eleven} ${styles.odd}`}></div>
+        <div className={`${styles.wave} ${styles.twelve} ${styles.even}`}></div>
+        <div
+          className={`${styles.wave} ${styles.thirteen} ${styles.odd}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.fourteen} ${styles.even}`}
+        ></div>
+        <div className={`${styles.wave} ${styles.fifteen} ${styles.odd}`}></div>
+        <div
+          className={`${styles.wave} ${styles.sixteen} ${styles.even}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.seventeen} ${styles.odd}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.eighteen} ${styles.even}`}
+        ></div>
+        <div
+          className={`${styles.wave} ${styles.nineteen} ${styles.odd}`}
+        ></div>
+      </div>
 
-            <div
-                className={styles.welcome}
-                style={{ display: flag === 0 ? "block" : "none" }}
-            >
-                <h4 className={`${styles.bold} ${styles.welcomeText}`}>
-                    Welcome Back!
-                </h4>
-                <p className={`${styles.normal} ${styles.text}`}>
-                    To keep connected with us please login with your personal info
-                </p>
-            </div>
-            <div
-                className={styles.hello}
-                style={{ display: flag === 1 ? "block" : "none" }}
-            >
-                <h4 className={`${styles.bold} ${styles.welcomeText}`}>
-                    Hello Friend
-                </h4>
-                <p className={`${styles.normal} ${styles.text}`}>
-                    Enter your personal details and start journey with us
-                </p>
-            </div>
-            <div
-                className={`${styles.form} ${
-                    flag === 1 ? styles.movingForm : styles.startForm
-                }`}
-            >
-                <h4 className={`${styles.bold} ${styles.title}`}>Create Account</h4>
-                <div className={styles.icons}>
-                    <div className={styles.icon}>
-                        <i className="fab fa-facebook-f"></i>
-                    </div>
-                    <div className={styles.icon}>
-                        <i className="fab fa-github"></i>
-                    </div>
-                    <div className={styles.icon}>
-                        <i className="fab fa-twitter"></i>
-                    </div>
-                </div>
-                <p className={`${styles.normal} ${styles.light}`}>
-                    Or use your email for registration
-                </p>
-                <input
-                    type="text"
-                    placeholder="Id"
-                    className={`${styles.normal} ${styles.name}`}
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                />
-                {flag === 1 && (
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            className={`${styles.normal} ${styles.name}`}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-                )}
-                <input
-                    type="password"
-                    placeholder="비밀번호"
-                    className={styles.normal}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                {flag === 1 && (
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="비밀번호 확인"
-                            className={styles.normal}
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                    </div>
-                )}
-                <br />
-                {flag !== 1 && (
-                    <button className={`${styles.bButton} ${styles.normal}`} onClick={handleLogIn}>
-                        SIGN IN
-                    </button>)}
-                {flag === 1 && (
-                    <button className={`${styles.bButton} ${styles.normal}`} onClick={handleSignUp}>SIGN UP</button>
-                )}
-            </div>
+      <div className={styles.serviceTitleDiv}>
+        <h1 className={styles.serviceTitle}>홈술포차</h1>
+      </div>
+      <div className={styles.loginWrap}>
+        <div className={styles.signup}>
+          <div className={styles.eachInput}>
+            <span>ID</span>
+            <input
+              type="text"
+              placeholder="Id"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+          </div>
+          <div className={styles.eachInput}>
+            <span>PW</span>
+            <input
+              type="Password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className={styles.eachInput}>
+            <span>PW확인</span>
+            <input
+              type="Password"
+              placeholder="비밀번호 확인"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+
+          <button onClick={handleSignUp}>SIGN UP</button>
         </div>
-    );
+        <div className={styles.login}>
+          <div className={styles.eachInput}>
+            <span>ID</span>
+            <input
+              type="text"
+              placeholder="Id"
+              value={loginId}
+              onChange={(e) => setLoginId(e.target.value)}
+            />
+          </div>
+          <div className={styles.eachInput}>
+            <span>PW</span>
+            <input
+              type="Password"
+              placeholder="비밀번호"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
+            />
+          </div>
+          <button onClick={handleLogIn}>SIGN IN</button>
+        </div>
+      </div>
+      <div className={styles.bottomColor}></div>
+    </div>
+  );
 };
 
 export default Login;

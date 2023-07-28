@@ -1,54 +1,6 @@
-.position{
-    /* margin-top: 16%; */
-    margin-left: 38%;
-}
-.container {
-    background-color: #40A940;
-    border: 1px solid #78EFAD;
-    border-radius: 12px;
-    padding: 20px;
-    width: 400px;
-
-}
-
-.title {
-    color: #a34a61;
-    font-family: 'Arial', sans-serif;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.room {
-    background-color: #78EFAD;
-    border-radius: 8px;
-    color: #91445c;
-    font-family: 'Arial', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    list-style: none;
-    margin-bottom: 8px;
-    padding: 10px;
-    text-align: center;
-}
-.roomIn{
-    margin-left: 120px;
-}
-button[type="submit"] {
-    width: 150px;
-    height: 40px;
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 20px;
-    background-color: #ffc107;
-    border: none;
-    color: #fff;
-    box-shadow: 2px 2px 5px #ccc;
-}
-
-button[type="submit"]:hover {
-    background-color: #ff9800;
+.roomCreateWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
 }

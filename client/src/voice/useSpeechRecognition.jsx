@@ -1,17 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import  useSpeechRecognition  from './useSpeechRecognitions';
-import styles from './voice.module.css';
-import axios from 'axios';
-import 'regenerator-runtime/runtime';
-import CloudCanvas from '../keyword/cloud';
+import React, { useState, useEffect, Component, useRef } from "react";
+import useSpeechRecognition from "./useSpeechRecognitions";
+import styles from "./voice.module.css";
+import axios from "axios";
+import "regenerator-runtime/runtime";
 
-const languageOptions = [{ label: '한국어 - ', value: 'ko-KR' }];
+const keyword = ["고양이", "구름", "벚꽃", "강아지"];
+const speech_sentence =["시작","간장 공장 공장장은 강 공장장이다","내가 그린 기린 그림은 긴 기린 그림이다","철수 책상 철 책상","상업 산업 사업을 상상한다"]
 
-const Example = () => {
-  const [lang, setLang] = useState('ko-KR');
-  const [value, setValue] = useState('');
-  const [blocked, setBlocked] = useState(false);
-  const [extractedValue, setExtractedValue] = useState('');
+const UseSpeechRecognition = (props) => {
+  // const [lang, setLang] = useState('ko-KR');
+  const [value, setValue] = useState("");
+  const [listenBlocked, setListenBlocked] = useState(false);
+  const [extractedValue, setExtractedValue] = useState("");
+
+  const lang = "ko-Kr";
+  useEffect(() => {
+    for (const sentence of speech_sentence) {
+      if (value.includes(sentence)) {
+        setExtractedValue(sentence);
+        props.sendSpeech(props.user.streamManager.stream.connection.connectionId);
+      }
+    }
+    for (const word of keyword) {
+      if (value.includes(word)) {
+        setExtractedValue(word);
+        props.sendEffectSignal(word);
+      }
+    }
+    console.log("Value:", value); // 추가된 부분
+  }, [value]);
+
+  useEffect(() => {
+    if (extractedValue !== "") {
+      const timeout = setTimeout(() => {
+        setExtractedValue(" ");
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [extractedValue]);
 
   const onEnd = () => {
     // You could do something here after listening has finished
@@ -22,8 +48,8 @@ const Example = () => {
   };
 
   const onError = (event) => {
-    if (event.error === 'not-allowed') {
-      setBlocked(true);
+    if (event.error === "not-allowed") {
+      setListenBlocked(true);
     }
   };
 
@@ -36,78 +62,54 @@ const Example = () => {
   const toggle = listening
     ? stop
     : () => {
-        setBlocked(false);
+        setListenBlocked(false);
         listen({ lang });
       };
 
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/api/keyword');
-        const { keywords } = response.data;
-        for (const keyword of keywords) {
-          if (value.indexOf(keyword) !== -1) {
-            setExtractedValue(keyword);
-            break;
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (value) {
-      fetchData();
-    }
-  }, [value]);
-  
   return (
-    <div className={styles.container}>
-      { extractedValue === "구름" && ( <CloudCanvas/>)} 
-      {/* <CloudCanvas/> */}
-      <form id="speech-recognition-form">
-      <h2>음성 인식</h2>
-        {!supported && (
-          <p>
-            Oh no, it looks like your browser doesn&#39;t support Speech Recognition.
-          </p>
-        )}
-        {supported && (
-          <React.Fragment>
-            <p>{`'듣기'를 클릭하고 말하기 시작..`}</p>
-            <select form="speech-recognition-form" id="language" value={lang}  onChange={(e) => setLang(e.target.value)}>
-              {languageOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="transcript">기록</label>
-            <textarea
-              id="transcript"
-              name="transcript"
-              placeholder="음성 기다리는중..."
-              value={value}
-              rows={3}
-              disabled             
+    <div>
+      <div className={styles.container}>
+        <form id="speech-recognition-form">
+          {!supported && (
+            <p>
+              Oh no, it looks like your browser doesn&#39;t support Speech
+              Recognition.
+            </p>
+          )}
+          {supported && (
+            <>
+              <label htmlFor="transcript">사용자 음성</label>
+              <textarea
+                id="transcript"
+                name="transcript"
+                placeholder="음성 기다리는중..."
+                value={value}
+                rows={3}
+                disabled
               />
-            <button disabled={blocked} type="button" onClick={toggle}>
-              {listening ? '정지' : '듣기'}
-            </button>
-            {blocked && <p style={{ color: 'red' }}>The microphone is blocked for this site in your browser.</p>}
-            <textarea
-              id="extractedValue"
-              name="extractedValue"
-              placeholder="..."
-              value={extractedValue}
-              rows={2}
-              disabled
+              <button disabled={listenBlocked} type="button" onClick={toggle}>
+                {listening ? "정지" : "듣기"}
+              </button>
+              {listenBlocked && (
+                <p style={{ color: "red" }}>
+                  The microphone is blocked for this site in your browser.
+                </p>
+              )}
+              <label htmlFor="extractedValue">일치 키워드</label>
+              <textarea
+                id="extractedValue"
+                name="extractedValue"
+                placeholder="..."
+                value={extractedValue}
+                rows={2}
+                disabled
               />
-          </React.Fragment>
-        )}
-      </form>
+            </>
+          )}
+        </form>
+      </div>
     </div>
   );
 };
 
-export default Example;
+export default UseSpeechRecognition;

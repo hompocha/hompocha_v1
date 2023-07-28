@@ -1,31 +1,6 @@
-.position{
-    position: absolute;
-    margin-top: 20%;
-    margin-left: 80%;
-}
-.container {
-    background-color: #7ca4d789;
-    border: 1px solid #78EFAD;
-    border-radius: 12px;
-    padding: 20px;
-    height: 400px;
-    width: 300px;
-}
-
-.title {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: #ffd589;
-}
-
-.userItem {
-    list-style-type: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    margin: 0.4rem 0;
-    transition: background-color 0.3s;
-}
-
-.userItem:hover {
-    cursor: pointer;
+.userListWrap {
+  border: 3px solid black;
+  width: 15vw;
+  padding: 10px;
+  border-radius: 10px;
 }

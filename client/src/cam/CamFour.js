@@ -1,28 +1,39 @@
 import { OpenVidu } from "openvidu-browser";
-
 import axios from "axios";
-import React, { Component } from "react";
-import UserVideoComponent from "./UserVideoComponent";
+import React, { Component, useState } from "react";
 import Cam from "./Cam";
-import styles from "./camFour.module.css";
-import {Link} from "react-router-dom";
+import styles from "./CamFour.module.css";
+import { Link } from "react-router-dom";
+import UseSpeechRecognition from "../voice/useSpeechRecognition";
+import UserModel from "../models/user-model";
+import GameCam from "../Games/GameCam";
+import UserVideoComponent from "./UserVideoComponent";
 
 console.log(process.env.NODE_ENV);
-const APPLICATION_SERVER_URL = "https://hompocha.site/api/"; //"https://seomik.shop/";
+const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`; //`"https://hompocha.site/api/"; //"https://seomik.shop/";
 // process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
-
-class CamFour extends Component {
+const localUser = new UserModel();
+export default class CamFour extends Component {
   constructor(props) {
     super(props);
-
+    
+    console.log([props.roomName]);
+    console.log([props.idx]);
+    const roomName = props.roomName;
+    const idx = props.idx;
+    console.log(roomName);
     // These properties are in the state's component in order to re-render the HTML whenever their values change
     this.state = {
-      mySessionId: "SessionA",
+      mySessionId: idx,
       myUserName: "Participant" + Math.floor(Math.random() * 100),
-      session: undefined,
+      session: idx,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
       subscribers: [],
+
+      sessionConnected: false,
+
+      mode: undefined,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -32,10 +43,98 @@ class CamFour extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.sendSignal = this.sendSignal.bind(this);
+    this.enterAirHockey = this.enterAirHockey.bind(this);
+    this.enterMovingDuck = this.enterMovingDuck.bind(this);
+    this.enterSpeech = this.enterSpeech.bind(this);
+
+    this.returnToRoom = this.returnToRoom.bind(this);
+    this.sendSpeech = this.sendSpeech.bind(this);
   }
+
+  /* 생성함수 --------------------------- */
+  sendSignal(string) {
+    if (this.state.session) {
+      this.state.session
+        .signal({
+          data: string,
+          to: [],
+          type: "effect",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
+  sendSpeech(string) {
+    if (this.state.session) {
+      const randomConnectionId = this.pickRandom();
+      this.state.session
+          .signal({
+            data: string,
+            to: [randomConnectionId],
+            type: "speech",
+          })
+          .then(() => {
+            console.log("Message successfully sent",randomConnectionId);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    }
+  }
+
+  pickRandom(){
+    const listPeople =[];
+    this.state.subscribers.forEach((subscriber) => {
+      listPeople.push(subscriber.stream.connection.connectionId);
+    });
+    listPeople.push(this.state.session.connection.connectionId);
+
+    const sortedPeople = [...listPeople].sort();
+    console.log(sortedPeople)
+    return sortedPeople[0];
+  }
+
+
+  enterAirHockey(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: "airHockey",
+    });
+  }
+  enterMovingDuck(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: "movingDuck",
+    });
+  }
+
+  enterSpeech(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: "speech",
+    });
+  }
+  returnToRoom(e) {
+    // e.preventDefault();
+    this.setState({
+      mode: undefined,
+    });
+  }
+
+  handleSessionConnected = () => {
+    this.setState({ sessionConnected: true });
+    this.props.onSessionConnect(localUser);
+  };
+  /* ---------------------------------- */
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    this.joinSession();
   }
 
   componentWillUnmount() {
@@ -76,20 +175,14 @@ class CamFour extends Component {
       });
     }
   }
-
   joinSession() {
-    // --- 1) Get an OpenVidu object ---
-
     this.OV = new OpenVidu();
-
-    // --- 2) Init a session ---
-
     this.setState(
       {
         session: this.OV.initSession(),
       },
       () => {
-        var mySession = this.state.session;
+        let mySession = this.state.session;
 
         // --- 3) Specify the actions when events take place in the session ---
 
@@ -122,13 +215,12 @@ class CamFour extends Component {
 
         // Get a token from the OpenVidu deployment
         this.getToken().then((token) => {
-          console.log('gettoken', token);
+          console.log("gettoken", token);
           // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
           mySession
             .connect(token, { clientData: this.state.myUserName })
             .then(async () => {
-              // --- 5) Get your own camera stream ---
 
               // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
               // element: we will manage it on our own) and with the desired properties
@@ -145,6 +237,17 @@ class CamFour extends Component {
               // --- 6) Publish your stream ---
 
               mySession.publish(publisher);
+              localUser.setNickname(this.state.myUserName);
+              localUser.setConnectionId(
+                this.state.session.connection.connectionId
+              );
+              localUser.setStreamManager(publisher);
+              localUser.setSubscriber(this.state.subscribers);
+              this.handleSessionConnected();
+              console.log(
+                "local Stream 세숀 : ",
+                localUser.getStreamManager().stream
+              ); //세션 및 stream 제대로 들어감
 
               // Obtain the current video device in use
               var devices = await this.OV.getDevices();
@@ -176,6 +279,7 @@ class CamFour extends Component {
         });
       }
     );
+    console.log(this.state);
   }
 
   leaveSession() {
@@ -198,7 +302,6 @@ class CamFour extends Component {
       publisher: undefined,
     });
   }
-
   async switchCamera() {
     try {
       const devices = await this.OV.getDevices();
@@ -246,98 +349,163 @@ class CamFour extends Component {
 
     return (
       <div className={styles.container}>
-        {this.state.session === undefined ? (
-          <div id="join">
-            <div id="join-dialog" className={styles.jumbotronVerticalCenter}>
-              <form className={styles.formGroup} onSubmit={this.joinSession}>
-                <p>
-                  <label>Participant: </label>
-                  <input
-                    className={styles.formControl}
-                    type="text"
-                    id="userName"
-                    value={myUserName}
-                    onChange={this.handleChangeUserName}
-                    required
-                  />
-                </p>
-                <p>
-                  <label> Session: </label>
-                  <input
-                    className={styles.formControl}
-                    type="text"
-                    id="sessionId"
-                    value={mySessionId}
-                    onChange={this.handleChangeSessionId}
-                    required
-                  />
-                </p>
-                <p className={styles.textCenter}>
-                  <input
-                    className={styles.btnLgBtnSuccess}
-                    name="commit"
-                    type="submit"
-                    value="영상출력 키워드"
-                  />
-                  
-                </p>
-                <p className={styles.textCenter}>
-                  <Link to="/GameCam">
-
-                  <input
-                    className={styles.btnLgBtnSuccess}
-                    name="commit"
-                    type="submit"
-                    value="게임화면"
-                    />
-                  </Link>
-                  
-                </p>
-              </form>
-            </div>
-            
-          </div>
-        ) : null}
-
         {
-          /* 방 접속 */
-          this.state.session !== undefined ? (
-            <div id="session">
-              {/* <div id="session-header">
-                <h1 id="session-title">{mySessionId}</h1>
-                <h2>{this.state.subscribers.length + 1}</h2>
-                <input
-                  type="button"
-                  id="buttonLeaveSession"
-                  onClick={this.leaveSession}
-                  value="Leave session"
-                />
-                <input
-                  type="button"
-                  id="buttonSwitchCamera"
-                  onClick={this.switchCamera}
-                  value="Switch Camera"
-                />
-              </div> */}
+          /* 방 생성 화면 */
+          this.state.session === undefined ? (
+            <div id="join">
+              <div id="join-dialog" className={styles.jumbotronVerticalCenter}>
+                <form className={styles.formGroup} onSubmit={this.joinSession}>
+                  <p>
+                    <label>Participant: </label>
 
-              <div id="video-container">
-                {/* publisher */
-                /* this.state.publisher !== undefined ? (
-                    <UserVideoComponent streamManager={this.state.publisher} />
-                  ) : null */}
-                {/* subscribers */
-                /* this.state.subscribers.map((sub, i) => (
-                    <UserVideoComponent streamManager={sub} />
-                  )) */}
-                {this.state.publisher !== undefined ? (
-                  <Cam
-                    num={this.state.subscribers.length + 1}
-                    publisher={this.state.publisher}
-                    subscribers={this.state.subscribers}
-                  />
-                ) : null}
+                    <input
+                      className={styles.formControl}
+                      type="text"
+                      id="userName"
+                      value={myUserName}
+                      onChange={this.handleChangeUserName}
+                      required
+                    />
+                  </p>
+                  <p>
+                    {/*세션 수동입력하는 창  (일단안뜸) */}
+                    <label> Session: </label>
+                    <input
+                      className={styles.formControl}
+                      type="text"
+                      id="sessionId"
+                      value={this.state.mySessionId}
+                      onChange={this.handleChangeSessionId}
+                      required
+                    />
+                  </p>
+                  <p className={styles.textCenter}>
+                    <input
+                      className={styles.btnLgBtnSuccess}
+                      name="commit"
+                      type="submit"
+                      value="영상출력 키워드"
+                    />
+                  </p>
+                  <p className={styles.textCenter}>
+                    <Link to="/GameCam">
+                      <input
+                        className={styles.btnLgBtnSuccess}
+                        name="commit"
+                        type="submit"
+                        value="게임화면"
+                      />
+                    </Link>
+                  </p>
+                </form>
               </div>
             </div>
+          ) : null
+        }
+
+        {
+          /* 대화가 이뤄지는 기본 공간 */
+          this.state.session !== undefined && this.state.mode === undefined ? (
+            <>
+              {" "}
+              <div id="session">
+                <div id="session-header">
+                  <h1 id="session-title">{mySessionId}</h1>
+                  <h2>{this.state.subscribers.length + 1}</h2>
+                  <input
+                    type="button"
+                    id="buttonLeaveSession"
+                    onClick={this.leaveSession}
+                    value="Leave session"
+                  />
+                  <input
+                    type="button"
+                    id="buttonSwitchCamera"
+                    onClick={this.switchCamera}
+                    value="Switch Camera"
+                  />
+                  <input
+                    onClick={this.enterAirHockey}
+                    type="button"
+                    value="에어하키"
+                  />
+                  <input
+                    onClick={this.enterMovingDuck}
+                    type="button"
+                    value="오리옮기기"
+                  />
+
+                  <input
+                      onClick={this.enterSpeech}
+                      type="button"
+                      value="발음게임"
+                  />
+                  {/*<Example sendSpeech={this.sendSpeech}/>*/}
+                  <UseSpeechRecognition sendSignal={this.sendSignal} />
+                </div>
+
+                <Cam
+                  state={this.state}
+                  num={this.state.subscribers.length + 1}
+                  publisher={this.state.publisher}
+                  subscribers={this.state.subscribers}
+                />
+              </div>
+
+            </>
+          ) : null
+        }
+
+        {
+          /* 에어하키 구현 */
+          this.state.session !== undefined &&
+          this.state.mode === "airHockey" ? (
+            <div>
+              <GameCam state={this.state} />
+              <form>
+                <input
+                  onClick={this.returnToRoom}
+                  type="button"
+                  value="방으로 이동"
+                />
+              </form>
+            </div>
+          ) : null
+        }
+
+        {
+          /* 오리 옮기기 구현 */
+          this.state.session !== undefined &&
+          this.state.mode === "movingDuck" ? (
+            <div>
+              <GameCam state={this.state} />
+              <form>
+                <input
+                  onClick={this.returnToRoom}
+                  type="button"
+                  value="방으로 이동"
+                />
+              </form>
+            </div>
+          ) : null
+        }
+
+        {
+          /* 발음 게임 구현 */
+          this.state.session !== undefined &&
+          this.state.mode === "speech" ? (
+              <div>
+                <h1> 안뇽 </h1>
+                <form>
+                  <SpeechCam key ={this.pickRandom()} subscribers={this.state.subscribers}/>
+                  <UseSpeechRecognition sendSpeech={this.sendSpeech} />
+                  <input
+                      onClick={this.returnToRoom}
+                      type="button"
+                      value="방으로 이동"
+                  />
+                </form>
+              </div>
           ) : null
         }
       </div>
@@ -366,12 +534,13 @@ class CamFour extends Component {
   }
 
   async createSession(sessionId) {
-    console.log(APPLICATION_SERVER_URL,'openvidu/');
-    const connect = await axios.get(APPLICATION_SERVER_URL+'openvidu/');
-    console.log(connect, 'createSession');
+    console.log(APPLICATION_SERVER_URL, "/openvidu/");
+    const connect = await axios.get(APPLICATION_SERVER_URL + "/openvidu/");
+    console.log(connect, "createSession");
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "openvidu/sessions",
-      { customSessionId: sessionId ,
+      APPLICATION_SERVER_URL + "/openvidu/sessions",
+      {
+        customSessionId: sessionId,
         headers: { "Content-Type": "application/json" },
       }
     );
@@ -379,9 +548,17 @@ class CamFour extends Component {
   }
 
   async createToken(sessionId) {
-    console.log(APPLICATION_SERVER_URL, "openvidu/sessions/", sessionId, "/connections");
+    console.log(
+      APPLICATION_SERVER_URL,
+      "/openvidu/sessions/",
+      sessionId,
+      "/connections"
+    );
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "openvidu/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL +
+        "/openvidu/sessions/" +
+        sessionId +
+        "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },
@@ -391,5 +568,3 @@ class CamFour extends Component {
     return response.data; // The token
   }
 }
-
-export default CamFour;

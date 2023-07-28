@@ -1,0 +1,28 @@
+.roomWrap {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid black;
+}
+
+.effectWrap {
+  border: 1px solid black;
+  z-index: 0;
+}
+
+.camChatWrap {
+  border: 3px solid black;
+  border-radius: 10px;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.zindex{
+  z-index: 1;
+}

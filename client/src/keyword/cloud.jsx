@@ -1,43 +1,72 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./cloud.module.css";
 
-function CloudCanvas() {
-  const canvasRef = useRef(null);
+export function CloudCanvas() {
+    const x = 1100, y = 0;
+    const canvasRef = useRef(null);
 
-  function drawBall(ctx, x, y) {
-    const image = new Image();
-    image.src = "/cloud.png"; 
-    ctx.drawImage(image, x - 20 , y -200 , 250, 250); 
-  }
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    let x = canvas.width / 2;
-    let y = canvas.height - 30;
-    let dx = 3;
-    let dy = -3;
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBall(ctx, x, y);
-      x += dx;
-      y += dy;
-      if (x  < 0 || x + 80 > canvas.width) {
-        dx = -dx;
-      }
-
-      if (y < 0 || y + 10 > canvas.height) {
-        dy = -dy;
-      }
+    function loadImage(src) {
+        return new Promise((resolve) => {
+        const image = new Image();
+        image.src = src;
+        image.onload = () => resolve(image);
+        });
     }
 
-    const interval = setInterval(draw, 10);
+    function drawImage(ctx, image, x, y, width, height, mirrored) {
+        ctx.save();
+        ctx.scale(mirrored ? -1 : 1, 1);
+        ctx.drawImage(image, mirrored ? -x - width : x, y, width, height);
+        ctx.restore();
+    }
 
-    return () => clearInterval(interval);
-  }, []);
+    async function drawCloud(ctx, x, y) {
+        let count = 0;
+        const frames = [
+            "/Cloud/cloud1.png",
+            "/Cloud/cloud2.png",
+            "/Cloud/cloud3.png",
+            "/Cloud/cloud4.png",
+            "/Cloud/cloud5.png",
+            "/Cloud/cloud6.png",
+            "/Cloud/cloud7.png",
+            "/Cloud/cloud8.png",
 
-  return <canvas className={styles.cloud} ref={canvasRef} width="1950" height="500" />;
+        ];
+
+        const images = await Promise.all(frames.map((src) => loadImage(src)));
+
+        function getRandomX() {
+            return Math.floor(Math.random() * 1301); 
+        }
+
+        x = getRandomX();
+        y = 0;
+
+        function animate() {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            const currentImage = images[count % images.length];
+            drawImage(ctx, currentImage, x, y, 350, 250, x > ctx.canvas.width / 2); 
+            count += 1;
+            x += x > ctx.canvas.width / 2 ? -10 : 10; 
+            if (x <= -250) {
+                x = ctx.canvas.width;
+            } else if (x >= ctx.canvas.width) {
+                x = -250;
+            }
+        }
+        setInterval(animate, 500);
+    }
+
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+
+        drawCloud(ctx, x, y);
+    }, [x, y]);
+
+    return <canvas className = {styles.size} ref={canvasRef} width="2200" height="300" />;
 }
 
 export default CloudCanvas;

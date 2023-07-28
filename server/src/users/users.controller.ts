@@ -13,9 +13,11 @@ export class UsersController {
     await this.userService.createUser(id, password);
   }
   @Post('/login')
-  async login(@Body() dto: UserLoginDto): Promise<void> {
-    const { id, password } = dto;
-    await this.userService.login(id, password);
+  async login(@Body() dto: UserLoginDto): Promise<string> {
+    const { loginId, loginPassword } = dto;
+    const jwt_log = await this.userService.login(loginId, loginPassword);
+    console.log(jwt_log);
+    return jwt_log;
   }
   @Get('/:id')
   async checkId(@Param('id') userId: string): Promise<void> {
