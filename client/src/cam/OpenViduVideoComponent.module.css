@@ -195,3 +195,8 @@
   height: 720px;
   transform: rotateY(180deg)scale(50%);
 }
+.rouletteVideo{
+  position: absolute;
+  width: 960px;
+  height: 720px;
+}

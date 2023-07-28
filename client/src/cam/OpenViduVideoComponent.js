@@ -184,6 +184,14 @@ const OpenViduVideoComponent = (props) => {
           </div>
         ) : null
       }
+      {
+        /* 룰렛돌리기할 때 불러와지는 플레이어 캠 */
+        props.mode === "roulette" ? (
+          <div>
+            <video className={styles.rouletteVideo} autoPlay={true} ref={videoRef} />
+          </div>
+        ) : null
+      }
 
       {/* 게임화면에서 다른 유저의 캠 */}
     </>
