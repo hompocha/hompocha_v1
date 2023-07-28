@@ -8,7 +8,7 @@ import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 let sentenceState = '시작'
 const speech_sentence = ["간장 공장 공장장은 강 공장장이다","내가 그린 기린 그림은 긴 기린 그림이다","철수 책상 철 책상","상업 산업 사업을 상상한다"]
 const time = []
-for(let i =100000; i < 500001; i+=100){
+for(let i =10000; i < 50001; i+=100){
   time.push(i);
 }
 const SpeechGame = (props) => {
