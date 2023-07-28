@@ -21,7 +21,6 @@ const SpeechGame = (props) => {
 
 
     useEffect(() => {
-        console.log('useeffect');
         /* 만약에 내가 방장이면 이 밑에서 처리를 해줌 */
         if (props.user.streamManager.stream.connection.connectionId === hostIp)
         {
@@ -68,7 +67,8 @@ const SpeechGame = (props) => {
         sentenceState=sentence;
         setStopTime(sendStopTime)
       })
-    }, [props.user,randomUser]);
+    }, [props.user,randomUser,stopTime]);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
