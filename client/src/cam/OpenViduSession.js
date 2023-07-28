@@ -38,9 +38,11 @@ export default class OpenViduSession extends Component {
   componentWillUnmount() {
     /*윈도우 창 끄는거임*/
     window.removeEventListener("beforeunload", this.onbeforeunload);
+    this.leaveSession();
   }
   onbeforeunload(event) {
-    this.leaveSession();
+    if(this.state.session)
+      this.leaveSession();
   }
   handleSessionConnected = () => {
     this.setState({ sessionConnected: true });
