@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef,useEffect } from 'react';
 import UserVideoComponent from './UserVideoComponent';
 import styles from './CamTest.module.css';
 // interface CamTwoProps {
@@ -16,7 +16,7 @@ const CamTest = (props:any) => {
     endAngle: number;
     num : number;
   }
-
+  const num = props.user.getSubscriber().length + 1;
   const svgRef = useRef<SVGSVGElement>(null);
   const [flag, setFlag] = useState(0);
   const [counts, setCounts] = useState(0);
@@ -70,7 +70,6 @@ const CamTest = (props:any) => {
   };
 
   const renderCamSlices = () => {
-    const num = props.user.getSubscriber().length + 1;
     const angle = 360 / num - 0.01;
     const pieSlices = [];
 
@@ -85,11 +84,10 @@ const CamTest = (props:any) => {
   };
 
   const roulette = () => {
-    const numSlices = props.user.getSubscriber().length + 1;
-    const randSlice = Math.floor(Math.random() * numSlices);
+    const randSlice = Math.floor(Math.random() * num);
     const rotations = Math.floor(Math.random() * 10) + 8;
     const targetAngleOffset = -180 + Math.random() * 360; // 변경된 무작위 각도 오프셋
-    const targetAngle = -(360 * rotations + randSlice * (360 / numSlices) + targetAngleOffset); // 오프셋 추가
+    const targetAngle = -(360 * rotations + randSlice * (360 / num) + targetAngleOffset); // 오프셋 추가
     const spinDuration = 9;
     const targetAnglePeople = Math.abs(targetAngle % 360);
     console.log("걸린사람 : " + targetAnglePeople);
@@ -98,28 +96,28 @@ const CamTest = (props:any) => {
       svgRef.current.style.transformOrigin = 'center';
       svgRef.current.style.transition = `transform ${spinDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
     }
-    console.log(props.user.subscribers.length+1);
+    console.log(num);
     
     let a = 0;
-
-    setAngle(360 / (props.user.subscribers.length + 1));
-    console.log(angle);
+    console.log(num,angle);
     while(targetAnglePeople >= a){
       a += angle;
       setCounts(prevCounts => prevCounts + 1);
       console.log(a, counts);
     }
+    setFlag(0);
     setTimeout(() => {
       setFlag(1);
       console.log(flag);
+      setTimeout(() => {
+        reset();
+      },10);
       setTimeout(() => {
         setFlag(0);
         setCounts(0);
         console.log(flag, counts);
       }, 5000);
-      reset();
     }, 9000);
-
     const reset = () => {
       if (svgRef.current) {
         svgRef.current.style.transform = 'rotate(0deg)';
@@ -127,9 +125,12 @@ const CamTest = (props:any) => {
         svgRef.current.style.transition = 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)';
       }
     };
-
+    
   };
-
+  
+  useEffect(() => {
+    setAngle(360 / (num));
+  },[num]);
 
   return (
     <div>
