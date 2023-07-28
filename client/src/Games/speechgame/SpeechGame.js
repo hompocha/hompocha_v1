@@ -5,29 +5,39 @@ import styles from './SpeechGame.module.css';
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 
 
-let firstTime = true;
 let sentenceState = '시작'
-const speech_sentence = ["간장 공장 공장장은 강 공장장이다","내가 그린 기린그림은 긴 기린그림이다","철수책상철책상"]
+const speech_sentence = ["간장 공장 공장장은 강 공장장이다","내가 그린 기린 그림은 긴 기린 그림이다","철수 책상 철 책상","상업 산업 사업을 상상한다"]
+const time = []
+for(let i =10000; i < 50001; i+=100){
+  time.push(i);
+}
 const SpeechGame = (props) => {
-    // const [sentenceState, setSpeech] = useState('시작');
-    // let sentenceSate = '시작'
+  // let stopTime=5000;
+  const [stopTime,setStopTime] = useState(5000);
     const [randomUser, setRandomUser] = useState(props.selectID);
     const hostIp = props.selectID;
-    // let randomUser = chooseRandomMember();
+  const [timerExpired, setTimerExpired] = useState(false);
+  const [firstTime,setFirstTime]= useState(true);
 
-    // const speechRef = useRef('')
+
     useEffect(() => {
+        console.log('useeffect');
         /* 만약에 내가 방장이면 이 밑에서 처리를 해줌 */
         if (props.user.streamManager.stream.connection.connectionId === hostIp)
         {
+          console.log('host');
           /* 처음 시작할때 랜덤으로 돌려서 보내버리기~!!!*/
           if (firstTime === true)
           {
-            firstTime = false;
-            const sentence = getRandomElement(speech_sentence)
+            setFirstTime(false);
+            const firstMembers = [...props.user.subscribers];
+            firstMembers.push(props.user.streamManager);
+            const selectId =getRandomElement(firstMembers).stream.connection.connectionId;
+            const sentence = getRandomElement(speech_sentence);
+            const sendStopTime=getRandomElement(time);
             // setRandomUser(chooseRandomMember());
-            console.log("첫번째로 걸린애: ", chooseRandomMember());
-            sendPasstoUser(chooseRandomMember(),sentence);
+            console.log("첫번째로 걸린애: ", selectId);
+            sendToUsers(selectId,sentence,sendStopTime);
             // sentenceState=sentence
           }
           /* 두번째부터는 밑에꺼 실행 */
@@ -41,28 +51,50 @@ const SpeechGame = (props) => {
             /* 술래가 제대로 발음한 시그널을 받았을 경우 */
                 if (sentId === randomUser) {
                     const sentence = getRandomElement(speech_sentence)
-                    console.log("걸린애 : ", chooseRandomMember());
-                  setRandomUser(chooseRandomMember());
-
-                    sendPasstoUser(chooseRandomMember(),sentence);
-                  sentenceState=sentence
+                  const selectId = getRandomElement(findSubscriber(randomUser)).stream.connection.connectionId;
+                  const sendStopTime=stopTime
+                    console.log("걸린애 : ", selectId);
+                    sendToUsers(selectId,sentence,sendStopTime);
                 }
             });
           }
         }
-        /* 호스트 아닌 애들은 그냥 받기만해서 영상 출력해버리면 되는거 아님?*/
+        /* 받아서 출력 */
       props.user.getStreamManager().stream.session.on("signal:randomId", (event) => {
         const data = JSON.parse(event.data);
-        const {id ,sentence} = data;
+        const {id ,sentence,sendStopTime} = data;
+        console.log(sendStopTime);
         console.log("애가 바껴야함 : ",id);
         setRandomUser(id);
         sentenceState=sentence;
+        setStopTime(sendStopTime)
       })
     }, [props.user]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimerExpired(true);
+    }, stopTime);
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [stopTime]);
+
+  useEffect(() => {
+    if(timerExpired) {
+      const timer = setTimeout(() => {
+        // setFirstTime()
+        props.end(undefined);
+      }, 2000);
+
+      return () => {
+        clearTimeout(timer);}
+    }
+  }, [timerExpired, stopTime, props]);
+
   /*================================*/
   /*signal 보내는데 맞춘사람 id보냄*/
-    function sendPass(sentId) {
+    function checkPass(sentId) {
         if (props.user.getStreamManager().session) {
             props.user.getStreamManager().session
                 .signal({
@@ -80,11 +112,11 @@ const SpeechGame = (props) => {
     }
   /*================================*/
     /* signal 보내는데 랜덤으로 고른 아이디랑 문장보냄*/
-    function sendPasstoUser(id,sentence) {
+    function sendToUsers(id,sentence,sendStopTime) {
       if (props.user.getStreamManager().session) {
         props.user.getStreamManager().session
           .signal({
-            data: JSON.stringify({id,sentence}),
+            data: JSON.stringify({id,sentence,sendStopTime}),
             to: [],
             type: "randomId",
           })
@@ -96,19 +128,9 @@ const SpeechGame = (props) => {
           });
       }
   }
-  /*================================*/
-  /* 랜덤으로 멤버 고름요*/
-  function chooseRandomMember()
-  {
-    const firstMembers = [...props.user.subscribers];
-    firstMembers.push(props.user.streamManager);
-    return getRandomElement(firstMembers).stream.connection.connectionId;
-  }
-  /*================================*/
   /* 랜덤요소 고르는 함수 */
     function getRandomElement(list) {
         if (list.length === 0) {
-            console.log("여기 Null 값이다.")
             return null;
         }
         const randomIndex = Math.floor(Math.random() * list.length);
@@ -120,25 +142,25 @@ const SpeechGame = (props) => {
   function findSubscriber(wantId){
     const firstMembers = [...props.user.subscribers];
     firstMembers.push(props.user.streamManager);
-    const a =firstMembers.filter(
+    return firstMembers.filter(
       (subscriber) => subscriber.stream.connection.connectionId !==wantId
     )
-    console.log("Asdfasdfasdf",a);
-    return a
   }
   /*================================================*/
 
     return (
+      <>
+      {!timerExpired ? (
         <div>
-            {/* UserVideoComponent 위에 불투명 레이어를 추가합니다. */}
             <h1 className={styles.gameWord}>{sentenceState}</h1>
             <div className={styles.speechPosition}>
-              <UseSpeechRecognition sendSpeech={sendPass} user={props.user}/>
+              <UseSpeechRecognition sendSpeech={checkPass} user={props.user}/>
             </div>
             <div className={styles.camPosition}>
               {/*========================테스트입니다=============================*/}
               <h1>{randomUser}</h1>
               <h1>{hostIp}</h1>
+              <h1>{stopTime}</h1>
               <h1>{props.user.streamManager.stream.connection.connectionId}</h1>
               {/*========================여기까지================================*/}
 
@@ -146,20 +168,26 @@ const SpeechGame = (props) => {
 
               {/*=============================딴애들=========================================================*/}
               {
-                findSubscriber(randomUser).map((subscriber) => (
-                  <>
+                findSubscriber(randomUser).map((subscriber, index) => (
+                  <React.Fragment key={index}>
                     <h1>{subscriber.stream.connection.connectionId}</h1>
                     <OpenViduVideoComponent mode={undefined} streamManager={subscriber} />
-                  </>
+                  </React.Fragment>
                 ))
               }
-              {/*==========================================================================================*/}
 
-
-
-
+              /*==========================================================================================*/}
             </div>
         </div>
+      ):
+        <div>
+          <h1>애가 마지막에 걸린애</h1>
+          <SpeechCam selectId={randomUser} user={props.user}/>
+        </div>
+      }
+      </>
     );
 }
+
+
 export default SpeechGame;

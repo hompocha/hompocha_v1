@@ -5,7 +5,7 @@ import axios from "axios";
 import "regenerator-runtime/runtime";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지"];
-const speech_sentence =["시작","우현이","성균이","간장공장공장장은강공장장이다","내가그린기린그림은긴기린그림이다","철수책상철책상","상업산업사업을상상한다."]
+const speech_sentence =["시작","간장 공장 공장장은 강 공장장이다","내가 그린 기린 그림은 긴 기린 그림이다","철수 책상 철 책상","상업 산업 사업을 상상한다"]
 
 const UseSpeechRecognition = (props) => {
   // const [lang, setLang] = useState('ko-KR');

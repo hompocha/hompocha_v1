@@ -197,7 +197,7 @@ export default class CamMain extends Component {
           /* 발음 게임 */
           this.state.mode === "speechGame" ? (
             <div>
-              <SpeechGame selectID ={this.chooseHost()} user ={this.props.user}/>
+              <SpeechGame selectID ={this.chooseHost()} user ={this.props.user} end ={this.sendGameTypeSignal} mode = {this.state.mode}/>
               <form className={styles.ReturnRoom}>
                 <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
               </form>
