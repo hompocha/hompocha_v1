@@ -9,6 +9,9 @@
     transform: rotateY(180deg);
     border-radius: 10px;
 }
+.hidden {
+    display: none;
+}
 
 .duckCanvas{
     position: absolute;

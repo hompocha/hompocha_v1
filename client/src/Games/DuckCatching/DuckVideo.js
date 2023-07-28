@@ -3,7 +3,8 @@ import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks, Data, lerp,} from "@mediapipe/drawing_utils";
 import styles from "./DuckVideo.module.css";
 import {Camera} from "@mediapipe/camera_utils"
-
+import {SyncLoader} from "react-spinners";
+import Loading from "../../Loading/Loading";
 const DuckVideo = (props) => {
     const [videoReady, setVideoReady] = useState(false);
     const [loaded, setLoaded] = useState(false);
@@ -75,10 +76,11 @@ const DuckVideo = (props) => {
         
     }, [videoReady]);
 
+
     //MediaPipe Hands 결과를 처리하고 화면에 출력하는 함수
     const onResults = (results) => {
-        if (canvasRef.current && canvasCtx.current) {
-            setLoaded(true);
+        if (canvasRef.current && canvasCtx.current && videoReady) {
+            // setLoaded(true);
         }
         
         canvasCtx.current.save();
@@ -161,7 +163,39 @@ const DuckVideo = (props) => {
     
         loadImages();
         canvasCtx.current.restore();
+
     };
+
+
+    useEffect(() => {
+        const videoNode = videoRef.current;
+        const canvasNode = canvasRef.current;
+
+        // video 요소와 canvas 요소가 둘 다 준비되었는지 확인
+        const handleLoaded = () => {
+            if (videoNode && canvasNode) {
+                setTimeout(() => {
+                    setLoaded(true);
+                }, 5000);}}
+
+        if (videoNode) {
+            videoNode.addEventListener('loadeddata', handleLoaded);
+        }
+
+        if (canvasNode) {
+            // 캔버스는 준비되었는지 확인하는 별도의 이벤트가 없으므로,
+            // 이 경우에는 DOM에 렌더링되면 즉시 준비된 것으로 간주합니다.
+            handleLoaded();
+        }
+
+        return () => {
+            if (videoNode) {
+                videoNode.removeEventListener('loadeddata', handleLoaded);
+            }
+        };
+    }, [videoRef.current, canvasRef.current]);
+
+
     const [blue, setBlue] = useState(0);
     const [red, setRed] = useState(0);
     // 사각형 오브젝트를 드래그하는 함수
@@ -226,23 +260,24 @@ const DuckVideo = (props) => {
     }
 
     return (
-        <>
-        {props.mode === "movingDuck" ? (
-            <div>
-            <span>오리 옮기기 모드</span>
-            <video
-                className={styles.videoCanvas}
-                autoPlay={true}
-                ref={(el) => {
-                    videoRef.current = el;
-                    setVideoReady(!!el);
-                }}
-            />
-            <canvas className={styles.duckCanvas} ref={canvasRef} width={800} height={700} />
-            <h2 className= {styles.bord}> blue {blue} : {red} red </h2>
-            </div>
-        ) : null}
-        </>
+      <>
+          <div>
+              {props.mode === "movingDuck" && !loaded && <div> <Loading/> </div>}
+              {props.mode === "movingDuck" ? (
+                <div>
+                    <span>오리 옮기기 모드</span>
+                    <video
+                      className={`${styles.videoCanvas} ${!loaded && styles.hidden}`}
+                      autoPlay={true}
+                      ref={videoRef}
+                    />
+
+                    <canvas className={styles.duckCanvas} ref={canvasRef} width={800} height={700} />
+                    <h2 className= {styles.bord}> blue {blue} : {red} red </h2>
+                </div>
+              ) : null}
+          </div>
+      </>
     );
 };
 

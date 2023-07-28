@@ -52,6 +52,7 @@ const defaultGameState = {
 };
 
 const Airhockey = (props) => {
+
   const [videoReady, setVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
   // const [user, setUser] = useState(null);
@@ -115,12 +116,13 @@ const Airhockey = (props) => {
         height: 720,
       });
       camera.start();
+      setLoaded(true);
     }
   }, [videoReady]);
 
   const onResults = (results) => {
     if (canvasRef.current && canvasCtx.current) {
-      setLoaded(true);
+
     }
 
     /* 패들 위치 감지 */
@@ -263,6 +265,7 @@ const Airhockey = (props) => {
       ball.position.y += ball.speed.dy;
     });
   };
+
   return (
     <>
       <video
