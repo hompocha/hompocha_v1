@@ -43,12 +43,11 @@ const SpeechGame = (props) => {
           /* 두번째부터는 밑에꺼 실행 */
           else
           {
+            console.log("여기로 못들어옴? ")
             props.user.getStreamManager().stream.session.on("signal:speech", (event) => {
                 const sentId = event.data;
                 console.log("메세지 보낸애: ", sentId);
                 console.log("첫시작으로 걸렸으면서, 맞춰야하는데: ", randomUser);
-
-            /* 술래가 제대로 발음한 시그널을 받았을 경우 */
                 if (sentId === randomUser) {
                     const sentence = getRandomElement(speech_sentence)
                   const selectId = getRandomElement(findSubscriber(randomUser)).stream.connection.connectionId;
@@ -69,7 +68,7 @@ const SpeechGame = (props) => {
         sentenceState=sentence;
         setStopTime(sendStopTime)
       })
-    }, [props.user]);
+    }, [props.user,randomUser]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -83,14 +82,14 @@ const SpeechGame = (props) => {
   useEffect(() => {
     if(timerExpired) {
       const timer = setTimeout(() => {
-        // setFirstTime()
+        setFirstTime(false);
         props.end(undefined);
       }, 2000);
 
       return () => {
         clearTimeout(timer);}
     }
-  }, [timerExpired, stopTime, props]);
+  }, [timerExpired, props]);
 
   /*================================*/
   /*signal 보내는데 맞춘사람 id보냄*/
@@ -175,7 +174,6 @@ const SpeechGame = (props) => {
                   </React.Fragment>
                 ))
               }
-
               {/*==========================================================================================*/}
             </div>
         </div>
