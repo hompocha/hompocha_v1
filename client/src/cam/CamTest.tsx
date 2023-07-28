@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import UserVideoComponent from './UserVideoComponent';
 import styles from './CamTest.module.css';
 // interface CamTwoProps {
@@ -16,6 +16,8 @@ const CamTest = (props:any) => {
     endAngle: number;
     num : number;
   }
+
+  const svgRef = useRef<SVGSVGElement>(null);
   
   const CamSlice: React.FC<Props> = ({ index, radius, startAngle, endAngle, num}) => {
     const cx = radius;
@@ -78,19 +80,42 @@ const CamTest = (props:any) => {
     return pieSlices;
   };
 
+  const roulette = () => {
+    const numSlices = props.user.getSubscriber().length + 1;
+    const randSlice = Math.floor(Math.random() * numSlices);
+    const rotations = Math.floor(Math.random() * 10) + 8;
+    const targetAngleOffset = -180 + Math.random() * 360; // 변경된 무작위 각도 오프셋
+    const targetAngle = -(360 * rotations + randSlice * (360 / numSlices) + targetAngleOffset); // 오프셋 추가
+    const spinDuration = 9;
+    const targetAnglePeople = Math.abs(targetAngle % 360);
+    console.log("걸린사람 : " + targetAnglePeople);
+    if (svgRef.current) {
+      svgRef.current.style.transform = `rotate(${targetAngle}deg)`;
+      svgRef.current.style.transformOrigin = 'center';
+      svgRef.current.style.transition = `transform ${spinDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
+    }
+  };
+
+  const reset = () => {
+    if (svgRef.current) {
+      svgRef.current.style.transform = 'rotate(0deg)';
+      svgRef.current.style.transformOrigin = 'center';
+      svgRef.current.style.transition = 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)';
+    }
+  };
+
   return (
     <div>
+      <div className={styles.triangleDown}/>
       <div>
-        {/* <input
-          min={1}
-          max={6}
-          type="number"
-          placeholder="현재 유저의 수"
-          value={num}
-          onChange={(e) => setNum(Number(e.target.value))}
-        /> */}
+        <button type='submit' onClick={roulette}> 돌려</button>
       </div>
-      <svg className={styles.position} width={800} height={800}>{renderCamSlices()}</svg>
+      <div>
+        <button type='submit' onClick={reset}> 정렬</button>
+      </div>
+      <div className={styles.scale}>
+        <svg ref={svgRef} className={styles.position} width={700} height={700}>{renderCamSlices()}</svg>
+      </div>
     </div>
   );
 }
