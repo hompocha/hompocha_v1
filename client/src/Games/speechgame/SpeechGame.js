@@ -69,6 +69,7 @@ const SpeechGame = (props) => {
       })
     }, [props.user,randomUser,stopTime]);
 
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
