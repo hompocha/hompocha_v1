@@ -166,6 +166,7 @@ export default class OpenViduSession extends Component {
         });
       }
     );
+    console.log(this.state);
   }
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---

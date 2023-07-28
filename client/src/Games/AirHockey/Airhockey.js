@@ -5,11 +5,10 @@ import { drawPaddle } from "./drawPaddle";
 // import styles from "../GameCam.module.css";
 import styles from "./Airhockey.module.css";
 
-
 const defaultGameState = {
   paddle: {
     width: 0.04,
-    height:0.2,
+    height: 0.2,
   },
   // players: [
   //   {
@@ -26,9 +25,9 @@ const defaultGameState = {
   //   }
   // ],
   player1: {
-    playerId: 'player1',
-    position: {x:0.2, y:0.5},
-    nextPosition: {x:0.2, y:0.5}
+    playerId: "player1",
+    position: { x: 0.2, y: 0.5 },
+    nextPosition: { x: 0.2, y: 0.5 },
   },
   // player2: {
   //   playerId: 'player2',
@@ -38,35 +37,32 @@ const defaultGameState = {
   balls: [
     {
       radius: 4,
-      position: {x:0.5, y:0.5},
-      speed: {dx:0.02, dy:0.02},
-      nextPosition:{x:0.5, y:0.5}
+      position: { x: 0.5, y: 0.5 },
+      speed: { dx: 0.02, dy: 0.02 },
+      nextPosition: { x: 0.5, y: 0.5 },
     },
     {
       radius: 4,
-      position: {x:0.5, y:0.5},
-      speed: {dx:0.02, dy:-0.02},
-      nextPosition:{x:0.5, y:0.5}
-    }
+      position: { x: 0.5, y: 0.5 },
+      speed: { dx: 0.02, dy: -0.02 },
+      nextPosition: { x: 0.5, y: 0.5 },
+    },
   ],
-  roomId: 'room'
-}
-
-
+  roomId: "room",
+};
 
 const Airhockey = (props) => {
   const [videoReady, setVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
   // const [user, setUser] = useState(null);
   // const [gameState, setGameState] = useState();
-  
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
   const padleLoc = useRef(null);
   const gameState = useRef(defaultGameState);
 
-  
   // useEffect(() => {
   //   if (videoRef.current && props.streamManager) {
   //     console.log('set');
@@ -76,33 +72,34 @@ const Airhockey = (props) => {
   // }, [props.streamManager]);
 
   useEffect(() => {
-    if(props.sessionConnected)
-      {
-        props.user.getStreamManager().stream.session.on('signal:airhockey', (event) => {
-          const data= JSON.parse(event.data);
+    if (props.sessionConnected) {
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:airhockey", (event) => {
+          const data = JSON.parse(event.data);
 
           // if(gameState.current.player1.playerId == props.user.connectionId){
           //   console.log()
-            gameState.current.player1.nextPosition.x=data.x;
-            gameState.current.player1.nextPosition.y=data.y;
+          gameState.current.player1.nextPosition.x = data.x;
+          gameState.current.player1.nextPosition.y = data.y;
           // }
           // else {
           //   gameState.current.player2.nextPosition.x=data.x;
           //   gameState.current.player2.nextPosition.y=data.y;
           // }
         });
-      }
+    }
   }, [props.sessionConnected]);
-  
+
   useEffect(() => {
     const hands = new Hands({
       locateFile: (file) =>
-      `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
+        `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
     });
-    
+
     if (videoRef.current && canvasRef.current) {
       canvasCtx.current = canvasRef.current.getContext("2d");
-      
+
       hands.setOptions({
         maxNumHands: 1,
         modelComplexity: 1,
@@ -120,7 +117,7 @@ const Airhockey = (props) => {
       camera.start();
     }
   }, [videoReady]);
-  
+
   const onResults = (results) => {
     if (canvasRef.current && canvasCtx.current) {
       setLoaded(true);
@@ -129,9 +126,11 @@ const Airhockey = (props) => {
     /* 패들 위치 감지 */
     if (results.multiHandLandmarks && results.multiHandedness) {
       if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
-          padleLoc.current = {user: props.user.getStreamManager().stream.connection.connectionId,
-              x:results.multiHandLandmarks[0][8].x,
-               y:results.multiHandLandmarks[0][8].y};
+        padleLoc.current = {
+          user: props.user.getStreamManager().stream.connection.connectionId,
+          x: results.multiHandLandmarks[0][8].x,
+          y: results.multiHandLandmarks[0][8].y,
+        };
       }
     }
     // console.log(gameState.current.player1);
@@ -146,39 +145,38 @@ const Airhockey = (props) => {
     drawGame(canvasRef.current, canvasCtx.current, gameState.current);
   };
 
-
-  
   // const [gameState, setGameState] = useState();
   // const [intervalId, setIntervalId] = useState();
   // setGameState(defaultGameState);
 
-  useEffect(()=>{
-      console.log('start');
-      canvasCtx.current = canvasRef.current.getContext("2d");
-      // gameState.current = defaultGameState;
-      setInterval(() => {
-        sendPadleLocation(padleLoc.current);
-        // updateGameState();
-      }, 1000/60);
-  },[]);
-    
+  useEffect(() => {
+    console.log("start");
+    canvasCtx.current = canvasRef.current.getContext("2d");
+    // gameState.current = defaultGameState;
+    setInterval(() => {
+      sendPadleLocation(padleLoc.current);
+      // updateGameState();
+    }, 1000 / 60);
+  }, []);
+
   const sendPadleLocation = (PadleLocation) => {
-    if (props.user){
-      const padleLocString=JSON.stringify(PadleLocation);
-      props.user.getStreamManager().session
-          .signal({
-            data: padleLocString,
-            to: [],
-            type: "airhockey",
-          })
-          .then(() => {
-              console.log("Message successfully sent");
-          })
-          .catch((error) => {
-              console.error(error);
-          });
+    if (props.user) {
+      const padleLocString = JSON.stringify(PadleLocation);
+      props.user
+        .getStreamManager()
+        .session.signal({
+          data: padleLocString,
+          to: [],
+          type: "airhockey",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-  }
+  };
 
   const drawGame = (can_ref, can_ctx, gameState) => {
     const w = can_ref.width;
@@ -190,12 +188,11 @@ const Airhockey = (props) => {
     //   console.log(player);
     //   // drawPlayerPaddle(can_ref, can_ctx, player, gameState.paddle);
     // })
-    
-    gameState.balls.forEach((ball)=>{
-        drawBall(can_ref, can_ctx, ball);
-      });
+
+    gameState.balls.forEach((ball) => {
+      drawBall(can_ref, can_ctx, ball);
+    });
     //   drawBall(can_ref, can_ctx, gameState.balls[0]);
-   
 
     can_ctx.restore();
   };
@@ -203,22 +200,31 @@ const Airhockey = (props) => {
   const drawPlayerPaddle = (can_ref, can_ctx, player, paddle) => {
     const w = can_ref.width;
     const h = can_ref.height;
-    can_ctx.fillStyle="lime";
-    can_ctx.fillRect((player.position.x-paddle.width/2)*w,
-       (player.position.y-paddle.height/2)*h, 
-       paddle.width*w, paddle.height*h);
-  }
+    can_ctx.fillStyle = "lime";
+    can_ctx.fillRect(
+      (player.position.x - paddle.width / 2) * w,
+      (player.position.y - paddle.height / 2) * h,
+      paddle.width * w,
+      paddle.height * h
+    );
+  };
 
   const drawBall = (can_ref, can_ctx, ball) => {
     const w = can_ref.width;
     const h = can_ref.height;
 
     can_ctx.beginPath();
-    can_ctx.fillStyle="yellow";
-    can_ctx.arc(ball.position.x*w, ball.position.y*h, ball.radius, 0, 2*Math.PI);
+    can_ctx.fillStyle = "yellow";
+    can_ctx.arc(
+      ball.position.x * w,
+      ball.position.y * h,
+      ball.radius,
+      0,
+      2 * Math.PI
+    );
     can_ctx.fill();
     can_ctx.closePath();
-  }
+  };
 
   const updateGameState = (can_ref, gameState) => {
     const w = can_ref.width;
@@ -227,46 +233,49 @@ const Airhockey = (props) => {
     gameState.player1.position.y = gameState.player1.nextPosition.y;
 
     gameState.balls.forEach((ball) => {
-      if ((ball.position.x + ball.speed.dx)*w > w - ball.radius/2 
-        || (ball.position.x + ball.speed.dx)*w < ball.radius/2){
+      if (
+        (ball.position.x + ball.speed.dx) * w > w - ball.radius / 2 ||
+        (ball.position.x + ball.speed.dx) * w < ball.radius / 2
+      ) {
         ball.speed.dx = -ball.speed.dx;
       }
-      if ((ball.position.y + ball.speed.dy)*h > h - ball.radius/2
-        || (ball.position.y + ball.speed.dy)*h < ball.radius/2 ){
+      if (
+        (ball.position.y + ball.speed.dy) * h > h - ball.radius / 2 ||
+        (ball.position.y + ball.speed.dy) * h < ball.radius / 2
+      ) {
         ball.speed.dy = -ball.speed.dy;
       }
 
-      if (((ball.position.y + ball.speed.dy) > gameState.player1.nextPosition.y - gameState.paddle.height/2
-      && (ball.position.y + ball.speed.dy) < gameState.player1.nextPosition.y + gameState.paddle.height/2 )
-       &&((ball.position.x + ball.speed.dx) > gameState.player1.nextPosition.x - gameState.paddle.width/2
-      && (ball.position.x + ball.speed.dx) < gameState.player1.nextPosition.x + gameState.paddle.width/2 )){
+      if (
+        ball.position.y + ball.speed.dy >
+          gameState.player1.nextPosition.y - gameState.paddle.height / 2 &&
+        ball.position.y + ball.speed.dy <
+          gameState.player1.nextPosition.y + gameState.paddle.height / 2 &&
+        ball.position.x + ball.speed.dx >
+          gameState.player1.nextPosition.x - gameState.paddle.width / 2 &&
+        ball.position.x + ball.speed.dx <
+          gameState.player1.nextPosition.x + gameState.paddle.width / 2
+      ) {
         ball.speed.dx = -ball.speed.dx;
       }
 
       ball.position.x += ball.speed.dx;
       ball.position.y += ball.speed.dy;
-    })
+    });
+  };
+  return (
+    <>
+      <video
+        className={styles.webcamRef}
+        autoPlay={true}
+        ref={(el) => {
+          videoRef.current = el;
+          setVideoReady(el);
+        }}
+      />
+      <canvas className={styles.webcamRefz} ref={canvasRef} />
+    </>
+  );
+};
 
-  }
-    return (
-      <>
-        <video
-          className={styles.webcamRef}
-          autoPlay={true}
-          ref={(el) => {
-            videoRef.current = el;
-            setVideoReady(el);
-          }}
-          />
-        <canvas 
-          className={styles.webcamRefz}
-           ref={canvasRef} />
-      </>
-    );
-    
-  }
-  
-  export {Airhockey};
-  
-  
-
+export { Airhockey };
