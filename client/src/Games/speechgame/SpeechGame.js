@@ -34,10 +34,11 @@ const SpeechGame = (props) => {
             firstMembers.push(props.user.streamManager);
             const selectId =getRandomElement(firstMembers).stream.connection.connectionId;
             const sentence = getRandomElement(speech_sentence);
-            const sendStopTime=getRandomElement(time);
+            const randomStopTime=getRandomElement(time);
             // setRandomUser(chooseRandomMember());
             console.log("첫번째로 걸린애: ", selectId);
-            sendToUsers(selectId,sentence,sendStopTime);
+            sendToUsers(selectId,sentence);
+            sendStopTime(randomStopTime);
             // sentenceState=sentence
           }
           /* 두번째부터는 밑에꺼 실행 */
@@ -50,10 +51,10 @@ const SpeechGame = (props) => {
                 console.log("첫시작으로 걸렸으면서, 맞춰야하는데: ", randomUser);
                 if (sentId === randomUser) {
                     const sentence = getRandomElement(speech_sentence)
-                  const selectId = getRandomElement(findSubscriber(randomUser)).stream.connection.connectionId;
-                  const sendStopTime=stopTime
+                    const selectId = getRandomElement(findSubscriber(randomUser)).stream.connection.connectionId;
+
                     console.log("걸린애 : ", selectId);
-                    sendToUsers(selectId,sentence,sendStopTime);
+                    sendToUsers(selectId,sentence);
                 }
             });
           }
@@ -61,14 +62,20 @@ const SpeechGame = (props) => {
         /* 받아서 출력 */
       props.user.getStreamManager().stream.session.on("signal:randomId", (event) => {
         const data = JSON.parse(event.data);
-        const {id ,sentence,sendStopTime} = data;
-        console.log(sendStopTime);
+        // const {id ,sentence,sendStopTime} = data;
+        const {id ,sentence} = data;
+        // console.log(sendStopTime);
         console.log("애가 바껴야함 : ",id);
         setRandomUser(id);
         sentenceState=sentence;
-        setStopTime(sendStopTime)
+        // setStopTime(sendStopTime)
       })
-    }, [props.user,randomUser]);
+
+      props.user.getStreamManager().stream.session.on("signal:stopTime", (event) => {
+        const data = event.data;
+        setStopTime(data);
+      })
+    }, [props.user,randomUser,stopTime]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -84,7 +91,7 @@ const SpeechGame = (props) => {
       const timer = setTimeout(() => {
         setFirstTime(false);
         props.end(undefined);
-      }, 2000);
+      }, 2000) ;
 
       return () => {
         clearTimeout(timer);}
@@ -109,13 +116,30 @@ const SpeechGame = (props) => {
                 });
         }
     }
+
+  function sendStopTime(stopTime) {
+    if (props.user.getStreamManager().session) {
+      props.user.getStreamManager().session
+        .signal({
+          data: stopTime,
+          to: [],
+          type: "stopTime",
+        })
+        .then(() => {
+          console.log("sentence sent_id sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
   /*================================*/
     /* signal 보내는데 랜덤으로 고른 아이디랑 문장보냄*/
-    function sendToUsers(id,sentence,sendStopTime) {
+    function sendToUsers(id,sentence) {
       if (props.user.getStreamManager().session) {
         props.user.getStreamManager().session
           .signal({
-            data: JSON.stringify({id,sentence,sendStopTime}),
+            data: JSON.stringify({id,sentence}),
             to: [],
             type: "randomId",
           })
