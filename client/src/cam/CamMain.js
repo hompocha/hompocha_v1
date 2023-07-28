@@ -115,10 +115,6 @@ export default class CamMain extends Component {
     });
     members.push(this.props.user.streamManager.stream.connection.connectionId);
     const sortedMembers = [...members].sort();
-    // const test = members[0].stream.connection.connectionId; // TODO 이거 수정해서 넘기는걸로 코드 수정해야
-    console.log("Host", sortedMembers[0]);
-    console.log("List", members);
-    console.log("sortedList :",sortedMembers);
     return sortedMembers[0]
   }
   /*======================================================*/

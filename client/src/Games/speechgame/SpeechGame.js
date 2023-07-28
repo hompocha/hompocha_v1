@@ -8,7 +8,7 @@ import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 let sentenceState = '시작'
 const speech_sentence = ["간장 공장 공장장은 강 공장장이다","내가 그린 기린 그림은 긴 기린 그림이다","철수 책상 철 책상","상업 산업 사업을 상상한다"]
 const time = []
-for(let i =10000; i < 50001; i+=100){
+for(let i =100000; i < 500001; i+=100){
   time.push(i);
 }
 const SpeechGame = (props) => {
@@ -43,12 +43,11 @@ const SpeechGame = (props) => {
           /* 두번째부터는 밑에꺼 실행 */
           else
           {
+            console.log("여기로 못들어옴? ")
             props.user.getStreamManager().stream.session.on("signal:speech", (event) => {
                 const sentId = event.data;
                 console.log("메세지 보낸애: ", sentId);
                 console.log("첫시작으로 걸렸으면서, 맞춰야하는데: ", randomUser);
-
-            /* 술래가 제대로 발음한 시그널을 받았을 경우 */
                 if (sentId === randomUser) {
                     const sentence = getRandomElement(speech_sentence)
                   const selectId = getRandomElement(findSubscriber(randomUser)).stream.connection.connectionId;
@@ -69,7 +68,7 @@ const SpeechGame = (props) => {
         sentenceState=sentence;
         setStopTime(sendStopTime)
       })
-    }, [props.user]);
+    }, [props.user,randomUser]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -83,14 +82,14 @@ const SpeechGame = (props) => {
   useEffect(() => {
     if(timerExpired) {
       const timer = setTimeout(() => {
-        // setFirstTime()
+        setFirstTime(false);
         props.end(undefined);
       }, 2000);
 
       return () => {
         clearTimeout(timer);}
     }
-  }, [timerExpired, stopTime, props]);
+  }, [timerExpired, props]);
 
   /*================================*/
   /*signal 보내는데 맞춘사람 id보냄*/
@@ -175,8 +174,7 @@ const SpeechGame = (props) => {
                   </React.Fragment>
                 ))
               }
-
-              /*==========================================================================================*/}
+              {/*==========================================================================================*/}
             </div>
         </div>
       ):
