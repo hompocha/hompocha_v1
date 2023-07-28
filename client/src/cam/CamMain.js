@@ -4,7 +4,6 @@ import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css"
 import SpeechGame from "../Games/speechgame/SpeechGame";
-import { useHistory } from "react-router";
 
 
 export default class CamMain extends Component {
@@ -107,31 +106,27 @@ export default class CamMain extends Component {
   }
 
   /*======================================================*/
-  /*================== 랜덤으로 사람뽑는 애들 ==================*/
+  /*================== Host로 결정 해버리기 ==================*/
   /*======================================================*/
-  getRandomElement(list) {
-    if (list.length === 0) {
-      console.log("여기 Null 값이다.")
-      return null;
-    }
-    const randomIndex = Math.floor(Math.random() * list.length);
-    return list[randomIndex];
+  chooseHost() {
+    const members = [];
+    this.props.user.subscribers.forEach((subscriber) => {
+      members.push(subscriber.stream.connection.connectionId);
+    });
+    members.push(this.props.user.streamManager.stream.connection.connectionId);
+    const sortedMembers = [...members].sort();
+    // const test = members[0].stream.connection.connectionId; // TODO 이거 수정해서 넘기는걸로 코드 수정해야
+    console.log("Host", sortedMembers[0]);
+    console.log("List", members);
+    console.log("sortedList :",sortedMembers);
+    return sortedMembers[0]
   }
-  chooseRandom() {
-    const peopleList = [...this.props.user.subscribers];
-    peopleList.push(this.props.user.streamManager);
-    console.log("ssssssssssssss", peopleList);
-    const test = this.getRandomElement(peopleList).stream.connection.connectionId;
-    console.log("test1", test);
-    console.log("test2", peopleList);
-    return test
-  }
+  /*======================================================*/
+  /*======================================================*/
 
   ReturnLobby = () => {
-    
+
   }
-  /*======================================================*/
-  /*======================================================*/
   render() {
     console.log("CamMain rendered");
     return (
@@ -202,7 +197,7 @@ export default class CamMain extends Component {
           /* 발음 게임 */
           this.state.mode === "speechGame" ? (
             <div>
-              <SpeechGame selectID ={this.chooseRandom()} user ={this.props.user}/>
+              <SpeechGame selectID ={this.chooseHost()} user ={this.props.user}/>
               <form className={styles.ReturnRoom}>
                 <input onClick={() => this.sendGameTypeSignal(undefined)} type="button" value="방으로 이동"/>
               </form>
