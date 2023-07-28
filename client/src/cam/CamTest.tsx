@@ -18,7 +18,10 @@ const CamTest = (props:any) => {
   }
 
   const svgRef = useRef<SVGSVGElement>(null);
-  
+  const [flag, setFlag] = useState(0);
+  const [counts, setCounts] = useState(0);
+  const [angle,setAngle] = useState(360);
+  let memberCount = props.user.subscribers.length + 1;
   const CamSlice: React.FC<Props> = ({ index, radius, startAngle, endAngle, num}) => {
     const cx = radius;
     const cy = radius;
@@ -52,11 +55,12 @@ const CamTest = (props:any) => {
     };
 
     const videoClipId = `fan-clip-${index}`;
-
+    console.log("받았음? " + (counts-1));
     return (
       <g>
           <foreignObject width="100%" height="100%" clipPath={`url(#${videoClipId})`}>
-            <UserVideoComponent streamManager={members[index]} index = {index} num = {num} mode ={mode} />
+            {flag === 0 &&(<UserVideoComponent streamManager={members[index]} index = {index} num = {num} mode ={mode} />)}
+            {flag === 1 &&(<UserVideoComponent streamManager={members[counts-1]} index = {1} num = {num} mode ="roulette"/>)}
           </foreignObject>
           <clipPath key={videoClipId} id={videoClipId}>
             <path d={pathData} />;
@@ -94,24 +98,44 @@ const CamTest = (props:any) => {
       svgRef.current.style.transformOrigin = 'center';
       svgRef.current.style.transition = `transform ${spinDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
     }
+    console.log(props.user.subscribers.length+1);
+    
+    let a = 0;
+
+    setAngle(360 / (props.user.subscribers.length + 1));
+    console.log(angle);
+    while(targetAnglePeople >= a){
+      a += angle;
+      setCounts(prevCounts => prevCounts + 1);
+      console.log(a, counts);
+    }
+    setTimeout(() => {
+      setFlag(1);
+      console.log(flag);
+      setTimeout(() => {
+        setFlag(0);
+        setCounts(0);
+        console.log(flag, counts);
+      }, 5000);
+      reset();
+    }, 9000);
+
+    const reset = () => {
+      if (svgRef.current) {
+        svgRef.current.style.transform = 'rotate(0deg)';
+        svgRef.current.style.transformOrigin = 'center';
+        svgRef.current.style.transition = 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)';
+      }
+    };
+
   };
 
-  const reset = () => {
-    if (svgRef.current) {
-      svgRef.current.style.transform = 'rotate(0deg)';
-      svgRef.current.style.transformOrigin = 'center';
-      svgRef.current.style.transition = 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)';
-    }
-  };
 
   return (
     <div>
       <div className={styles.triangleDown}/>
       <div>
         <button type='submit' onClick={roulette}> 돌려</button>
-      </div>
-      <div>
-        <button type='submit' onClick={reset}> 정렬</button>
       </div>
       <div className={styles.scale}>
         <svg ref={svgRef} className={styles.position} width={700} height={700}>{renderCamSlices()}</svg>
