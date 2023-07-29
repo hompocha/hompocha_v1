@@ -265,17 +265,22 @@ const DuckVideo = (props) => {
               {props.mode === "movingDuck" && !loaded && <div> <Loading/> </div>}
               {props.mode === "movingDuck" ? (
                 <div>
-                    <span>오리 옮기기 모드</span>
-                    <video
+                  <span className={!loaded ? styles.hidden : ''}>
+                    {loaded ? null : '오리 옮기기 모드'}
+                  </span>
+                  <video
                       className={`${styles.videoCanvas} ${!loaded && styles.hidden}`}
                       autoPlay={true}
                       ref={videoRef}
                     />
 
                     <canvas className={styles.duckCanvas} ref={canvasRef} width={800} height={700} />
-                    <h2 className= {styles.bord}> blue {blue} : {red} red </h2>
+                    <h2 className={styles.bord}>
+                      {loaded ? `blue ${blue} : ${red} red` : ''}
+                    </h2>
                 </div>
               ) : null}
+
           </div>
       </>
     );
