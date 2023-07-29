@@ -9,6 +9,7 @@ import SpeechGame from "../Games/speechgame/SpeechGame";
 const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
+  const [childStopped, setChildStopped] = useState(false);
 
   useEffect(() => {
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {

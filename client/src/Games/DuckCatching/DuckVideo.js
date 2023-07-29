@@ -3,19 +3,17 @@ import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks, Data, lerp,} from "@mediapipe/drawing_utils";
 import styles from "./DuckVideo.module.css";
 import {Camera} from "@mediapipe/camera_utils"
-import {SyncLoader} from "react-spinners";
 import Loading from "../../Loading/Loading";
 const DuckVideo = (props) => {
+    const [isMounted, setIsMounted] = useState(false);
     const [videoReady, setVideoReady] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [pickObj, setPickObj] = useState();
-
-    //   console.log(props.state.mode);
-    //   console.log(props.streamManager);
-
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const canvasCtx = useRef(null);
+
+    let animationId = null;
 
 
     //사각형 오브젝트의 위치와 크기 설정
@@ -42,46 +40,102 @@ const DuckVideo = (props) => {
         }
     }, [props.streamManager]);
 
+    // useEffect(() => {
+    //     if(!canvasRef.current) return ;
+    //     const hands = new Hands({
+    //     locateFile: (file) =>
+    //     `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
+    //     });
+    //
+    //
+    //     if (videoRef.current && canvasRef.current) {
+    //         canvasCtx.current = canvasRef.current.getContext("2d");
+    //         console.log(`canvasCtx.current : ${canvasCtx.current}`);
+    //         // setTimeout(sendToMediaPipe, 3000);
+    //
+    //         hands.setOptions({
+    //             maxNumHands: 2,
+    //             modelComplexity: 1,
+    //             minDetectionConfidence: 0.7,
+    //             minTrackingConfidence: 0.7,
+    //         });
+    //
+    //         hands.onResults(onResults);
+    //
+    //         const camera = new Camera(videoRef.current, {
+    //             onFrame: async () => {
+    //                 await hands.send({image: videoRef.current});
+    //             },
+    //             width: 1280,
+    //             height: 720
+    //         });
+    //         camera.start();
+    //     }
+    //         return () => {
+    //             // 클린업 함수를 통해 camera와 hands를 중단
+    //             if (camera) {
+    //                 camera.stop();
+    //             }
+    //             hands.stop();
+    //         };
+    //     }
+    //
+    //
+    // }, [videoReady, canvasRef.current]);
+
     useEffect(() => {
+    let didCancel = false;
+
+    const loadHandsAndCamera = async () => {
         const hands = new Hands({
-        locateFile: (file) =>
-        `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
         });
-        
+        let camera;
 
         if (videoRef.current && canvasRef.current) {
-        canvasCtx.current = canvasRef.current.getContext("2d");
-        console.log(`canvasCtx.current : ${canvasCtx.current}`);
-        // setTimeout(sendToMediaPipe, 3000);
-        
-        hands.setOptions({
-            maxNumHands: 2,
-            modelComplexity: 1,
-            minDetectionConfidence: 0.7,
-            minTrackingConfidence: 0.7,
-        });
-        
-        hands.onResults(onResults);
+            canvasCtx.current = canvasRef.current.getContext("2d");
 
-        const camera = new Camera(videoRef.current, {
-            onFrame: async () => {
-            await hands.send({image: videoRef.current});
-            },
-            width: 1280,
-            height: 720
-        });
-        camera.start();
+            hands.setOptions({
+                maxNumHands: 2,
+                modelComplexity: 1,
+                minDetectionConfidence: 0.7,
+                minTrackingConfidence: 0.7,
+            });
+
+            hands.onResults(onResults);
+
+            camera = new Camera(videoRef.current, {
+                onFrame: async () => {
+                    if (!didCancel) {
+                        await hands.send({ image: videoRef.current });
+                    }
+                },
+                width: 1280,
+                height: 720,
+            });
+
+            camera.start();
         }
 
-        
-    }, [videoReady]);
+        return () => {
+            if (camera) {
+                camera.stop();
+            }
+        };
+    };
+
+    loadHandsAndCamera();
+
+    return () => {
+        didCancel = true;
+    };
+}, [videoReady,canvasRef.current]);
 
 
     //MediaPipe Hands 결과를 처리하고 화면에 출력하는 함수
     const onResults = (results) => {
-        if (canvasRef.current && canvasCtx.current && videoReady) {
-            // setLoaded(true);
-        }
+        if(!canvasRef.current) return;
+
         
         canvasCtx.current.save();
         canvasCtx.current.clearRect(
@@ -90,7 +144,7 @@ const DuckVideo = (props) => {
             canvasRef.current.width,
             canvasRef.current.height
         );
-        
+
         canvasCtx.current.drawImage(
             results.image,
         0,
@@ -98,7 +152,7 @@ const DuckVideo = (props) => {
         canvasRef.current.width,
         canvasRef.current.height
         );
-            
+
         const w = canvasRef.current.width;
         const h = canvasRef.current.height;
         
@@ -107,18 +161,6 @@ const DuckVideo = (props) => {
                 const classification = results.multiHandedness[index];
                 const isRightHand = classification.label === "Right";
                 const landmarks = results.multiHandLandmarks[index];
-                
-                // drawConnectors(canvasCtx.current, landmarks, HAND_CONNECTIONS, {
-                //     color: isRightHand ? "#00FF00" : "#FF0000",
-                // });
-                
-                // drawLandmarks(canvasCtx.current, landmarks, {
-                //     color: isRightHand ? "#00FF00" : "#FF0000",
-                //     fillColor: isRightHand ? "#FF0000" : "#00FF00",
-                //     radius: (data) => {
-                //         return lerp(data.from.z, -0.15, 0.1, 10, 1);
-                //     },
-                // });
                 
                 objDrag(landmarks, canvasRef);
             }
@@ -130,6 +172,8 @@ const DuckVideo = (props) => {
         const imgElements = [];
         
         const drawDuck = () => {
+            // if(!isMounted) return;
+            if(!canvasRef.current) return;
             canvasCtx.current.clearRect(0, 0, canvasCtx.current.canvas.width, canvasCtx.current.canvas.height);
             canvasCtx.current.drawImage(
                 imgElements[currentImageIndex],
@@ -138,10 +182,8 @@ const DuckVideo = (props) => {
                 boxLocation.lenX * w,
                 boxLocation.lenY * h
                 );
-            // setTimeout(() => {
-                currentImageIndex = (currentImageIndex + 1) % imgElements.length;
-                requestAnimationFrame(drawDuck);
-            // }, 10000);
+            currentImageIndex = (currentImageIndex + 1) % imgElements.length;
+            animationId = requestAnimationFrame(drawDuck);
         };
         const loadImages = async () => {
             try {
@@ -156,6 +198,7 @@ const DuckVideo = (props) => {
                 }
                 // 모든 이미지 로딩이 완료되면 애니메이션 시작
                 drawDuck();
+
             } catch (error) {
                 console.error("Error loading images:", error);
             }
@@ -200,6 +243,7 @@ const DuckVideo = (props) => {
     const [red, setRed] = useState(0);
     // 사각형 오브젝트를 드래그하는 함수
     const objMove = (fingerpick) => {
+        if(!canvasRef) return;
         const w = canvasRef.current.width;
         const h = canvasRef.current.height;
         const {x: fingerX, y: fingerY, z:_} = fingerpick;
@@ -270,6 +314,7 @@ const DuckVideo = (props) => {
                   </span>
                   <video
                       className={`${styles.videoCanvas} ${!loaded && styles.hidden}`}
+                     // className={styles.hidden}
                       autoPlay={true}
                       ref={videoRef}
                     />
