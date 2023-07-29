@@ -20,9 +20,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
         enterMovingDuck();
       } else if (data === "speechGame") {
         enterSpeech();
-      }
-      /* data 가 undefined 일 경우 방으로 돌아감 */
-      else {
+      } else {
+        /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
       }
     });
@@ -51,8 +50,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
 
   const sendEffectSignal = (string) => {
     if (user.getStreamManager().session) {
-      user.getStreamManager().session
-        .signal({
+      user
+        .getStreamManager()
+        .session.signal({
           data: string,
           to: [],
           type: "effect",
@@ -68,8 +68,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
 
   const sendGameTypeSignal = (string) => {
     if (user.getStreamManager().session) {
-      user.getStreamManager().session
-        .signal({
+      user
+        .getStreamManager()
+        .session.signal({
           data: string,
           to: [],
           type: "gameType",
@@ -82,7 +83,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
         });
     }
   };
-  
+
   const chooseHost = () => {
     const members = [];
     user.subscribers.forEach((subscriber) => {
@@ -96,7 +97,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
     console.log("sortedList :", sortedMembers);
     return sortedMembers[0];
   };
-  
+
   const endSession = () => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
@@ -134,11 +135,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
             />
 
             <form className={styles.ReturnRoom}>
-              <input
-                onClick={returnLobby}
-                type="button"
-                value="로비로 이동"
-              />
+              <input onClick={returnLobby} type="button" value="로비로 이동" />
             </form>
           </div>
 
