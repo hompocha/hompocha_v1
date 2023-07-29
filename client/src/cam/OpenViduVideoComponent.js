@@ -193,7 +193,20 @@ const OpenViduVideoComponent = (props) => {
         ) : null
       }
 
-      {/* 게임화면에서 다른 유저의 캠 */}
+      {
+        /* 대화 모드일 때 불러와 지는 캠 */
+        props.mode === "speechGame" ? (
+          <div>
+            {/* <span>대화모드</span> */}
+            <div className={styles.parent}>
+              <video
+                autoPlay={true}
+                ref={videoRef}
+              />
+            </div>
+          </div>
+        ) : null
+      }
     </>
   );
 };

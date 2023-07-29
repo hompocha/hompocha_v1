@@ -9,26 +9,21 @@ const SpeechCam = (props) => {
     if (selectId && (props.selectId || selectId.stream.connection.connectionId === props.user.streamManager.stream.connection.connectionId))
     {
         return (
-          <>
-              {/*========================테스트입니다=============================*/}
-              <h1>애는 조건문을 통과한애{selectId.stream.connection.connectionId}</h1>
-              {/*========================여기까지================================*/}
-              <OpenViduVideoComponent
-                mode ={undefined}
-                streamManager={selectId}
-              />
+            <>
+                {/*========================여기까지================================*/}
+                <OpenViduVideoComponent
+                    mode={"speechGame"}
+                    streamManager={selectId}
+                />
 
-          </>
+            </>
         );
     }
     else{
         return(
         <>
-            {/*========================테스트입니다=============================*/}
-            <h1>애는 조건문을 못한애{props.user.streamManager.stream.connection.connectionId}</h1>
-            {/*========================여기까지================================*/}
             <OpenViduVideoComponent
-                mode ={undefined}
+                mode={"speechGame"}
                 streamManager={props.user.streamManager}
             />
         </>
