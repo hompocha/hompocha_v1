@@ -1,13 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./CamTest.module.scss";
-// interface CamTwoProps {
-//   state: any; // 적절한 타입으로 수정하세요.
-//   num: number;
-//   members: string[]; // 적절한 타입으로 수정하세요.
-// }
 
-// const CamTest: React.FC<CamTwoProps> = ({ state, num, members }) => {
 const CamTest = (props: any) => {
   interface Props {
     index: number;
@@ -54,12 +48,6 @@ const CamTest = (props: any) => {
       Z
     `;
 
-    const sliceStyle = {
-      fill: "tomato",
-      stroke: "black",
-      strokeWidth: "3px",
-    };
-
     const videoClipId = `fan-clip-${index}`;
     console.log("받았음? " + (counts - 1));
     return (
@@ -92,7 +80,10 @@ const CamTest = (props: any) => {
       </g>
     );
   };
-
+  /*
+   * readyDrink : 0 => 건배 모드 X 평소 상태,
+   * readyDrink : 0 => 건배 모드
+   */
   const [readyDrink, setreadyDrink] = useState(0);
   function readyToDrink() {
     setreadyDrink(1);
@@ -100,6 +91,28 @@ const CamTest = (props: any) => {
       setreadyDrink(0);
     }, 2000);
   }
+  useEffect(() => {
+    props.user
+      .getStreamManager()
+      .session.on("signal:cheersEffect", (event: any) => {
+        readyToDrink();
+      });
+  }, []);
+  //
+  const sendCheersEffectSignal = (number: number) => {
+    console.log(props.user);
+    if (props.user.getStreamManager().session) {
+      props.user
+        .getStreamManager()
+        .session.signal({ data: number, to: [], type: "cheersEffect" })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error: any) => {
+          console.error(error);
+        });
+    }
+  };
 
   const renderCamSlices = () => {
     const angle = 360 / num - 0.01;
@@ -178,36 +191,24 @@ const CamTest = (props: any) => {
   function cheersImg() {
     const cheersImgGroup = [];
     for (let i = 0; i < 4; i++) {
-      const img_class =
-        readyDrink === 1
-          ? `${styles.cheersImgVer} ${styles[`bottom${i}`]}`
-          : `${styles.opacity}`;
+      const img_class = `${styles.cheersImgVer} ${styles[`bottom${i}`]}`;
       const img_src = "asset/cheers/cheers0" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} />);
+      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
     }
     for (let i = 10; i < 15; i++) {
-      const img_class =
-        readyDrink === 1
-          ? `${styles.cheersImgVer} ${styles[`top${i}`]}`
-          : `${styles.opacity}`;
+      const img_class = `${styles.cheersImgVer} ${styles[`top${i}`]}`;
       const img_src = "asset/cheers/cheers" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} />);
+      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
     }
     for (let i = 20; i < 24; i++) {
-      const img_class =
-        readyDrink === 1
-          ? `${styles.cheersImgHor} ${styles[`left${i}`]}`
-          : `${styles.opacity}`;
+      const img_class = `${styles.cheersImgHor} ${styles[`left${i}`]}`;
       const img_src = "asset/cheers/cheers" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} />);
+      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
     }
     for (let i = 30; i < 32; i++) {
-      const img_class =
-        readyDrink === 1
-          ? `${styles.cheersImgHor} ${styles[`right${i}`]}`
-          : `${styles.opacity}`;
+      const img_class = `${styles.cheersImgHor} ${styles[`right${i}`]}`;
       const img_src = "asset/cheers/cheers" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} />);
+      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
     }
     return cheersImgGroup;
   }
@@ -217,12 +218,11 @@ const CamTest = (props: any) => {
       <div className={styles.triangleDown} />
       <div>
         <button type="submit" onClick={roulette}>
-          {" "}
           돌려
         </button>
       </div>
       <div>
-        <button type="submit" onClick={readyToDrink}>
+        <button type="submit" onClick={() => sendCheersEffectSignal(1)}>
           건배준비
         </button>
       </div>
@@ -231,7 +231,7 @@ const CamTest = (props: any) => {
           {renderCamSlices()}
         </svg>
       </div>
-      {cheersImg()}
+      {readyDrink === 1 ? cheersImg() : null}
     </div>
   );
 };
