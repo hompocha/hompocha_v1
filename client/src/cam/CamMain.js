@@ -123,8 +123,15 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
       {mode === undefined && (
         <div id="session" className={styles.camMainWrap}>
           <div id="session-header" className={styles.camMainHeader}>
-            <h1 id="session-title">{roomName} </h1>
-            <h2>{user.subscribers.length + 1}명 참여중</h2>
+            <div id="session-title">{roomName} </div>
+            <div>{user.subscribers.length + 1}명 참여중</div>
+
+            <form className={styles.ReturnRoom}>
+              <input onClick={returnLobby} type="button" value="로비로 이동" />
+            </form>
+          </div>
+          <div className={styles.gameListWrap}>
+            <div className={styles.gameMenu}>메뉴판</div>
             <input
               onClick={() => sendGameTypeSignal("airHockey")}
               type="button"
@@ -145,10 +152,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
               type="button"
               value="피하기게임"
             />
-
-            <form className={styles.ReturnRoom}>
-              <input onClick={returnLobby} type="button" value="로비로 이동" />
-            </form>
           </div>
 
           <div className={styles.camAndVoice}>
