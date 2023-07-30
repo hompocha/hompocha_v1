@@ -11,22 +11,32 @@ export class RoomlistController {
     private authService: AuthService,
   ) {}
   @Post('/create')
-  async createRoom(@Body() dto: CreateRoomDto): Promise<void> {
-    const { room_name } = dto;
-    await this.roomService.createRoom(room_name);
+  async createRoom(@Body() dto: CreateRoomDto, @Headers() headers: any) {
+    const { room_name, room_max } = dto;
+    const verifiedToken = this.authService.verify(
+      headers.authorization.split('Bearer ')[1],
+    );
+    return await this.roomService.createRoom(
+      room_name,
+      room_max,
+      verifiedToken.idx,
+    );
   }
+
   @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
   }
   @Post('/roomInfo')
   async saveUserToRoom(@Body() roomDto: ToroomDto, @Headers() headers: any) {
-    const { room_name, idx } = roomDto;
+    const { idx } = roomDto;
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],
     );
-    await this.roomService.saveUserToRoom(room_name, idx, verifiedToken.idx);
+    await this.roomService.saveUserToRoom(idx, verifiedToken.idx);
+    const cnt = await this.roomService.countUserinRoom(idx);
+    const room = await this.roomService.findRoomMax(idx);
+    const max = room.room_max;
+    return { cnt, max };
   }
-
-
 }

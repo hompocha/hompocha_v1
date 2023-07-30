@@ -5,6 +5,7 @@ import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
+import axios from "axios";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
   const [mode, setMode] = useState(undefined);
@@ -30,7 +31,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
 
   const enterMainRoom = () => {
     setMode(undefined);
-
     onModeChange(undefined);
   };
 

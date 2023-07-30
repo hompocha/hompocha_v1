@@ -15,10 +15,10 @@ const RoomCreate = () => {
         `${process.env.REACT_APP_API_URL}/lobby/create`,
         {
           room_name,
-          idx,
         }
       );
-      console.log(response.data);
+      console.log("IDX 임: " ,response.data);
+      setIdx(response.data);
       alert("방 생성 성공");
       navigate("/Room", { state: { roomName: room_name, idx: idx } });
     } catch (error) {
