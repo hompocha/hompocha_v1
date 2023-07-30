@@ -1,13 +1,16 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('Rooms')
-export class RoomsEntity {
+export class RoomlistEntity {
   @PrimaryColumn()
   idx: string;
 
   @Column({ length: 30 })
   room_name: string;
 
-  // @Column({length: 30})
-  // room_
+  @Column({ length: 30 })
+  room_status: string;
+
+  @Column()
+  room_max: number;
 }

@@ -76,26 +76,26 @@ const SpeechGame = (props) => {
       })
     }, [props.user,randomUser,stopTime]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimerExpired(true);
-    }, stopTime);
-    return () => {
-      clearTimeout(timer);
-    }
-  }, [stopTime]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setTimerExpired(true);
+  //   }, stopTime);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   }
+  // }, [stopTime]);
 
-  useEffect(() => {
-    if(timerExpired) {
-      const timer = setTimeout(() => {
-        setFirstTime(false);
-        props.end(undefined);
-      }, 2000) ;
+  // useEffect(() => {
+  //   if(timerExpired) {
+  //     const timer = setTimeout(() => {
+  //       setFirstTime(false);
+  //       props.end(undefined);
+  //     }, 2000) ;
 
-      return () => {
-        clearTimeout(timer);}
-    }
-  }, [timerExpired, props]);
+  //     return () => {
+  //       clearTimeout(timer);}
+  //   }
+  // }, [timerExpired, props]);
 
   /*================================*/
   /*signal 보내는데 맞춘사람 id보냄*/
@@ -168,33 +168,62 @@ const SpeechGame = (props) => {
       (subscriber) => subscriber.stream.connection.connectionId !==wantId
     )
   }
+  // /* 이거 추가하면 될꺼같긴한데 */
+  // function findme(wantId){
+  //   const findMe = [...props.user.subscribers];
+  //   findMe.push(props.user.streamManager);
+  //   return findMe.find(
+  //     (subscriber) => subscriber.stream.connection.connectionId === wantId
+  //   )
+  //
+  // }
+  // const list_people = findSubscriber(randomUser)
+  // list_people.unshift(findme(randomUser))
+  // /*이렇게 하면 리스트 만들어지고 맨앞은 random 이고 리스트 뒤에는 남는애들*/
+
   /*================================================*/
+
+  /* 이거 추가하면 될꺼같긴한데 */
+  function findme(wantId){
+    const findMe = [...props.user.subscribers];
+    findMe.push(props.user.streamManager);
+    return findMe.find(
+      (subscriber) => subscriber.stream.connection.connectionId === wantId
+    )
+  }
+  const list_people = findSubscriber(randomUser)
+  list_people.unshift(findme(randomUser))
+  /*이렇게 하면 리스트 만들어지고 맨앞은 random 이고 리스트 뒤에는 남는애들*/
 
     return (
       <>
       {!timerExpired ? (
         <div>
-            <h1 className={styles.gameWord}>{sentenceState}</h1>
+            <h4 className={styles.gameWord}>{sentenceState}</h4>
             <div className={styles.speechPosition}>
               <UseSpeechRecognition sendSpeech={checkPass} user={props.user}/>
             </div>
             <div className={styles.camPosition}>
               {/*========================테스트입니다=============================*/}
-              <h1>{randomUser}</h1>
-              <h1>{hostIp}</h1>
-              <h1>{stopTime}</h1>
-              <h1>{props.user.streamManager.stream.connection.connectionId}</h1>
-              {/*========================여기까지================================*/}
+              <div className={styles.text}>
+                <h4>{randomUser}</h4>
+                <h4>{hostIp}</h4>
+                <h4>{stopTime}</h4>
+                <h4>{props.user.streamManager.stream.connection.connectionId}</h4>
+              </div>
 
-              <SpeechCam selectId={randomUser} user={props.user}/>
+              {/*========================여기까지================================*/}
+              <div className={styles[`speechGameCam__${0}`]}>
+                <SpeechCam selectId={randomUser} user={props.user}/>
+              </div>
 
               {/*=============================딴애들=========================================================*/}
               {
                 findSubscriber(randomUser).map((subscriber, index) => (
-                  <React.Fragment key={index}>
+                  <div className={styles[`speechGameCam__${index+1}`]}>
+                    <OpenViduVideoComponent mode={"speechGame"} streamManager={subscriber} />
                     <h1>{subscriber.stream.connection.connectionId}</h1>
-                    <OpenViduVideoComponent mode={undefined} streamManager={subscriber} />
-                  </React.Fragment>
+                  </div>
                 ))
               }
               {/*==========================================================================================*/}
@@ -202,7 +231,7 @@ const SpeechGame = (props) => {
         </div>
       ):
         <div>
-          <h1>애가 마지막에 걸린애</h1>
+          <h4>애가 마지막에 걸린애</h4>
           <SpeechCam selectId={randomUser} user={props.user}/>
         </div>
       }

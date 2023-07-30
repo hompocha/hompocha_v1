@@ -8,39 +8,59 @@ interface RoomInfoProps {
   currentIdx: string;
 }
 
-const RoomInfo: React.FC<RoomInfoProps> = ({ selectedTitle, currentIdx }) => {
-  const [inpeople, setInPeople] = useState("");
-  const [maxpeople, setMaxPeople] = useState("");
+const RoomInfo: React.FC<RoomInfoProps> = ({ selectedTitle, currentIdx}) => {
+  const [peopleNum, setPeopleNum] = useState(0);
+  const [mode, setMode] = useState("");
   const navigate = useNavigate();
   const room_name = selectedTitle;
   const idx = currentIdx;
   console.log(idx);
-  useEffect(() => {
-    fetchRoomInfo();
-  }, []);
 
-  const fetchRoomInfo = async () => {
+  const handleClick = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/lobby/roomInfo`
+        `${process.env.REACT_APP_API_URL}/lobby/roomInfo`,
+        {
+          room_name,
+          idx,
+        }
       );
-      const { room } = response.data;
-      setInPeople(room.inpeople);
-      setMaxPeople(room.maxpeople);
+      console.log(response.data);
+      alert("방 입장 정보 보내기 성공");
+      navigate("/Room", { state: { roomName: room_name, idx: idx } });
     } catch (error) {
       console.error(error);
+      alert("방 입장 정보 실패");
     }
   };
 
-  const handleClick = () => {
-    navigate("/Room", { state: { roomName: room_name, idx: idx } });
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const jwtToken = localStorage.getItem("jwtToken");
+        if (jwtToken) {
+          axios.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
+        }
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/room/roomInfo`
+        );
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
 
   return (
     <div className={styles.roomInfoWrap}>
       <h2>방 제목 : {room_name}</h2>
       <h3>
-        현재 참여 인원 : 👤 {inpeople}/{maxpeople}
+        현재 참여 인원 : 👤 {peopleNum}
+      </h3>
+      <h3>
+        모드 : {mode}
       </h3>
       <button type="submit" onClick={handleClick}>
         방 입장

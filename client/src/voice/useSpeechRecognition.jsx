@@ -5,7 +5,13 @@ import axios from "axios";
 import "regenerator-runtime/runtime";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지"];
-const speech_sentence =["시작","간장 공장 공장장은 강 공장장이다","내가 그린 기린 그림은 긴 기린 그림이다","철수 책상 철 책상","상업 산업 사업을 상상한다"]
+const speech_sentence = [
+  "시작",
+  "간장 공장 공장장은 강 공장장이다",
+  "내가 그린 기린 그림은 긴 기린 그림이다",
+  "철수 책상 철 책상",
+  "상업 산업 사업을 상상한다",
+];
 
 const UseSpeechRecognition = (props) => {
   // const [lang, setLang] = useState('ko-KR');
@@ -18,7 +24,9 @@ const UseSpeechRecognition = (props) => {
     for (const sentence of speech_sentence) {
       if (value.includes(sentence)) {
         setExtractedValue(sentence);
-        props.sendSpeech(props.user.streamManager.stream.connection.connectionId);
+        props.sendSpeech(
+          props.user.streamManager.stream.connection.connectionId
+        );
       }
     }
     for (const word of keyword) {
@@ -65,6 +73,28 @@ const UseSpeechRecognition = (props) => {
         setListenBlocked(false);
         listen({ lang });
       };
+  // /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
+  // /* 현재 방으로 이동 시 오류 발생, 개선필요 */
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setListenBlocked(false);
+  //     listen({ lang });
+  //   }, 1000);
+
+  //   let voiceRecog = setInterval(() => {
+  //     setTimeout(stop, 29 * 1000);
+
+  //     setListenBlocked(false);
+  //     listen({ lang });
+
+  //     console.log(listenBlocked);
+  //   }, 30 * 1000);
+  //   return () => {
+  //     clearInterval(voiceRecog);
+  //     stop();
+  //     console.log("음성인식 종료");
+  //   };
+  // }, []);
 
   return (
     <div>

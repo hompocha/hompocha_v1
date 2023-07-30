@@ -14,17 +14,18 @@ export class UsersService {
     private userRepository: Repository<UsersEntity>,
     private authService: AuthService,
   ) {}
-  async createUser(id: string, password: string) {
+  async createUser(id: string, password: string, nickname: string) {
     const hashedPassword = await this.hashPassword(password);
-    await this.saveUser(/*name*/ id, hashedPassword /*phonenumber*/);
+    await this.saveUser(/*name*/ id, hashedPassword, nickname /*phonenumber*/);
   }
-  private async saveUser(id: string, password: string) {
+  private async saveUser(id: string, password: string, nickname: string) {
     const user = new UsersEntity();
     user.idx = ulid();
     user.id = id;
     user.password = password;
-    await this.userRepository.save(user);
+    user.nickName = nickname;
     console.log(user);
+    await this.userRepository.save(user);
   }
   async login(id: string, password: string): Promise<string> {
     const user = await this.userRepository.findOne({
@@ -39,18 +40,31 @@ export class UsersService {
     }
     return this.authService.login({
       id: user.id,
-      name: user.name,
+      nickName: user.nickName,
+      idx: user.idx,
     });
   }
   async hashPassword(password: string): Promise<string> {
     const saltRounds = 10;
     return bcrypt.hash(password, saltRounds);
   }
-  async checkId(userId: string): Promise<string> {
+  async checkId(userId: string): Promise<UsersEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
-      return userId;
+      return null;
     }
     console.log(user);
+    return user;
+  }
+
+  async checkNickname(userNickname: string): Promise<UsersEntity> {
+    const user = await this.userRepository.findOne({
+      where: { nickName: userNickname },
+    });
+    if (!user) {
+      return null;
+    }
+    console.log(user);
+    return user;
   }
 }

@@ -30,11 +30,11 @@
   background-color: #b8b8b8;
   position: fixed;
   z-index: 99999;
-  right: 3vw;
-  bottom: 3vh;
+  right: 2vw;
+  bottom: 4vh;
   margin: auto;
-  height: 40vh;
-  width: 20vw;
+  height: 25vh;
+  width: 15vw;
   border-radius: 20px;
 }
 

@@ -276,7 +276,7 @@ const DuckVideo = (props) => {
                       ref={videoRef}
                     />
 
-                    <canvas className={styles.duckCanvas} ref={canvasRef} width={800} height={700} />
+                    <canvas className={`${styles.duckCanvas} ${!loaded && styles.hidden}`} ref={canvasRef} width={800} height={700} />
                     <h2 className={styles.bord}>
                       {loaded ? `blue ${blue} : ${red} red` : ''}
                     </h2>
@@ -287,6 +287,5 @@ const DuckVideo = (props) => {
       </>
     );
 };
-
 
 export default DuckVideo;
