@@ -1,18 +1,58 @@
 .gameWord{
   position: absolute;
-  left: 5%;
-  top: 35%;
-  width: 800px;
+  left: 7%;
+  top: 22%;
+  width: 1000px;
+  z-index: 1;
   text-align: center;
 }
 .speechPosition{
   position: absolute;
-  left: 5%;
-  top: 4%;
-  width: 400px;
+  left: 65%;
+  top: 70%;
+  width: 800px;
+  text-align: center;
+  transform: scale(60%);
 }
-.camPosition{
+.text{
+  position: fixed;
+  top : 1%;
+  left: 21%;
+  display: none;
+}
+.speechGameCam__0{
+  position: fixed;
+  top: 27%;
+  left: 16%;
+  transform: scale(170%);
+}
+.speechGameCam__1{
   position: absolute;
-  left: 10%;
-  top: 45%;
+  left: 55%;
+  top: -3.5%;
+  transform: scale(47%);
+}
+.speechGameCam__2{
+  position: absolute;
+  left: 73%;
+  top: -3.5%;
+  transform: scale(47%);
+}
+.speechGameCam__3{
+  position: absolute;
+  left: 55%;
+  top: 23.5%;
+  transform: scale(47%);
+}
+.speechGameCam__4{
+  position: absolute;
+  left: 73%;
+  top: 23.5%;
+  transform: scale(47%);
+}
+.speechGameCam__5{
+  position: absolute;
+  left: 55%;
+  top: 50.5%;
+  transform: scale(47%);
 }

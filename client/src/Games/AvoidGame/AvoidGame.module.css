@@ -1,0 +1,53 @@
+.avoidVideo {
+  position: fixed;
+  top: 10vh;
+  left: 2vw;
+  width: 48vw;
+  height: 36vw;
+  transform: rotateY(180deg);
+}
+.avoidCanvas {
+  position: fixed;
+  top: 10vh;
+  left: 2vw;
+  width: 48vw;
+  height: 36vw;
+  transform: rotateY(180deg);
+}
+
+h1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.avoidGameSub1 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 10vh;
+  left: 52.5vw;
+}
+.avoidGameSub2 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 10vh;
+  left: 77.5vw;
+}
+.avoidGameSub3 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 40vh;
+  left: 52.5vw;
+}
+.avoidGameSub4 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 40vh;
+  left: 77.5vw;
+}
+.avoidGameSub5 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 70vh;
+  left: 52.5vw;
+}

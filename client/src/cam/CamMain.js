@@ -5,7 +5,7 @@ import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
-import axios from "axios";
+import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
   const [mode, setMode] = useState(undefined);
@@ -21,9 +21,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
         enterMovingDuck();
       } else if (data === "speechGame") {
         enterSpeech();
-      }
-      /* data 가 undefined 일 경우 방으로 돌아감 */
-      else {
+      } else if (data === "avoidGame") {
+        enterAvoidGame();
+      } else {
+        /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
       }
     });
@@ -49,10 +50,16 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
     onModeChange("speechGame");
   };
 
+  const enterAvoidGame = () => {
+    setMode("avoidGame");
+    onModeChange("avoidGame");
+  };
+
   const sendEffectSignal = (string) => {
     if (user.getStreamManager().session) {
-      user.getStreamManager().session
-        .signal({
+      user
+        .getStreamManager()
+        .session.signal({
           data: string,
           to: [],
           type: "effect",
@@ -68,8 +75,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
 
   const sendGameTypeSignal = (string) => {
     if (user.getStreamManager().session) {
-      user.getStreamManager().session
-        .signal({
+      user
+        .getStreamManager()
+        .session.signal({
           data: string,
           to: [],
           type: "gameType",
@@ -82,7 +90,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
         });
     }
   };
-  
+
   const chooseHost = () => {
     const members = [];
     user.subscribers.forEach((subscriber) => {
@@ -96,7 +104,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
     console.log("sortedList :", sortedMembers);
     return sortedMembers[0];
   };
-  
+
   const endSession = () => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
@@ -132,13 +140,14 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
               type="button"
               value="발음게임"
             />
+            <input
+              onClick={() => sendGameTypeSignal("avoidGame")}
+              type="button"
+              value="피하기게임"
+            />
 
             <form className={styles.ReturnRoom}>
-              <input
-                onClick={returnLobby}
-                type="button"
-                value="로비로 이동"
-              />
+              <input onClick={returnLobby} type="button" value="로비로 이동" />
             </form>
           </div>
 
@@ -189,6 +198,25 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
       {mode === "speechGame" && (
         <div>
           <SpeechGame
+            selectID={chooseHost()}
+            user={user}
+            end={sendGameTypeSignal}
+            mode={mode}
+          />
+          <form className={styles.ReturnRoom}>
+            <input
+              onClick={() => sendGameTypeSignal(undefined)}
+              type="button"
+              value="방으로 이동"
+            />
+          </form>
+        </div>
+      )}
+
+      {/* 피하기 게임 */}
+      {mode === "avoidGame" && (
+        <div>
+          <AvoidGame
             selectID={chooseHost()}
             user={user}
             end={sendGameTypeSignal}
