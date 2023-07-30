@@ -40,6 +40,7 @@ const Parent2 = ({ roomName, idx }) => {
                 setUserStream={setUserStream}
                 onModeChange={onModeChange}
                 roomName={roomName}
+                idx={idx}
               />
             </div>
             <div className={styles.zindex}>

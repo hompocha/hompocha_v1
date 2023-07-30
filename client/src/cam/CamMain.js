@@ -7,7 +7,7 @@ import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
 import axios from "axios";
 
-const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
+const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [childStopped, setChildStopped] = useState(false);
@@ -17,9 +17,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
       const data = event.data;
       if (data === "airHockey") {
         enterAirHockey();
+        // axios.post(`${process.env.REACT_APP_API_URL}/room/airhockey`,data("airhockey"))
       } else if (data === "movingDuck") {
         enterMovingDuck();
+        // axios.post(`${process.env.REACT_APP_API_URL}/room/movingdock`,data("airhockey"))
       } else if (data === "speechGame") {
+        axios.post(`${process.env.REACT_APP_API_URL}/room/status`, { status: "ingame", room_idx: idx })
         enterSpeech();
       }
       /* data 가 undefined 일 경우 방으로 돌아감 */
@@ -100,6 +103,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
   const endSession = () => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
+      axios.post(`${process.env.REACT_APP_API_URL}/room/roomout`, { room_idx: idx })
     }
   };
 

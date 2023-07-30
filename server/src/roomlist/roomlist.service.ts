@@ -29,7 +29,7 @@ export class RoomlistService {
     roomList.idx = room_idx;
     roomList.room_name = room_name;
     roomList.room_max = room_max;
-    roomList.room_status = undefined;
+    roomList.room_status = 'openGame';
     await this.roomListEntityRepository.save(roomList);
     console.log(roomList);
     return room_idx;
@@ -53,6 +53,9 @@ export class RoomlistService {
       where: { idx: room_idx },
     });
   }
+
+  /*인터벌써서 주기적으로 검사해서 삭제해야함.
+  async emptyRoom()*/
 }
 // async getRoomInfo(roomidx: string): Promise<RoomlistEntity> {
 //   const roomList = await this.roomListEntityRepository.findOne({
