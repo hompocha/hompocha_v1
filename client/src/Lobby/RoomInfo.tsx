@@ -8,44 +8,43 @@ interface RoomInfoProps {
   currentIdx: string;
 }
 
-const RoomInfo: React.FC<RoomInfoProps> = ({ selectedTitle, currentIdx }) => {
+const RoomInfo: React.FC<RoomInfoProps> = ({ selectedTitle, currentIdx}) => {
   const [inpeople, setInPeople] = useState("");
   const [maxpeople, setMaxPeople] = useState("");
   const navigate = useNavigate();
   const room_name = selectedTitle;
   const idx = currentIdx;
   console.log(idx);
-  useEffect(() => {
-    fetchRoomInfo();
-  }, []);
 
-  const fetchRoomInfo = async () => {
+  const handleClick = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/lobby/roomInfo`
+          `${process.env.REACT_APP_API_URL}/lobby/roomInfo`,
+          {
+            room_name,
+            idx,
+          }
       );
-      const { room } = response.data;
-      setInPeople(room.inpeople);
-      setMaxPeople(room.maxpeople);
+      console.log(response.data);
+      alert("방 입장 정보 보내기 성공");
+      navigate("/Room", { state: { roomName: room_name, idx: idx } });
     } catch (error) {
       console.error(error);
+      alert("방 입장 정보 실패");
     }
   };
 
-  const handleClick = () => {
-    navigate("/Room", { state: { roomName: room_name, idx: idx } });
-  };
 
   return (
-    <div className={styles.roomInfoWrap}>
-      <h2>방 제목 : {room_name}</h2>
-      <h3>
-        현재 참여 인원 : 👤 {inpeople}/{maxpeople}
-      </h3>
-      <button type="submit" onClick={handleClick}>
-        방 입장
-      </button>
-    </div>
+      <div className={styles.roomInfoWrap}>
+        <h2>방 제목 : {room_name}</h2>
+        <h3>
+          현재 참여 인원 : 👤 {inpeople}/{maxpeople}
+        </h3>
+        <button type="submit" onClick={handleClick}>
+          방 입장
+        </button>
+      </div>
   );
 };
 
