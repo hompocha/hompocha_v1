@@ -12,13 +12,13 @@ export class RoomlistController {
   ) {}
   @Post('/create')
   async createRoom(@Body() dto: CreateRoomDto, @Headers() headers: any) {
-    const { room_name, room_max } = dto;
+    const { room_name, maxPeople } = dto;
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],
     );
     return await this.roomService.createRoom(
       room_name,
-      room_max,
+      maxPeople,
       verifiedToken.idx,
     );
   }
