@@ -11,6 +11,6 @@ export class RoomlistEntity {
   @Column({ length: 30 })
   room_status: string;
 
-  @Column({ length: 30 })
+  @Column()
   room_max: number;
 }

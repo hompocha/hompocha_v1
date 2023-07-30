@@ -32,7 +32,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
 
   const enterMainRoom = () => {
     setMode(undefined);
-
     onModeChange(undefined);
   };
 
