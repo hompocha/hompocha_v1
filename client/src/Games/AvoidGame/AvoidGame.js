@@ -121,10 +121,6 @@ const AvoidGame = (props) => {
 
   /* 프레임마다 전송 */
   useEffect(() => {
-    // console.log(props.user.connectionId, props.host);
-    // if (props.user.connectionId === props.host ){
-    //   console.log('I am the host!');
-    // }
     canvasCtx.current = canvasRef.current.getContext("2d");
     objInterval.current = setObjInterval(
       1000 / gameState.current.condition.objIntervalFrame
@@ -285,7 +281,6 @@ const AvoidGame = (props) => {
     });
   };
 
-  console.log();
   return (
     <>
       {props.user.connectionId === props.host ? <h1>host</h1> : null}
@@ -300,12 +295,17 @@ const AvoidGame = (props) => {
       <canvas className={styles.avoidCanvas} ref={canvasRef} />
       {/* subscribers Cam */}
       {subscribers.map((subscriber, index) => (
-        <div className={styles[`avoidGameSub${index + 1}`]}>
-          <OpenViduVideoComponent
-            mode={"avoidGame"}
-            streamManager={subscriber}
-          />
-        </div>
+        <>
+          <div className={styles[`avoidGameSub${index + 1}`]}>
+            <OpenViduVideoComponent
+              mode={"avoidGame"}
+              streamManager={subscriber}
+            />
+          </div>
+          <div className={styles[`userNick${index + 1}`]}>
+            닉네임이 들어갈 자리
+          </div>
+        </>
       ))}
     </>
   );
