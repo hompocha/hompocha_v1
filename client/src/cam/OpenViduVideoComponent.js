@@ -188,23 +188,36 @@ const OpenViduVideoComponent = (props) => {
         /* 룰렛돌리기할 때 불러와지는 플레이어 캠 */
         props.mode === "roulette" ? (
           <div>
-            <video className={styles.rouletteVideo} autoPlay={true} ref={videoRef} />
+            <video
+              className={styles.rouletteVideo}
+              autoPlay={true}
+              ref={videoRef}
+            />
           </div>
         ) : null
       }
 
       {
-        /* 대화 모드일 때 불러와 지는 캠 */
+        /* 발음게임일 때 불러와 지는 캠 */
         props.mode === "speechGame" ? (
           <div>
             {/* <span>대화모드</span> */}
             <div className={styles.parent}>
-              <video
-                autoPlay={true}
-                ref={videoRef}
-              />
+              <video autoPlay={true} ref={videoRef} />
             </div>
           </div>
+        ) : null
+      }
+      {
+        /* 피하기 모드일 때 불러와 지는 캠 */
+        props.mode === "avoidGame" ? (
+          <>
+            <video
+              className={styles.avoidGameSub}
+              autoPlay={true}
+              ref={videoRef}
+            />
+          </>
         ) : null
       }
     </>

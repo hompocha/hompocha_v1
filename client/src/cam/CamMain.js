@@ -5,6 +5,7 @@ import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
+import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
   const [mode, setMode] = useState(undefined);
@@ -20,6 +21,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
         enterMovingDuck();
       } else if (data === "speechGame") {
         enterSpeech();
+      } else if (data === "avoidGame") {
+        enterAvoidGame();
       } else {
         /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
@@ -46,6 +49,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
   const enterSpeech = () => {
     setMode("speechGame");
     onModeChange("speechGame");
+  };
+
+  const enterAvoidGame = () => {
+    setMode("avoidGame");
+    onModeChange("avoidGame");
   };
 
   const sendEffectSignal = (string) => {
@@ -133,6 +141,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
               type="button"
               value="발음게임"
             />
+            <input
+              onClick={() => sendGameTypeSignal("avoidGame")}
+              type="button"
+              value="피하기게임"
+            />
 
             <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
@@ -186,6 +199,25 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
       {mode === "speechGame" && (
         <div>
           <SpeechGame
+            selectID={chooseHost()}
+            user={user}
+            end={sendGameTypeSignal}
+            mode={mode}
+          />
+          <form className={styles.ReturnRoom}>
+            <input
+              onClick={() => sendGameTypeSignal(undefined)}
+              type="button"
+              value="방으로 이동"
+            />
+          </form>
+        </div>
+      )}
+
+      {/* 피하기 게임 */}
+      {mode === "avoidGame" && (
+        <div>
+          <AvoidGame
             selectID={chooseHost()}
             user={user}
             end={sendGameTypeSignal}
