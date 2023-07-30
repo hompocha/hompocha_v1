@@ -5,6 +5,7 @@ import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
+import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
@@ -21,10 +22,13 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
         enterMovingDuck();
       } else if (data === "speechGame") {
         enterSpeech();
+      } else if (data === "somaek"){
+        enterSomaek();
       } else if (data === "avoidGame") {
         enterAvoidGame();
-      } else {
-        /* data 가 undefined 일 경우 방으로 돌아감 */
+      }
+      /* data 가 undefined 일 경우 방으로 돌아감 */
+      else {
         enterMainRoom();
       }
     });
@@ -49,6 +53,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
     setMode("speechGame");
     onModeChange("speechGame");
   };
+
+  const enterSomaek = () =>{
+    setMode("somaek");
+    onModeChange("somaek");
+  }
 
   const enterAvoidGame = () => {
     setMode("avoidGame");
@@ -141,6 +150,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
               value="발음게임"
             />
             <input
+              onClick={() => sendGameTypeSignal("somaek")}
+              type="button"
+              value="소맥게임"
+            />
+
+            <input
               onClick={() => sendGameTypeSignal("avoidGame")}
               type="button"
               value="피하기게임"
@@ -202,6 +217,23 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
             user={user}
             end={sendGameTypeSignal}
             mode={mode}
+          />
+          <form className={styles.ReturnRoom}>
+            <input
+              onClick={() => sendGameTypeSignal(undefined)}
+              type="button"
+              value="방으로 이동"
+            />
+          </form>
+        </div>
+      )}
+      {/*소맥게임*/}
+      {mode === "somaek" && (
+        <div>
+          <Somaek
+            mode={mode}
+            user={user}
+            sessionConnected={sessionConnected}
           />
           <form className={styles.ReturnRoom}>
             <input

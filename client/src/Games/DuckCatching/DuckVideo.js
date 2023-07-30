@@ -24,64 +24,21 @@ const DuckVideo = (props) => {
     useEffect(()=>{
         if(pickObj===false) {
         const interval = setInterval(()=>{
-            boxLocation.topY=boxLocation.topY + 0.1;    
+            boxLocation.topY=boxLocation.topY + 0.1;
             // console.log(boxLocation.topY);
             console.log(2);
         },1000/60);
-        setTimeout(()=>{clearInterval(interval);},1000/60);  
+        setTimeout(()=>{clearInterval(interval);},1000/60);
         }
     },[pickObj]);
 
-    
+
     useEffect(() => {
         // console.log(videoRef.current);
         if (videoRef.current && props.streamManager) {
         props.streamManager.addVideoElement(videoRef.current);
         }
     }, [props.streamManager]);
-
-    // useEffect(() => {
-    //     if(!canvasRef.current) return ;
-    //     const hands = new Hands({
-    //     locateFile: (file) =>
-    //     `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
-    //     });
-    //
-    //
-    //     if (videoRef.current && canvasRef.current) {
-    //         canvasCtx.current = canvasRef.current.getContext("2d");
-    //         console.log(`canvasCtx.current : ${canvasCtx.current}`);
-    //         // setTimeout(sendToMediaPipe, 3000);
-    //
-    //         hands.setOptions({
-    //             maxNumHands: 2,
-    //             modelComplexity: 1,
-    //             minDetectionConfidence: 0.7,
-    //             minTrackingConfidence: 0.7,
-    //         });
-    //
-    //         hands.onResults(onResults);
-    //
-    //         const camera = new Camera(videoRef.current, {
-    //             onFrame: async () => {
-    //                 await hands.send({image: videoRef.current});
-    //             },
-    //             width: 1280,
-    //             height: 720
-    //         });
-    //         camera.start();
-    //     }
-    //         return () => {
-    //             // 클린업 함수를 통해 camera와 hands를 중단
-    //             if (camera) {
-    //                 camera.stop();
-    //             }
-    //             hands.stop();
-    //         };
-    //     }
-    //
-    //
-    // }, [videoReady, canvasRef.current]);
 
     useEffect(() => {
     let didCancel = false;
@@ -136,7 +93,7 @@ const DuckVideo = (props) => {
     const onResults = (results) => {
         if(!canvasRef.current) return;
 
-        
+
         canvasCtx.current.save();
         canvasCtx.current.clearRect(
             0,
@@ -155,22 +112,22 @@ const DuckVideo = (props) => {
 
         const w = canvasRef.current.width;
         const h = canvasRef.current.height;
-        
+
         if (results.multiHandLandmarks && results.multiHandedness) {
             for (let index = 0; index < results.multiHandLandmarks.length; index++) {
                 const classification = results.multiHandedness[index];
                 const isRightHand = classification.label === "Right";
                 const landmarks = results.multiHandLandmarks[index];
-                
+
                 objDrag(landmarks, canvasRef);
             }
-            
+
         }
         // 물체를 그리는 부분
         const images = ['/Duck/moving_duck1.png', '/Duck/moving_duck2.png', '/Duck/moving_duck3.png'];
         let currentImageIndex = 0;
         const imgElements = [];
-        
+
         const drawDuck = () => {
             // if(!isMounted) return;
             if(!canvasRef.current) return;
@@ -203,7 +160,7 @@ const DuckVideo = (props) => {
                 console.error("Error loading images:", error);
             }
         };
-    
+
         loadImages();
         canvasCtx.current.restore();
 
@@ -247,13 +204,13 @@ const DuckVideo = (props) => {
         const w = canvasRef.current.width;
         const h = canvasRef.current.height;
         const {x: fingerX, y: fingerY, z:_} = fingerpick;
-    
+
         boxLocation.leftX = fingerX - boxLocation.lenX / 2;
         boxLocation.topY = fingerY - boxLocation.lenY / 2;
-    
+
         const xPos = (boxLocation.leftX + boxLocation.lenX / 2)*w;
         const yPos = (boxLocation.topY + boxLocation.lenY / 2)*h;
-        
+
         if (xPos >= 0 && xPos <= (w/2) && yPos >= 0 && yPos <= h) {
             setBlue(1);
             setRed(0);
@@ -270,12 +227,12 @@ const DuckVideo = (props) => {
 
         const {leftX: objLeftX, topY: objTopY, lenX:objXLength, lenY: objYLength} = boxLocation;
         const {x: fingerX, y: fingerY, z:_} = fingerPick;
-        
+
         const w = canvasRef.current.width;
         const h = canvasRef.current.height;
         const boxsize=0.12;
-        
-        if (objLeftX+objXLength*(1/2-boxsize) < fingerX && fingerX< (objLeftX+objXLength*(1/2+boxsize)) 
+
+        if (objLeftX+objXLength*(1/2-boxsize) < fingerX && fingerX< (objLeftX+objXLength*(1/2+boxsize))
             && objTopY+objYLength*(1/2-boxsize) < fingerY && fingerY< objTopY+objYLength*(1/2+boxsize)){
         objMove(fingerPick);
         setPickObj(true);
