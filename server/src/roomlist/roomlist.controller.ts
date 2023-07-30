@@ -1,14 +1,13 @@
 import { Body, Controller, Get, Param, Post, Headers } from '@nestjs/common';
 import { CreateRoomDto } from './dto/createroomdto';
-import { RoomsService } from './rooms.service';
+import { RoomlistService } from './roomlist.service';
 import { AuthService } from '../auth/auth.service';
-import { UserInfo } from '../users/user.info';
-import { UserLoginDto } from './dto/roomfind.dto';
+import { ToroomDto } from './dto/toroom.dto';
 
 @Controller('lobby')
-export class RoomsController {
+export class RoomlistController {
   constructor(
-    private roomService: RoomsService,
+    private roomService: RoomlistService,
     private authService: AuthService,
   ) {}
   @Post('/create')
@@ -16,16 +15,18 @@ export class RoomsController {
     const { room_name } = dto;
     await this.roomService.createRoom(room_name);
   }
-
-  @Get()
-  async getUserJwt(@Headers() headers: any): Promise<any> {
-    const jwtstring = headers.authorization.split('Bearer ')[1];
-    const verifiedToken = this.authService.verify(jwtstring);
-    return await this.roomService.getUserJwt(verifiedToken.userId);
-  }
-
   @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
   }
+  @Post('/roomInfo')
+  async saveUserToRoom(@Body() roomDto: ToroomDto, @Headers() headers: any) {
+    const { room_name, idx } = roomDto;
+    const verifiedToken = this.authService.verify(
+      headers.authorization.split('Bearer ')[1],
+    );
+    await this.roomService.saveUserToRoom(room_name, idx, verifiedToken.idx);
+  }
+
+
 }

@@ -7,7 +7,7 @@ import axios from "axios";
 const Login: React.FC = () => {
   const [loginId, setLoginId] = useState<string>("");
   const [loginPassword, setLoginPassword] = useState<string>("");
-
+  const [nickName, setNickname] = useState<string>("");
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -36,7 +36,6 @@ const Login: React.FC = () => {
         }
       );
       console.log(response.data);
-
       localStorage.setItem("jwtToken", response.data);
       alert("로그인 성공");
       axios.defaults.headers.common[
@@ -50,7 +49,7 @@ const Login: React.FC = () => {
   };
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!id || !password || !confirmPassword) {
+    if (!id || !password || !confirmPassword ||!nickName) {
       alert("모든 정보를 입력해주세요.");
       return;
     } else if (password !== confirmPassword) {
@@ -65,7 +64,8 @@ const Login: React.FC = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/user/${id}`
       );
-      if (response.data.exists) {
+      console.log(response.data)
+      if (response.data) {
         alert("중복된 아이디입니다.");
         return;
       }
@@ -73,16 +73,33 @@ const Login: React.FC = () => {
       console.error("중복 확인 오류:", error);
       return;
     }
-    // 비밀번호 일치 여부 확인
+    /*=================== 우현이 수정!!! ====================*/
+    //nickname 일치 여부 확인
+    try {
+      const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user/${nickName}`
+      );
+      console.log(response.data)
+      if (response.data) {
+        alert("중복된 닉네임입니다.");
+        return;
+      }
+    } catch (error) {
+      console.error("중복 확인 오류:", error);
+      return;
+    }
+    /*============================================================*/
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/user/signup`,
         {
           id,
           password,
+          nickName,
         }
       );
-      console.log(response.data);
+
+      console.log("아니 왜 안뜨냐고",response.data.id);
       alert("회원가입이 완료되었습니다.");
     } catch (error) {
       console.error(error);
@@ -162,8 +179,22 @@ const Login: React.FC = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
-
+          {/*====================================================================================*/}
+          {/*우현 멋대로 해서 수정 필요*/}
+          {/*====================================================================================*/}
+          <div className={styles.eachInput}>
+            <span>닉네임</span>
+            <input
+                type="text"
+                placeholder="nickname"
+                value={nickName}
+                onChange={(e) => setNickname(e.target.value)}
+            />
+          </div>
+          {/*====================================================================================*/}
+          {/*====================================================================================*/}
           <button onClick={handleSignUp}>SIGN UP</button>
+
         </div>
         <div className={styles.login}>
           <div className={styles.eachInput}>

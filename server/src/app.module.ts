@@ -5,11 +5,12 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from './users/users.entity';
-import { RoomsModule } from './rooms/rooms.module';
-import { RoomsEntity } from './rooms/rooms.entity';
+import { RoomlistModule } from './roomlist/roomlist.module';
+import { RoomlistEntity } from './roomlist/roomlist.entity';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import authConfig from './config/auth.config';
+import { RoomEntity } from './room/room.entity';
 
 @Module({
   controllers: [AppController],
@@ -22,7 +23,7 @@ import authConfig from './config/auth.config';
     }),
     OpenviduModule,
     UsersModule,
-    RoomsModule,
+    RoomlistModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -33,7 +34,7 @@ import authConfig from './config/auth.config';
         username: 'admin',
         password: 'hompocha229',
         database: 'test_db',
-        entities: [UsersEntity, RoomsEntity],
+        entities: [UsersEntity, RoomlistEntity, RoomEntity],
         synchronize: true,
       }),
     }),
