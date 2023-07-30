@@ -7,5 +7,5 @@ export class CreateRoomDto {
 
   @IsNotEmpty()
   @IsNumber()
-  room_max: number;
+  maxPeople: number;
 }
