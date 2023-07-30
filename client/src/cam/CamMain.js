@@ -5,6 +5,7 @@ import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
+import Somaek from "../Games/Somaek/Somaek";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
   const [mode, setMode] = useState(undefined);
@@ -20,6 +21,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
         enterMovingDuck();
       } else if (data === "speechGame") {
         enterSpeech();
+      } else if (data === "somaek"){
+        enterSomaek();
       }
       /* data 가 undefined 일 경우 방으로 돌아감 */
       else {
@@ -48,6 +51,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
     setMode("speechGame");
     onModeChange("speechGame");
   };
+
+  const enterSomaek = () =>{
+    setMode("somaek");
+    onModeChange("somaek");
+  }
 
   const sendEffectSignal = (string) => {
     if (user.getStreamManager().session) {
@@ -132,6 +140,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
               type="button"
               value="발음게임"
             />
+            <input
+              onClick={() => sendGameTypeSignal("somaek")}
+              type="button"
+              value="소맥게임"
+            />
+              
 
             <form className={styles.ReturnRoom}>
               <input
@@ -193,6 +207,23 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected }) => {
             user={user}
             end={sendGameTypeSignal}
             mode={mode}
+          />
+          <form className={styles.ReturnRoom}>
+            <input
+              onClick={() => sendGameTypeSignal(undefined)}
+              type="button"
+              value="방으로 이동"
+            />
+          </form>
+        </div>
+      )}
+      {/*소맥게임*/}
+      {mode === "somaek" && (
+        <div>
+          <Somaek
+            mode={mode}
+            user={user}
+            sessionConnected={sessionConnected}
           />
           <form className={styles.ReturnRoom}>
             <input
