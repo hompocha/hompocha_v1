@@ -3,7 +3,6 @@ import ChatComponent from "./Chat/ChatComponent";
 import EffectComponent from "./Chat/EffectComponent";
 import CamMain from "./cam/CamMain";
 import OpenViduSession from "./cam/OpenViduSession";
-import UserModel from "./models/user-model";
 import styles from "./Parent2.module.css";
 
 const Parent2 = ({ roomName, idx }) => {
