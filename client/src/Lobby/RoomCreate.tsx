@@ -22,6 +22,7 @@ const RoomCreate = () => {
       console.error("방 생성 오류:", error);
     }
   };
+  
   const PeopleRadio: React.FC = () => {
     const radioItems = [];
     for (let i = 2; i <= 6; i++) {
@@ -42,8 +43,7 @@ const RoomCreate = () => {
     return <>{radioItems}</>;
   };
   return (
-    <div className={styles.roomCreate}>
-      <div className={styles.roomCreateWrap}>
+      <div >
         <input
           type="text"
           placeholder="방 제목"
@@ -57,7 +57,6 @@ const RoomCreate = () => {
           방 생성
         </button>
       </div>
-    </div>
   );
 };
 

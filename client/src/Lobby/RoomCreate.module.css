@@ -3,8 +3,6 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 10px;
-}
-.roomCreate{
   position: absolute;
   background-color: bisque;
   border-radius: 1vw;
