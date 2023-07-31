@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import { useLocation} from "react-router-dom";
-import ParentComponent from "../ParentComponent";
 import Parent2 from "../Parent2";
 function Room() {
 

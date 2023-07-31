@@ -36,12 +36,13 @@ export class RoomlistController {
     return await this.roomService.findAllRooms();
   }
   @Post('/roomInfo')
-  async saveUserToRoom(@Body() dto: ToroomDto, @Headers() headers: any) {
-    const { idx } = dto;
+
+  async saveUserToRoom(@Body() roomDto: ToroomDto, @Headers() headers: any) {
+    const { idx } = roomDto;
+
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],
     );
     await this.roomService.saveUserToRoom(idx, verifiedToken.idx);
-    await this.roomService.countUserinRoom(idx);
   }
 }

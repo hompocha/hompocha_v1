@@ -12,6 +12,7 @@ const Lobby = () => {
   const [loginId, setLoginId] = useState<string>("");
   const [flag, setFlag] = useState(0);
   const navigate = useNavigate();
+
   const handleLogout = useCallback(() => {
     localStorage.removeItem("jwtToken");
     navigate("/");
