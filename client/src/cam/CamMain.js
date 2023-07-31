@@ -9,7 +9,7 @@ import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
 
-const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
+const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [childStopped, setChildStopped] = useState(false);
@@ -24,15 +24,17 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
         enterMovingDuck();
         // axios.post(`${process.env.REACT_APP_API_URL}/room/movingdock`,data("airhockey"))
       } else if (data === "speechGame") {
-        axios.post(`${process.env.REACT_APP_API_URL}/room/status`, { status: "ingame", room_idx: idx })
+        axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+          status: "ingame",
+          room_idx: idx,
+        });
         enterSpeech();
-      } else if (data === "somaek"){
+      } else if (data === "somaek") {
         enterSomaek();
       } else if (data === "avoidGame") {
         enterAvoidGame();
-      }
-      /* data 가 undefined 일 경우 방으로 돌아감 */
-      else {
+      } else {
+        /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
       }
     });
@@ -58,10 +60,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
     onModeChange("speechGame");
   };
 
-  const enterSomaek = () =>{
+  const enterSomaek = () => {
     setMode("somaek");
     onModeChange("somaek");
-  }
+  };
 
   const enterAvoidGame = () => {
     setMode("avoidGame");
@@ -121,7 +123,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
   const endSession = () => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
-      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`)
+      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`);
     }
   };
 
@@ -145,33 +147,24 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
             </form>
           </div>
           <div className={styles.gameListWrap}>
-            <div className={styles.gameMenu}>메뉴판</div>
-            <input
-              onClick={() => sendGameTypeSignal("airHockey")}
-              type="button"
-              value="에어하키"
-            />
-            <input
-              onClick={() => sendGameTypeSignal("movingDuck")}
-              type="button"
-              value="오리옮기기"
-            />
-            <input
-              onClick={() => sendGameTypeSignal("speechGame")}
-              type="button"
-              value="발음게임"
-            />
-            <input
-              onClick={() => sendGameTypeSignal("somaek")}
-              type="button"
-              value="소맥게임"
-            />
-
-            <input
-              onClick={() => sendGameTypeSignal("avoidGame")}
-              type="button"
-              value="피하기게임"
-            />
+            <div className={styles.gameMenu}>메 뉴 판</div>
+            <div className={styles.gameButtons}>
+              {/* <button onClick={() => sendGameTypeSignal("airHockey")}>
+                에어하키
+              </button>
+              <button onClick={() => sendGameTypeSignal("movingDuck")}>
+                오리옮기기
+              </button> */}
+              <button onClick={() => sendGameTypeSignal("speechGame")}>
+                발음게임
+              </button>
+              <button onClick={() => sendGameTypeSignal("somaek")}>
+                소맥게임
+              </button>
+              <button onClick={() => sendGameTypeSignal("avoidGame")}>
+                피하기게임
+              </button>
+            </div>
           </div>
 
           <div className={styles.camAndVoice}>
@@ -238,11 +231,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
       {/*소맥게임*/}
       {mode === "somaek" && (
         <div>
-          <Somaek
-            mode={mode}
-            user={user}
-            sessionConnected={sessionConnected}
-          />
+          <Somaek mode={mode} user={user} sessionConnected={sessionConnected} />
           <form className={styles.ReturnRoom}>
             <input
               onClick={() => sendGameTypeSignal(undefined)}
