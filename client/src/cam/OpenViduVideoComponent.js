@@ -15,6 +15,9 @@ const OpenViduVideoComponent = (props) => {
   const canvasCtx = useRef(null);
   const paddleRef = useRef(null);
   const paddleCtx = useRef(null);
+  const canvasSubRef = useRef(null);
+  const canvasSubCtx = useRef(null);
+  const gameStateRef = useRef(null);
 
   const streamId = props.streamManager.stream.streamId;
 
@@ -137,6 +140,20 @@ const OpenViduVideoComponent = (props) => {
       });
   };
 
+  useEffect(()=>{
+    if(props.mode==='avoidGame')
+    {
+      canvasSubCtx.current = canvasSubRef.current.getContext("2d");
+      const interval=setInterval(()=>{
+        gameStateRef.current = props.gameState[`${props.streamManager.stream.connection.connectionId}`];
+        if(gameStateRef.current!==undefined){
+          props.drawGame(canvasSubRef.current, canvasSubCtx.current, gameStateRef.current);
+        }
+      }, 1000/20);
+      return ()=>{clearInterval(interval)};
+    }
+  },[]);
+
   return (
     <>
       {
@@ -230,11 +247,12 @@ const OpenViduVideoComponent = (props) => {
               autoPlay={true}
               ref={videoRef}
             />
+              <canvas className={styles.avoidGameSubCan} ref={canvasSubRef} />
           </>
         ) : null
       }
       {
-        /* 피하기 모드일 때 불러와 지는 캠 */
+        /* 소맥게임 모드일 때 불러와 지는 캠 */
         props.mode === "somaek" ? (
           <>
             <video

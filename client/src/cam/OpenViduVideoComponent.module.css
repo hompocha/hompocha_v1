@@ -207,6 +207,17 @@
 .avoidGameSub {
   width: 16vw;
   height: auto;
+  position:fixed;
+  top: 0;
+  left: 0;
+}
+
+.avoidGameSubCan{
+  width: 16vw;
+  height: 11vw;
+  position:fixed;
+  top: 0;
+  left: 0;
 }
 
 .speechGameMain {
@@ -221,9 +232,11 @@
 .speechGameSub {
   width: 16vw;
   height: auto;
-}
 
+}
+/*  */
 .somaekGameSub {
   width: 16vw;
   height: auto;
+
 }
