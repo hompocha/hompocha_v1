@@ -1,3 +1,6 @@
+.hidden {
+  display: none;
+}
 .somaekVideo {
   position: fixed;
   top: 10vh;

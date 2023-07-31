@@ -36,8 +36,10 @@ export class RoomlistController {
     return await this.roomService.findAllRooms();
   }
   @Post('/roomInfo')
+
   async saveUserToRoom(@Body() roomDto: ToroomDto, @Headers() headers: any) {
     const { idx } = roomDto;
+
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],
     );
