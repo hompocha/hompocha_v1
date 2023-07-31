@@ -11,6 +11,9 @@ import { RoomlistEntity } from './roomlist/roomlist.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import authConfig from './config/auth.config';
 import { RoomEntity } from './room/room.entity';
+import { RoomService } from './room/room.service';
+import { RoomController } from './room/room.controller';
+import { RoomModule } from './room/room.module';
 
 @Module({
   controllers: [AppController],
@@ -24,6 +27,7 @@ import { RoomEntity } from './room/room.entity';
     OpenviduModule,
     UsersModule,
     RoomlistModule,
+    RoomModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

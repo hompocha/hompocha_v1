@@ -22,7 +22,6 @@ export class RoomlistController {
       verifiedToken.idx,
     );
   }
-
   @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
