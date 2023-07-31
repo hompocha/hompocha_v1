@@ -6,6 +6,7 @@ import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
+import axios from "axios";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
   const [mode, setMode] = useState(undefined);

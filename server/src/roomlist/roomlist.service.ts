@@ -36,6 +36,23 @@ export class RoomlistService {
   }
 
   async findAllRooms() {
+    try {
+      const list = await this.roomListEntityRepository.find({
+        select: ['idx'],
+      });
+      for (let i = 0; i < list.length; i++) {
+        const room_idx = list[i].idx;
+        if (
+          !(await this.roomRepository.findOne({
+            where: { room_idx: room_idx },
+          }))
+        ) {
+          await this.roomListEntityRepository.delete({ idx: room_idx });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
     return await this.roomListEntityRepository.find({ order: { idx: 'ASC' } });
   }
   async saveUserToRoom(room_idx: string, user_idx: string): Promise<void> {
@@ -53,9 +70,6 @@ export class RoomlistService {
       where: { idx: room_idx },
     });
   }
-
-  /*인터벌써서 주기적으로 검사해서 삭제해야함.
-  async emptyRoom()*/
 }
 // async getRoomInfo(roomidx: string): Promise<RoomlistEntity> {
 //   const roomList = await this.roomListEntityRepository.findOne({
