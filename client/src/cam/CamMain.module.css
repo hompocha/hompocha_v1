@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: space-evenly;
   /* background-color: antiquewhite; */
-  background-image: url(/Users/seungkyu/Desktop/namanmoo/hompocha_v1/client/public/asset/gameMenuBackground.png);
+  background-image: url("../../public/asset/gameMenuBackground.png");
   background-repeat: no-repeat;
   background-size: contain;
 }
