@@ -30,7 +30,7 @@ export class RoomlistService {
     roomList.room_name = room_name;
     roomList.room_max = room_max;
     roomList.room_status = 'openGame';
-    roomList.peopleNum = 0;
+    roomList.peopleNum = 1;
     await this.roomListEntityRepository.save(roomList);
     console.log(roomList);
     return room_idx;
