@@ -112,7 +112,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
   const endSession = () => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
-      axios.post(`${process.env.REACT_APP_API_URL}/room/roomout`, { room_idx: idx })
+      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`)
     }
   };
 

@@ -1,7 +1,6 @@
-import { Body, Controller, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { SavestatusDto } from './dto/savestatus.dto';
 import { RoomService } from './room.service';
-import { OutroomDto } from './dto/outroom.dto';
 import { AuthService } from '../auth/auth.service';
 
 @Controller('room')
@@ -16,11 +15,11 @@ export class RoomController {
     await this.roomService.saveRoomStatus(status, room_idx);
   }
 
-  @Post('/roomout')
-  async outRoom(@Body() room_idx: string, @Headers() headers: any) {
+  @Get('/roomout')
+  async outRoom(@Headers() headers: any) {
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],
     );
-    await this.roomService.outRoom(room_idx, verifiedToken.idx);
+    await this.roomService.outRoom(verifiedToken.idx);
   }
 }

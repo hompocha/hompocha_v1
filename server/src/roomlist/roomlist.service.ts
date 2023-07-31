@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ulid } from 'ulid';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -71,20 +71,3 @@ export class RoomlistService {
     });
   }
 }
-// async getRoomInfo(roomidx: string): Promise<RoomlistEntity> {
-//   const roomList = await this.roomListEntityRepository.findOne({
-//     where: { idx: roomidx },
-//   });
-//   return roomList;
-// }
-
-// async getUserJwt(userId: string): Promise<string> {
-//   const user = await this.userRepository.findOne({
-//     where: { id: userId },
-//   });
-//   if (!user) {
-//     throw new NotFoundException('유저 존재 X');
-//   }
-//   // console.log(user.id);
-//   return user.id;
-// }

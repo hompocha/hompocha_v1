@@ -19,9 +19,8 @@ export class RoomService {
       { room_status: status },
     );
   }
-  async outRoom(room_idx, user_idx) {
+  async outRoom(user_idx) {
     await this.roomRepository.delete({
-      room_idx: room_idx,
       user_idx: user_idx,
     });
   }
