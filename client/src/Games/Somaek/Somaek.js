@@ -12,6 +12,11 @@ const Somaek = (props) => {
   const canvasCtx = useRef(null);
 
   const subscribers = props.user.subscribers;
+  let scores = [];
+  for (let i = 0; i < subscribers.length; i++) {
+    const conId = subscribers[i].stream.connection.connectionId;
+    scores.push({ [conId]: 0 });
+  }
 
   let objects = [
     { leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5, type: "beer" },
@@ -19,20 +24,26 @@ const Somaek = (props) => {
     { leftX: 0.75, topY: 0.5, lenX: 0.5, lenY: 0.5, type: "soju" },
     { leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, type: "cider" },
   ];
-  const container = {leftX: 0.15, topY: 0.4, lenX:0.2, lenY: 0.2, type:'cup'};
-  const conX = container.leftX;//*1280;
-  const conY = container.topY;//*720;
+  const container = {
+    leftX: 0.15,
+    topY: 0.4,
+    lenX: 0.2,
+    lenY: 0.2,
+    type: "cup",
+  };
+  const conX = container.leftX; //*1280;
+  const conY = container.topY; //*720;
 
   let score = 0;
-  let order = []
-  let inBucket = []
+  let order = [];
+  let inBucket = [];
 
-  let orderKorean = []
+  let orderKorean = [];
 
   useEffect(() => {
     const videoNode = videoRef.current;
     const canvasNode = canvasRef.current;
-    if(order.length === 0) {
+    if (order.length === 0) {
       order = randomDrink();
       orderKorean = printDrinks(order);
       console.log(order);
@@ -42,7 +53,8 @@ const Somaek = (props) => {
 
     const loadHandsAndCamera = async () => {
       const hands = new Hands({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
+        locateFile: (file) =>
+          `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
       });
       let camera;
 
@@ -81,33 +93,39 @@ const Somaek = (props) => {
       if (videoNode && canvasNode) {
         setTimeout(() => {
           setLoaded(true);
-        }, 5000);}}
+        }, 5000);
+      }
+    };
 
     if (videoNode) {
-      videoNode.addEventListener('loadeddata', handleLoaded);
+      videoNode.addEventListener("loadeddata", handleLoaded);
     }
     if (canvasNode) {
       handleLoaded();
     }
 
     /* 시그널 받았을때 처리 */
-    props.user.getStreamManager().stream.session.on("signal:somaekScore", (event) => {
-      const data = event.data;
-      let connectionId = event.from.connectionId;
-      let getScore = data.score;
-      console.log("somaekScore received from", connectionId);
-
-    });
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:somaekScore", (event) => {
+        const data = JSON.parse(event.data);
+        let connectionId = event.from.connectionId;
+        let getScore = data.score;
+        console.log(
+          "somaekScore received from",
+          props.conToNick[connectionId],
+          "score : ",
+          getScore,
+        );
+      });
 
     return () => {
       didCancel = true;
       props.user.getStreamManager().stream.session.off("signal:somaekScore");
       if (videoNode) {
-        videoNode.removeEventListener('loadeddata', handleLoaded);
+        videoNode.removeEventListener("loadeddata", handleLoaded);
       }
     };
-
-
   }, [videoRef.current, canvasRef.current]);
 
   const canvasWidth = 1280;
@@ -141,7 +159,7 @@ const Somaek = (props) => {
         0,
         0,
         canvasCtx.current.canvas.width,
-        canvasCtx.current.canvas.height
+        canvasCtx.current.canvas.height,
       );
 
       for (let i = 0; i < objects.length; i++) {
@@ -152,7 +170,7 @@ const Somaek = (props) => {
           boxLocation.leftX * canvasWidth,
           boxLocation.topY * canvasHeight,
           boxLocation.lenX * canvasWidth * 0.5,
-          boxLocation.lenY * canvasHeight * 0.5
+          boxLocation.lenY * canvasHeight * 0.5,
         );
       }
       canvasCtx.current.drawImage(
@@ -160,7 +178,7 @@ const Somaek = (props) => {
         container.leftX * canvasWidth,
         container.topY * canvasHeight,
         container.lenX * canvasWidth,
-        container.lenY * canvasHeight
+        container.lenY * canvasHeight,
       );
 
       /* InBucket용 */
@@ -172,7 +190,7 @@ const Somaek = (props) => {
           (0.1 - 0.02 * i) * canvasWidth,
           0.4 * canvasHeight,
           0.13 * canvasWidth,
-          0.13 * canvasHeight
+          0.13 * canvasHeight,
         );
       }
 
@@ -186,9 +204,9 @@ const Somaek = (props) => {
       /* 소주1병, 맥주1명 주문내역 텍스트 캔버스에 출력 */
       orderKorean.forEach((text, index) => {
         // canvasCtx.current.strokeStyle = 'black';
-        canvasCtx.current.fillStyle = 'black';  // 텍스트 색상을 검은색으로 설정
-        canvasCtx.current.font = "30px Arial";  // 폰트와 크기를 설정
-        canvasCtx.current.fillText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
+        canvasCtx.current.fillStyle = "black"; // 텍스트 색상을 검은색으로 설정
+        canvasCtx.current.font = "30px Arial"; // 폰트와 크기를 설정
+        canvasCtx.current.fillText(text, -200, 200 + (index + 1) * 30); // 텍스트를 캔버스에 쓰기
         // canvasCtx.current.strokeText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
       });
       canvasCtx.current.restore();
@@ -249,24 +267,25 @@ const Somaek = (props) => {
 
       /* order 안에 있는 음료가 제대로 들어왔을 경우 배열 하나 줄여주고, 아닐경우 무시 */
       let index = order.indexOf(objects[boxIndex].type);
-      if(index !== -1) { // 있을경우
+      if (index !== -1) {
+        // 있을경우
         order.splice(index, 1);
         inBucket.push(objects[boxIndex]);
-      } else { //없을경우
+      } else {
+        //없을경우
         console.log("주문한 음료가 아님");
       }
-      if(order.length === 0){
-        order=randomDrink();
-        score+=1;
+      if (order.length === 0) {
+        order = randomDrink();
+        score += 1;
         sendScoreSignal(score);
-        console.log("score = ",score);
-        orderKorean = ["감사합니다!!"]
+        console.log("score = ", score);
+        orderKorean = ["감사합니다!!"];
         /* 버킷에 모든음료가 채워졌을 경우, 1초보여주고 사라짐 */
         setTimeout(() => {
-          inBucket=[];
+          inBucket = [];
           orderKorean = printDrinks(order);
         }, 800);
-
       }
       console.log(order);
     }
@@ -274,7 +293,7 @@ const Somaek = (props) => {
 
   const objDrag = (landmarks, canvasRef) => {
     let { distance, fingerPick } = fingerDistance(landmarks);
-    if (distance > 0.01 )  return;
+    if (distance > 0.01) return;
     for (let boxIndex = 0; boxIndex < objects.length; boxIndex++) {
       const {
         leftX: objLeftX,
@@ -296,7 +315,7 @@ const Somaek = (props) => {
         return;
       }
     }
-  }
+  };
 
   //손가락 사이의 거리를 계산하는 함수
   const fingerDistance = (landmarks) => {
@@ -387,10 +406,8 @@ const Somaek = (props) => {
     return drinkPrintList;
   }
 
-
   const sendScoreSignal = (score) => {
     if (props.user.getStreamManager().session) {
-
       const data = {
         score: score,
         streamId: props.user.getStreamManager().stream.streamId,
@@ -398,10 +415,10 @@ const Somaek = (props) => {
       props.user
         .getStreamManager()
         .session.signal({
-        data: JSON.stringify(data),
-        to: [],
-        type: "somaekScore",
-      })
+          data: JSON.stringify(data),
+          to: [],
+          type: "somaekScore",
+        })
         .then(() => {
           console.log("Message successfully sent");
         })

@@ -8,14 +8,25 @@ import SpeechGame from "../Games/speechgame/SpeechGame";
 import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
-import cat from "../keyword/cat";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
-  const [childStopped, setChildStopped] = useState(false);
-  console.log(idx);
+  const [conToNick] = useState({});
+  // let conToNick = {}; // Empty object, not an array
+
   useEffect(() => {
+    user.getStreamManager().stream.session.on("signal:nickName", (event) => {
+      let nick = event.data;
+      let conId = event.from.connectionId;
+
+      // Only add the conId-nick pair if the conId is not already a key in the conToNick object
+      if (!conToNick.hasOwnProperty(conId)) {
+        conToNick[conId] = nick;
+      }
+      console.log("닉네임 리스트 ", conToNick);
+    });
+
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {
       const data = event.data;
       if (data === "airHockey") {
@@ -24,25 +35,34 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         enterMovingDuck();
       } else if (data === "speechGame") {
         try {
-          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
-        } catch(error){
-          alert("재 로그인 해야합니다~!")
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+            status: "ingame",
+            room_idx: idx,
+          });
+        } catch (error) {
+          alert("재 로그인 해야합니다~!");
           navigate("/lobby");
         }
         enterSpeech();
       } else if (data === "somaek"){
         try {
-          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
-        } catch(error){
-          alert("재 로그인 해야합니다~!")
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+            status: "ingame",
+            room_idx: idx,
+          });
+        } catch (error) {
+          alert("재 로그인 해야합니다~!");
           navigate("/lobby");
         }
         enterSomaek();
       } else if (data === "avoidGame") {
         try {
-          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
-        } catch(error){
-          alert("재 로그인 해야합니다~!")
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+            status: "ingame",
+            room_idx: idx,
+          });
+        } catch (error) {
+          alert("재 로그인 해야합니다~!");
           navigate("/lobby");
         }
         enterAvoidGame();
@@ -50,6 +70,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
       }
+
       if(mode === undefined){
       //   try {
       //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
@@ -61,6 +82,22 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    user
+      .getStreamManager()
+      .session.signal({
+        data: user.getNickname(),
+        to: [],
+        type: "nickName",
+      })
+      .then(() => {
+        console.log("Message successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [user]);
 
   const enterMainRoom = () => {
     setMode(undefined);
@@ -146,9 +183,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
       try {
-        axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`)
-      }catch (error){
-        alert("토큰없음요")
+        axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`);
+      } catch (error) {
+        alert("토큰없음요");
         navigate("/lobby");
       }
     }
@@ -259,7 +296,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       {/*소맥게임*/}
       {mode === "somaek" && (
         <div>
-          <Somaek mode={mode} user={user} sessionConnected={sessionConnected} />
+          <Somaek
+            mode={mode}
+            user={user}
+            sessionConnected={sessionConnected}
+            conToNick={conToNick}
+          />
           <form className={styles.ReturnRoom}>
             <input
               onClick={() => sendGameTypeSignal(undefined)}
@@ -278,6 +320,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
             user={user}
             end={sendGameTypeSignal}
             mode={mode}
+            conToNick={conToNick}
           />
           <form className={styles.ReturnRoom}>
             <input
