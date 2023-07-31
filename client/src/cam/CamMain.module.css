@@ -16,7 +16,7 @@
   justify-content: flex-start;
   align-items: center;
 }
-.camMainHeader * {
+.camMainHeader > * {
   padding-right: 50px;
 }
 
@@ -30,4 +30,34 @@
   position: absolute;
   top: 2.5%;
   right: 1%;
+}
+
+.gameListWrap {
+  border: 3px solid white;
+  border-radius: 10px;
+  position: fixed;
+  width: 300px;
+  top: 10vh;
+  right: 3vw;
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.gameMenu {
+  background-color: white;
+  width: 200px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.gameListWrap > input {
+  width: 150px;
+  height: 30px;
 }

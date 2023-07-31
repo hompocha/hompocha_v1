@@ -199,13 +199,26 @@ const OpenViduVideoComponent = (props) => {
 
       {
         /* 발음게임일 때 불러와 지는 캠 */
+        props.mode === "speechGameMain" ? (
+          <>
+            <video
+              className={styles.speechGameMain}
+              autoPlay={true}
+              ref={videoRef}
+            />
+          </>
+        ) : null
+      }
+      {
+        /* 발음게임일 때 불러와 지는 캠 */
         props.mode === "speechGame" ? (
-          <div>
-            {/* <span>대화모드</span> */}
-            <div className={styles.parent}>
-              <video autoPlay={true} ref={videoRef} />
-            </div>
-          </div>
+          <>
+            <video
+              className={styles.speechGameSub}
+              autoPlay={true}
+              ref={videoRef}
+            />
+          </>
         ) : null
       }
       {
