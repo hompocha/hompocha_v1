@@ -14,7 +14,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [childStopped, setChildStopped] = useState(false);
-
+  console.log(idx);
   useEffect(() => {
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {
       const data = event.data;
@@ -23,13 +23,13 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       } else if (data === "movingDuck") {
         enterMovingDuck();
       } else if (data === "speechGame") {
-        enterSpeech();
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
         } catch(error){
           alert("재 로그인 해야합니다~!")
           navigate("/lobby");
         }
+        enterSpeech();
       } else if (data === "somaek"){
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
@@ -51,12 +51,13 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         enterMainRoom();
       }
       if(mode === undefined){
-        try {
-          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
-        } catch(error) {
-          alert("재 로그인 해야합니다~!")
-          navigate("/lobby");
-        }
+      //   try {
+      //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
+      //   } catch(error) {
+      //     alert("재 로그인 해야합니다~!")
+      //     navigate("/lobby");
+      //   }
+      // }
       }
     });
   }, []);
