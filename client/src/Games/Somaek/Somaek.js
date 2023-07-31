@@ -101,7 +101,7 @@ const Somaek = (props) => {
 
     return () => {
       didCancel = true;
-
+      props.user.getStreamManager().stream.session.off("signal:somaekScore");
       if (videoNode) {
         videoNode.removeEventListener('loadeddata', handleLoaded);
       }
@@ -274,7 +274,7 @@ const Somaek = (props) => {
 
   const objDrag = (landmarks, canvasRef) => {
     let { distance, fingerPick } = fingerDistance(landmarks);
-
+    if (distance > 0.01 )  return;
     for (let boxIndex = 0; boxIndex < objects.length; boxIndex++) {
       const {
         leftX: objLeftX,
@@ -385,25 +385,7 @@ const Somaek = (props) => {
     });
     console.log(drinkPrintList);
     return drinkPrintList;
-    /* (
-      <div className={styles.drinkList}>
-        {drinkPrintList.map((item, index) => (
-          <span index={index}>{item} </span>
-        ))}
-      </div>
-    ) */
   }
-
-  //
-  // const subscribers = props.user.getSubscriber();
-  // for(let i =0;i<subscribers.length;i++){
-  //
-  // }
-  //
-  //
-  // props.user.getSubsciber().forEach((subscriber)=>
-  //   subscriber
-  // )
 
 
   const sendScoreSignal = (score) => {
