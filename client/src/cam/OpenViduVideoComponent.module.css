@@ -221,4 +221,11 @@
 .speechGameSub {
   width: 16vw;
   height: auto;
+  position: fixed;
+}
+.avoidGameSubCan {
+  width: 20vw;
+  height: 15vw;
+  /* object-fit: contain; */
+  position: fixed;
 }
