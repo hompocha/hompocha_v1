@@ -7,6 +7,7 @@ import { Hands, VERSION } from "@mediapipe/hands";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 
 const Somaek = (props) => {
+  console.log(props);
   const [loaded, setLoaded] = useState(true);
   const [pickObj, setPickObj] = useState(false);
   const videoRef = useRef(null);
@@ -412,7 +413,7 @@ const Somaek = (props) => {
               <>
                 <div className={styles[`somaekGameSub${index + 1}`]}>
                   <OpenViduVideoComponent
-                    mode={"avoidGame"}
+                    mode={"somaek"}
                     streamManager={subscriber}
                   />
                 </div>
