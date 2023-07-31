@@ -41,6 +41,10 @@ export default class OpenViduSession extends Component {
     this.leaveSession();
   }
   onbeforeunload(event) {
+    try {axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`);
+    } catch (error){
+      console.log(error);
+    }
     if(this.state.session)
       this.leaveSession();
   }

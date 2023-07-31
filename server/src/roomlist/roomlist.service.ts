@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ulid } from 'ulid';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,13 +29,30 @@ export class RoomlistService {
     roomList.idx = room_idx;
     roomList.room_name = room_name;
     roomList.room_max = room_max;
-    roomList.room_status = undefined;
+    roomList.room_status = 'openGame';
     await this.roomListEntityRepository.save(roomList);
     console.log(roomList);
     return room_idx;
   }
 
   async findAllRooms() {
+    try {
+      const list = await this.roomListEntityRepository.find({
+        select: ['idx'],
+      });
+      for (let i = 0; i < list.length; i++) {
+        const room_idx = list[i].idx;
+        if (
+          !(await this.roomRepository.findOne({
+            where: { room_idx: room_idx },
+          }))
+        ) {
+          await this.roomListEntityRepository.delete({ idx: room_idx });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
     return await this.roomListEntityRepository.find({ order: { idx: 'ASC' } });
   }
   async saveUserToRoom(room_idx: string, user_idx: string): Promise<void> {
@@ -54,20 +71,3 @@ export class RoomlistService {
     });
   }
 }
-// async getRoomInfo(roomidx: string): Promise<RoomlistEntity> {
-//   const roomList = await this.roomListEntityRepository.findOne({
-//     where: { idx: roomidx },
-//   });
-//   return roomList;
-// }
-
-// async getUserJwt(userId: string): Promise<string> {
-//   const user = await this.userRepository.findOne({
-//     where: { id: userId },
-//   });
-//   if (!user) {
-//     throw new NotFoundException('유저 존재 X');
-//   }
-//   // console.log(user.id);
-//   return user.id;
-// }

@@ -29,6 +29,7 @@ export class RoomlistController {
     );
     return verifiedToken.nickname;
   }
+
   @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
