@@ -36,21 +36,6 @@ const RoomList = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const jwtToken = localStorage.getItem("jwtToken");
-        if (jwtToken) {
-          axios.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
-        }
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/room/roomInfo`
-        );
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
     handleRoomList();
   }, []);
 

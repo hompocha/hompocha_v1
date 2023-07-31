@@ -30,6 +30,7 @@ export class RoomlistService {
     roomList.room_name = room_name;
     roomList.room_max = room_max;
     roomList.room_status = 'openGame';
+    roomList.peopleNum = 1;
     await this.roomListEntityRepository.save(roomList);
     console.log(roomList);
     return room_idx;
@@ -63,11 +64,10 @@ export class RoomlistService {
     await this.roomRepository.save(room);
   }
   async countUserinRoom(room_idx: string) {
-    return await this.roomRepository.countBy({ room_idx: room_idx });
-  }
-  async findRoomMax(room_idx: string) {
-    return await this.roomListEntityRepository.findOne({
-      where: { idx: room_idx },
-    });
+    const num = await this.roomRepository.countBy({ room_idx: room_idx });
+    await this.roomListEntityRepository.update(
+      { idx: room_idx },
+      { peopleNum: num },
+    );
   }
 }

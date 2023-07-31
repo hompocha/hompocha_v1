@@ -13,4 +13,7 @@ export class RoomlistEntity {
 
   @Column()
   room_max: number;
+
+  @Column()
+  peopleNum: number;
 }
