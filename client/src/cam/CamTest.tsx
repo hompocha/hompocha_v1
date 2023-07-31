@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./CamTest.module.scss";
+import { event } from "jquery";
 
 const CamTest = (props: any) => {
   interface Props {
@@ -79,39 +80,6 @@ const CamTest = (props: any) => {
         </clipPath>
       </g>
     );
-  };
-  /*
-   * readyDrink : 0 => 건배 모드 X 평소 상태,
-   * readyDrink : 0 => 건배 모드
-   */
-  const [readyDrink, setreadyDrink] = useState(0);
-  function readyToDrink() {
-    setreadyDrink(1);
-    setTimeout(() => {
-      setreadyDrink(0);
-    }, 2000);
-  }
-  useEffect(() => {
-    props.user
-      .getStreamManager()
-      .session.on("signal:cheersEffect", (event: any) => {
-        readyToDrink();
-      });
-  }, []);
-  //
-  const sendCheersEffectSignal = (number: number) => {
-    console.log(props.user);
-    if (props.user.getStreamManager().session) {
-      props.user
-        .getStreamManager()
-        .session.signal({ data: number, to: [], type: "cheersEffect" })
-        .then(() => {
-          console.log("Message successfully sent");
-        })
-        .catch((error: any) => {
-          console.error(error);
-        });
-    }
   };
 
   const renderCamSlices = () => {
@@ -213,6 +181,53 @@ const CamTest = (props: any) => {
     return cheersImgGroup;
   }
 
+  /* ========================================================= */
+
+  // drinkEffect : 0 => 건배 모드 X 평소 상태,
+  // drinkEffect : 0 => 건배 모드
+  const [drinkEffect, setDrinkEffect] = useState(0);
+  // 건배를 누른 인원의 수
+  let count = 0;
+
+  // 모든 유저가 건배 버튼을 눌렀을 때 실행되는 함수
+  // 이펙트 호출을 위한 setDrinkEffect(1)
+  // count 초기화
+  function readyToDrink() {
+    setDrinkEffect(1);
+    count = 0;
+    setTimeout(() => {
+      setDrinkEffect(0);
+    }, 2000);
+  }
+
+  //
+  useEffect(() => {
+    props.user
+      .getStreamManager()
+      .session.on("signal:cheersSignal", (event: any) => {
+        count += 1;
+        if (count === props.user.getSubscriber().length + 1) {
+          readyToDrink();
+        }
+      });
+  }, []);
+
+  const sendCheersReadySignal = () => {
+    if (props.user.getStreamManager().session) {
+      props.user
+        .getStreamManager()
+        .session.signal({ data: "cheersReady", to: [], type: "cheersSignal" })
+        .then(() => {
+          console.log("one more user is ready to drink");
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
+  };
+
+  /* ========================================================= */
+
   return (
     <div>
       <div className={styles.triangleDown} />
@@ -222,7 +237,7 @@ const CamTest = (props: any) => {
         </button>
       </div>
       <div>
-        <button type="submit" onClick={() => sendCheersEffectSignal(1)}>
+        <button type="submit" onClick={sendCheersReadySignal}>
           건배준비
         </button>
       </div>
@@ -231,7 +246,7 @@ const CamTest = (props: any) => {
           {renderCamSlices()}
         </svg>
       </div>
-      {readyDrink === 1 ? cheersImg() : null}
+      {drinkEffect === 1 ? cheersImg() : null}
     </div>
   );
 };

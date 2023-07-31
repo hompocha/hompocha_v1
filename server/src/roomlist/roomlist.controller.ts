@@ -22,7 +22,8 @@ export class RoomlistController {
       verifiedToken.idx,
     );
   }
-  @Get('/:nickName')
+
+  @Get()
   async getNickname(@Headers() headers: any) {
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],

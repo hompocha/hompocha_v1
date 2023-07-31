@@ -14,19 +14,14 @@ const RoomInfo: React.FC<RoomInfoProps> = ({ selectedTitle, currentIdx}) => {
   const navigate = useNavigate();
   const room_name = selectedTitle;
   const idx = currentIdx;
-  console.log(idx);
 
   const handleClick = async () => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/lobby/roomInfo`,
-        {
-          room_name,
-          idx,
-        }
+        { room_name, idx, }
       );
       console.log(response.data);
-      alert("방 입장 정보 보내기 성공");
       navigate("/Room", { state: { roomName: room_name, idx: idx } });
     } catch (error) {
       console.error(error);
