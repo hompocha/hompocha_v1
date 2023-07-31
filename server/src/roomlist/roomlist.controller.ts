@@ -44,6 +44,6 @@ export class RoomlistController {
     const cnt = await this.roomService.countUserinRoom(idx);
     const room = await this.roomService.findRoomMax(idx);
     const max = room.room_max;
-    return { cnt, max };
+    return cnt ;
   }
 }
