@@ -12,7 +12,7 @@ export default class OpenViduSession extends Component {
     super(props);
     const idx = props.idx;
     this.state = {
-      mySessionId: idx,
+      mySessionId: "SessionA",
       nickName: 'hompocha',
       session: idx,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'

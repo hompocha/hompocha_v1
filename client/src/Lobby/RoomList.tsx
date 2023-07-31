@@ -44,12 +44,13 @@ const RoomList = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/lobby/roomList`
       );
-      console.log(response.data);
-
+      console.log(idx);
       setTitle(response.data.map((room: RoomData) => room.room_name));
       setIdx(response.data.map((idx: RoomData) => idx.idx));
       setRoom_Max(response.data.map((room_max: RoomData) => room_max.room_max));
       setRoom_State(response.data.map((room_state: RoomData) => room_state.room_state));
+
+
     } catch (error) {
       console.error("방 정보 출력 오류:", error);
     }
