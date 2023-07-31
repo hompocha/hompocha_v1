@@ -42,8 +42,8 @@
   justify-content: space-between;
   padding: 10px;
   position: absolute;
-  top: 30%;
-  right: 1.5%;
+  top: 30vh;
+  right: 1.5vw;
   background-color: bisque;
   border-radius: 1vw;
 }

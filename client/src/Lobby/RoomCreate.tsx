@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import styles from "./RoomCreate.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-const RoomCreate = () => {
+interface NickNameProps{
+  nickName:string;
+}
+const RoomCreate: React.FC<NickNameProps> = ({ nickName }) => {
   const [room_name, setRoomName] = useState<string>("");
   const [maxPeople, setMaxPeople] = useState(2);
   const [idx, setIdx] = useState<string>("");
@@ -17,7 +19,7 @@ const RoomCreate = () => {
         { room_name, maxPeople, }
       );
       setIdx(response.data);
-      navigate("/Room", { state: { roomName: room_name, idx: idx, maxPeople: maxPeople } });
+      navigate("/Room", { state: { roomName: room_name, idx: idx, maxPeople: maxPeople, nickName:nickName } });
     } catch (error) {
       console.error("방 생성 오류:", error);
     }

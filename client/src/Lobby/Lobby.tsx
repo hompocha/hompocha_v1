@@ -9,7 +9,7 @@ import axios from "axios";
 import RoomCreate from "./RoomCreate";
 
 const Lobby = () => {
-  const [loginId, setLoginId] = useState<string>("");
+  const [nickName, setNickname] = useState<string>("");
   const [flag, setFlag] = useState(0);
   const navigate = useNavigate();
 
@@ -25,7 +25,8 @@ const Lobby = () => {
           `${process.env.REACT_APP_API_URL}/lobby`
         );
         console.log(response.data);
-        setLoginId(response.data);
+        setNickname(response.data);
+
       } catch (error) {
         console.error(error);
       }
@@ -43,19 +44,19 @@ const Lobby = () => {
     <div className={styles.option} onClick={handleOptionClick} tabIndex={0} role="button">방 생성</div>
       <div className={styles.lobbyWrap}>
         <div className={styles.lobbyInfo}>
-          <RoomList />
+          <RoomList nickName = {nickName}/>
           {/* <UserList /> */}
         </div>
       </div>
       <div className={styles.nav}>
-        <div className={styles.userName}>{loginId}</div>
+        <div className={styles.userName}>{nickName}</div>
         <div className={styles.logoutBtn}>
           <input onClick={handleLogout} type="button" value="로그아웃" />
         </div>
       </div>
       { flag === 1 && 
         <div className={styles.roomCreateWrap}>
-          <RoomCreate/>
+          <RoomCreate nickName = {nickName}/>
         </div>
       }
     </>

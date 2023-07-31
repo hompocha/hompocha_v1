@@ -48,7 +48,6 @@ const Login: React.FC = () => {
     }
   };
   const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
     if (!id || !password || !confirmPassword || !nickName) {
       alert("모든 정보를 입력해주세요.");
       return;
@@ -100,8 +99,8 @@ const Login: React.FC = () => {
         }
       );
 
-      console.log("아니 왜 안뜨냐고", response.data.id);
       alert("회원가입이 완료되었습니다.");
+      window.location.reload();
     } catch (error) {
       console.error(error);
       alert("에러");
