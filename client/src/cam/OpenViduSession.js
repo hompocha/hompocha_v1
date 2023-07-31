@@ -85,7 +85,7 @@ export default class OpenViduSession extends Component {
   }
   async getSessionNickname(){
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/lobby/wow`
+      `${process.env.REACT_APP_API_URL}/room/wow`
     );
     this.setState({
       nickName: response.data,

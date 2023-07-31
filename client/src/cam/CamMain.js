@@ -8,6 +8,7 @@ import SpeechGame from "../Games/speechgame/SpeechGame";
 import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
+import cat from "../keyword/cat";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
   const [mode, setMode] = useState(undefined);
@@ -19,21 +20,44 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
       const data = event.data;
       if (data === "airHockey") {
         enterAirHockey();
-        // axios.post(`${process.env.REACT_APP_API_URL}/room/airhockey`,data("airhockey"))
       } else if (data === "movingDuck") {
         enterMovingDuck();
-        // axios.post(`${process.env.REACT_APP_API_URL}/room/movingdock`,data("airhockey"))
       } else if (data === "speechGame") {
-        axios.post(`${process.env.REACT_APP_API_URL}/room/status`, { status: "ingame", room_idx: idx })
         enterSpeech();
+        try {
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
+        } catch(error){
+          alert("재 로그인 해야합니다~!")
+          navigate("/lobby");
+        }
       } else if (data === "somaek"){
+        try {
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
+        } catch(error){
+          alert("재 로그인 해야합니다~!")
+          navigate("/lobby");
+        }
         enterSomaek();
       } else if (data === "avoidGame") {
+        try {
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "ingame", room_idx: idx})
+        } catch(error){
+          alert("재 로그인 해야합니다~!")
+          navigate("/lobby");
+        }
         enterAvoidGame();
       }
       /* data 가 undefined 일 경우 방으로 돌아감 */
       else {
         enterMainRoom();
+      }
+      if(mode === undefined){
+        try {
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
+        } catch(error) {
+          alert("재 로그인 해야합니다~!")
+          navigate("/lobby");
+        }
       }
     });
   }, []);
@@ -121,7 +145,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
   const endSession = () => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
-      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`)
+      try {
+        axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`)
+      }catch (error){
+        alert("토큰없음요")
+        navigate("/lobby");
+      }
     }
   };
 
