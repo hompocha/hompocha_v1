@@ -329,16 +329,16 @@ const Somaek = (props) => {
     return(drinkPrintList);
   }
 
-
-  const subscribers = props.user.getSubscriber();
-  for(let i =0;i<subscribers.length;i++){
-
-  }
-
-
-  props.user.getSubsciber().forEach((subscriber)=>
-    subscriber
-  )
+  //
+  // const subscribers = props.user.getSubscriber();
+  // for(let i =0;i<subscribers.length;i++){
+  //
+  // }
+  //
+  //
+  // props.user.getSubsciber().forEach((subscriber)=>
+  //   subscriber
+  // )
 
 
 
