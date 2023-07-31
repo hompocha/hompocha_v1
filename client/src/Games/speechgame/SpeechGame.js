@@ -183,17 +183,6 @@ const SpeechGame = (props) => {
 
   /*================================================*/
 
-  /* 이거 추가하면 될꺼같긴한데 */
-  function findme(wantId){
-    const findMe = [...props.user.subscribers];
-    findMe.push(props.user.streamManager);
-    return findMe.find(
-      (subscriber) => subscriber.stream.connection.connectionId === wantId
-    )
-  }
-  const list_people = findSubscriber(randomUser)
-  list_people.unshift(findme(randomUser))
-  /*이렇게 하면 리스트 만들어지고 맨앞은 random 이고 리스트 뒤에는 남는애들*/
 
     return (
       <>
