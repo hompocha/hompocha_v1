@@ -22,6 +22,14 @@ export class RoomlistController {
       verifiedToken.idx,
     );
   }
+  @Get()
+  async getNickname(@Headers() headers: any) {
+    const verifiedToken = this.authService.verify(
+      headers.authorization.split('Bearer ')[1],
+    );
+    return verifiedToken.nickname;
+  }
+
   @Get('/roomList')
   async getAllRooms() {
     return await this.roomService.findAllRooms();
