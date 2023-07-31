@@ -131,6 +131,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
   };
 
   console.log("CamMain rendered");
+
   return (
     <div>
       {/* Main Room */}

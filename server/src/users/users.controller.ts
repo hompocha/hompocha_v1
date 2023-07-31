@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {Body, Controller, Get, Headers, Param, Post} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/createuserdto';
 import { UserLoginDto } from './dto/user.login';
@@ -41,4 +41,5 @@ export class UsersController {
       return checked.nickName;
     }
   }
+
 }
