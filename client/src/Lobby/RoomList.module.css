@@ -1,84 +1,33 @@
 .roomListWrap {
   width: 40vw;
+  position: absolute;
+  top: 17vh;
+  left: 40vw;
   /* border: 3px solid black; */
   border-radius: 10px;
   padding: 5px;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
+  z-index: 3;
 }
-
-.leftRoomInfo {
-  width: 10vw;
-  border: 3px solid black;
-  border-radius: 10px;
-  padding: 5px;
-  position: fixed;
-  top: 3vh;
-  left: 0vw;
+.roomList{
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  z-index: 2;
-}
-.rightRoomInfo {
-  position: fixed;
-  left: vw;
-  width: 10vw;
-  z-index: 7; 
-}
-.roomDetail {
-  position: absolute;
-  width: 20vw;
-  border-radius: 10px;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.roomCreate {
-  position: absolute;
-  width: 20vw;
-  border-radius: 10px;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 img{
-  width: 400px;
+  width: 500px;
   height: 400px;
   float: left;
 }
-/* .book {
-  position: relative;
-} */
-
 .page {
   overflow: hidden;
   transform-origin: left center;
   transform: perspective(1000px); 
   transition: all 1s ease;
 }
-
 .page1 {
   position: fixed;
-  
-  top: 15vw;
-  left: 41vw;  
+  top: 16vw;
+  left: 25vw;  
   z-index: 1;
-  scale: 150%;
-  transition-delay: 0.1s;
-}
-
-.page2 {
-  position: fixed;
-  width: 400px;
-  height: 400px;
-  top: 15vw;
-  left: 10.5vw;  
-  scale: 150%;
-  z-index: 0;
+  scale: 200%;
   transition-delay: 0.1s;
 }

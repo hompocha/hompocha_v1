@@ -16,7 +16,8 @@
   padding: 0 20px;
 }
 .userName {
-  padding-right: 20px;
+  position: absolute;
+  right: 6vw;
 }
 .menu1{
   position: fixed;
