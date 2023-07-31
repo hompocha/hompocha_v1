@@ -33,17 +33,20 @@
 }
 
 .gameListWrap {
-  border: 3px solid white;
   border-radius: 10px;
   position: fixed;
-  width: 300px;
   top: 10vh;
   right: 3vw;
-  height: 40vh;
+  width: 300px;
+  height: 390px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  /* background-color: antiquewhite; */
+  background-image: url(/Users/seungkyu/Desktop/namanmoo/hompocha_v1/client/public/asset/gameMenuBackground.png);
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .gameMenu {
@@ -55,9 +58,28 @@
   align-items: center;
   border-radius: 10px;
   box-shadow: 3px 3px rgba(0, 0, 0, 0.3);
+  font-family: "Gowun Dodum", sans-serif;
+  font-size: 25px;
 }
 
-.gameListWrap > input {
-  width: 150px;
-  height: 30px;
+.gameButtons {
+  width: 250px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.gameButtons > button {
+  width: 45px;
+  height: 210px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: x-large;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  /* border-bottom-left-radius: 8px; */
+  /* border-bottom-right-radius: 8px; */
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.3);
+  font-family: "Gowun Dodum", sans-serif;
+  border: none;
 }
