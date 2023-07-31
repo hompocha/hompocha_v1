@@ -5,6 +5,7 @@ import CamTest from "./CamTest";
 import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
+import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
 
@@ -25,10 +26,13 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
       } else if (data === "speechGame") {
         axios.post(`${process.env.REACT_APP_API_URL}/room/status`, { status: "ingame", room_idx: idx })
         enterSpeech();
+      } else if (data === "somaek"){
+        enterSomaek();
       } else if (data === "avoidGame") {
         enterAvoidGame();
-      } else {
-        /* data 가 undefined 일 경우 방으로 돌아감 */
+      }
+      /* data 가 undefined 일 경우 방으로 돌아감 */
+      else {
         enterMainRoom();
       }
     });
@@ -53,6 +57,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
     setMode("speechGame");
     onModeChange("speechGame");
   };
+
+  const enterSomaek = () =>{
+    setMode("somaek");
+    onModeChange("somaek");
+  }
 
   const enterAvoidGame = () => {
     setMode("avoidGame");
@@ -128,8 +137,15 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
       {mode === undefined && (
         <div id="session" className={styles.camMainWrap}>
           <div id="session-header" className={styles.camMainHeader}>
-            <h1 id="session-title">{roomName} </h1>
-            <h2>{user.subscribers.length + 1}명 참여중</h2>
+            <div id="session-title">{roomName} </div>
+            <div>{user.subscribers.length + 1}명 참여중</div>
+
+            <form className={styles.ReturnRoom}>
+              <input onClick={returnLobby} type="button" value="로비로 이동" />
+            </form>
+          </div>
+          <div className={styles.gameListWrap}>
+            <div className={styles.gameMenu}>메뉴판</div>
             <input
               onClick={() => sendGameTypeSignal("airHockey")}
               type="button"
@@ -146,14 +162,16 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
               value="발음게임"
             />
             <input
+              onClick={() => sendGameTypeSignal("somaek")}
+              type="button"
+              value="소맥게임"
+            />
+
+            <input
               onClick={() => sendGameTypeSignal("avoidGame")}
               type="button"
               value="피하기게임"
             />
-
-            <form className={styles.ReturnRoom}>
-              <input onClick={returnLobby} type="button" value="로비로 이동" />
-            </form>
           </div>
 
           <div className={styles.camAndVoice}>
@@ -207,6 +225,23 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected,idx }) => {
             user={user}
             end={sendGameTypeSignal}
             mode={mode}
+          />
+          <form className={styles.ReturnRoom}>
+            <input
+              onClick={() => sendGameTypeSignal(undefined)}
+              type="button"
+              value="방으로 이동"
+            />
+          </form>
+        </div>
+      )}
+      {/*소맥게임*/}
+      {mode === "somaek" && (
+        <div>
+          <Somaek
+            mode={mode}
+            user={user}
+            sessionConnected={sessionConnected}
           />
           <form className={styles.ReturnRoom}>
             <input

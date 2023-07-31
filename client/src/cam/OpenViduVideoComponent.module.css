@@ -205,6 +205,20 @@
 }
 
 .avoidGameSub {
-  width: 20vw;
+  width: 16vw;
+  height: auto;
+}
+
+.speechGameMain {
+  position: fixed;
+  top: 10vh;
+  left: 22vw;
+  width: 56vw;
+  height: 42vw;
+  transform: rotateY(180deg);
+}
+
+.speechGameSub {
+  width: 16vw;
   height: auto;
 }

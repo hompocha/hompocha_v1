@@ -49,7 +49,7 @@ const Login: React.FC = () => {
   };
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!id || !password || !confirmPassword ||!nickName) {
+    if (!id || !password || !confirmPassword || !nickName) {
       alert("모든 정보를 입력해주세요.");
       return;
     } else if (password !== confirmPassword) {
@@ -64,7 +64,7 @@ const Login: React.FC = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/user/${id}`
       );
-      console.log(response.data)
+      console.log(response.data);
       if (response.data) {
         alert("중복된 아이디입니다.");
         return;
@@ -77,9 +77,9 @@ const Login: React.FC = () => {
     //nickname 일치 여부 확인
     try {
       const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/user/${nickName}`
+        `${process.env.REACT_APP_API_URL}/user/${nickName}`
       );
-      console.log(response.data)
+      console.log(response.data);
       if (response.data) {
         alert("중복된 닉네임입니다.");
         return;
@@ -99,7 +99,7 @@ const Login: React.FC = () => {
         }
       );
 
-      console.log("아니 왜 안뜨냐고",response.data.id);
+      console.log("아니 왜 안뜨냐고", response.data.id);
       alert("회원가입이 완료되었습니다.");
     } catch (error) {
       console.error(error);
@@ -108,7 +108,80 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <>
+      <div className={styles.container}>
+        <div className={styles.serviceTitleDiv}>
+          <h1 className={styles.serviceTitle}>홈술포차</h1>
+        </div>
+        <div className={styles.loginWrap}>
+          <div className={styles.signup}>
+            <div className={styles.eachInput}>
+              <span>ID</span>
+              <input
+                type="text"
+                placeholder="Id"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+              />
+            </div>
+            <div className={styles.eachInput}>
+              <span>PW</span>
+              <input
+                type="Password"
+                placeholder="비밀번호"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className={styles.eachInput}>
+              <span>PW확인</span>
+              <input
+                type="Password"
+                placeholder="비밀번호 확인"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            {/*====================================================================================*/}
+            {/*우현 멋대로 해서 수정 필요*/}
+            {/*====================================================================================*/}
+            <div className={styles.eachInput}>
+              <span>닉네임</span>
+              <input
+                type="text"
+                placeholder="nickname"
+                value={nickName}
+                onChange={(e) => setNickname(e.target.value)}
+              />
+            </div>
+            {/*====================================================================================*/}
+            {/*====================================================================================*/}
+            <button onClick={handleSignUp}>SIGN UP</button>
+          </div>
+          <div className={styles.login}>
+            <div className={styles.eachInput}>
+              <span>ID</span>
+              <input
+                type="text"
+                placeholder="Id"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+              />
+            </div>
+            <div className={styles.eachInput}>
+              <span>PW</span>
+              <input
+                type="Password"
+                placeholder="비밀번호"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+              />
+            </div>
+            <button onClick={handleLogIn}>SIGN IN</button>
+          </div>
+        </div>
+      </div>
+      {/* CSS영역 */}
       <div>
         <div className={`${styles.menu} ${styles.il}`}>오 뎅 탕</div>
         <div className={`${styles.menu} ${styles.ee}`}>계란말이</div>
@@ -146,80 +219,8 @@ const Login: React.FC = () => {
           className={`${styles.wave} ${styles.nineteen} ${styles.odd}`}
         ></div>
       </div>
-
-      <div className={styles.serviceTitleDiv}>
-        <h1 className={styles.serviceTitle}>홈술포차</h1>
-      </div>
-      <div className={styles.loginWrap}>
-        <div className={styles.signup}>
-          <div className={styles.eachInput}>
-            <span>ID</span>
-            <input
-              type="text"
-              placeholder="Id"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-            />
-          </div>
-          <div className={styles.eachInput}>
-            <span>PW</span>
-            <input
-              type="Password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className={styles.eachInput}>
-            <span>PW확인</span>
-            <input
-              type="Password"
-              placeholder="비밀번호 확인"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-          {/*====================================================================================*/}
-          {/*우현 멋대로 해서 수정 필요*/}
-          {/*====================================================================================*/}
-          <div className={styles.eachInput}>
-            <span>닉네임</span>
-            <input
-                type="text"
-                placeholder="nickname"
-                value={nickName}
-                onChange={(e) => setNickname(e.target.value)}
-            />
-          </div>
-          {/*====================================================================================*/}
-          {/*====================================================================================*/}
-          <button onClick={handleSignUp}>SIGN UP</button>
-
-        </div>
-        <div className={styles.login}>
-          <div className={styles.eachInput}>
-            <span>ID</span>
-            <input
-              type="text"
-              placeholder="Id"
-              value={loginId}
-              onChange={(e) => setLoginId(e.target.value)}
-            />
-          </div>
-          <div className={styles.eachInput}>
-            <span>PW</span>
-            <input
-              type="Password"
-              placeholder="비밀번호"
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-            />
-          </div>
-          <button onClick={handleLogIn}>SIGN IN</button>
-        </div>
-      </div>
       <div className={styles.bottomColor}></div>
-    </div>
+    </>
   );
 };
 
