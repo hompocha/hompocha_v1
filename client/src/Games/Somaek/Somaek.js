@@ -5,6 +5,7 @@ import styles from "../DuckCatching/DuckVideo.module.css";
 import {Camera} from "@mediapipe/camera_utils"
 import {Hands, VERSION} from "@mediapipe/hands";
 
+
 const Somaek = (props) => {
   const [loaded, setLoaded] = useState(true);
   const [pickObj, setPickObj] = useState(false);
@@ -24,12 +25,14 @@ const Somaek = (props) => {
   // objects.push(newBox);
   let score = 0;
   let order = []
-
+  let inBucket = []
+  // let orderPrint = []
 
   useEffect(() => {
     if(order.length === 0) {
       order = randomDrink();
       console.log(order);
+      printDrinks(order);
     }
     let didCancel = false;
 
@@ -96,7 +99,7 @@ const Somaek = (props) => {
       'beer': '../../Drink/beer.png',
       'mak': '../../Drink/mak.png',
       'container':'../../Drink/empty.png',
-      'cider': '../../beer2.png'
+      'cider': '../../Drink/cider.png'
       // 필요한 이미지를 계속 추가할 수 있습니다.
     };
     let currentImageIndex = 0;
@@ -126,16 +129,26 @@ const Somaek = (props) => {
         container.lenX * canvasWidth,
         container.lenY * canvasHeight,
       )
-      // canvasCtx.current.fillRect(
-      //   container.leftX * canvasWidth,
-      //   container.topY * canvasHeight,
-      //   container.lenX * canvasWidth,
-      //   container.lenY * canvasHeight,
-      //   // 0,
-      //   // 0,
-      //   // canvasWidth,
-      //   // canvasHeight,
-      // );
+
+        /* InBucket용 */
+      for (let i = 0; i < inBucket.length; i++) {
+        let boxLocation = inBucket[i];
+        const img = imgElements[boxLocation.type];  // type에 따른 이미지 선택
+        canvasCtx.current.drawImage(
+          img,(0.1-(0.02*i))*canvasWidth,0.4*canvasHeight,0.13*canvasWidth,0.13*canvasHeight
+        );
+
+      }
+
+      // 그림 그리는 코드는 이곳에 위치...
+
+      /* score 출력 부분 */
+      canvasCtx.current.save();  // 현재 컨텍스트 상태를 저장
+      canvasCtx.current.scale(-1, 1);  // X 축을 따라 스케일을 반전시킴 (좌우 반전)
+      canvasCtx.current.fillStyle = 'black';
+      canvasCtx.current.font = "30px Arial";
+      canvasCtx.current.fillText(`점수: ${score}`, -canvasWidth + 20, 50);
+      canvasCtx.current.restore();
 
     };
     const loadImages = async () => {
@@ -193,12 +206,24 @@ const Somaek = (props) => {
         console.log('cider');
         objects[boxIndex].topY = 0.73;
       }
-      order.splice(order.indexOf(objects[boxIndex].type), order.indexOf(objects[boxIndex].type) !== -1 ? 1 : 0);
 
+      /* order 안에 있는 음료가 제대로 들어왔을 경우 하나 줄여주고, 아닐경우 무시 */
+      let index = order.indexOf(objects[boxIndex].type);
+      if(index !== -1) { // 있을경우
+        order.splice(index, 1);
+        inBucket.push(objects[boxIndex]);
+      } else { //없을경우
+        console.log("주문한 음료가 아님");
+      }
       if(order.length === 0){
         order=randomDrink();
         score+=1;
         console.log("score = ",score);
+        /* 버킷에 모든음료가 채워졌을 경우, 1초보여주고 사라짐 */
+        setTimeout(() => {
+          inBucket=[];
+        }, 800);
+        printDrinks(order);
       }
       console.log(order);
     }
@@ -213,11 +238,11 @@ const Somaek = (props) => {
       const {leftX: objLeftX, topY: objTopY, lenX:objXLength, lenY: objYLength} = objects[boxIndex];
       const {x: fingerX, y: fingerY, z:_} = fingerPick;
 
-      const boxsize=0.12;
+      const boxSize=0.12;
 
 
-      if (objLeftX+objXLength*(1/2-boxsize) < fingerX && fingerX< (objLeftX+objXLength*(1/2+boxsize))
-        && objTopY+objYLength*(1/2-boxsize) < fingerY && fingerY< objTopY+objYLength*(1/2+boxsize)){
+      if (objLeftX+objXLength*(1/2-boxSize) < fingerX && fingerX< (objLeftX+objXLength*(1/2+boxSize))
+        && objTopY+objYLength*(1/2-boxSize) < fingerY && fingerY< objTopY+objYLength*(1/2+boxSize)){
         objMove(fingerPick, boxIndex);
         setPickObj(true);
         return;
@@ -262,6 +287,58 @@ const Somaek = (props) => {
     return drinks;
   }
 
+  /* {soju, beer, beer} 를 {소주1병,맥주2병} 으로 바꾸는 함수 */
+  function printDrinks(drinks) {
+    // 요소의 빈도를 저장하는 Map을 생성
+    const drinkCount = new Map();
+
+    // 각 요소에 대해
+    drinks.forEach(drink => {
+      // 현재 요소의 빈도를 가져옴 (없으면 0)
+      const currentCount = drinkCount.get(drink) || 0;
+      // 현재 요소의 빈도를 1 증가시킴
+      drinkCount.set(drink, currentCount + 1);
+    });
+    let drinkPrintList =[]
+    // Map을 순회하며 결과를 출력
+    drinkCount.forEach((count, drink) => {
+      // 빈도가 0인 요소는 제외
+      if (count > 0) {
+        let koreanDrink;
+        switch(drink) {
+          case 'soju':
+            koreanDrink = '소주';
+            break;
+          case 'beer':
+            koreanDrink = '맥주';
+            break;
+          case 'mak':
+            koreanDrink = '막걸리';
+            break;
+          case 'cider':
+            koreanDrink = '사이다';
+            break;
+          default:
+            koreanDrink = drink;
+        }
+        drinkPrintList.push(`${koreanDrink} ${count}병`);
+      }
+
+    });
+    console.log(drinkPrintList);
+    return(drinkPrintList);
+  }
+
+  //
+  // const subscribers = props.user.getSubscriber();
+  // for(let i =0;i<subscribers.length;i++){
+  //
+  // }
+  //
+  //
+  // props.user.getSubsciber().forEach((subscriber)=>
+  //   subscriber
+  // )
 
 
 
