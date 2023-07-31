@@ -3,4 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 10px;
+  position: absolute;
+  background-color: bisque;
+  border-radius: 1vw;
 }

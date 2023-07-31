@@ -13,7 +13,7 @@ export default class OpenViduSession extends Component {
     const idx = props.idx;
     this.state = {
       mySessionId: idx,
-      myUserName: "Hompocha" + Math.floor(Math.random() * 100),
+      nickName: 'hompocha',
       session: idx,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
@@ -26,7 +26,7 @@ export default class OpenViduSession extends Component {
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.handleSessionConnected = this.handleSessionConnected.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
-    // this.switchCamera = this.switchCamera.bind(this);
+    this.getSessionNickname = this.getSessionNickname.bind(this);
     // this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
     // this.sendSignal = this.sendSignal.bind(this);
     // this.sendSpeech = this.sendSpeech.bind(this);
@@ -83,11 +83,21 @@ export default class OpenViduSession extends Component {
       this.props.setUserStream(localUser);
     }
   }
+  async getSessionNickname(){
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/room/wow`
+    );
+    this.setState({
+      nickName: response.data,
+    });
+    return response.data;
+  }
   joinSession() {
     this.OV = new OpenVidu();
     this.setState(
       {
         session: this.OV.initSession(),
+        nickName: this.getSessionNickname(),
       },
       () => {
         let mySession = this.state.session;
@@ -140,6 +150,7 @@ export default class OpenViduSession extends Component {
               );
               localUser.setStreamManager(publisher);
               localUser.setSubscriber(this.state.subscribers);
+              localUser.setNickname(this.state.nickName);
               this.handleSessionConnected();
 
               // Obtain the current video device in use
@@ -189,7 +200,7 @@ export default class OpenViduSession extends Component {
       session: undefined,
       subscribers: [],
       mySessionId: "SessionA",
-      myUserName: "Hompocha" + Math.floor(Math.random() * 100),
+      nickName: 'hompocha',
       mainStreamManager: undefined,
       publisher: undefined,
     });

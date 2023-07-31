@@ -16,19 +16,34 @@
   padding: 0 20px;
 }
 .userName {
-  padding-right: 20px;
+  position: absolute;
+  right: 6vw;
 }
-.menu1{
+.option {
+  cursor: pointer;
   position: fixed;
-  top: -45vh;
-  left: -25vw;
-  transform: scale(60%);
-  z-index: -1;
+  text-align: center;
+  top: 11vh;
+  right: 10vh;
+  width: 45px;
+  height: 170px;
+  font-size: xx-large;
+  writing-mode: vertical-lr;
+  background-color: whitesmoke;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 5px 5px;
+  font-family: "Gowun Dodum", sans-serif;
+  z-index: auto;
 }
-.menu2{
-  position: fixed;
-  top: -45vh;
-  left: 1.53vw;
-  transform: scale(60%);
-  z-index: -1;
+.roomCreateWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  position: absolute;
+  top: 30%;
+  right: 1.5%;
+  background-color: bisque;
+  border-radius: 1vw;
 }

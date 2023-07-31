@@ -55,10 +55,11 @@ const Login: React.FC = () => {
     } else if (password !== confirmPassword) {
       alert("비밀번호가 다릅니다.");
       return;
-    } else if (password.length < 8) {
-      alert("비밀번호를 8자리 이상으로 입력해주세요!");
-      return;
-    }
+    } 
+    // else if (password.length < 8) {
+    //   alert("비밀번호를 8자리 이상으로 입력해주세요!");
+    //   return;
+    // }
     // 중복된 아이디인지 확인
     try {
       const response = await axios.get(

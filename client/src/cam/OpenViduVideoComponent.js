@@ -233,6 +233,18 @@ const OpenViduVideoComponent = (props) => {
           </>
         ) : null
       }
+      {
+        /* 피하기 모드일 때 불러와 지는 캠 */
+        props.mode === "somaek" ? (
+          <>
+            <video
+              className={styles.somaekGameSub}
+              autoPlay={true}
+              ref={videoRef}
+            />
+          </>
+        ) : null
+      }
     </>
   );
 };
