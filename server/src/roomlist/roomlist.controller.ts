@@ -16,11 +16,13 @@ export class RoomlistController {
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],
     );
+    await this.roomService.countUserinRoom(verifiedToken.idx);
     return await this.roomService.createRoom(
       room_name,
       maxPeople,
       verifiedToken.idx,
     );
+    
   }
 
   @Get()
@@ -41,6 +43,7 @@ export class RoomlistController {
     const verifiedToken = this.authService.verify(
       headers.authorization.split('Bearer ')[1],
     );
+    await this.roomService.countUserinRoom(idx);
     await this.roomService.saveUserToRoom(idx, verifiedToken.idx);
   }
 }

@@ -30,7 +30,7 @@ export class RoomlistService {
     roomList.room_name = room_name;
     roomList.room_max = room_max;
     roomList.room_status = 'openGame';
-    roomList.peopleNum = 1;
+    roomList.peopleNum = 0;
     await this.roomListEntityRepository.save(roomList);
     console.log(roomList);
     return room_idx;
@@ -67,7 +67,7 @@ export class RoomlistService {
     const num = await this.roomRepository.countBy({ room_idx: room_idx });
     await this.roomListEntityRepository.update(
       { idx: room_idx },
-      { peopleNum: num },
+      { peopleNum: num+1 },
     );
   }
 }

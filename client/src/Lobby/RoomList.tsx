@@ -9,14 +9,18 @@ interface RoomData {
   room_name: string;
   room_max: number;
   room_state: string;
+  peopleNum: number;
 }
 
-const RoomList = () => {
+interface NickNameProps{
+  nickName:string;
+}
+const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
   const [title, setTitle] = useState<string[]>([""]);
   const [idx, setIdx] = useState("");
-  const [peopleNum, setPeopleNum] = useState(0);
+  const [peopleNum, setPeopleNum] = useState<number[]>([]);
   const [room_max, setRoom_Max] = useState<number[]>([]); // 배열로 변경
-  const [room_state, setRoom_State] = useState("");
+  const [room_state, setRoom_State] = useState<string[]>([""]);
   const navigate = useNavigate();
   const page1Ref = useRef<HTMLDivElement>(null);
 
@@ -28,7 +32,7 @@ const RoomList = () => {
       );
       console.log(response.data);
       alert("방 입장 정보 보내기 성공");
-      navigate("/Room", { state: { roomName: room_name, idx: idx } });
+      navigate("/Room", { state: { roomName: room_name, idx: idx , nickName:nickName} });
     } catch (error) {
       console.error(error);
       alert("방 입장 정보 실패");
@@ -47,6 +51,7 @@ const RoomList = () => {
       console.log(idx);
       setTitle(response.data.map((room: RoomData) => room.room_name));
       setIdx(response.data.map((idx: RoomData) => idx.idx));
+      setPeopleNum(response.data.map((peopleNum: RoomData) => peopleNum.peopleNum));
       setRoom_Max(response.data.map((room_max: RoomData) => room_max.room_max));
       setRoom_State(response.data.map((room_state: RoomData) => room_state.room_state));
 
@@ -68,10 +73,10 @@ const RoomList = () => {
           <div className = {styles.roomList} key={index}>
             <h4>
               방 제목 : {t}
-              현재 참여 인원 : 👤{peopleNum} / {room_max[index]}
+              현재 참여 인원 : 👤{peopleNum[index]} / {room_max[index]}
             </h4>
             <h4>
-              상태 : {room_state}
+              상태 : {room_state[index]}
             </h4>
             <button
             type="submit"
