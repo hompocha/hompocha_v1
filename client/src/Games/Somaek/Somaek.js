@@ -7,8 +7,7 @@ import {Hands, VERSION} from "@mediapipe/hands";
 
 
 const Somaek = (props) => {
-  const [loaded, setLoaded] = useState(true);
-  const [pickObj, setPickObj] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
@@ -19,20 +18,24 @@ const Somaek = (props) => {
     {leftX: 0.75, topY:0.5, lenX:0.5, lenY: 0.5, type:'soju'},
     {leftX: 0.75, topY: 0.73, lenX:0.5, lenY: 0.5, type:'cider'},
   ];
-  const container = {leftX: 0.15, topY: 0.4, lenX:0.2, lenY: 0.2, type:'cup', movable: false};
+  const container = {leftX: 0.15, topY: 0.4, lenX:0.2, lenY: 0.2, type:'cup'};
   const conX = container.leftX;//*1280;
   const conY = container.topY;//*720;
-  // objects.push(newBox);
+
   let score = 0;
   let order = []
   let inBucket = []
-  // let orderPrint = []
+
+  let orderKorean = []
 
   useEffect(() => {
+    const videoNode = videoRef.current;
+    const canvasNode = canvasRef.current;
     if(order.length === 0) {
       order = randomDrink();
+      orderKorean = printDrinks(order);
       console.log(order);
-      printDrinks(order);
+      // printDrinks(order);
     }
     let didCancel = false;
 
@@ -72,10 +75,39 @@ const Somaek = (props) => {
       };
     };
     loadHandsAndCamera();
+
+    const handleLoaded = () => {
+      if (videoNode && canvasNode) {
+        setTimeout(() => {
+          setLoaded(true);
+        }, 5000);}}
+
+    if (videoNode) {
+      videoNode.addEventListener('loadeddata', handleLoaded);
+    }
+    if (canvasNode) {
+      handleLoaded();
+    }
+
+    /* 시그널 받았을때 처리 */
+    props.user.getStreamManager().stream.session.on("signal:somaekScore", (event) => {
+      const data = event.data;
+      let connectionId = event.from.connectionId;
+      let getScore = data.score;
+      console.log("somaekScore received from", connectionId);
+
+    });
+
     return () => {
       didCancel = true;
+
+      if (videoNode) {
+        videoNode.removeEventListener('loadeddata', handleLoaded);
+      }
     };
-  }, [canvasRef.current]);
+
+
+  }, [videoRef.current, canvasRef.current]);
 
   const canvasWidth = 1280;
   const canvasHeight = 720;
@@ -86,7 +118,6 @@ const Somaek = (props) => {
 
     if (results.multiHandLandmarks && results.multiHandedness) {
       for (let index = 0; index < results.multiHandLandmarks.length; index++) {
-        const classification = results.multiHandedness[index];
         const landmarks = results.multiHandLandmarks[index];
 
         objDrag(landmarks, canvasRef);
@@ -100,13 +131,11 @@ const Somaek = (props) => {
       'mak': '../../Drink/mak.png',
       'container':'../../Drink/empty.png',
       'cider': '../../Drink/cider.png'
-      // 필요한 이미지를 계속 추가할 수 있습니다.
     };
-    let currentImageIndex = 0;
+
     const imgElements = [];
 
     const drawSoju = () => {
-      // if(!isMounted) return;
       if(!canvasRef.current) return;
       canvasCtx.current.clearRect(0, 0, canvasCtx.current.canvas.width, canvasCtx.current.canvas.height);
 
@@ -140,14 +169,21 @@ const Somaek = (props) => {
 
       }
 
-      // 그림 그리는 코드는 이곳에 위치...
-
       /* score 출력 부분 */
       canvasCtx.current.save();  // 현재 컨텍스트 상태를 저장
       canvasCtx.current.scale(-1, 1);  // X 축을 따라 스케일을 반전시킴 (좌우 반전)
       canvasCtx.current.fillStyle = 'black';
       canvasCtx.current.font = "30px Arial";
       canvasCtx.current.fillText(`점수: ${score}`, -canvasWidth + 20, 50);
+
+      /* 소주1병, 맥주1명 주문내역 텍스트 캔버스에 출력 */
+      orderKorean.forEach((text, index) => {
+        // canvasCtx.current.strokeStyle = 'black';
+        canvasCtx.current.fillStyle = 'black';  // 텍스트 색상을 검은색으로 설정
+        canvasCtx.current.font = "30px Arial";  // 폰트와 크기를 설정
+        canvasCtx.current.fillText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
+        // canvasCtx.current.strokeText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
+      });
       canvasCtx.current.restore();
 
     };
@@ -207,7 +243,7 @@ const Somaek = (props) => {
         objects[boxIndex].topY = 0.73;
       }
 
-      /* order 안에 있는 음료가 제대로 들어왔을 경우 하나 줄여주고, 아닐경우 무시 */
+      /* order 안에 있는 음료가 제대로 들어왔을 경우 배열 하나 줄여주고, 아닐경우 무시 */
       let index = order.indexOf(objects[boxIndex].type);
       if(index !== -1) { // 있을경우
         order.splice(index, 1);
@@ -218,12 +254,15 @@ const Somaek = (props) => {
       if(order.length === 0){
         order=randomDrink();
         score+=1;
+        sendScoreSignal(score);
         console.log("score = ",score);
+        orderKorean = ["감사합니다!!"]
         /* 버킷에 모든음료가 채워졌을 경우, 1초보여주고 사라짐 */
         setTimeout(() => {
           inBucket=[];
+          orderKorean = printDrinks(order);
         }, 800);
-        printDrinks(order);
+
       }
       console.log(order);
     }
@@ -231,8 +270,6 @@ const Somaek = (props) => {
 
   const objDrag = (landmarks, canvasRef) => {
     let {distance, fingerPick} = fingerDistance(landmarks);
-
-    if (distance > 0.01 ) {setPickObj(false); return;}
 
     for(let boxIndex = 0; boxIndex < objects.length; boxIndex++){
       const {leftX: objLeftX, topY: objTopY, lenX:objXLength, lenY: objYLength} = objects[boxIndex];
@@ -244,11 +281,9 @@ const Somaek = (props) => {
       if (objLeftX+objXLength*(1/2-boxSize) < fingerX && fingerX< (objLeftX+objXLength*(1/2+boxSize))
         && objTopY+objYLength*(1/2-boxSize) < fingerY && fingerY< objTopY+objYLength*(1/2+boxSize)){
         objMove(fingerPick, boxIndex);
-        setPickObj(true);
         return;
       }
     }
-    setPickObj(false);
   }
 
   //손가락 사이의 거리를 계산하는 함수
@@ -272,7 +307,7 @@ const Somaek = (props) => {
 
   function randomDrink(){
     let drinks = []
-    let randomCount = 1+Math.floor(Math.random()*5);
+    let randomCount = 1+Math.floor(Math.random()*4);
     for(let i = 0;i<randomCount;i++){
       let randomValue = Math.random();
       if(randomValue <0.1)
@@ -341,6 +376,28 @@ const Somaek = (props) => {
   // )
 
 
+  const sendScoreSignal = (score) => {
+    if (props.user.getStreamManager().session) {
+
+      const data = {
+        score: score,
+        streamId: props.user.getStreamManager().stream.streamId,
+      };
+      props.user
+        .getStreamManager()
+        .session.signal({
+        data: JSON.stringify(data),
+        to: [],
+        type: "somaekScore",
+      })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
 
   return (
     <>
