@@ -22,4 +22,12 @@ export class RoomController {
     );
     await this.roomService.outRoom(verifiedToken.idx);
   }
+  @Get('/wow')
+  async nickNameToSession(@Headers() headers: any) {
+    const verifiedToken = this.authService.verify(
+      headers.authorization.split('Bearer ')[1],
+    );
+    const nickName = verifiedToken.nickname;
+    return nickName;
+  }
 }

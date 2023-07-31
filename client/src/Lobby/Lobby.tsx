@@ -10,6 +10,7 @@ import RoomCreate from "./RoomCreate";
 
 const Lobby = () => {
   const [loginId, setLoginId] = useState<string>("");
+  const [flag, setFlag] = useState(0);
   const navigate = useNavigate();
   const handleLogout = useCallback(() => {
     localStorage.removeItem("jwtToken");
@@ -19,10 +20,6 @@ const Lobby = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const jwtToken = localStorage.getItem("jwtToken");
-        if (jwtToken) {
-          axios.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
-        }
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/lobby`
         );
@@ -35,8 +32,14 @@ const Lobby = () => {
     fetchData();
   }, []);
 
+  const handleOptionClick = () =>{
+    setFlag((prevFlag) => (prevFlag === 0 ? 1 : 0));
+  }
+
   return (
     <>
+  
+    <div className={styles.option} onClick={handleOptionClick} tabIndex={0} role="button">방 생성</div>
       <div className={styles.lobbyWrap}>
         <div className={styles.lobbyInfo}>
           <RoomList />
@@ -49,9 +52,11 @@ const Lobby = () => {
           <input onClick={handleLogout} type="button" value="로그아웃" />
         </div>
       </div>
-      <div>
-        <RoomCreate/>
-      </div>
+      { flag === 1 && 
+        <div className={styles.roomCreateWrap}>
+          <RoomCreate/>
+        </div>
+      }
     </>
   );
 };
