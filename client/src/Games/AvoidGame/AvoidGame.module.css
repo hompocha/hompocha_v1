@@ -25,31 +25,31 @@ h1 {
   transform: rotateY(180deg);
   position: fixed;
   top: 10vh;
-  left: 3vw;
+  left: 19vw;
 }
 .avoidGameSub2 {
   transform: rotateY(180deg);
   position: fixed;
   top: 39.25vh;
-  left: 3vw;
+  left: 19vw;
 }
 .avoidGameSub3 {
   transform: rotateY(180deg);
   position: fixed;
   top: 68.5vh;
-  left: 3vw;
+  left: 19vw;
 }
 .avoidGameSub4 {
   transform: rotateY(180deg);
   position: fixed;
   top: 10vh;
-  left: 81vw;
+  left: 97vw;
 }
 .avoidGameSub5 {
   transform: rotateY(180deg);
   position: fixed;
   top: 40vh;
-  left: 81vw;
+  left: 97vw;
 }
 
 .userNick1 {

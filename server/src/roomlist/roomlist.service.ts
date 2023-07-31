@@ -67,7 +67,7 @@ export class RoomlistService {
     const num = await this.roomRepository.countBy({ room_idx: room_idx });
     await this.roomListEntityRepository.update(
       { idx: room_idx },
-      { peopleNum: num },
+      { peopleNum: num+1 },
     );
   }
 }

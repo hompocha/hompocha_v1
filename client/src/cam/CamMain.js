@@ -34,7 +34,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       } else if (data === "movingDuck") {
         enterMovingDuck();
       } else if (data === "speechGame") {
-        enterSpeech();
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
             status: "ingame",
@@ -44,7 +43,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           alert("재 로그인 해야합니다~!");
           navigate("/lobby");
         }
-      } else if (data === "somaek") {
+        enterSpeech();
+      } else if (data === "somaek"){
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
             status: "ingame",
@@ -70,16 +70,15 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
       }
-      if (mode === undefined) {
-        try {
-          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-            status: "openGame",
-            room_idx: idx,
-          });
-        } catch (error) {
-          alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
-        }
+
+      if(mode === undefined){
+      //   try {
+      //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
+      //   } catch(error) {
+      //     alert("재 로그인 해야합니다~!")
+      //     navigate("/lobby");
+      //   }
+      // }
       }
     });
   }, []);
