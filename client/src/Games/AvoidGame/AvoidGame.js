@@ -3,6 +3,8 @@ import { Camera } from "@mediapipe/camera_utils";
 import { Results, Hands, VERSION } from "@mediapipe/hands";
 import styles from "./AvoidGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
+import useSound from "../../useSound";
+import BGM from "../../sounds/avoidBGM.mp3";
 
 function newObj(src, width, height) {
   this.position = { x: 0, y: 0 };
@@ -19,7 +21,7 @@ const defaultGameState = {
   roomId: "room",
   user: "connectionId",
   condition: {
-    objSize:0.01,
+    objSize: 0.01,
     objDropHeight: 0.08,
     ground: 0.98,
     objSpeed: 0.05,
@@ -59,19 +61,23 @@ const AvoidGame = (props) => {
   const hpLeft = useRef(100);
 
   const subscribers = props.user.subscribers;
-  const subscriberState= {};
+  const subscriberState = {};
+
+  /* 배경음악 */
+  useSound(BGM, 1);
 
   /* 데이터 수신해서 반영 */
   useEffect(() => {
-    if (props.user.getStreamManager().stream.session) { 
+    if (props.user.getStreamManager().stream.session) {
       props.user
-      .getStreamManager()
-      .stream.session.on("signal:avoidgame_state", (event) => {
-        const data = JSON.parse(event.data);
-        console.log(subscribers[0]);
-        subscriberState[`${data.currentGameState.user}`] = data.currentGameState;
-        console.log(subscriberState);
-      });
+        .getStreamManager()
+        .stream.session.on("signal:avoidgame_state", (event) => {
+          const data = JSON.parse(event.data);
+          console.log(subscribers[0]);
+          subscriberState[`${data.currentGameState.user}`] =
+            data.currentGameState;
+          console.log(subscriberState);
+        });
     }
   }, [props.user.getStreamManager().stream.session]);
 
@@ -140,9 +146,9 @@ const AvoidGame = (props) => {
     gameState.current.user = props.user.connectionId;
 
     canvasCtx.current = canvasRef.current.getContext("2d");
-    sendInterval.current = setInterval(()=>{
+    sendInterval.current = setInterval(() => {
       sendGameState(gameState.current);
-    },1000/20);
+    }, 1000 / 20);
 
     objInterval.current = setObjInterval(
       1000 / gameState.current.condition.objIntervalFrame
@@ -177,7 +183,7 @@ const AvoidGame = (props) => {
 
   const sendGameState = (currentGameState) => {
     if (props.user) {
-      const stateToSend = JSON.stringify({currentGameState});
+      const stateToSend = JSON.stringify({ currentGameState });
       props.user
         .getStreamManager()
         .session.signal({
@@ -192,7 +198,7 @@ const AvoidGame = (props) => {
           console.error(error);
         });
     }
-  }
+  };
 
   /* 전체 게임을 그림 */
   const drawGame = (can_ref, can_ctx, gameState) => {
@@ -230,7 +236,13 @@ const AvoidGame = (props) => {
 
     can_ctx.beginPath();
     can_ctx.fillStyle = obj.isAvoid ? "red" : "green";
-    can_ctx.arc(obj.position.x * w, obj.position.y * h, gameState.current.condition.objSize*w, 0, 2 * Math.PI);
+    can_ctx.arc(
+      obj.position.x * w,
+      obj.position.y * h,
+      gameState.current.condition.objSize * w,
+      0,
+      2 * Math.PI
+    );
     can_ctx.fill();
     can_ctx.closePath();
   };
@@ -264,7 +276,10 @@ const AvoidGame = (props) => {
           gameState.player.position.x + gameState.player.width / 2
       ) {
         if (obj.isAvoid) {
-          console.log("diediediediediediediediediediediedie", gameState.hpBar.hpLeft.current);
+          console.log(
+            "diediediediediediediediediediediedie",
+            gameState.hpBar.hpLeft.current
+          );
           gameState.hpBar.hpLeft -= 3;
           if (gameState.hpBar.hpLeft < 0) {
             setGameEnd(true);
@@ -284,8 +299,9 @@ const AvoidGame = (props) => {
         }
         gameState.objects.splice(i, 1);
       }
-      if (obj.position.y > gameState.condition.ground){
-      gameState.objects.splice(i, 1);}
+      if (obj.position.y > gameState.condition.ground) {
+        gameState.objects.splice(i, 1);
+      }
       obj.position.y = obj.position.y + gameState.condition.objSpeed;
     }
   };
