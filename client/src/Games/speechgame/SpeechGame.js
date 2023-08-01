@@ -72,7 +72,7 @@ const SpeechGame = (props) => {
         console.log("애가 바껴야함 : ", id);
         setRandomUser(id);
         sentenceState = sentence;
-        // setStopTime(sendStopTime)
+        setStopTime(sendStopTime);
       });
 
     props.user
@@ -83,26 +83,27 @@ const SpeechGame = (props) => {
       });
   }, [props.user, randomUser, stopTime]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setTimerExpired(true);
-  //   }, stopTime);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   }
-  // }, [stopTime]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimerExpired(true);
+    }, stopTime);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [stopTime]);
 
-  // useEffect(() => {
-  //   if(timerExpired) {
-  //     const timer = setTimeout(() => {
-  //       setFirstTime(false);
-  //       props.end(undefined);
-  //     }, 2000) ;
+  useEffect(() => {
+    if (timerExpired) {
+      const timer = setTimeout(() => {
+        setFirstTime(false);
+        props.end(undefined);
+      }, 2000);
 
-  //     return () => {
-  //       clearTimeout(timer);}
-  //   }
-  // }, [timerExpired, props]);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [timerExpired, props]);
 
   /*================================*/
   /*signal 보내는데 맞춘사람 id보냄*/
@@ -175,7 +176,7 @@ const SpeechGame = (props) => {
     const firstMembers = [...props.user.subscribers];
     firstMembers.push(props.user.streamManager);
     return firstMembers.filter(
-      (subscriber) => subscriber.stream.connection.connectionId !== wantId
+      (subscriber) => subscriber.stream.connection.connectionId !== wantId,
     );
   }
   // /* 이거 추가하면 될꺼같긴한데 */
@@ -192,7 +193,6 @@ const SpeechGame = (props) => {
   // /*이렇게 하면 리스트 만들어지고 맨앞은 random 이고 리스트 뒤에는 남는애들*/
 
   /*================================================*/
-
 
   return (
     <>
