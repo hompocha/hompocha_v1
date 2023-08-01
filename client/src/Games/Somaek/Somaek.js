@@ -10,13 +10,13 @@ const Somaek = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
-
   const subscribers = props.user.subscribers;
-  let scores = [];
+  const scores = {};
   for (let i = 0; i < subscribers.length; i++) {
     const conId = subscribers[i].stream.connection.connectionId;
-    scores.push({ [conId]: 0 });
+    scores[props.conToNick[conId]] = 0;
   }
+  scores[props.user.getNickname()] = 0;
 
   let objects = [
     { leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5, type: "beer" },
@@ -37,7 +37,6 @@ const Somaek = (props) => {
   let score = 0;
   let order = [];
   let inBucket = [];
-
   let orderKorean = [];
 
   useEffect(() => {
@@ -47,7 +46,6 @@ const Somaek = (props) => {
       order = randomDrink();
       orderKorean = printDrinks(order);
       console.log(order);
-      // printDrinks(order);
     }
     let didCancel = false;
 
@@ -111,12 +109,13 @@ const Somaek = (props) => {
         const data = JSON.parse(event.data);
         let connectionId = event.from.connectionId;
         let getScore = data.score;
-        console.log(
-          "somaekScore received from",
-          props.conToNick[connectionId],
-          "score : ",
-          getScore,
-        );
+        scores[props.conToNick[connectionId]] = getScore;
+        // console.log(
+        //   "보낸사람: ",
+        //   props.conToNick[connectionId],
+        //   "score : ",
+        //   getScore,
+        // );
       });
 
     return () => {
@@ -209,6 +208,19 @@ const Somaek = (props) => {
         canvasCtx.current.fillText(text, -200, 200 + (index + 1) * 30); // 텍스트를 캔버스에 쓰기
         // canvasCtx.current.strokeText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
       });
+
+      /* 점수가 높은사람부터 출력 */
+      Object.entries(scores)
+        .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
+        .forEach(([key, value], index) => {
+          /* 내점수는 초록색으로 표시 */
+          if (key === props.user.getNickname())
+            canvasCtx.current.fillStyle = "green";
+          else canvasCtx.current.fillStyle = "black";
+          const scoreText = `${key}: ${value}`;
+          const y = 400 + (index + 1) * 30;
+          canvasCtx.current.fillText(scoreText, -200, y);
+        });
       canvasCtx.current.restore();
     };
     const loadImages = async () => {
@@ -230,7 +242,7 @@ const Somaek = (props) => {
     };
 
     loadImages();
-    canvasCtx.current.restore();
+    // canvasCtx.current.restore();
   };
 
   const objMove = (fingerpick, boxIndex) => {
@@ -456,14 +468,23 @@ const Somaek = (props) => {
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
               <>
-                <div className={styles[`somaekGameSub${index + 1}`]}>
+                <div
+                  className={`${styles[`somaekGameSub${index + 1}`]} ${
+                    !loaded && styles.hidden
+                  }`}
+                >
                   <OpenViduVideoComponent
                     mode={"somaek"}
                     streamManager={subscriber}
                   />
                 </div>
-                <div className={styles[`userNick${index + 1}`]}>
-                  닉네임이 들어갈 자리
+                <div
+                  className={`${styles[`userNick${index + 1}`]} ${
+                    !loaded && styles.hidden
+                  }`}
+                >
+                  닉네임 :
+                  {props.conToNick[subscriber.stream.connection.connectionId]}
                 </div>
               </>
             ))}
