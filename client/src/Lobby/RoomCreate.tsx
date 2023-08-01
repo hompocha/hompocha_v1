@@ -29,7 +29,7 @@ const RoomCreate: React.FC<NickNameProps> = ({ nickName }) => {
     const radioItems = [];
     for (let i = 2; i <= 6; i++) {
       radioItems.push(
-        <>
+        <React.Fragment key={`radio-item-${i}`}>
           <label htmlFor={`${i}`}>{i}</label>
           <input
             type="radio"
@@ -39,7 +39,7 @@ const RoomCreate: React.FC<NickNameProps> = ({ nickName }) => {
             checked={maxPeople === i}
             onChange={(e) => setMaxPeople(Number(e.target.value))}
           />
-        </>
+        </React.Fragment>
       );
     }
     return <>{radioItems}</>;
