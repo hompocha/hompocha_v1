@@ -1,13 +1,14 @@
 import { Howl } from "howler";
 
-function useEffectSound(src, volume = 1) {
+function effectSound(src) {
   let sound;
   const soundInject = (src) => {
     sound = new Howl({ src });
-    sound.volume(volume);
+    sound.volume(1);
+    sound.play();
   };
   soundInject(src);
   return sound;
 }
 
-export default useEffectSound;
+export { effectSound };

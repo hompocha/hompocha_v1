@@ -1,4 +1,9 @@
 declare module "*.wav" {
   const value: string;
-  export default value;
+  export { value };
+}
+
+declare module "*.mp3" {
+  const value: string;
+  export { value };
 }
