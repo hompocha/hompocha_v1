@@ -15,7 +15,15 @@
 img{
   width: 500px;
   height: 400px;
-  float: left;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 }
 .page {
   transform-origin: left center;

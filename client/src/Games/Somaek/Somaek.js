@@ -275,13 +275,14 @@ const Somaek = (props) => {
       .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
       .forEach(([key, value], index) => {
         /* 내점수는 초록색으로 표시 */
-        if (key === props.user.getNickname())
+        if (key == props.user.getNickname())
           can_ctx.fillStyle = "green";
         else can_ctx.fillStyle = "black";
         const scoreText = `${key}: ${value}`;
         const y = 400 + (index + 1) * 30;
         can_ctx.fillText(scoreText, -200, y);
       });
+
     can_ctx.restore();
   };
 
