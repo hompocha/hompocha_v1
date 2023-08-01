@@ -44,7 +44,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           navigate("/lobby");
         }
         enterSpeech();
-      } else if (data === "somaek"){
+      } else if (data === "somaek") {
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
             status: "ingame",
@@ -71,14 +71,14 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         enterMainRoom();
       }
 
-      if(mode === undefined){
-      //   try {
-      //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
-      //   } catch(error) {
-      //     alert("재 로그인 해야합니다~!")
-      //     navigate("/lobby");
-      //   }
-      // }
+      if (mode === undefined) {
+        //   try {
+        //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
+        //   } catch(error) {
+        //     alert("재 로그인 해야합니다~!")
+        //     navigate("/lobby");
+        //   }
+        // }
       }
     });
   }, []);
@@ -283,6 +283,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
             user={user}
             end={sendGameTypeSignal}
             mode={mode}
+            conToNick={conToNick}
           />
           <form className={styles.ReturnRoom}>
             <input
