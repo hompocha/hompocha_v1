@@ -206,26 +206,25 @@ export default class OpenViduSession extends Component {
     );
     console.log(this.state);
   }
-  leaveSession() {
-    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-
+  leaveSession = () => {
     const mySession = this.state.session;
 
     if (mySession) {
+      // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
       mySession.disconnect();
     }
 
     // Empty all properties...
-    this.OV = null;
     this.setState({
       session: undefined,
       subscribers: [],
       mySessionId: "SessionA",
-      nickName: 'hompocha',
+      nickName: "hompocha",
       mainStreamManager: undefined,
       publisher: undefined,
     });
-  }
+  };
+
 
   /* Session 생성, 토큰 생성 */
   async getToken() {

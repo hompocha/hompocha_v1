@@ -20,6 +20,20 @@ export class RoomService {
     );
   }
   async outRoom(user_idx) {
+    const room = await this.roomRepository.findOne({
+      where: { user_idx: user_idx },
+    });
+    if (
+      await this.roomRepository.findOne({ where: { room_idx: room.room_idx } })
+    ) {
+      const num = await this.roomRepository.countBy({
+        room_idx: room.room_idx,
+      });
+      await this.roomListEntityRepository.update(
+        { idx: room.room_idx },
+        { peopleNum: num - 1 },
+      );
+    }
     await this.roomRepository.delete({
       user_idx: user_idx,
     });
