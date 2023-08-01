@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import UserModel from "../models/user-model";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import UseSpeechRecognition from "../voice/useSpeechRecognition";
+import { createBrowserHistory} from "history";
+
 
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`;
 let localUser = new UserModel();
+export const history = createBrowserHistory();
 
 export default class OpenViduSession extends Component {
   constructor(props) {
@@ -23,36 +25,43 @@ export default class OpenViduSession extends Component {
     };
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
-    this.onbeforeunload = this.onbeforeunload.bind(this);
+    // this.onbeforeunload = this.onbeforeunload.bind(this);
     this.handleSessionConnected = this.handleSessionConnected.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.getSessionNickname = this.getSessionNickname.bind(this);
+    this.leavePage = this.leavePage.bind(this);
     // this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
     // this.sendSignal = this.sendSignal.bind(this);
     // this.sendSpeech = this.sendSpeech.bind(this);
   }
   componentDidMount() {
-    window.addEventListener("beforeunload", this.onbeforeunload);
+    window.addEventListener("beforeunload", this.leavePage);
+    this.unlistenHistoryEvent = history.listen(({ action }) => {
+      if (action === "POP") {
+        this.leavePage();
+      }
+    });
     this.joinSession();
   }
   componentWillUnmount() {
     /*윈도우 창 끄는거임*/
-    window.removeEventListener("beforeunload", this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.leavePage);
+    this.unlistenHistoryEvent();
     this.leaveSession();
   }
-  onbeforeunload(event) {
+  leavePage = () => {
     try {
-      const token = localStorage.getItem('jwtToken');
-      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`,{
-        headers: {
-          Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
-        },});
-    } catch (error){
-      console.log(error);
+      const token = localStorage.getItem("jwtToken");
+      axios.get(
+        `${process.env.REACT_APP_API_URL}/room/roomout`, {headers: {
+            Authorization: `Bearer ${token}`,},});
+    } catch (error) {
+      console.error(error);
     }
-    if(this.state.session)
+    if (this.state.session) {
       this.leaveSession();
-  }
+    }
+  };
   handleSessionConnected = () => {
     this.setState({ sessionConnected: true });
     this.props.onSessionConnect(localUser);

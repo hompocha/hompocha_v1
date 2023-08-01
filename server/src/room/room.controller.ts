@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
 import { SavestatusDto } from './dto/savestatus.dto';
 import { RoomService } from './room.service';
 import { AuthService } from '../auth/auth.service';
