@@ -12,7 +12,6 @@ const objectsDefault = [
   { leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, type: "cider" },
 ];
 
-
 /* 물체를 그리는 부분 */
 const images = {
   soju: "../../Drink/soju.png",
@@ -30,8 +29,6 @@ const Somaek = (props) => {
   const objectRef = useRef(objectsDefault);
   const signalInterval = useRef(null);
 
-
-
   const imgElements = [];
   const subscribers = props.user.subscribers;
   const scores = {};
@@ -41,14 +38,11 @@ const Somaek = (props) => {
   }
   scores[props.user.getNickname()] = 0;
 
-
-
   const states = {};
   for (let i = 0; i < subscribers.length; i++) {
     const conId = subscribers[i].stream.connection.connectionId;
     states[props.conId] = undefined;
   }
-
 
   const container = {
     leftX: 0.15,
@@ -65,16 +59,14 @@ const Somaek = (props) => {
   let inBucket = [];
   let orderKorean = [];
 
-
-  useEffect(()=>{
-    signalInterval.current = setInterval(()=>{
+  useEffect(() => {
+    signalInterval.current = setInterval(() => {
       sendStateSignal();
     }, 1000);
-    return (()=>{
+    return () => {
       clearInterval(signalInterval.current);
-    });
+    };
   }, []);
-
 
   useEffect(() => {
     const videoNode = videoRef.current;
@@ -146,13 +138,16 @@ const Somaek = (props) => {
         const data = JSON.parse(event.data);
         let connectionId = event.from.connectionId;
         let getScore = data.score;
+        /* 원래코드 */
+        // scores[props.conToNick[connectionId]] = getScore;
+
+        /* 먼저 그 점수에 도달한 사람이 있으면 0.1을 깎아서 저장 */
+        while (Object.values(scores).includes(getScore)) {
+          getScore -= 0.1;
+          getScore = Math.round(getScore * 10) / 10; // 자바스크립트 부동소수점 오류잡으려면 이런식으로 하라는데?
+        }
+
         scores[props.conToNick[connectionId]] = getScore;
-        // console.log(
-        //   "보낸사람: ",
-        //   props.conToNick[connectionId],
-        //   "score : ",
-        //   getScore,
-        // );
       });
 
     props.user
@@ -162,7 +157,7 @@ const Somaek = (props) => {
         let connectionId = event.from.connectionId;
         let getState = data.state;
         states[connectionId] = getState;
-        console.log(states)
+        console.log(states);
       });
 
     return () => {
@@ -188,12 +183,10 @@ const Somaek = (props) => {
       }
     }
 
-
-    
     loadImages(canvasRef.current, canvasCtx.current, objectRef.current);
     // canvasCtx.current.restore();
   };
-  
+
   const loadImages = async (can_ref, can_ctx, objs) => {
     try {
       for (let type in images) {
@@ -215,12 +208,7 @@ const Somaek = (props) => {
   const drawSoju = (can_ref, can_ctx, objs) => {
     // if(!isMounted) return;
     if (!can_ref) return;
-    can_ctx.clearRect(
-      0,
-      0,
-      can_ctx.canvas.width,
-      can_ctx.canvas.height,
-    );
+    can_ctx.clearRect(0, 0, can_ctx.canvas.width, can_ctx.canvas.height);
 
     for (let i = 0; i < objs.length; i++) {
       let boxLocation = objs[i];
@@ -275,10 +263,11 @@ const Somaek = (props) => {
       .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
       .forEach(([key, value], index) => {
         /* 내점수는 초록색으로 표시 */
-        if (key == props.user.getNickname())
-          can_ctx.fillStyle = "green";
+        if (key == props.user.getNickname()) can_ctx.fillStyle = "green";
         else can_ctx.fillStyle = "black";
-        const scoreText = `${key}: ${value}`;
+        /* 소수점 없이 점수 올림 해서 출력 */
+        const upValue = Math.ceil(value);
+        const scoreText = `${key}: ${upValue}`;
         const y = 400 + (index + 1) * 30;
         can_ctx.fillText(scoreText, -200, y);
       });
@@ -290,8 +279,10 @@ const Somaek = (props) => {
     if (!canvasRef) return;
 
     const { x: fingerX, y: fingerY, z: _ } = fingerpick;
-    objectRef.current[boxIndex].leftX = fingerX - objectRef.current[boxIndex].lenX / 2;
-    objectRef.current[boxIndex].topY = fingerY - objectRef.current[boxIndex].lenY / 2;
+    objectRef.current[boxIndex].leftX =
+      fingerX - objectRef.current[boxIndex].lenX / 2;
+    objectRef.current[boxIndex].topY =
+      fingerY - objectRef.current[boxIndex].lenY / 2;
     /* 점수를 위한 object x,y 위치 */
     const objX = objectRef.current[boxIndex].leftX;
     const objY = objectRef.current[boxIndex].topY;
@@ -481,12 +472,11 @@ const Somaek = (props) => {
     }
   };
 
-
   const sendStateSignal = (score) => {
     if (props.user.getStreamManager().session) {
       const data = {
         streamId: props.user.getStreamManager().stream.streamId,
-        state: objectRef.current
+        state: objectRef.current,
       };
       props.user
         .getStreamManager()
