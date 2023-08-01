@@ -83,26 +83,26 @@ const SpeechGame = (props) => {
       });
   }, [props.user, randomUser, stopTime]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setTimerExpired(true);
-  //   }, stopTime);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   }
-  // }, [stopTime]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimerExpired(true);
+    }, stopTime);
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [stopTime]);
 
-  // useEffect(() => {
-  //   if(timerExpired) {
-  //     const timer = setTimeout(() => {
-  //       setFirstTime(false);
-  //       props.end(undefined);
-  //     }, 2000) ;
+  useEffect(() => {
+    if(timerExpired) {
+      const timer = setTimeout(() => {
+        setFirstTime(false);
+        props.end(undefined);
+      }, 2000) ;
 
-  //     return () => {
-  //       clearTimeout(timer);}
-  //   }
-  // }, [timerExpired, props]);
+      return () => {
+        clearTimeout(timer);}
+    }
+  }, [timerExpired, props]);
 
   /*================================*/
   /*signal 보내는데 맞춘사람 id보냄*/
