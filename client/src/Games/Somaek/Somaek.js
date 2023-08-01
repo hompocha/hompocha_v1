@@ -214,7 +214,7 @@ const Somaek = (props) => {
         .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
         .forEach(([key, value], index) => {
           /* 내점수는 초록색으로 표시 */
-          if (key === props.user.getNickname())
+          if (key == props.user.getNickname())
             canvasCtx.current.fillStyle = "green";
           else canvasCtx.current.fillStyle = "black";
           const scoreText = `${key}: ${value}`;

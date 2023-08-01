@@ -95,19 +95,23 @@ export default function ChatComponent(props) {
                     ? styles.left
                     : styles.right
                 }`
-                /* "message" +
-                (data.connectionId !== props.user.getConnectionId()
-                  ? " left"
-                  : " right") */
               }
             >
               <div className={styles.msgDetail}>
                 <div className={styles.msgContent}>
                   <span className={styles.spanTriangle} />
                   <p className={styles.text}>
-                    {data.connectionId !== props.user.getConnectionId()
-                      ? `${data.nickName}: ${data.message}`
-                      : `${data.message}: ${data.nickName}`}
+                    {data.connectionId !== props.user.getConnectionId() ? (
+                      <>
+                        <span className={styles.nickName}>{data.nickName}</span>{' '}
+                        <span className={styles.messageContent}>{data.message}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.messageContent}>{data.message}</span>{' '}
+                        <span className={styles.nickName}>{data.nickName}</span>
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
