@@ -9,20 +9,31 @@ export default function ChatComponent(props) {
 
   useEffect(() => {
     if (props.sessionConnected) {
+      const onChatSignal = (event) => {
+        const data = JSON.parse(event.data);
+        console.log("set Message");
+        setMessageList((prevMessageList) => [
+          ...prevMessageList,
+          {
+            connectionId: event.from.connectionId,
+            message: data.message,
+            nickName: data.nickName,
+          },
+        ]);
+        scrollToBottom();
+      };
+  
       props.user
         .getStreamManager()
-        .stream.session.on("signal:chat", (event) => {
-          const data = JSON.parse(event.data);
-          console.log("set Message");
-          setMessageList((prevMessageList) => [
-            ...prevMessageList,
-            { connectionId: event.from.connectionId, message: data.message },
-          ]);
-          scrollToBottom();
-        });
+        .stream.session.on("signal:chat", onChatSignal);
+      return () => {
+        props.user
+          .getStreamManager()
+          .stream.session.off("signal:chat", onChatSignal);
+      };
     }
-  }, [props.sessionConnected]);
-  // , props.user]);
+  }, [props.sessionConnected, props.user]);
+  
 
   const handleChange = (event) => {
     setMessage(event.target.value);
@@ -42,7 +53,9 @@ export default function ChatComponent(props) {
         const data = {
           message: messageStr,
           streamId: props.user.getStreamManager().stream.streamId,
+          nickName: props.user.getNickname(),
         };
+        console.log(props.nickName);
         props.user.getStreamManager().stream.session.signal({
           data: JSON.stringify(data),
           type: "chat",
@@ -82,16 +95,24 @@ export default function ChatComponent(props) {
                     ? styles.left
                     : styles.right
                 }`
-                /* "message" +
-                (data.connectionId !== props.user.getConnectionId()
-                  ? " left"
-                  : " right") */
               }
             >
               <div className={styles.msgDetail}>
                 <div className={styles.msgContent}>
                   <span className={styles.spanTriangle} />
-                  <p className={styles.text}>{data.message}</p>
+                  <p className={styles.text}>
+                    {data.connectionId !== props.user.getConnectionId() ? (
+                      <>
+                        <span className={styles.nickName}>{data.nickName}</span>{' '}
+                        <span className={styles.messageContent}>{data.message}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.messageContent}>{data.message}</span>{' '}
+                        <span className={styles.nickName}>{data.nickName}</span>
+                      </>
+                    )}
+                  </p>
                 </div>
               </div>
             </div>

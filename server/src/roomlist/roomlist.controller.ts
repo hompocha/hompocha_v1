@@ -11,25 +11,24 @@ export class RoomlistController {
     private authService: AuthService,
   ) {}
   @Post('/create')
-  async createRoom(@Body() dto: CreateRoomDto, @Headers() headers: any) {
+  async createRoom(
+    @Body() dto: CreateRoomDto,
+    @Headers('authorization') headers: any,
+  ) {
     const { room_name, maxPeople } = dto;
-    const verifiedToken = this.authService.verify(
-      headers.authorization.split('Bearer ')[1],
-    );
-    await this.roomService.countUserinRoom(verifiedToken.idx);
+    const verifiedToken = this.authService.verify(headers.split('Bearer ')[1]);
+
     return await this.roomService.createRoom(
       room_name,
       maxPeople,
       verifiedToken.idx,
     );
-    
   }
 
   @Get()
-  async getNickname(@Headers() headers: any) {
-    const verifiedToken = this.authService.verify(
-      headers.authorization.split('Bearer ')[1],
-    );
+  async getNickname(@Headers('authorization') headers: any) {
+    const verifiedToken = this.authService.verify(headers.split('Bearer ')[1]);
+    console.log(verifiedToken.nickname);
     return verifiedToken.nickname;
   }
 
@@ -38,13 +37,12 @@ export class RoomlistController {
     return await this.roomService.findAllRooms();
   }
   @Post('/roomInfo')
-
-  async saveUserToRoom(@Body() roomDto: ToroomDto, @Headers() headers: any) {
+  async saveUserToRoom(
+    @Body() roomDto: ToroomDto,
+    @Headers('authorization') headers: any,
+  ) {
     const { idx } = roomDto;
-
-    const verifiedToken = this.authService.verify(
-      headers.authorization.split('Bearer ')[1],
-    );
+    const verifiedToken = this.authService.verify(headers.split('Bearer ')[1]);
     await this.roomService.countUserinRoom(idx);
     await this.roomService.saveUserToRoom(idx, verifiedToken.idx);
   }

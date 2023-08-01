@@ -63,8 +63,10 @@ const AvoidGame = (props) => {
   const subscribers = props.user.subscribers;
   const subscriberState = {};
 
+
   /* 배경음악 */
   useSound(BGM, 1);
+
 
   /* 데이터 수신해서 반영 */
   useEffect(() => {
@@ -151,14 +153,14 @@ const AvoidGame = (props) => {
     }, 1000 / 20);
 
     objInterval.current = setObjInterval(
-      1000 / gameState.current.condition.objIntervalFrame
+      1000 / gameState.current.condition.objIntervalFrame,
     );
 
     speedInterval.current = setInterval(() => {
       clearInterval(objInterval.current);
       gameState.current.condition.objIntervalFrame += 5;
       objInterval.current = setObjInterval(
-        1000 / gameState.current.condition.objIntervalFrame
+        1000 / gameState.current.condition.objIntervalFrame,
       );
     }, 7 * 1000);
 
@@ -225,7 +227,7 @@ const AvoidGame = (props) => {
       (player.position.x - player.width / 2) * w,
       (player.position.y - player.height / 2) * h,
       player.width * w,
-      player.height * h
+      player.height * h,
     );
   };
 
@@ -241,7 +243,7 @@ const AvoidGame = (props) => {
       obj.position.y * h,
       gameState.current.condition.objSize * w,
       0,
-      2 * Math.PI
+      2 * Math.PI,
     );
     can_ctx.fill();
     can_ctx.closePath();
@@ -255,7 +257,7 @@ const AvoidGame = (props) => {
       gameState.current.hpBar.location.x * w,
       gameState.current.hpBar.location.y * h,
       (hp / 100) * gameState.current.hpBar.length * w,
-      gameState.current.hpBar.height * h
+      gameState.current.hpBar.height * h,
     );
   };
 
@@ -278,7 +280,7 @@ const AvoidGame = (props) => {
         if (obj.isAvoid) {
           console.log(
             "diediediediediediediediediediediedie",
-            gameState.hpBar.hpLeft.current
+            gameState.hpBar.hpLeft.current,
           );
           gameState.hpBar.hpLeft -= 3;
           if (gameState.hpBar.hpLeft < 0) {
@@ -293,7 +295,7 @@ const AvoidGame = (props) => {
           console.log(
             obj.isAvoid,
             "yumyumyumyumyumyumyumyumyumyumyumyum",
-            gameState.hpBar.hpLeft
+            gameState.hpBar.hpLeft,
           );
           gameState.hpBar.hpLeft += 5;
         }
