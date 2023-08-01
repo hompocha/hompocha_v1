@@ -2,8 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./CamTest.module.scss";
 import { event } from "jquery";
+import BGM from "../sounds/roomBGM.wav";
+import useSound from "../useSound";
 
 const CamTest = (props: any) => {
+  /* 배경음악 */
+  useSound(BGM, 1);
   interface Props {
     index: number;
     radius: number;

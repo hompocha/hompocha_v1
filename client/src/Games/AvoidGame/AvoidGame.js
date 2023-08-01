@@ -3,6 +3,8 @@ import { Camera } from "@mediapipe/camera_utils";
 import { Results, Hands, VERSION } from "@mediapipe/hands";
 import styles from "./AvoidGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
+import useSound from "../../useSound";
+import BGM from "../../sounds/avoidBGM.mp3";
 
 function newObj(src, width, height) {
   this.position = { x: 0, y: 0 };
@@ -60,6 +62,11 @@ const AvoidGame = (props) => {
 
   const subscribers = props.user.subscribers;
   const subscriberState = {};
+
+
+  /* 배경음악 */
+  useSound(BGM, 1);
+
 
   /* 데이터 수신해서 반영 */
   useEffect(() => {
