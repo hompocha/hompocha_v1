@@ -5,11 +5,34 @@ import { Camera } from "@mediapipe/camera_utils";
 import { Hands, VERSION } from "@mediapipe/hands";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 
+const objectsDefault = [
+  { leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5, type: "beer" },
+  { leftX: 0.75, topY: 0.28, lenX: 0.5, lenY: 0.5, type: "mak" },
+  { leftX: 0.75, topY: 0.5, lenX: 0.5, lenY: 0.5, type: "soju" },
+  { leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, type: "cider" },
+];
+
+
+/* 물체를 그리는 부분 */
+const images = {
+  soju: "../../Drink/soju.png",
+  beer: "../../Drink/beer.png",
+  mak: "../../Drink/mak.png",
+  container: "../../Drink/empty.png",
+  cider: "../../Drink/cider.png",
+};
+
 const Somaek = (props) => {
   const [loaded, setLoaded] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
+  const objectRef = useRef(objectsDefault);
+  const signalInterval = useRef(null);
+
+
+
+  const imgElements = [];
   const subscribers = props.user.subscribers;
   const scores = {};
   for (let i = 0; i < subscribers.length; i++) {
@@ -18,12 +41,15 @@ const Somaek = (props) => {
   }
   scores[props.user.getNickname()] = 0;
 
-  let objects = [
-    { leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5, type: "beer" },
-    { leftX: 0.75, topY: 0.28, lenX: 0.5, lenY: 0.5, type: "mak" },
-    { leftX: 0.75, topY: 0.5, lenX: 0.5, lenY: 0.5, type: "soju" },
-    { leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, type: "cider" },
-  ];
+
+
+  const states = {};
+  for (let i = 0; i < subscribers.length; i++) {
+    const conId = subscribers[i].stream.connection.connectionId;
+    states[props.conId] = undefined;
+  }
+
+
   const container = {
     leftX: 0.15,
     topY: 0.4,
@@ -38,6 +64,17 @@ const Somaek = (props) => {
   let order = [];
   let inBucket = [];
   let orderKorean = [];
+
+
+  useEffect(()=>{
+    signalInterval.current = setInterval(()=>{
+      sendStateSignal();
+    }, 1000);
+    return (()=>{
+      clearInterval(signalInterval.current);
+    });
+  }, []);
+
 
   useEffect(() => {
     const videoNode = videoRef.current;
@@ -118,6 +155,16 @@ const Somaek = (props) => {
         // );
       });
 
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:somaekState", (event) => {
+        const data = JSON.parse(event.data);
+        let connectionId = event.from.connectionId;
+        let getState = data.state;
+        states[connectionId] = getState;
+        console.log(states)
+      });
+
     return () => {
       didCancel = true;
       props.user.getStreamManager().stream.session.off("signal:somaekScore");
@@ -140,120 +187,114 @@ const Somaek = (props) => {
         objDrag(landmarks, canvasRef);
       }
     }
-    /* 물체를 그리는 부분 */
-    const images = {
-      soju: "../../Drink/soju.png",
-      beer: "../../Drink/beer.png",
-      mak: "../../Drink/mak.png",
-      container: "../../Drink/empty.png",
-      cider: "../../Drink/cider.png",
-    };
 
-    const imgElements = [];
 
-    const drawSoju = () => {
-      // if(!isMounted) return;
-      if (!canvasRef.current) return;
-      canvasCtx.current.clearRect(
-        0,
-        0,
-        canvasCtx.current.canvas.width,
-        canvasCtx.current.canvas.height,
-      );
-
-      for (let i = 0; i < objects.length; i++) {
-        let boxLocation = objects[i];
-        const img = imgElements[boxLocation.type]; // type에 따른 이미지 선택
-        canvasCtx.current.drawImage(
-          img,
-          boxLocation.leftX * canvasWidth,
-          boxLocation.topY * canvasHeight,
-          boxLocation.lenX * canvasWidth * 0.5,
-          boxLocation.lenY * canvasHeight * 0.5,
-        );
+    
+    loadImages(canvasRef.current, canvasCtx.current, objectRef.current);
+    // canvasCtx.current.restore();
+  };
+  
+  const loadImages = async (can_ref, can_ctx, objs) => {
+    try {
+      for (let type in images) {
+        const img = new Image();
+        img.src = images[type];
+        // 이미지 로딩을 Promise로 감싸 비동기로 처리
+        await new Promise((resolve) => {
+          img.onload = () => resolve();
+        });
+        imgElements[type] = img;
       }
-      canvasCtx.current.drawImage(
-        imgElements["container"],
-        container.leftX * canvasWidth,
-        container.topY * canvasHeight,
-        container.lenX * canvasWidth,
-        container.lenY * canvasHeight,
+      // 모든 이미지 로딩이 완료되면 애니메이션 시작
+      drawSoju(can_ref, can_ctx, objs);
+    } catch (error) {
+      console.error("Error loading images:", error);
+    }
+  };
+
+  const drawSoju = (can_ref, can_ctx, objs) => {
+    // if(!isMounted) return;
+    if (!can_ref) return;
+    can_ctx.clearRect(
+      0,
+      0,
+      can_ctx.canvas.width,
+      can_ctx.canvas.height,
+    );
+
+    for (let i = 0; i < objs.length; i++) {
+      let boxLocation = objs[i];
+      const img = imgElements[boxLocation.type]; // type에 따른 이미지 선택
+      can_ctx.drawImage(
+        img,
+        boxLocation.leftX * can_ref.width,
+        boxLocation.topY * can_ref.height,
+        boxLocation.lenX * can_ref.width * 0.5,
+        boxLocation.lenY * can_ref.height * 0.5,
       );
+    }
+    can_ctx.drawImage(
+      imgElements["container"],
+      container.leftX * can_ref.width,
+      container.topY * can_ref.height,
+      container.lenX * can_ref.width,
+      container.lenY * can_ref.height,
+    );
 
-      /* InBucket용 */
-      for (let i = 0; i < inBucket.length; i++) {
-        let boxLocation = inBucket[i];
-        const img = imgElements[boxLocation.type]; // type에 따른 이미지 선택
-        canvasCtx.current.drawImage(
-          img,
-          (0.1 - 0.02 * i) * canvasWidth,
-          0.4 * canvasHeight,
-          0.13 * canvasWidth,
-          0.13 * canvasHeight,
-        );
-      }
+    /* InBucket용 */
+    for (let i = 0; i < inBucket.length; i++) {
+      let boxLocation = inBucket[i];
+      const img = imgElements[boxLocation.type]; // type에 따른 이미지 선택
+      can_ctx.drawImage(
+        img,
+        (0.1 - 0.02 * i) * can_ref.width,
+        0.4 * can_ref.height,
+        0.13 * can_ref.width,
+        0.13 * can_ref.height,
+      );
+    }
 
-      /* score 출력 부분 */
-      canvasCtx.current.save(); // 현재 컨텍스트 상태를 저장
-      canvasCtx.current.scale(-1, 1); // X 축을 따라 스케일을 반전시킴 (좌우 반전)
-      canvasCtx.current.fillStyle = "black";
-      canvasCtx.current.font = "30px Arial";
-      canvasCtx.current.fillText(`점수: ${score}`, -canvasWidth + 20, 50);
+    /* score 출력 부분 */
+    can_ctx.save(); // 현재 컨텍스트 상태를 저장
+    can_ctx.scale(-1, 1); // X 축을 따라 스케일을 반전시킴 (좌우 반전)
+    can_ctx.fillStyle = "black";
+    can_ctx.font = "30px Arial";
+    can_ctx.fillText(`점수: ${score}`, -can_ref.width + 20, 50);
 
-      /* 소주1병, 맥주1명 주문내역 텍스트 캔버스에 출력 */
-      orderKorean.forEach((text, index) => {
-        // canvasCtx.current.strokeStyle = 'black';
-        canvasCtx.current.fillStyle = "black"; // 텍스트 색상을 검은색으로 설정
-        canvasCtx.current.font = "30px Arial"; // 폰트와 크기를 설정
-        canvasCtx.current.fillText(text, -200, 200 + (index + 1) * 30); // 텍스트를 캔버스에 쓰기
-        // canvasCtx.current.strokeText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
+    /* 소주1병, 맥주1명 주문내역 텍스트 캔버스에 출력 */
+    orderKorean.forEach((text, index) => {
+      // can_ctx.strokeStyle = 'black';
+      can_ctx.fillStyle = "black"; // 텍스트 색상을 검은색으로 설정
+      can_ctx.font = "30px Arial"; // 폰트와 크기를 설정
+      can_ctx.fillText(text, -200, 200 + (index + 1) * 30); // 텍스트를 캔버스에 쓰기
+      // can_ctx.strokeText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
+    });
+
+    /* 점수가 높은사람부터 출력 */
+    Object.entries(scores)
+      .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
+      .forEach(([key, value], index) => {
+        /* 내점수는 초록색으로 표시 */
+        if (key == props.user.getNickname())
+          can_ctx.fillStyle = "green";
+        else can_ctx.fillStyle = "black";
+        const scoreText = `${key}: ${value}`;
+        const y = 400 + (index + 1) * 30;
+        can_ctx.fillText(scoreText, -200, y);
       });
 
-      /* 점수가 높은사람부터 출력 */
-      Object.entries(scores)
-        .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
-        .forEach(([key, value], index) => {
-          /* 내점수는 초록색으로 표시 */
-          if (key == props.user.getNickname())
-            canvasCtx.current.fillStyle = "green";
-          else canvasCtx.current.fillStyle = "black";
-          const scoreText = `${key}: ${value}`;
-          const y = 400 + (index + 1) * 30;
-          canvasCtx.current.fillText(scoreText, -200, y);
-        });
-      canvasCtx.current.restore();
-    };
-    const loadImages = async () => {
-      try {
-        for (let type in images) {
-          const img = new Image();
-          img.src = images[type];
-          // 이미지 로딩을 Promise로 감싸 비동기로 처리
-          await new Promise((resolve) => {
-            img.onload = () => resolve();
-          });
-          imgElements[type] = img;
-        }
-        // 모든 이미지 로딩이 완료되면 애니메이션 시작
-        drawSoju();
-      } catch (error) {
-        console.error("Error loading images:", error);
-      }
-    };
-
-    loadImages();
-    // canvasCtx.current.restore();
+    can_ctx.restore();
   };
 
   const objMove = (fingerpick, boxIndex) => {
     if (!canvasRef) return;
 
     const { x: fingerX, y: fingerY, z: _ } = fingerpick;
-    objects[boxIndex].leftX = fingerX - objects[boxIndex].lenX / 2;
-    objects[boxIndex].topY = fingerY - objects[boxIndex].lenY / 2;
+    objectRef.current[boxIndex].leftX = fingerX - objectRef.current[boxIndex].lenX / 2;
+    objectRef.current[boxIndex].topY = fingerY - objectRef.current[boxIndex].lenY / 2;
     /* 점수를 위한 object x,y 위치 */
-    const objX = objects[boxIndex].leftX;
-    const objY = objects[boxIndex].topY;
+    const objX = objectRef.current[boxIndex].leftX;
+    const objY = objectRef.current[boxIndex].topY;
 
     if (
       objX >= conX - 0.06 &&
@@ -261,28 +302,28 @@ const Somaek = (props) => {
       objY <= conY + 0.04 &&
       objY >= conY - 0.1
     ) {
-      objects[boxIndex].leftX = 0.75;
+      objectRef.current[boxIndex].leftX = 0.75;
 
-      if (objects[boxIndex].type === "beer") {
+      if (objectRef.current[boxIndex].type === "beer") {
         console.log("beer");
-        objects[boxIndex].topY = 0.05;
-      } else if (objects[boxIndex].type === "soju") {
+        objectRef.current[boxIndex].topY = 0.05;
+      } else if (objectRef.current[boxIndex].type === "soju") {
         console.log("soju");
-        objects[boxIndex].topY = 0.5;
-      } else if (objects[boxIndex].type === "mak") {
+        objectRef.current[boxIndex].topY = 0.5;
+      } else if (objectRef.current[boxIndex].type === "mak") {
         console.log("mak");
-        objects[boxIndex].topY = 0.28;
+        objectRef.current[boxIndex].topY = 0.28;
       } else {
         console.log("cider");
-        objects[boxIndex].topY = 0.73;
+        objectRef.current[boxIndex].topY = 0.73;
       }
 
       /* order 안에 있는 음료가 제대로 들어왔을 경우 배열 하나 줄여주고, 아닐경우 무시 */
-      let index = order.indexOf(objects[boxIndex].type);
+      let index = order.indexOf(objectRef.current[boxIndex].type);
       if (index !== -1) {
         // 있을경우
         order.splice(index, 1);
-        inBucket.push(objects[boxIndex]);
+        inBucket.push(objectRef.current[boxIndex]);
       } else {
         //없을경우
         console.log("주문한 음료가 아님");
@@ -306,13 +347,13 @@ const Somaek = (props) => {
   const objDrag = (landmarks, canvasRef) => {
     let { distance, fingerPick } = fingerDistance(landmarks);
     if (distance > 0.01) return;
-    for (let boxIndex = 0; boxIndex < objects.length; boxIndex++) {
+    for (let boxIndex = 0; boxIndex < objectRef.current.length; boxIndex++) {
       const {
         leftX: objLeftX,
         topY: objTopY,
         lenX: objXLength,
         lenY: objYLength,
-      } = objects[boxIndex];
+      } = objectRef.current[boxIndex];
       const { x: fingerX, y: fingerY, z: _ } = fingerPick;
 
       const boxSize = 0.12;
@@ -440,6 +481,29 @@ const Somaek = (props) => {
     }
   };
 
+
+  const sendStateSignal = (score) => {
+    if (props.user.getStreamManager().session) {
+      const data = {
+        streamId: props.user.getStreamManager().stream.streamId,
+        state: objectRef.current
+      };
+      props.user
+        .getStreamManager()
+        .session.signal({
+          data: JSON.stringify(data),
+          to: [],
+          type: "somaekState",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
   return (
     <>
       <div>
@@ -476,6 +540,8 @@ const Somaek = (props) => {
                   <OpenViduVideoComponent
                     mode={"somaek"}
                     streamManager={subscriber}
+                    drawGame={loadImages}
+                    gameState={states}
                   />
                 </div>
                 <div
