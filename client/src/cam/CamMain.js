@@ -183,7 +183,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     if (user.getStreamManager().session) {
       user.getStreamManager().session.disconnect();
       try {
-        axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`);
+        const token = localStorage.getItem('jwtToken');
+        axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
+            },});
       } catch (error) {
         alert("토큰없음요");
         navigate("/lobby");
