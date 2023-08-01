@@ -16,17 +16,13 @@ export class RoomController {
   }
 
   @Get('/roomout')
-  async outRoom(@Headers() headers: any) {
-    const verifiedToken = this.authService.verify(
-      headers.authorization.split('Bearer ')[1],
-    );
+  async outRoom(@Headers('authorization') headers: any) {
+    const verifiedToken = this.authService.verify(headers.split('Bearer ')[1]);
     await this.roomService.outRoom(verifiedToken.idx);
   }
   @Get('/wow')
-  async nickNameToSession(@Headers() headers: any) {
-    const verifiedToken = this.authService.verify(
-      headers.authorization.split('Bearer ')[1],
-    );
+  async nickNameToSession(@Headers('authorization') headers: any) {
+    const verifiedToken = this.authService.verify(headers.split('Bearer ')[1]);
     const nickName = verifiedToken.nickname;
     return nickName;
   }
