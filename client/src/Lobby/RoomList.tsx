@@ -42,16 +42,16 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
               Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
             },});
       console.log(response.data);
-      alert("방 입장 정보 보내기 성공");
       navigate("/Room", { state: { roomName: room_name, idx: idx , nickName:nickName} });
     } catch (error) {
       console.error(error);
-      alert("방 입장 정보 실패");
     }
   };
 
   useEffect(() => {
     handleRoomList();
+    const interval = setInterval(handleRoomList, 1500); // 1분(60,000ms) 간격으로 호출
+    return () => clearInterval(interval);
   }, []);
 
   const handleRoomList = async () => {

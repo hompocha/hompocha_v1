@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 import styles from "./LoserCam.module.css";
 
 
-const loserCam = (props) => {
+const LoserCam = (props) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      props.end(undefined);
+    }, 3500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [])
+
   const selectId = props.user.subscribers.find(
     (subscriber) => subscriber.stream.connection.connectionId === props.selectId
   );
@@ -39,4 +49,4 @@ const loserCam = (props) => {
   }
 };
 
-export default loserCam;
+export default LoserCam;

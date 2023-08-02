@@ -3,7 +3,6 @@ import UseSpeechRecognition from "../../voice/useSpeechRecognition";
 import SpeechCam from "./SpeechCam";
 import styles from "./SpeechGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
-import Losecam from "../losecam/LoserCam";
 import LoserCam from "../losecam/LoserCam";
 
 let sentenceState = "시작";
@@ -77,24 +76,11 @@ const SpeechGame = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, /*stopTime*/8000);
+    }, /*stopTime*/1000);
     return () => {
       clearTimeout(timer);
     }
   }, [stopTime]);
-
-
-  useEffect(() => {
-    if(timerExpired) {
-      const timer = setTimeout(() => {
-        setFirstTime(false);
-        props.end(undefined);
-      }, 3500);
-
-      return () => {
-        clearTimeout(timer);}
-    }
-  }, [timerExpired, props]);
 
   /*signal 보내는데 맞춘사람 id보냄*/
   function checkPass(sentId) {
@@ -211,7 +197,7 @@ const SpeechGame = (props) => {
         </div>
       ) : (
         <div>
-            <LoserCam selectId={randomUser} user={props.user} mode={"speechGameMain"}/>
+            <LoserCam selectId={randomUser} user={props.user} mode={"speechGameMain"} end ={props.end}/>
         </div>
       )}
     </>
