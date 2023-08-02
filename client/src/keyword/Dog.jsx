@@ -43,7 +43,7 @@ export function DogCanvas() {
         //direction 변수로 이미지가 왼쪽이나 오른쪽을 향할지 결정함 필요한 경우 x및 y좌표를 업데이트
         const direction = Math.random() < 0.5 ? -1 : 1;
         if (direction === -1) {
-            x = 1500;
+            x = 1700;
             y = 200;
         } else {
             x = 0;
@@ -68,7 +68,7 @@ export function DogCanvas() {
         drawDog(ctx, x, y);
     }, [x, y]);
     //캔버스를 반환하고 DogCanvas를 내보냄
-    return <canvas className= {styles.size} ref={canvasRef} width= "2200" height="430" />;
+    return <canvas className= {styles.size} ref={canvasRef} width= "2400" height="430" />;
 }
 
 export default DogCanvas;
