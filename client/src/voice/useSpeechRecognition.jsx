@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./voice.module.css";
 import axios from "axios";
@@ -6,11 +6,16 @@ import "regenerator-runtime/runtime";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지"];
 const speech_sentence = [
-  "시작",
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
   "철수 책상 철 책상",
   "상업 산업 사업을 상상한다",
+  "앞 집 팥죽은 붉은 팥 풋 팥죽이다",
+  "뒷집 콩죽은 햇콩 단콩 콩죽이다",
+  "안 촉촉한 초코칩 나라에 살던 안 촉촉한 초코칩",
+  "경찰청 창살은 외철창살이다",
+  "검찰청 창살은 쌍철창살이다",
+  "네가 그린 기린 그림은 못생긴 기린 그림이다"
 ];
 const gameStartKeywords = ["발음 게임", "소맥 게임", "피하기 게임"];
 
