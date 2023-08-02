@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Loading from "../../Loading/Loading";
+import CountDown from "../../Loading/CountDown";
 import styles from "./Somaek.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { Hands, VERSION } from "@mediapipe/hands";
@@ -23,13 +24,15 @@ const images = {
 
 const Somaek = (props) => {
   const [loaded, setLoaded] = useState(false);
-  const [timer, setTimer] = useState(50000);
   const [start, setStart] = useState(false);
+  const [countDown, setCountDown] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
   const objectRef = useRef(objectsDefault);
   const signalInterval = useRef(null);
+  const hostId = props.selectId;
+  const timerPrint = useRef(50000);
 
   const imgElements = [];
   const subscribers = props.user.subscribers;
@@ -61,17 +64,18 @@ const Somaek = (props) => {
   let inBucket = [];
   let orderKorean = [];
 
+  /* 타이머 주기 */
   useEffect(() => {
+    if (!start) return;
+    timerPrint.current = 50000;
     signalInterval.current = setInterval(() => {
       sendStateSignal();
+      if (start && timerPrint.current > 0) timerPrint.current -= 1000;
     }, 1000);
     return () => {
       clearInterval(signalInterval.current);
     };
-  }, []);
-
-  /* 타이머 주기 */
-  // useEe;
+  }, [start]);
 
   useEffect(() => {
     const videoNode = videoRef.current;
@@ -125,6 +129,7 @@ const Somaek = (props) => {
       if (videoNode && canvasNode) {
         setTimeout(() => {
           setLoaded(true);
+          sendReadySignal();
         }, 5000);
       }
     };
@@ -161,6 +166,43 @@ const Somaek = (props) => {
         let getState = data.state;
         states[connectionId] = getState;
         console.log(states);
+      });
+
+    /* 내가 호스트일 경우에만, session on 함  */
+    if (
+      props.user.getStreamManager().stream.connection.connectionId === hostId
+    ) {
+      let readyPeople = [];
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:readySignal", (event) => {
+          let fromId = event.from.connectionId;
+          if (!readyPeople.includes(fromId)) {
+            readyPeople.push(fromId);
+          }
+
+          if (readyPeople.length === subscribers.length + 1) {
+            console.log("받았다!!!");
+            sendStartSignal();
+            props.user
+              .getStreamManager()
+              .stream.session.off("signal:readySignal");
+          }
+        });
+    }
+
+    /* start 시그널 받는 session on !! */
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:startSignal", (event) => {
+        setCountDown(true);
+        /* 3초후에 스타트로 바뀜!*/
+        setTimeout(() => {
+          setCountDown(false);
+          setTimeout(() => {
+            setStart(true);
+          }, 300);
+        }, 3000);
       });
 
     return () => {
@@ -260,6 +302,13 @@ const Somaek = (props) => {
       can_ctx.fillText(text, -200, 200 + (index + 1) * 30); // 텍스트를 캔버스에 쓰기
       // can_ctx.strokeText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
     });
+
+    // can_ctx.fillText(`남은시간: ${timer}`, -can_ref.width + 20, 100);
+    can_ctx.fillText(
+      `남은시간: ${timerPrint.current / 1000}초`,
+      -can_ref.width + 20,
+      150,
+    );
 
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores)
@@ -489,12 +538,41 @@ const Somaek = (props) => {
           type: "somaekState",
         })
         .then(() => {
-          console.log("Message successfully sent");
+          console.log("stateSignal successfully sent");
         })
         .catch((error) => {
           console.error(error);
         });
     }
+  };
+  const sendReadySignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "readySignal",
+      })
+      .then(() => {
+        console.log("readySignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const sendStartSignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "startSignal",
+      })
+      .then(() => {
+        console.log("startSignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -503,6 +581,11 @@ const Somaek = (props) => {
         {props.mode === "somaek" && !loaded && (
           <div>
             <Loading />
+          </div>
+        )}
+        {props.mode === "somaek" && countDown && (
+          <div>
+            <CountDown />
           </div>
         )}
         {props.mode === "somaek" ? (
@@ -517,10 +600,12 @@ const Somaek = (props) => {
             />
 
             <canvas
-              className={styles.somaekCanvas}
+              className={`${styles.somaekCanvas} ${!start && styles.hidden}`}
               ref={canvasRef}
-              width={1280}
-              height={720}
+              // width={1280}
+              // height={720}
+              width={"1920px"}
+              height={"1080px"}
             />
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (

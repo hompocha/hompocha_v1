@@ -26,7 +26,7 @@ const RoomCreate: React.FC<NickNameProps> = ({ nickName }) => {
                     Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
                 },});
       setIdx(response.data);
-      navigate("/Room", { state: { roomName: room_name, idx: idx, maxPeople: maxPeople, nickName:nickName } });
+      navigate("/Room", { state: { roomName: room_name, idx: response.data, maxPeople: maxPeople, nickName:nickName } });
     } catch (error) {
       console.error("방 생성 오류:", error);
     }

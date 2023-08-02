@@ -30,6 +30,7 @@
   position: absolute;
   top: 2.5%;
   right: 1%;
+  z-index:10;
 }
 
 .gameListWrap {

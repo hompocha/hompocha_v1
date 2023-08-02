@@ -17,12 +17,13 @@ export class RoomlistController {
   ) {
     const { room_name, maxPeople } = dto;
     const verifiedToken = this.authService.verify(headers.split('Bearer ')[1]);
-
-    return await this.roomService.createRoom(
+    const a = await this.roomService.createRoom(
       room_name,
       maxPeople,
       verifiedToken.idx,
     );
+    console.log("dmaksdfmaksdfmasdkf",a);
+    return a;
   }
 
   @Get()
