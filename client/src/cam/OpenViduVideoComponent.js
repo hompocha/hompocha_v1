@@ -61,7 +61,7 @@ const OpenViduVideoComponent = (props) => {
       // Remove the event listener when the component is unmounted or props.streamManager changes
       props.streamManager.stream.session.off(
         "signal:hockeyData",
-        signalHandler
+        signalHandler,
       );
     };
   }, [props.streamManager]);
@@ -140,34 +140,49 @@ const OpenViduVideoComponent = (props) => {
       });
   };
 
-  useEffect(()=>{
-    if(props.mode==='avoidGame')
-    {
+  useEffect(() => {
+    if (props.mode === "avoidGame") {
       canvasSubCtx.current = canvasSubRef.current.getContext("2d");
-      const interval=setInterval(()=>{
-        gameStateRef.current = props.gameState[`${props.streamManager.stream.connection.connectionId}`];
-        if(gameStateRef.current!==undefined){
-          props.drawGame(canvasSubRef.current, canvasSubCtx.current, gameStateRef.current);
+      const interval = setInterval(() => {
+        gameStateRef.current =
+          props.gameState[
+            `${props.streamManager.stream.connection.connectionId}`
+          ];
+        if (gameStateRef.current !== undefined) {
+          props.drawGame(
+            canvasSubRef.current,
+            canvasSubCtx.current,
+            gameStateRef.current,
+          );
         }
-      }, 1000/20);
-      return ()=>{clearInterval(interval)};
+      }, 1000 / 20);
+      return () => {
+        clearInterval(interval);
+      };
     }
-  },[]);
+  }, []);
 
-  useEffect(()=>{
-    if(props.mode==='somaek')
-      {
-        canvasSubCtx.current = canvasSubRef.current.getContext("2d");
-        const interval=setInterval(()=>{
-          gameStateRef.current = props.gameState[`${props.streamManager.stream.connection.connectionId}`];
-          if(gameStateRef.current!==undefined){
-            props.drawGame(canvasSubRef.current, canvasSubCtx.current, gameStateRef.current);
-          }
-        }, 1000/20);
-        return ()=>{clearInterval(interval)};
-      }
-    },[]);
-
+  useEffect(() => {
+    if (props.mode === "somaek") {
+      canvasSubCtx.current = canvasSubRef.current.getContext("2d");
+      const interval = setInterval(() => {
+        gameStateRef.current =
+          props.gameState[
+            `${props.streamManager.stream.connection.connectionId}`
+          ];
+        if (gameStateRef.current !== undefined) {
+          props.drawGame(
+            canvasSubRef.current,
+            canvasSubCtx.current,
+            gameStateRef.current,
+          );
+        }
+      }, 1000 / 20);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, []);
 
   return (
     <>
@@ -231,10 +246,10 @@ const OpenViduVideoComponent = (props) => {
 
       {
         /* 발음게임일 때 불러와 지는 캠 */
-        props.mode === "speechGameMain" ? (
+        props.mode === "centerCam" ? (
           <>
             <video
-              className={styles.speechGameMain}
+              className={styles.centerCam}
               autoPlay={true}
               ref={videoRef}
             />
@@ -262,7 +277,7 @@ const OpenViduVideoComponent = (props) => {
               autoPlay={true}
               ref={videoRef}
             />
-              <canvas className={styles.avoidGameSubCan} ref={canvasSubRef} />
+            <canvas className={styles.avoidGameSubCan} ref={canvasSubRef} />
           </>
         ) : null
       }

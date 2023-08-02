@@ -5,6 +5,7 @@ import styles from "./Somaek.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { Hands, VERSION } from "@mediapipe/hands";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
+import LoserCam from "../loserCam/LoserCam";
 
 const objectsDefault = [
   { leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5, type: "beer" },
@@ -640,7 +641,16 @@ const Somaek = (props) => {
               </>
             ))}
           </>
-        ) : null}
+        ) : (
+          <div>
+            <LoserCam
+              selectId={lowestConId}
+              user={props.user}
+              mode={"centerCam"}
+              end={props.end}
+            />
+          </div>
+        )}
       </div>
     </>
   );

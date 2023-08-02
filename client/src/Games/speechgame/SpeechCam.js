@@ -3,7 +3,8 @@ import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 
 const SpeechCam = (props) => {
   const selectId = props.user.subscribers.find(
-    (subscriber) => subscriber.stream.connection.connectionId === props.selectId
+    (subscriber) =>
+      subscriber.stream.connection.connectionId === props.selectId,
   );
   if (
     selectId &&
@@ -14,17 +15,14 @@ const SpeechCam = (props) => {
     return (
       <>
         {/*========================여기까지================================*/}
-        <OpenViduVideoComponent
-          mode={"speechGameMain"}
-          streamManager={selectId}
-        />
+        <OpenViduVideoComponent mode={"centerCam"} streamManager={selectId} />
       </>
     );
   } else {
     return (
       <>
         <OpenViduVideoComponent
-          mode={"speechGameMain"}
+          mode={"centerCam"}
           streamManager={props.user.streamManager}
         />
       </>

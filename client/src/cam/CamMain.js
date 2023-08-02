@@ -311,6 +311,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
             user={user}
             sessionConnected={sessionConnected}
             conToNick={conToNick}
+            end={sendGameTypeSignal}
           />
           <form className={styles.ReturnRoom}>
             <input

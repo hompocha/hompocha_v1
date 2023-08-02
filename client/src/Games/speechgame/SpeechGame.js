@@ -3,7 +3,7 @@ import UseSpeechRecognition from "../../voice/useSpeechRecognition";
 import SpeechCam from "./SpeechCam";
 import styles from "./SpeechGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
-import LoserCam from "../losecam/LoserCam";
+import LoserCam from "../loserCam/LoserCam";
 
 let sentenceState = "시작";
 const speech_sentence = [
@@ -72,14 +72,13 @@ const SpeechGame = (props) => {
       });
   }, [props.user, randomUser, stopTime]);
 
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, /*stopTime*/1000);
+    }, /*stopTime*/ 1000);
     return () => {
       clearTimeout(timer);
-    }
+    };
   }, [stopTime]);
 
   /*signal 보내는데 맞춘사람 id보냄*/
@@ -197,7 +196,12 @@ const SpeechGame = (props) => {
         </div>
       ) : (
         <div>
-            <LoserCam selectId={randomUser} user={props.user} mode={"speechGameMain"} end ={props.end}/>
+          <LoserCam
+            selectId={randomUser}
+            user={props.user}
+            mode={"centerCam"}
+            end={props.end}
+          />
         </div>
       )}
     </>
