@@ -238,7 +238,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           </div>
 
           <div className={styles.camAndVoice}>
-            <UseSpeechRecognition sendEffectSignal={sendEffectSignal} />
+            <UseSpeechRecognition
+              sendEffectSignal={sendEffectSignal}
+              sendGameTypeSignal={sendGameTypeSignal}
+            />
             <CamTest user={user} />
           </div>
         </div>

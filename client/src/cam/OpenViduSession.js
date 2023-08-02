@@ -4,6 +4,7 @@ import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { createBrowserHistory } from "history";
 
+
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`;
 let localUser = new UserModel();
 export const history = createBrowserHistory();
