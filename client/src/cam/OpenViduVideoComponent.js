@@ -154,6 +154,21 @@ const OpenViduVideoComponent = (props) => {
     }
   },[]);
 
+  useEffect(()=>{
+    if(props.mode==='somaek')
+      {
+        canvasSubCtx.current = canvasSubRef.current.getContext("2d");
+        const interval=setInterval(()=>{
+          gameStateRef.current = props.gameState[`${props.streamManager.stream.connection.connectionId}`];
+          if(gameStateRef.current!==undefined){
+            props.drawGame(canvasSubRef.current, canvasSubCtx.current, gameStateRef.current);
+          }
+        }, 1000/20);
+        return ()=>{clearInterval(interval)};
+      }
+    },[]);
+
+
   return (
     <>
       {
@@ -260,6 +275,7 @@ const OpenViduVideoComponent = (props) => {
               autoPlay={true}
               ref={videoRef}
             />
+            <canvas className={styles.somaekGameSubCan} ref={canvasSubRef} />
           </>
         ) : null
       }

@@ -108,7 +108,7 @@ const Somaek = (props) => {
               await hands.send({ image: videoRef.current });
             }
           },
-          width: 1280,
+          width: 960,
           height: 720,
         });
         camera.start();
