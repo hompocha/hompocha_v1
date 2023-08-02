@@ -1,7 +1,9 @@
 import React from "react";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
+import styles from "./LoserCam.module.css";
 
-const SpeechCam = (props) => {
+
+const loserCam = (props) => {
   const selectId = props.user.subscribers.find(
     (subscriber) => subscriber.stream.connection.connectionId === props.selectId
   );
@@ -9,27 +11,32 @@ const SpeechCam = (props) => {
     selectId &&
     (props.selectId ||
       selectId.stream.connection.connectionId ===
-        props.user.streamManager.stream.connection.connectionId)
+      props.user.streamManager.stream.connection.connectionId)
   ) {
     return (
       <>
-        {/*========================여기까지================================*/}
+        <img className={styles['end-image']} src="../../stamp/loser.png" alt={"woo"}/>
+        <div>
         <OpenViduVideoComponent
-          mode={"speechGameMain"}
+          mode={props.mode}
           streamManager={selectId}
         />
+        </div>
       </>
     );
   } else {
     return (
       <>
+        <img className={styles['end-image']} src="../../stamp/loser.png" alt={"woo"}/>
+        <div>
         <OpenViduVideoComponent
-          mode={"speechGameMain"}
+          mode={props.mode}
           streamManager={props.user.streamManager}
         />
+        </div>
       </>
     );
   }
 };
 
-export default SpeechCam;
+export default loserCam;

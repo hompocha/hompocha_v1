@@ -6,7 +6,7 @@ import { createBrowserHistory } from "history";
 
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`;
 let localUser = new UserModel();
-export const history = createBrowserHistory();
+const history = createBrowserHistory();
 
 export default class OpenViduSession extends Component {
   constructor(props) {
@@ -38,6 +38,7 @@ export default class OpenViduSession extends Component {
     this.unlistenHistoryEvent = history.listen(({ action }) => {
       if (action === "POP") {
         this.leaveRoom();
+        history.push('/');
       }
     });
     this.joinSession();
@@ -224,7 +225,7 @@ export default class OpenViduSession extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: undefined,
       nickName: 'hompocha',
       mainStreamManager: undefined,
       publisher: undefined,
