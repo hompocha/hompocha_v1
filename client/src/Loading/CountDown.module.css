@@ -1,11 +1,11 @@
 .countDown {
     position: fixed;
     z-index: 9;
-    top: 44%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(180%);
     width: 35vw;  /*승규 형 나중에 고쳐주세요 */
-    height: 48vh;
+    height: 50vh;
     display: flex;
     flex-direction: column;
     justify-content: center;

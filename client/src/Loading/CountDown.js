@@ -1,8 +1,8 @@
 import React from "react";
-import "./CountDown.css";
+import styles from "./CountDown.module.css";
 const CountDown = () => {
   return (
-    <div className="countDown">
+    <div className={styles.countDown}>
       <h3>카운트다운!!!!</h3>
       <img src="/Loading/countDown.gif" alt="countdown" />
       {/*<img src="/Drink/soju.png" alt="countdown" />*/}
