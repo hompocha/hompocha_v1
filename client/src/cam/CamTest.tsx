@@ -126,7 +126,7 @@ const CamTest = (props: any) => {
         .getStreamManager()
         .session.signal({ data: targetAngle, to: [], type: "rouletteSignal" })
         .then(() => {
-          effectSound(rouletteSound);
+          effectSound(rouletteSound, false);
           console.log("Roulette Signal: ", targetAngle);
         })
         .catch((error: any) => {
