@@ -13,6 +13,10 @@ const RoomCreate: React.FC<NickNameProps> = ({ nickName }) => {
 
   const handleRoomCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if(room_name.length > 15){
+      alert("방 제목을 15글자 이하로 해주세요");
+      return;
+    }
     try {
         const token = localStorage.getItem('jwtToken');
         const response = await axios.post(

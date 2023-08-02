@@ -109,7 +109,7 @@ export default function ChatComponent(props) {
                     ) : (
                       <>
                         <span className={styles.messageContent}>{data.message}</span>{' '}
-                        <span className={styles.nickName}>{data.nickName}</span>
+                        <span className={styles.nickName}></span>
                       </>
                     )}
                   </p>

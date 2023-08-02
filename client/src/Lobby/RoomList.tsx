@@ -42,11 +42,9 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
               Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
             },});
       console.log(response.data);
-      alert("방 입장 정보 보내기 성공");
       navigate("/Room", { state: { roomName: room_name, idx: idx , nickName:nickName} });
     } catch (error) {
       console.error(error);
-      alert("방 입장 정보 실패");
     }
   };
 
@@ -82,15 +80,18 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
         {title.map((t,index) => (
 
           <div className = {styles.roomList} key={index}>
-            <h4>
+            <h4 className={styles.roomName}>
               방 제목 : {t}
+            </h4>
+            <h4 className={styles.roomPeople}>
               현재 참여 인원 : 👤{peopleNum[index]} / {room_max[index]}
             </h4>
-            <h4>
+            <h4 className={styles.roomStatus}>
               상태 : {room_status[index]}
             </h4>
             <button
             type="submit"
+            className={styles.roomInButton}
             onClick={() => handleClick(idx[index], t, peopleNum[index], room_max[index],room_status[index])}
               >
             방 입장
