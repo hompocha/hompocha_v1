@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import UseSpeechRecognition from "../../voice/useSpeechRecognition";
 import SpeechCam from "./SpeechCam";
 import styles from "./SpeechGame.module.css";
@@ -86,7 +86,7 @@ const SpeechGame = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, stopTime);
+    }, /*stopTime*/1100);
     return () => {
       clearTimeout(timer);
     }
@@ -97,7 +97,7 @@ const SpeechGame = (props) => {
       const timer = setTimeout(() => {
         setFirstTime(false);
         props.end(undefined);
-      }, 2000) ;
+      }, 3500) ;
 
       return () => {
         clearTimeout(timer);}
@@ -178,19 +178,6 @@ const SpeechGame = (props) => {
       (subscriber) => subscriber.stream.connection.connectionId !== wantId
     );
   }
-  // /* 이거 추가하면 될꺼같긴한데 */
-  // function findme(wantId){
-  //   const findMe = [...props.user.subscribers];
-  //   findMe.push(props.user.streamManager);
-  //   return findMe.find(
-  //     (subscriber) => subscriber.stream.connection.connectionId === wantId
-  //   )
-  //
-  // }
-  // const list_people = findSubscriber(randomUser)
-  // list_people.unshift(findme(randomUser))
-  // /*이렇게 하면 리스트 만들어지고 맨앞은 random 이고 리스트 뒤에는 남는애들*/
-
   /*================================================*/
 
 
@@ -226,7 +213,7 @@ const SpeechGame = (props) => {
                   />
                 </div>
                 <div className={styles[`userNick${index + 1}`]}>
-                  닉네임이 들어갈 자리
+                  {props.conToNick[subscriber.stream.connection.connectionId]}
                 </div>
               </>
             ))}
@@ -235,8 +222,10 @@ const SpeechGame = (props) => {
         </div>
       ) : (
         <div>
-          <h4>애가 마지막에 걸린애</h4>
-          <SpeechCam selectId={randomUser} user={props.user} />
+          <img className={styles['end-image']} src="../../stamp/loser.png" alt={"woo"}/>
+          <div className={styles[`speechGameCam__${0}`]}>
+            <SpeechCam selectId={randomUser} user={props.user} />
+          </div>
         </div>
       )}
     </>

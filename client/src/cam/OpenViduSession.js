@@ -4,7 +4,6 @@ import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { createBrowserHistory} from "history";
 
-
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`;
 let localUser = new UserModel();
 export const history = createBrowserHistory();
@@ -14,7 +13,7 @@ export default class OpenViduSession extends Component {
     super(props);
     const idx = props.idx;
     this.state = {
-      mySessionId: "SessionA",
+      mySessionId: idx,
       nickName: 'hompocha',
       session: idx,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
@@ -29,27 +28,27 @@ export default class OpenViduSession extends Component {
     this.handleSessionConnected = this.handleSessionConnected.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.getSessionNickname = this.getSessionNickname.bind(this);
-    this.leavePage = this.leavePage.bind(this);
+    this.leaveRoom = this.leaveRoom.bind(this);
     // this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
     // this.sendSignal = this.sendSignal.bind(this);
     // this.sendSpeech = this.sendSpeech.bind(this);
   }
   componentDidMount() {
-    window.addEventListener("beforeunload", this.leavePage);
+    window.addEventListener("beforeunload", this.leaveRoom);
     this.unlistenHistoryEvent = history.listen(({ action }) => {
       if (action === "POP") {
-        this.leavePage();
+        this.leaveRoom();
       }
     });
     this.joinSession();
   }
   componentWillUnmount() {
     /*윈도우 창 끄는거임*/
-    window.removeEventListener("beforeunload", this.leavePage);
+    window.removeEventListener("beforeunload", this.leaveRoom);
     this.unlistenHistoryEvent();
     this.leaveSession();
   }
-  leavePage = () => {
+  leaveRoom = () => {
     try {
       const token = localStorage.getItem("jwtToken");
       axios.get(
@@ -206,25 +205,26 @@ export default class OpenViduSession extends Component {
     );
     console.log(this.state);
   }
-  leaveSession = () => {
+  leaveSession() {
+    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
+
     const mySession = this.state.session;
 
     if (mySession) {
-      // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
       mySession.disconnect();
     }
 
     // Empty all properties...
+    this.OV = null;
     this.setState({
       session: undefined,
       subscribers: [],
       mySessionId: "SessionA",
-      nickName: "hompocha",
+      nickName: 'hompocha',
       mainStreamManager: undefined,
       publisher: undefined,
     });
-  };
-
+  }
 
   /* Session 생성, 토큰 생성 */
   async getToken() {
