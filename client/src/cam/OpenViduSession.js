@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import UserModel from "../models/user-model";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import { createBrowserHistory} from "history";
-
+import { createBrowserHistory } from "history";
 
 const APPLICATION_SERVER_URL = `${process.env.REACT_APP_API_URL}`;
 let localUser = new UserModel();
@@ -14,8 +13,8 @@ export default class OpenViduSession extends Component {
     super(props);
     const idx = props.idx;
     this.state = {
-      mySessionId: "SessionA",
-      nickName: 'hompocha',
+      mySessionId: idx,
+      nickName: "hompocha",
       session: idx,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
@@ -52,9 +51,11 @@ export default class OpenViduSession extends Component {
   leavePage = () => {
     try {
       const token = localStorage.getItem("jwtToken");
-      axios.get(
-        `${process.env.REACT_APP_API_URL}/room/roomout`, {headers: {
-            Authorization: `Bearer ${token}`,},});
+      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (error) {
       console.error(error);
     }
@@ -97,19 +98,22 @@ export default class OpenViduSession extends Component {
       this.props.setUserStream(localUser);
     }
   }
-  async getSessionNickname(){
-    try{
-    const token = localStorage.getItem('jwtToken');
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/room/wow`,{
-        headers: {
-          Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
-        },}
-    );
-    this.setState({
-      nickName: response.data,
-    });
-    return response.data;}catch (error){
+  async getSessionNickname() {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/room/wow`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
+          },
+        }
+      );
+      this.setState({
+        nickName: response.data,
+      });
+      return response.data;
+    } catch (error) {
       console.error(error);
     }
   }
@@ -224,7 +228,6 @@ export default class OpenViduSession extends Component {
       publisher: undefined,
     });
   };
-
 
   /* Session 생성, 토큰 생성 */
   async getToken() {
