@@ -26,17 +26,19 @@ const Somaek = (props) => {
   const [loaded, setLoaded] = useState(false);
   const [start, setStart] = useState(false);
   const [countDown, setCountDown] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [lowestConId, setLowestConId] = useState(undefined);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
   const objectRef = useRef(objectsDefault);
   const signalInterval = useRef(null);
   const hostId = props.selectId;
-  const timerPrint = useRef(50000);
-
+  const timerPrint = useRef(5000);
   const imgElements = [];
   const subscribers = props.user.subscribers;
   const scores = {};
+
   for (let i = 0; i < subscribers.length; i++) {
     const conId = subscribers[i].stream.connection.connectionId;
     scores[props.conToNick[conId]] = 0;
@@ -64,13 +66,26 @@ const Somaek = (props) => {
   let inBucket = [];
   let orderKorean = [];
 
-  /* 타이머 주기 */
+  /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 50000;
+    timerPrint.current = 5000;
     signalInterval.current = setInterval(() => {
       sendStateSignal();
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
+      /* 게임이 끝났을 경우 */ else {
+        clearInterval(signalInterval.current);
+        setTimeout(() => {
+          if (!isGameOver) {
+            setIsGameOver(true);
+            const sortedScores = Object.entries(scores).sort(
+              ([, a], [, b]) => b - a,
+            );
+            const lowestScorePerson = sortedScores[sortedScores.length - 1];
+            setLowestConId(lowestScorePerson[0]);
+          }
+        }, 1000);
+      }
     }, 1000);
     return () => {
       clearInterval(signalInterval.current);
@@ -214,22 +229,16 @@ const Somaek = (props) => {
     };
   }, [videoRef.current, canvasRef.current]);
 
-  const canvasWidth = 1280;
-  const canvasHeight = 720;
-
   /* on Results */
   const onResults = (results) => {
     if (results.multiHandLandmarks && results.multiHandedness) {
       for (let index = 0; index < results.multiHandLandmarks.length; index++) {
-        const classification = results.multiHandedness[index];
         const landmarks = results.multiHandLandmarks[index];
 
         objDrag(landmarks, canvasRef);
       }
     }
-
     loadImages(canvasRef.current, canvasCtx.current, objectRef.current);
-    // canvasCtx.current.restore();
   };
 
   const loadImages = async (can_ref, can_ctx, objs) => {
@@ -377,7 +386,7 @@ const Somaek = (props) => {
         sendScoreSignal(score);
         console.log("score = ", score);
         orderKorean = ["감사합니다!!"];
-        /* 버킷에 모든음료가 채워졌을 경우, 1초보여주고 사라짐 */
+        /* 버킷에 모든음료가 채워졌을 경우, 0.8초보여주고 사라짐 */
         setTimeout(() => {
           inBucket = [];
           orderKorean = printDrinks(order);
@@ -588,7 +597,7 @@ const Somaek = (props) => {
             <CountDown />
           </div>
         )}
-        {props.mode === "somaek" ? (
+        {props.mode === "somaek" && !isGameOver ? (
           <>
             <span className={!loaded ? styles.hidden : ""}>
               {loaded ? null : "소맥"}
@@ -602,8 +611,6 @@ const Somaek = (props) => {
             <canvas
               className={`${styles.somaekCanvas} ${!start && styles.hidden}`}
               ref={canvasRef}
-              // width={1280}
-              // height={720}
               width={"1920px"}
               height={"1080px"}
             />

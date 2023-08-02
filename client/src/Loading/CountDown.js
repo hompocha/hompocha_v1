@@ -4,8 +4,8 @@ const CountDown = () => {
   return (
     <div className="countDown">
       <h3>카운트다운!!!!</h3>
-      {/*<img src="/Loading/countDown2.gif" alt="countdown" />*/}
-      <img src="/Drink/soju.png" alt="countdown" />
+      <img src="/Loading/countDown.gif" alt="countdown" />
+      {/*<img src="/Drink/soju.png" alt="countdown" />*/}
     </div>
   );
 };
