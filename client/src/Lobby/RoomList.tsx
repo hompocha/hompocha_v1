@@ -50,6 +50,8 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
 
   useEffect(() => {
     handleRoomList();
+    const interval = setInterval(handleRoomList, 1500); // 1분(60,000ms) 간격으로 호출
+    return () => clearInterval(interval);
   }, []);
 
   const handleRoomList = async () => {

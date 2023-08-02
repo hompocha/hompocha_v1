@@ -3,6 +3,7 @@ import UseSpeechRecognition from "../../voice/useSpeechRecognition";
 import SpeechCam from "./SpeechCam";
 import styles from "./SpeechGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
+import LoserCam from "../losecam/LoserCam";
 
 let sentenceState = "시작";
 const speech_sentence = [
@@ -12,7 +13,7 @@ const speech_sentence = [
   "상업 산업 사업을 상상한다",
 ];
 const time = [];
-for (let i = 10000; i < 50001; i += 100) {
+for (let i = 20000; i < 50001; i += 100) {
   time.push(i);
 }
 const SpeechGame = (props) => {
@@ -26,8 +27,6 @@ const SpeechGame = (props) => {
   useEffect(() => {
     /* 만약에 내가 방장이면 이 밑에서 처리를 해줌 */
     if (props.user.streamManager.stream.connection.connectionId === hostIp) {
-      console.log("host");
-      /* 처음 시작할때 랜덤으로 돌려서 보내버리기~!!!*/
       if (firstTime === true) {
         setFirstTime(false);
         const firstMembers = [...props.user.subscribers];
@@ -36,26 +35,19 @@ const SpeechGame = (props) => {
           getRandomElement(firstMembers).stream.connection.connectionId;
         const sentence = getRandomElement(speech_sentence);
         const randomStopTime = getRandomElement(time);
-        // setRandomUser(chooseRandomMember());
-        console.log("첫번째로 걸린애: ", selectId);
         sendToUsers(selectId, sentence);
         sendStopTime(randomStopTime);
-        // sentenceState=sentence
       } else {
         /* 두번째부터는 밑에꺼 실행 */
-        console.log("여기로 못들어옴? ");
         props.user
           .getStreamManager()
           .stream.session.on("signal:speech", (event) => {
             const sentId = event.data;
-            console.log("메세지 보낸애: ", sentId);
-            console.log("첫시작으로 걸렸으면서, 맞춰야하는데: ", randomUser);
             if (sentId === randomUser) {
               const sentence = getRandomElement(speech_sentence);
               const selectId = getRandomElement(findSubscriber(randomUser))
                 .stream.connection.connectionId;
 
-              console.log("걸린애 : ", selectId);
               sendToUsers(selectId, sentence);
             }
           });
@@ -66,13 +58,10 @@ const SpeechGame = (props) => {
       .getStreamManager()
       .stream.session.on("signal:randomId", (event) => {
         const data = JSON.parse(event.data);
-        // const {id ,sentence,sendStopTime} = data;
         const { id, sentence } = data;
-        // console.log(sendStopTime);
         console.log("애가 바껴야함 : ", id);
         setRandomUser(id);
         sentenceState = sentence;
-        setStopTime(sendStopTime);
       });
 
     props.user
@@ -83,30 +72,16 @@ const SpeechGame = (props) => {
       });
   }, [props.user, randomUser, stopTime]);
 
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, stopTime);
+    }, /*stopTime*/1000);
     return () => {
       clearTimeout(timer);
-    };
+    }
   }, [stopTime]);
 
-  useEffect(() => {
-    if (timerExpired) {
-      const timer = setTimeout(() => {
-        setFirstTime(false);
-        props.end(undefined);
-      }, 3500) ;
-
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [timerExpired, props]);
-
-  /*================================*/
   /*signal 보내는데 맞춘사람 id보냄*/
   function checkPass(sentId) {
     if (props.user.getStreamManager().session) {
@@ -143,7 +118,6 @@ const SpeechGame = (props) => {
         });
     }
   }
-  /*================================*/
   /* signal 보내는데 랜덤으로 고른 아이디랑 문장보냄*/
   function sendToUsers(id, sentence) {
     if (props.user.getStreamManager().session) {
@@ -170,7 +144,6 @@ const SpeechGame = (props) => {
     const randomIndex = Math.floor(Math.random() * list.length);
     return list[randomIndex];
   }
-  /*================================*/
 
   /*===========id를 통해서 subscribers 찾기 ============*/
   function findSubscriber(wantId) {
@@ -186,6 +159,7 @@ const SpeechGame = (props) => {
     <>
       {!timerExpired ? (
         <div>
+          <h1>{stopTime}</h1>
           <div className={styles.gameWord}>{sentenceState}</div>
           <div className={styles.speechPosition}>
             <UseSpeechRecognition sendSpeech={checkPass} user={props.user} />
@@ -223,10 +197,7 @@ const SpeechGame = (props) => {
         </div>
       ) : (
         <div>
-          <img className={styles['end-image']} src="../../stamp/loser.png" alt={"woo"}/>
-          <div className={styles[`speechGameCam__${0}`]}>
-            <SpeechCam selectId={randomUser} user={props.user} />
-          </div>
+            <LoserCam selectId={randomUser} user={props.user} mode={"speechGameMain"} end ={props.end}/>
         </div>
       )}
     </>

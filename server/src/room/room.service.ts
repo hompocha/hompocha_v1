@@ -23,9 +23,8 @@ export class RoomService {
     const room = await this.roomRepository.findOne({
       where: { user_idx: user_idx },
     });
-    if (
-      await this.roomRepository.findOne({ where: { room_idx: room.room_idx } })
-    ) {
+    console.log(room);
+    if (room) {
       const num = await this.roomRepository.countBy({
         room_idx: room.room_idx,
       });

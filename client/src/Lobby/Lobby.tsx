@@ -2,9 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Lobby.module.css";
-import UserList from "./UserList";
 import RoomList from "./RoomList";
-// import {Link} from 'react-router-dom';
 import axios from "axios";
 import RoomCreate from "./RoomCreate";
 
@@ -28,9 +26,7 @@ const Lobby = () => {
           headers: {
             Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
           },});
-        console.log(response.data);
         setNickname(response.data);
-
       } catch (error) {
         console.error(error);
       }

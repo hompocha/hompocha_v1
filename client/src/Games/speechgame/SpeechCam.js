@@ -5,7 +5,6 @@ const SpeechCam = (props) => {
   const selectId = props.user.subscribers.find(
     (subscriber) => subscriber.stream.connection.connectionId === props.selectId
   );
-  console.log("받은 conntionid에서 찾은 streamManger :", selectId);
   if (
     selectId &&
     (props.selectId ||
