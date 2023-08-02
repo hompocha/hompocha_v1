@@ -23,6 +23,8 @@ const images = {
 
 const Somaek = (props) => {
   const [loaded, setLoaded] = useState(false);
+  const [timer, setTimer] = useState(50000);
+  const [start, setStart] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
@@ -67,6 +69,9 @@ const Somaek = (props) => {
       clearInterval(signalInterval.current);
     };
   }, []);
+
+  /* 타이머 주기 */
+  // useEe;
 
   useEffect(() => {
     const videoNode = videoRef.current;
