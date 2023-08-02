@@ -234,9 +234,19 @@
   height: auto;
 
 }
-/*  */
+/* */
+
 .somaekGameSub {
   width: 16vw;
   height: auto;
-
-}
+  top: 0;
+  left: 0;
+  }
+  
+  .somaekGameSubCan{
+  width: 16vw;
+  height: 11vw;
+  position:fixed;
+  top: 0;
+  left: 0;
+  }

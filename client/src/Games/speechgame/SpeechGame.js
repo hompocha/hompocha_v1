@@ -72,7 +72,7 @@ const SpeechGame = (props) => {
         console.log("애가 바껴야함 : ", id);
         setRandomUser(id);
         sentenceState = sentence;
-        // setStopTime(sendStopTime)
+        setStopTime(sendStopTime);
       });
 
     props.user
@@ -86,21 +86,23 @@ const SpeechGame = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, /*stopTime*/1100);
+    }, stopTime);
     return () => {
       clearTimeout(timer);
-    }
+    };
   }, [stopTime]);
 
   useEffect(() => {
-    if(timerExpired) {
+    if (timerExpired) {
       const timer = setTimeout(() => {
         setFirstTime(false);
         props.end(undefined);
       }, 3500) ;
 
+
       return () => {
-        clearTimeout(timer);}
+        clearTimeout(timer);
+      };
     }
   }, [timerExpired, props]);
 
@@ -175,11 +177,10 @@ const SpeechGame = (props) => {
     const firstMembers = [...props.user.subscribers];
     firstMembers.push(props.user.streamManager);
     return firstMembers.filter(
-      (subscriber) => subscriber.stream.connection.connectionId !== wantId
+      (subscriber) => subscriber.stream.connection.connectionId !== wantId,
     );
   }
   /*================================================*/
-
 
   return (
     <>

@@ -12,8 +12,10 @@ const speech_sentence = [
   "철수 책상 철 책상",
   "상업 산업 사업을 상상한다",
 ];
+const gameStartKeywords = ["발음 게임", "소맥 게임", "피하기 게임"];
 
 const UseSpeechRecognition = (props) => {
+  console.log(props);
   // const [lang, setLang] = useState('ko-KR');
   const [value, setValue] = useState("");
   const [listenBlocked, setListenBlocked] = useState(false);
@@ -33,6 +35,27 @@ const UseSpeechRecognition = (props) => {
       if (value.includes(word)) {
         setExtractedValue(word);
         props.sendEffectSignal(word);
+      }
+    }
+    for (const gameStartKeyword of gameStartKeywords) {
+      if (value.includes(gameStartKeyword)) {
+        setExtractedValue(gameStartKeyword);
+        switch (gameStartKeyword) {
+          case "발음 게임":
+            stop();
+            props.sendGameTypeSignal("speechGame");
+            break;
+          case "소맥 게임":
+            stop();
+            props.sendGameTypeSignal("somaek");
+            break;
+          case "피하기 게임":
+            stop();
+            props.sendGameTypeSignal("avoidGame");
+            break;
+          default:
+            break;
+        }
       }
     }
     console.log("Value:", value); // 추가된 부분

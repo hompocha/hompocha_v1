@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Loading from "../../Loading/Loading";
+import CountDown from "../../Loading/CountDown";
 import styles from "./Somaek.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { Hands, VERSION } from "@mediapipe/hands";
@@ -12,7 +13,6 @@ const objectsDefault = [
   { leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, type: "cider" },
 ];
 
-
 /* 물체를 그리는 부분 */
 const images = {
   soju: "../../Drink/soju.png",
@@ -24,13 +24,15 @@ const images = {
 
 const Somaek = (props) => {
   const [loaded, setLoaded] = useState(false);
+  const [start, setStart] = useState(false);
+  const [countDown, setCountDown] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
   const objectRef = useRef(objectsDefault);
   const signalInterval = useRef(null);
-
-
+  const hostId = props.selectId;
+  const timerPrint = useRef(50000);
 
   const imgElements = [];
   const subscribers = props.user.subscribers;
@@ -41,14 +43,11 @@ const Somaek = (props) => {
   }
   scores[props.user.getNickname()] = 0;
 
-
-
   const states = {};
   for (let i = 0; i < subscribers.length; i++) {
     const conId = subscribers[i].stream.connection.connectionId;
     states[props.conId] = undefined;
   }
-
 
   const container = {
     leftX: 0.15,
@@ -65,16 +64,18 @@ const Somaek = (props) => {
   let inBucket = [];
   let orderKorean = [];
 
-
-  useEffect(()=>{
-    signalInterval.current = setInterval(()=>{
+  /* 타이머 주기 */
+  useEffect(() => {
+    if (!start) return;
+    timerPrint.current = 50000;
+    signalInterval.current = setInterval(() => {
       sendStateSignal();
+      if (start && timerPrint.current > 0) timerPrint.current -= 1000;
     }, 1000);
-    return (()=>{
+    return () => {
       clearInterval(signalInterval.current);
-    });
-  }, []);
-
+    };
+  }, [start]);
 
   useEffect(() => {
     const videoNode = videoRef.current;
@@ -111,7 +112,7 @@ const Somaek = (props) => {
               await hands.send({ image: videoRef.current });
             }
           },
-          width: 1280,
+          width: 960,
           height: 720,
         });
         camera.start();
@@ -128,6 +129,7 @@ const Somaek = (props) => {
       if (videoNode && canvasNode) {
         setTimeout(() => {
           setLoaded(true);
+          sendReadySignal();
         }, 5000);
       }
     };
@@ -146,13 +148,14 @@ const Somaek = (props) => {
         const data = JSON.parse(event.data);
         let connectionId = event.from.connectionId;
         let getScore = data.score;
+
+        /* 먼저 그 점수에 도달한 사람이 있으면 0.1을 깎아서 저장 */
+        while (Object.values(scores).includes(getScore)) {
+          getScore -= 0.1;
+          getScore = Math.round(getScore * 10) / 10; // 자바스크립트 부동소수점 오류잡으려면 이런식으로 하라는데?
+        }
+
         scores[props.conToNick[connectionId]] = getScore;
-        // console.log(
-        //   "보낸사람: ",
-        //   props.conToNick[connectionId],
-        //   "score : ",
-        //   getScore,
-        // );
       });
 
     props.user
@@ -162,7 +165,44 @@ const Somaek = (props) => {
         let connectionId = event.from.connectionId;
         let getState = data.state;
         states[connectionId] = getState;
-        console.log(states)
+        console.log(states);
+      });
+
+    /* 내가 호스트일 경우에만, session on 함  */
+    if (
+      props.user.getStreamManager().stream.connection.connectionId === hostId
+    ) {
+      let readyPeople = [];
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:readySignal", (event) => {
+          let fromId = event.from.connectionId;
+          if (!readyPeople.includes(fromId)) {
+            readyPeople.push(fromId);
+          }
+
+          if (readyPeople.length === subscribers.length + 1) {
+            console.log("받았다!!!");
+            sendStartSignal();
+            props.user
+              .getStreamManager()
+              .stream.session.off("signal:readySignal");
+          }
+        });
+    }
+
+    /* start 시그널 받는 session on !! */
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:startSignal", (event) => {
+        setCountDown(true);
+        /* 3초후에 스타트로 바뀜!*/
+        setTimeout(() => {
+          setCountDown(false);
+          setTimeout(() => {
+            setStart(true);
+          }, 300);
+        }, 3000);
       });
 
     return () => {
@@ -188,12 +228,10 @@ const Somaek = (props) => {
       }
     }
 
-
-    
     loadImages(canvasRef.current, canvasCtx.current, objectRef.current);
     // canvasCtx.current.restore();
   };
-  
+
   const loadImages = async (can_ref, can_ctx, objs) => {
     try {
       for (let type in images) {
@@ -215,12 +253,7 @@ const Somaek = (props) => {
   const drawSoju = (can_ref, can_ctx, objs) => {
     // if(!isMounted) return;
     if (!can_ref) return;
-    can_ctx.clearRect(
-      0,
-      0,
-      can_ctx.canvas.width,
-      can_ctx.canvas.height,
-    );
+    can_ctx.clearRect(0, 0, can_ctx.canvas.width, can_ctx.canvas.height);
 
     for (let i = 0; i < objs.length; i++) {
       let boxLocation = objs[i];
@@ -270,15 +303,23 @@ const Somaek = (props) => {
       // can_ctx.strokeText(text, -200, 200+((index+1) * 30));  // 텍스트를 캔버스에 쓰기
     });
 
+    // can_ctx.fillText(`남은시간: ${timer}`, -can_ref.width + 20, 100);
+    can_ctx.fillText(
+      `남은시간: ${timerPrint.current / 1000}초`,
+      -can_ref.width + 20,
+      150,
+    );
+
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores)
       .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
       .forEach(([key, value], index) => {
         /* 내점수는 초록색으로 표시 */
-        if (key == props.user.getNickname())
-          can_ctx.fillStyle = "green";
+        if (key == props.user.getNickname()) can_ctx.fillStyle = "green";
         else can_ctx.fillStyle = "black";
-        const scoreText = `${key}: ${value}`;
+        /* 소수점 없이 점수 올림 해서 출력 */
+        const upValue = Math.ceil(value);
+        const scoreText = `${key}: ${upValue}`;
         const y = 400 + (index + 1) * 30;
         can_ctx.fillText(scoreText, -200, y);
       });
@@ -290,8 +331,10 @@ const Somaek = (props) => {
     if (!canvasRef) return;
 
     const { x: fingerX, y: fingerY, z: _ } = fingerpick;
-    objectRef.current[boxIndex].leftX = fingerX - objectRef.current[boxIndex].lenX / 2;
-    objectRef.current[boxIndex].topY = fingerY - objectRef.current[boxIndex].lenY / 2;
+    objectRef.current[boxIndex].leftX =
+      fingerX - objectRef.current[boxIndex].lenX / 2;
+    objectRef.current[boxIndex].topY =
+      fingerY - objectRef.current[boxIndex].lenY / 2;
     /* 점수를 위한 object x,y 위치 */
     const objX = objectRef.current[boxIndex].leftX;
     const objY = objectRef.current[boxIndex].topY;
@@ -481,12 +524,11 @@ const Somaek = (props) => {
     }
   };
 
-
   const sendStateSignal = (score) => {
     if (props.user.getStreamManager().session) {
       const data = {
         streamId: props.user.getStreamManager().stream.streamId,
-        state: objectRef.current
+        state: objectRef.current,
       };
       props.user
         .getStreamManager()
@@ -496,12 +538,41 @@ const Somaek = (props) => {
           type: "somaekState",
         })
         .then(() => {
-          console.log("Message successfully sent");
+          console.log("stateSignal successfully sent");
         })
         .catch((error) => {
           console.error(error);
         });
     }
+  };
+  const sendReadySignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "readySignal",
+      })
+      .then(() => {
+        console.log("readySignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const sendStartSignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "startSignal",
+      })
+      .then(() => {
+        console.log("startSignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -510,6 +581,11 @@ const Somaek = (props) => {
         {props.mode === "somaek" && !loaded && (
           <div>
             <Loading />
+          </div>
+        )}
+        {props.mode === "somaek" && countDown && (
+          <div>
+            <CountDown />
           </div>
         )}
         {props.mode === "somaek" ? (
@@ -524,10 +600,12 @@ const Somaek = (props) => {
             />
 
             <canvas
-              className={styles.somaekCanvas}
+              className={`${styles.somaekCanvas} ${!start && styles.hidden}`}
               ref={canvasRef}
-              width={1280}
-              height={720}
+              // width={1280}
+              // height={720}
+              width={"1920px"}
+              height={"1080px"}
             />
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
