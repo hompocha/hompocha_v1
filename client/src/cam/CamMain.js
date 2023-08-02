@@ -306,6 +306,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       {mode === "somaek" && (
         <div>
           <Somaek
+            selectId={chooseHost()}
             mode={mode}
             user={user}
             sessionConnected={sessionConnected}
