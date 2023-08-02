@@ -64,7 +64,7 @@ const Somaek = (props) => {
 
   let score = 0;
   let order = [];
-  let inBucket = [];
+  let inBucket = []; 
   let orderKorean = [];
 
   /* 게임시작, 타이머 주기 */
@@ -76,14 +76,15 @@ const Somaek = (props) => {
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
+        const sortedScores = Object.entries(scores).sort(
+          ([, a], [, b]) => b - a,
+        );
+        const lowestScorePerson = sortedScores[sortedScores.length - 1];
+        setLowestConId(lowestScorePerson[0]);
         setTimeout(() => {
           if (!isGameOver) {
             setIsGameOver(true);
-            const sortedScores = Object.entries(scores).sort(
-              ([, a], [, b]) => b - a,
-            );
-            const lowestScorePerson = sortedScores[sortedScores.length - 1];
-            setLowestConId(lowestScorePerson[0]);
+           
           }
         }, 1000);
       }
