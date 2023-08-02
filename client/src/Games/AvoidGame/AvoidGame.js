@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Camera } from "@mediapipe/camera_utils";
 import { Results, Hands, VERSION } from "@mediapipe/hands";
 import styles from "./AvoidGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 import useSound from "../../useSound";
 import BGM from "../../sounds/avoidBGM.mp3";
+import Loading from "../../Loading/Loading";
 
 function newObj(src, width, height) {
   this.position = { x: 0, y: 0 };
@@ -63,10 +64,8 @@ const AvoidGame = (props) => {
   const subscribers = props.user.subscribers;
   const subscriberState = {};
 
-
   /* 배경음악 */
   useSound(BGM, 1);
-
 
   /* 데이터 수신해서 반영 */
   useEffect(() => {
@@ -82,6 +81,23 @@ const AvoidGame = (props) => {
         });
     }
   }, [props.user.getStreamManager().stream.session]);
+
+  useEffect(() => {
+    const handleLoaded = () => {
+      if (videoRef.current && canvasRef.current) {
+        setTimeout(() => {
+          setLoaded(true);
+        }, 3000);
+      }
+    };
+
+    if (videoRef.current) {
+      videoRef.current.addEventListener("loadeddata", handleLoaded);
+    }
+    if (canvasRef.current) {
+      handleLoaded();
+    }
+  }, [videoRef.current, canvasRef.current]);
 
   /* 비디오 시작 시 - 손 인식 시작 */
   useEffect(() => {
@@ -115,10 +131,6 @@ const AvoidGame = (props) => {
 
   /* 손 위치 인식 + 패들 위치 업데이트 + 패들 캔버스에 그림 */
   const onResults = (results) => {
-    if (canvasRef.current && canvasCtx.current) {
-      setLoaded(true);
-    }
-
     /* 패들 위치 감지 */
     if (results.multiHandLandmarks && results.multiHandedness) {
       if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
@@ -310,9 +322,15 @@ const AvoidGame = (props) => {
 
   return (
     <>
+      {props.mode === "avoidGame" && !loaded && (
+        <div>
+          <Loading />
+        </div>
+      )}
       {props.user.connectionId === props.host ? <h1>host</h1> : null}
       <video
-        className={styles.avoidVideo}
+        className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
+        // className={styles.avoidVideo}
         autoPlay={true}
         ref={(el) => {
           videoRef.current = el;
@@ -323,7 +341,11 @@ const AvoidGame = (props) => {
       {/* subscribers Cam */}
       {subscribers.map((subscriber, index) => (
         <>
-          <div className={styles[`avoidGameSub${index + 1}`]}>
+          <div
+            className={`${styles[`avoidGameSub${index + 1}`]} ${
+              !loaded && styles.hidden
+            }`}
+          >
             <OpenViduVideoComponent
               mode={"avoidGame"}
               streamManager={subscriber}
@@ -331,7 +353,11 @@ const AvoidGame = (props) => {
               gameState={subscriberState}
             />
           </div>
-          <div className={styles[`userNick${index + 1}`]}>
+          <div
+            className={`${styles[`userNick${index + 1}`]} ${
+              !loaded && styles.hidden
+            }`}
+          >
             닉네임이 들어갈 자리
           </div>
         </>

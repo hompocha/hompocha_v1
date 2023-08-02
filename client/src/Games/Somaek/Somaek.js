@@ -143,8 +143,6 @@ const Somaek = (props) => {
         const data = JSON.parse(event.data);
         let connectionId = event.from.connectionId;
         let getScore = data.score;
-        /* 원래코드 */
-        // scores[props.conToNick[connectionId]] = getScore;
 
         /* 먼저 그 점수에 도달한 사람이 있으면 0.1을 깎아서 저장 */
         while (Object.values(scores).includes(getScore)) {
