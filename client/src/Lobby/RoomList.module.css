@@ -1,8 +1,8 @@
 .roomListWrap {
-  width: 40vw;
+  width: 50vw;
   position: absolute;
-  top: 17vh;
-  left: 40vw;
+  top: 15vh;
+  left: 32vw;
   /* border: 3px solid black; */
   border-radius: 10px;
   padding: 5px;
@@ -11,6 +11,21 @@
 }
 .roomList{
   display: flex;
+  width: 50vw;
+}
+.roomName{
+  width: 320px;
+}
+.roomPeople{
+  width: 200px;
+}
+.roomStatus{
+  width: 150px;
+}
+.roomInButton{
+  border-radius: 1%;
+  width: 70px;
+  height: 50px;
 }
 img{
   width: 500px;

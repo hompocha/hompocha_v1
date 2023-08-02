@@ -103,7 +103,6 @@ const Login: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error(error);
-      alert("에러");
     }
   };
 
