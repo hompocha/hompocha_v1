@@ -6,6 +6,7 @@ import "regenerator-runtime/runtime";
 import somaekSuccess from "../sounds/somaekSuccess.wav";
 import somaekFail from "../sounds/somaekFail.wav";
 import { effectSound } from "../effectSound";
+import {set} from "mongoose";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지"];
 const speech_sentence = [
@@ -22,9 +23,9 @@ const speech_sentence = [
   "네가 그린 기린 그림은 못생긴 기린 그림이다",
 ];
 const gameStartKeywords = [
-  "사장님 발음 게임 하나 주세요",
-  "사장님 소맥 게임 하나 주세요",
-  "사장님 피하기 게임 하나 주세요",
+  "사장님 발음 게임이요",
+  "사장님 소맥 게임이요",
+  "사장님 피하기 게임이요",
   "발음 게임",
   "소맥 게임",
   "피하기 게임",
@@ -36,7 +37,7 @@ const UseSpeechRecognition = (props) => {
   const [value, setValue] = useState("");
   const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState("");
-
+  const [woo,setWoo] = useState(true);
   const lang = "ko-Kr";
   useEffect(() => {
     for (const sentence of speech_sentence) {
@@ -48,12 +49,17 @@ const UseSpeechRecognition = (props) => {
         );
       }
     }
+
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
+        stop();
+        setWoo(false);
         props.sendEffectSignal(word);
       }
     }
+
+
     for (const gameStartKeyword of gameStartKeywords) {
       if (value.includes(gameStartKeyword)) {
         setExtractedValue(gameStartKeyword);
@@ -80,6 +86,16 @@ const UseSpeechRecognition = (props) => {
     }
     console.log("Value:", value); // 추가된 부분
   }, [value]);
+
+  useEffect(()=>{
+    if(!woo){
+      const timeout = setTimeout(() => {
+        setWoo(true);
+        listen({lang});
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  },[woo])
 
   useEffect(() => {
     if (extractedValue !== "") {
