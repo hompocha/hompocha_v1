@@ -30,6 +30,12 @@ const images = {
   rank: "../../rank.png",
 };
 
+
+
+/*======================================================= */  
+/*=================== 메인 함수 시작=================== */  
+/*======================================================= */  
+
 const Somaek = (props) => {
   const [loaded, setLoaded] = useState(false);
   const [start, setStart] = useState(false);
@@ -40,7 +46,7 @@ const Somaek = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
-  const objectRef = useRef(objectsDefault);
+  const objectRef = useRef(JSON.parse(JSON.stringify(objectsDefault)));
   const signalInterval = useRef(null);
   const hostId = props.selectId;
   const timerPrint = useRef(15000);
@@ -75,6 +81,11 @@ const Somaek = (props) => {
   let inBucket = [];
   let orderKorean = [];
 
+
+
+/*======================================================= */  
+/*=================== 게임 시작=================== */  
+/*======================================================= */  
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
@@ -96,6 +107,7 @@ const Somaek = (props) => {
 
         setTimeout(() => {
           if (!isGameOver) {
+            objectRef.current = JSON.parse(JSON.stringify(objectsDefault));
             setIsGameOver(true);
           }
         }, 500);
@@ -107,6 +119,11 @@ const Somaek = (props) => {
     };
   }, [start]);
 
+
+/*======================================================= */  
+/*===================손 인식 및 게임 화면 그리기=================== */  
+/*======================================================= */  
+  /* 손 인식 부분 */
   useEffect(() => {
     let didCancel = false;
 
@@ -156,103 +173,7 @@ const Somaek = (props) => {
     };
   }, [handStop]);
 
-  useEffect(() => {
-    const videoNode = videoRef.current;
-    const canvasNode = canvasRef.current;
-    if (order.length === 0) {
-      order = randomDrink();
-      orderKorean = printDrinks(order);
-      console.log(order);
-    }
-
-    const handleLoaded = () => {
-      if (videoNode && canvasNode) {
-        setTimeout(() => {
-          setLoaded(true);
-          sendReadySignal();
-        }, 5000);
-      }
-    };
-
-    if (videoNode) {
-      videoNode.addEventListener("loadeddata", handleLoaded);
-    }
-    if (canvasNode) {
-      handleLoaded();
-    }
-
-    /* 시그널 받았을때 처리 */
-    props.user
-      .getStreamManager()
-      .stream.session.on("signal:somaekScore", (event) => {
-        const data = JSON.parse(event.data);
-        let connectionId = event.from.connectionId;
-        let getScore = data.score;
-
-        /* 먼저 그 점수에 도달한 사람이 있으면 0.1을 깎아서 저장 */
-        while (Object.values(scores).includes(getScore)) {
-          getScore -= 0.1;
-          getScore = Math.round(getScore * 10) / 10; // 자바스크립트 부동소수점 오류잡으려면 이런식으로 하라는데?
-        }
-
-        scores[props.conToNick[connectionId]] = getScore;
-      });
-
-    props.user
-      .getStreamManager()
-      .stream.session.on("signal:somaekState", (event) => {
-        const data = JSON.parse(event.data);
-        let connectionId = event.from.connectionId;
-        let getState = data.state;
-        states[connectionId] = getState;
-        console.log(states);
-      });
-
-    /* 내가 호스트일 경우에만, session on 함  */
-    if (
-      props.user.getStreamManager().stream.connection.connectionId === hostId
-    ) {
-      let readyPeople = [];
-      props.user
-        .getStreamManager()
-        .stream.session.on("signal:readySignal", (event) => {
-          let fromId = event.from.connectionId;
-          if (!readyPeople.includes(fromId)) {
-            readyPeople.push(fromId);
-          }
-
-          if (readyPeople.length === subscribers.length + 1) {
-            console.log("받았다!!!");
-            sendStartSignal();
-            props.user
-              .getStreamManager()
-              .stream.session.off("signal:readySignal");
-          }
-        });
-    }
-
-    /* start 시그널 받는 session on !! */
-    props.user
-      .getStreamManager()
-      .stream.session.on("signal:startSignal", (event) => {
-        setCountDown(true);
-        /* 3초후에 스타트로 바뀜!*/
-        setTimeout(() => {
-          setCountDown(false);
-          setTimeout(() => {
-            setStart(true);
-          }, 300);
-        }, 3000);
-      });
-
-    return () => {
-      // didCancel = true;
-      props.user.getStreamManager().stream.session.off("signal:somaekScore");
-      if (videoNode) {
-        videoNode.removeEventListener("loadeddata", handleLoaded);
-      }
-    };
-  }, [videoRef.current, canvasRef.current]);
+  
 
   /* on Results */
   const onResults = (results) => {
@@ -661,6 +582,7 @@ const Somaek = (props) => {
     const drinkCount = new Map();
 
     // 각 요소에 대해
+    
     drinks.forEach((drink) => {
       // 현재 요소의 빈도를 가져옴 (없으면 0)
       const currentCount = drinkCount.get(drink) || 0;
@@ -697,6 +619,172 @@ const Somaek = (props) => {
     return drinkPrintList;
   }
 
+
+
+
+
+
+/*======================================================= */  
+/*===================시그널 관련=================== */  
+/*======================================================= */  
+
+  /* 시그널 받는 부분 */
+  useEffect(() => {
+    const videoNode = videoRef.current;
+    const canvasNode = canvasRef.current;
+    if (order.length === 0) {
+      order = randomDrink();
+      orderKorean = printDrinks(order);
+      console.log(order);
+    }
+
+    const handleLoaded = () => {
+      if (videoNode && canvasNode) {
+        setTimeout(() => {
+          setLoaded(true);
+          sendReadySignal();
+        }, 5000);
+      }
+    };
+
+    if (videoNode) {
+      videoNode.addEventListener("loadeddata", handleLoaded);
+    }
+    if (canvasNode) {
+      handleLoaded();
+    }
+
+    /* 시그널 받았을때 처리 */
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:somaekScore", (event) => {
+        const data = JSON.parse(event.data);
+        let connectionId = event.from.connectionId;
+        let getScore = data.score;
+
+        /* 먼저 그 점수에 도달한 사람이 있으면 0.1을 깎아서 저장 */
+        while (Object.values(scores).includes(getScore)) {
+          getScore -= 0.1;
+          getScore = Math.round(getScore * 10) / 10; // 자바스크립트 부동소수점 오류잡으려면 이런식으로 하라는데?
+        }
+
+        scores[props.conToNick[connectionId]] = getScore;
+      });
+
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:somaekState", (event) => {
+        const data = JSON.parse(event.data);
+        let connectionId = event.from.connectionId;
+        let getState = data.state;
+        states[connectionId] = getState;
+        console.log(states);
+      });
+
+    /* 내가 호스트일 경우에만, session on 함  */
+    if (
+      props.user.getStreamManager().stream.connection.connectionId === hostId
+    ) {
+      let readyPeople = [];
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:readySignal", (event) => {
+          let fromId = event.from.connectionId;
+          if (!readyPeople.includes(fromId)) {
+            readyPeople.push(fromId);
+          }
+
+          if (readyPeople.length === subscribers.length + 1) {
+            console.log("받았다!!!");
+            sendStartSignal();
+            props.user
+              .getStreamManager()
+              .stream.session.off("signal:readySignal");
+          }
+        });
+    }
+
+    /* start 시그널 받는 session on !! */
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:startSignal", (event) => {
+        setCountDown(true);
+        /* 3초후에 스타트로 바뀜!*/
+        setTimeout(() => {
+          setCountDown(false);
+          setTimeout(() => {
+            setStart(true);
+          }, 300);
+        }, 3000);
+      });
+
+    return () => {
+      // didCancel = true;
+      props.user.getStreamManager().stream.session.off("signal:somaekScore");
+      if (videoNode) {
+        videoNode.removeEventListener("loadeddata", handleLoaded);
+      }
+    };
+  }, [videoRef.current, canvasRef.current]);
+
+
+
+  /*게임 로드 후 레디 시그널 전송 */
+  const sendReadySignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "readySignal",
+      })
+      .then(() => {
+        console.log("readySignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  /*게임 시작 시그널 전송*/
+  const sendStartSignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "startSignal",
+      })
+      .then(() => {
+        console.log("startSignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  /* 게임 진행 상태 전송 */
+  const sendStateSignal = (score) => {
+    if (props.user.getStreamManager().session) {
+      const data = {
+        streamId: props.user.getStreamManager().stream.streamId,
+        state: objectRef.current,
+      };
+      props.user
+        .getStreamManager()
+        .session.signal({
+          data: JSON.stringify(data),
+          to: [],
+          type: "somaekState",
+        })
+        .then(() => {
+          console.log("stateSignal successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  /* 게임 결과 전송 */
   const sendScoreSignal = (score) => {
     if (props.user.getStreamManager().session) {
       const data = {
@@ -719,56 +807,10 @@ const Somaek = (props) => {
     }
   };
 
-  const sendStateSignal = (score) => {
-    if (props.user.getStreamManager().session) {
-      const data = {
-        streamId: props.user.getStreamManager().stream.streamId,
-        state: objectRef.current,
-      };
-      props.user
-        .getStreamManager()
-        .session.signal({
-          data: JSON.stringify(data),
-          to: [],
-          type: "somaekState",
-        })
-        .then(() => {
-          console.log("stateSignal successfully sent");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  };
-  const sendReadySignal = () => {
-    props.user
-      .getStreamManager()
-      .session.signal({
-        to: [],
-        type: "readySignal",
-      })
-      .then(() => {
-        console.log("readySignal successfully sent");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
-  const sendStartSignal = () => {
-    props.user
-      .getStreamManager()
-      .session.signal({
-        to: [],
-        type: "startSignal",
-      })
-      .then(() => {
-        console.log("startSignal successfully sent");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+/*======================================================= */  
+/*=================== return =================== */  
+/*======================================================= */  
 
   return (
     <>

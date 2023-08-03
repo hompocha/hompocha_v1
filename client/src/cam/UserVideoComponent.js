@@ -11,6 +11,7 @@ const UserVideoComponent = (props) => {
                 streamManager={props.streamManager}
                 index = {props.index}
                 num = {props.num}
+                myself = {props.myself}
             />
         ) : null}
       </>

@@ -43,6 +43,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       console.log("닉네임 리스트 ", conToNick);
     });
 
+    user.getStreamManager().stream.session.on("signal:cheersData", (event)=>{
+      const data = JSON.parse(event.data)
+      const handData = data.hand;
+      console.log(handData);
+    });
+
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {
       const data = event.data;
       if (data === "airHockey") {

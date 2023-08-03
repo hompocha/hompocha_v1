@@ -21,7 +21,7 @@ const CamTest = (props: any) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [flag, setFlag] = useState(0);
   const [counts, setCounts] = useState(0);
-  // const memberCount = useRef(num);
+  const myself = props.user.connectionId;
 
   /* 부채꼴 모양으로 자른 캠 */
   const CamSlice: React.FC<Props> = ({
@@ -79,14 +79,16 @@ const CamTest = (props: any) => {
               index={index}
               num={num}
               mode={mode}
-            />
-          )}
+              myself = {myself}
+              />
+              )}
           {flag === 1 && (
             <UserVideoComponent
-              streamManager={members[counts - 1]}
-              index={1}
-              num={num}
-              mode="roulette"
+            streamManager={members[counts - 1]}
+            index={1}
+            num={num}
+            mode="roulette"
+            myself = {myself}
             />
           )}
         </foreignObject>

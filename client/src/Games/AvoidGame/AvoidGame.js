@@ -45,9 +45,9 @@ const defaultGameState = {
   player: {
     position: { x: 0.5, y: 0.95 },
     nextPosition: { x: 0.5, y: 0.95 },
-    width: 0.05,
-    height: 0.08,
-    state: "normal"
+    width: 0.04,
+    height: 0.09,
+    state: 0
   },
   objects: [],
 };
@@ -59,6 +59,12 @@ const images = {
   player_normal: "../../asset/game_img/normal.png",
   player_sick: "../../asset/game_img/sick.png",
 };
+
+
+
+/*======================================================= */  
+/*=================== 메인 함수 시작=================== */  
+/*======================================================= */  
 
 const AvoidGame = (props) => {
   const myConnectionId = props.user.connectionId;
@@ -85,72 +91,52 @@ const AvoidGame = (props) => {
   const result = [];
 
   /* 배경음악 */
-  useSound(BGM, 1);
+  useSound(BGM,0.7);
 
-  /* 데이터 수신해서 반영 */
+
+
+/*======================================================= */  
+/*=================== 게임 시작=================== */  
+/*======================================================= */  
+
+  /* 프레임마다 전송 */
   useEffect(() => {
-    if (props.user.getStreamManager().stream.session) {
-      props.user
-        .getStreamManager()
-        .stream.session.on("signal:avoidgame_state", (event) => {
-          const data = JSON.parse(event.data);
-          subscriberState[`${data.currentGameState.user}`] =
-            data.currentGameState;
-        });
+    // console.log(props.user.connectionId, props.host);
+    // if (props.user.connectionId === props.host ){
+    //   console.log('I am the host!');
+    // }
+    gameState.current.user = props.user.connectionId;
+
+    if(canvasRef.current){
+      if(!start) return;
+    canvasCtx.current = canvasRef.current.getContext("2d");
+    sendInterval.current = setInterval(() => {
+      sendGameState(gameState.current);
+    }, 1000 / 20);
+
+    objInterval.current = setObjInterval(
+      1000 / gameState.current.condition.objIntervalFrame,
+    );
+
+    speedInterval.current = setInterval(() => {
+      clearInterval(objInterval.current);
+      gameState.current.condition.objIntervalFrame += 5;
+      objInterval.current = setObjInterval(
+        1000 / gameState.current.condition.objIntervalFrame,
+      );
+    }, 7 * 1000);}
+
+    return () => {
+      clearInterval(objInterval.current);
+      clearInterval(speedInterval.current);
+      clearInterval(sendInterval.current);
+    };
+  }, [start]);
 
 
-      props.user
-        .getStreamManager()
-        .stream.session.on("signal:avoidgame_result", (event) => {
-          const data = JSON.parse(event.data);
-          result.push(data.user);
-          console.log(result.length, subscribers.length);
-          if (result.length >= subscribers.length+1){
-            console.log(result[0]);
-            setLowestConId(result[0]);
-            setIsGameOver(true);
-          }
-        });
-
-         /* start 시그널 받는 session on !! */
-    props.user
-    .getStreamManager()
-    .stream.session.on("signal:startSignal", (event) => {
-      setCountDown(true);
-      /* 3초후에 스타트로 바뀜!*/
-      setTimeout(() => {
-        setCountDown(false);
-        setTimeout(() => {
-          setStart(true);
-        }, 300);
-      }, 3000);
-    });
-
-    /* 내가 호스트일 경우에만, session on 함  */
-    if (
-      props.user.getStreamManager().stream.connection.connectionId === hostId
-    ) {
-      let readyPeople = [];
-      props.user
-        .getStreamManager()
-        .stream.session.on("signal:readySignal", (event) => {
-          let fromId = event.from.connectionId;
-          if (!readyPeople.includes(fromId)) {
-            readyPeople.push(fromId);
-            console.log(readyPeople);
-          }
-
-          if (readyPeople.length === subscribers.length + 1) {
-            console.log("받았다!!!");
-            sendStartSignal();
-            props.user
-              .getStreamManager()
-              .stream.session.off("signal:readySignal");
-          }
-        });
-    }
-    }
-  }, [props.user.getStreamManager().stream.session]);
+/*======================================================= */  
+/*===================손 인식 및 게임 화면 그리기=================== */  
+/*======================================================= */  
 
   useEffect(() => {
     const handleLoaded = () => {
@@ -243,39 +229,6 @@ const AvoidGame = (props) => {
     loadImages(canvasRef.current, canvasCtx.current, gameState.current);
   };
 
-  /* 프레임마다 전송 */
-  useEffect(() => {
-    // console.log(props.user.connectionId, props.host);
-    // if (props.user.connectionId === props.host ){
-    //   console.log('I am the host!');
-    // }
-    gameState.current.user = props.user.connectionId;
-
-    if(canvasRef.current){
-      if(!start) return;
-    canvasCtx.current = canvasRef.current.getContext("2d");
-    sendInterval.current = setInterval(() => {
-      sendGameState(gameState.current);
-    }, 1000 / 20);
-
-    objInterval.current = setObjInterval(
-      1000 / gameState.current.condition.objIntervalFrame,
-    );
-
-    speedInterval.current = setInterval(() => {
-      clearInterval(objInterval.current);
-      gameState.current.condition.objIntervalFrame += 5;
-      objInterval.current = setObjInterval(
-        1000 / gameState.current.condition.objIntervalFrame,
-      );
-    }, 7 * 1000);}
-
-    return () => {
-      clearInterval(objInterval.current);
-      clearInterval(speedInterval.current);
-      clearInterval(sendInterval.current);
-    };
-  }, [start]);
 
   const setObjInterval = (time) => {
     return setInterval(() => {
@@ -290,69 +243,16 @@ const AvoidGame = (props) => {
         obj.type = "beer";
       }
       obj.position.y = gameState.current.condition.objDropHeight;
-      obj.position.x = Math.random()*1.3-0.15;
+      obj.position.x = Math.random()*1.3-0.15;    // 가장자리 사각지대 방지
       gameState.current.objects.push(obj);
     }, time);
   };
 
-  const sendGameState = (currentGameState) => {
-    if (props.user) {
-      const stateToSend = JSON.stringify({ currentGameState });
-      props.user
-        .getStreamManager()
-        .session.signal({
-          data: stateToSend,
-          to: [],
-          type: "avoidgame_state",
-        })
-        .then(() => {
-          console.log("Message successfully sent");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  };
 
 
-  const sendGameResult = () => {
-    if (props.user) {
-      const Id = JSON.stringify({ user: myConnectionId });
-      props.user
-        .getStreamManager()
-        .session.signal({
-          data: Id,
-          to: [],
-          type: "avoidgame_result",
-        })
-        .then(() => {
-          console.log("Message successfully sent");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  };
-
-
-  /* 전체 게임을 그림 */
-  const drawGame = async (can_ref, can_ctx, gameState) => {
-    const w = can_ref.width;
-    const h = can_ref.height;
-    can_ctx.save();
-    can_ctx.clearRect(0, 0, w, h);
-    drawPlayer(can_ref, can_ctx, gameState.player);
-    gameState.objects.forEach((obj) => {
-      drawObj(can_ref, can_ctx, obj);
-    });
-
-    drawHpBar(can_ref, can_ctx, gameState.hpBar.hpLeft);
-    can_ctx.restore();
-  };
-
-  /* 플레이어를 그림 */
   
   
+  /* 이미지 로드 후 게임 그리기 */
   const loadImages = async (can_ref, can_ctx, gameState) => {
     try {
       for (let type in images) {
@@ -365,7 +265,6 @@ const AvoidGame = (props) => {
         imgElements[type] = img;
       }
       // 모든 이미지 로딩이 완료되면 애니메이션 시작
-      // drawSoju(can_ref, can_ctx, objs);
       drawGame(can_ref, can_ctx, gameState);
       
     } catch (error) {
@@ -373,12 +272,36 @@ const AvoidGame = (props) => {
     }
   };
   
+  /* 전체 게임을 그림 */
+  const drawGame = async (can_ref, can_ctx, gameState) => {
+    const w = can_ref.width;
+    const h = can_ref.height;
+    can_ctx.save();
+    can_ctx.clearRect(0, 0, w, h);
+    drawPlayer(can_ref, can_ctx, gameState.player);
+    gameState.objects.forEach((obj) => {
+      drawObj(can_ref, can_ctx, obj);
+    });
+
+    if(gameState.player.state>0){
+      const grad = can_ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0.4, 'rgba(0, 0, 0, 0)');
+      grad.addColorStop(0, 'rgba(255, 0, 0, 0.6)');
+      can_ctx.fillStyle = grad;
+      can_ctx.fillRect(0,0,w,h);
+    }
+    
+    drawHpBar(can_ref, can_ctx, gameState.hpBar.hpLeft);
+
+    can_ctx.restore();
+  };
+
   /* 플레이어를 그림 */
   const drawPlayer = (can_ref, can_ctx, player) => {
     const w = can_ref.width;
     const h = can_ref.height;
 
-    const img = (player.state==="normal")?imgElements['player_normal']:imgElements['player_sick'];
+    const img = (player.state < 1)?imgElements['player_normal']:imgElements['player_sick'];
     can_ctx.drawImage(
       img,
         (player.position.x - player.width / 2) * w,
@@ -438,7 +361,11 @@ const AvoidGame = (props) => {
             gameState.hpBar.hpLeft.current,
           );
           gameState.hpBar.hpLeft -= 10;
-          gameState.player.state = "sick";
+          gameState.player.state += 1;
+          setTimeout(()=>{
+            gameState.player.state -=1;
+          }, 200);
+
           if (gameState.hpBar.hpLeft < 0) {
             gameState.objects = [];
             gameState.hpBar.hpLeft = 100;
@@ -457,9 +384,6 @@ const AvoidGame = (props) => {
         }
         gameState.objects.splice(i, 1);
       }
-      else {
-        gameState.player.state = "normal";
-      }
       obj.position.y = obj.position.y + gameState.condition.objSpeed;
       if (obj.position.y > gameState.condition.ground) {
         gameState.objects.splice(i, 1);
@@ -469,6 +393,80 @@ const AvoidGame = (props) => {
 
 
 
+
+
+/*======================================================= */  
+/*===================시그널 관련=================== */  
+/*======================================================= */  
+
+  /* 데이터 수신해서 반영 */
+  useEffect(() => {
+    if (props.user.getStreamManager().stream.session) {
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:avoidgame_state", (event) => {
+          const data = JSON.parse(event.data);
+          subscriberState[`${data.currentGameState.user}`] =
+            data.currentGameState;
+        });
+
+
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:avoidgame_result", (event) => {
+          const data = JSON.parse(event.data);
+          result.push(data.user);
+          console.log(result.length, subscribers.length);
+          if (result.length >= subscribers.length+1){
+            console.log(result[0]);
+            setLowestConId(result[0]);
+            setIsGameOver(true);
+          }
+        });
+
+         /* start 시그널 받는 session on !! */
+      props.user
+      .getStreamManager()
+      .stream.session.on("signal:startSignal", (event) => {
+        setCountDown(true);
+        /* 3초후에 스타트로 바뀜!*/
+        setTimeout(() => {
+          setCountDown(false);
+          setTimeout(() => {
+            setStart(true);
+          }, 300);
+        }, 3000);
+      });
+
+    /* 내가 호스트일 경우에만, session on 함  */
+    if (
+      props.user.getStreamManager().stream.connection.connectionId === hostId
+    ) {
+      let readyPeople = [];
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:readySignal", (event) => {
+          let fromId = event.from.connectionId;
+          if (!readyPeople.includes(fromId)) {
+            readyPeople.push(fromId);
+            console.log(readyPeople);
+          }
+
+          if (readyPeople.length === subscribers.length + 1) {
+            console.log("받았다!!!");
+            sendStartSignal();
+            props.user
+              .getStreamManager()
+              .stream.session.off("signal:readySignal");
+          }
+        });
+    }
+    }
+  }, [props.user.getStreamManager().stream.session]);
+
+
+
+  /* 게임 로딩 후 레디 시 전송 */
   const sendReadySignal = () => {
     props.user
       .getStreamManager()
@@ -484,6 +482,7 @@ const AvoidGame = (props) => {
       });
   };
 
+  /* 게임 시작 시그널 전송 */
   const sendStartSignal = () => {
     props.user
       .getStreamManager()
@@ -498,6 +497,52 @@ const AvoidGame = (props) => {
         console.error(error);
       });
   };
+
+  /* 게임 진행 상태 전송 */
+  const sendGameState = (currentGameState) => {
+    if (props.user) {
+      const stateToSend = JSON.stringify({ currentGameState });
+      props.user
+        .getStreamManager()
+        .session.signal({
+          data: stateToSend,
+          to: [],
+          type: "avoidgame_state",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  /* 게임 결과 전송 */
+  const sendGameResult = () => {
+    if (props.user) {
+      const Id = JSON.stringify({ user: myConnectionId });
+      props.user
+        .getStreamManager()
+        .session.signal({
+          data: Id,
+          to: [],
+          type: "avoidgame_result",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+
+
+/*======================================================= */  
+/*=================== return =================== */  
+/*======================================================= */  
 
   return (
     <>
@@ -515,6 +560,7 @@ const AvoidGame = (props) => {
         )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
+
         <video
           className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
           // className={styles.avoidVideo}
