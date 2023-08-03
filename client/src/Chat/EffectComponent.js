@@ -10,6 +10,7 @@ const EffectComponent = ({ user, sessionConnected }) => {
     강아지: [],
     구름: [],
     벚꽃: [],
+    그만해: [],
   });
 
   useEffect(() => {
@@ -31,29 +32,37 @@ const EffectComponent = ({ user, sessionConnected }) => {
       return () => streamManager.off("signal:effect", handleEffect);
     }
   }, [user]);
-
+  const stopRequested = keywordList.그만해.length > 0;
   return (
     <div>
-      <React.Fragment>
-        {keywordList.고양이.map((cat, index) => (
-          <CatCanvas key={index} x={cat.x} y={cat.y} />
-        ))}
-      </React.Fragment>
-      <React.Fragment>
-        {keywordList.강아지.map((dog, index) => (
-          <DogCanvas key={index} x={dog.x} y={dog.y} />
-        ))}
-      </React.Fragment>
-      <React.Fragment>
-        {keywordList.구름.map((cloud, index) => (
-          <CloudCanvas key={index} x={cloud.x} y={cloud.y} />
-        ))}
-      </React.Fragment>
-      <React.Fragment>
-        {keywordList.벚꽃.map((blossom, index) => (
-          <CherryBlossom key={index} x={blossom.x} y={blossom.y} />
-        ))}
-      </React.Fragment>
+      {!stopRequested && (
+        <React.Fragment>
+          {keywordList.고양이.map((cat, index) => (
+            <CatCanvas key={index} x={cat.x} y={cat.y} />
+          ))}
+        </React.Fragment>
+      )}
+      {!stopRequested && (
+        <React.Fragment>
+          {keywordList.강아지.map((dog, index) => (
+            <DogCanvas key={index} x={dog.x} y={dog.y} />
+          ))}
+        </React.Fragment>
+      )}
+      {!stopRequested && (
+        <React.Fragment>
+          {keywordList.구름.map((cloud, index) => (
+            <CloudCanvas key={index} x={cloud.x} y={cloud.y} />
+          ))}
+        </React.Fragment>
+      )}
+      {!stopRequested && (
+        <React.Fragment>
+          {keywordList.벚꽃.map((blossom, index) => (
+            <CherryBlossom key={index} x={blossom.x} y={blossom.y} />
+          ))}
+        </React.Fragment>
+      )}
     </div>
   );
 };

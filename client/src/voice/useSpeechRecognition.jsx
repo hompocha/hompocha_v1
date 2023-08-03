@@ -8,7 +8,7 @@ import somaekFail from "../sounds/somaekFail.wav";
 import { effectSound } from "../effectSound";
 import {set} from "mongoose";
 
-const keyword = ["고양이", "구름", "벚꽃", "강아지"];
+const keyword = ["고양이", "구름", "벚꽃", "강아지","그만해"];
 const speech_sentence = [
   "시작",
   "간장 공장 공장장은 강 공장장이다",
