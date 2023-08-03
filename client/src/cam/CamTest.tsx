@@ -4,6 +4,8 @@ import styles from "./CamTest.module.scss";
 import { event } from "jquery";
 import BGM from "../sounds/roomBGM.wav";
 import useSound from "../useSound";
+import rouletteSound from "../sounds/rouletteEffect.wav";
+import { effectSound } from "../effectSound";
 
 const CamTest = (props: any) => {
   /* 배경음악 */
@@ -19,8 +21,9 @@ const CamTest = (props: any) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [flag, setFlag] = useState(0);
   const [counts, setCounts] = useState(0);
-  const [angle, setAngle] = useState(360);
-  let memberCount = props.user.subscribers.length + 1;
+  // const memberCount = useRef(num);
+
+  /* 부채꼴 모양으로 자른 캠 */
   const CamSlice: React.FC<Props> = ({
     index,
     radius,
@@ -35,6 +38,14 @@ const CamTest = (props: any) => {
     const publisher = props.user.getStreamManager();
     const subscribers = props.user.getSubscriber();
     const members = [publisher, ...subscribers];
+    members.sort((a, b) => {
+      return a.stream.connection.connectionId < b.stream.connection.connectionId
+        ? -1
+        : a.stream.connection.connectionId > b.stream.connection.connectionId
+        ? 1
+        : 0;
+    });
+    console.log(members);
 
     const startAngleRad = ((startAngle - 90) * Math.PI) / 180;
     const endAngleRad = ((endAngle - 90) * Math.PI) / 180;
@@ -86,6 +97,7 @@ const CamTest = (props: any) => {
     );
   };
 
+  /* 부채꼴 모양의 캠 array return */
   const renderCamSlices = () => {
     const angle = 360 / num - 0.01;
     const pieSlices = [];
@@ -107,16 +119,39 @@ const CamTest = (props: any) => {
     return pieSlices;
   };
 
-  const roulette = () => {
-    const randSlice = Math.floor(Math.random() * num);
-    const rotations = Math.floor(Math.random() * 10) + 8;
-    const targetAngleOffset = -180 + Math.random() * 360; // 변경된 무작위 각도 오프셋
-    const targetAngle = -(
+  const sendRouletteSignal = () => {
+    const targetAngle = rouletteAngle();
+    if (props.user.getStreamManager().session) {
+      props.user
+        .getStreamManager()
+        .session.signal({ data: targetAngle, to: [], type: "rouletteSignal" })
+        .then(() => {
+          effectSound(rouletteSound, false);
+          console.log("Roulette Signal: ", targetAngle);
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    }
+  };
+
+  /* 룰렛 각도 결정 함수*/
+  const rouletteAngle = () => {
+    const randSlice: number = Math.floor(Math.random() * num);
+    const rotations: number = Math.floor(Math.random() * 10) + 8;
+    const targetAngleOffset: number = -180 + Math.random() * 360; // 변경된 무작위 각도 오프셋
+    const targetAngle: number = -(
       360 * rotations +
       randSlice * (360 / num) +
       targetAngleOffset
     ); // 오프셋 추가
-    const spinDuration = 9;
+    return targetAngle;
+  };
+
+  /* 룰렛 함수*/
+  const roulette = (targetAngle: number) => {
+    const memberCount = props.user.getSubscriber().length + 1;
+    const spinDuration = 5;
     const targetAnglePeople = Math.abs(targetAngle % 360);
     console.log("걸린사람 : " + targetAnglePeople);
     if (svgRef.current) {
@@ -124,13 +159,13 @@ const CamTest = (props: any) => {
       svgRef.current.style.transformOrigin = "center";
       svgRef.current.style.transition = `transform ${spinDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
     }
-    console.log(num);
+    console.log(memberCount);
 
     let a = 0;
-    console.log(num, angle);
+    console.log(memberCount, 360 / memberCount);
     while (targetAnglePeople >= a) {
-      a += angle;
-      setCounts((prevCounts) => prevCounts + 1);
+      a += 360 / memberCount;
+      setCounts((prevCounts: number) => prevCounts + 1);
       console.log(a, counts);
     }
     setFlag(0);
@@ -145,7 +180,7 @@ const CamTest = (props: any) => {
         setCounts(0);
         console.log(flag, counts);
       }, 5000);
-    }, 9000);
+    }, 5000);
     const reset = () => {
       if (svgRef.current) {
         svgRef.current.style.transform = "rotate(0deg)";
@@ -156,9 +191,9 @@ const CamTest = (props: any) => {
     };
   };
 
-  useEffect(() => {
-    setAngle(360 / num);
-  }, [num]);
+  // useEffect(() => {
+  //   setAngle(360 / num);
+  // }, [num]);
 
   function cheersImg() {
     const cheersImgGroup = [];
@@ -214,6 +249,13 @@ const CamTest = (props: any) => {
           readyToDrink();
         }
       });
+
+    props.user
+      .getStreamManager()
+      .session.on("signal:rouletteSignal", (event: any) => {
+        console.log("받은 각도:", event.data);
+        roulette(event.data);
+      });
   }, []);
 
   const sendCheersReadySignal = () => {
@@ -236,7 +278,7 @@ const CamTest = (props: any) => {
     <div>
       <div className={styles.triangleDown} />
       <div>
-        <button type="submit" onClick={roulette}>
+        <button type="submit" onClick={sendRouletteSignal}>
           돌려
         </button>
       </div>

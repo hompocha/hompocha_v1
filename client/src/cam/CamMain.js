@@ -13,7 +13,22 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [conToNick] = useState({});
+  const [micEnabled, setMicEnabled] = useState(true);
   // let conToNick = {}; // Empty object, not an array
+
+  const toggleMic = () => {
+    setMicEnabled((prevState) => {
+      const enabled = !prevState;
+      const publisher = user.getStreamManager();
+      if (enabled) {
+        publisher.publishAudio(true);
+      } else {
+        publisher.publishAudio(false);
+      }
+      console.log("sssssStream:", user.getStreamManager().stream); // 로그 출력
+      return enabled;
+    });
+  };
 
   useEffect(() => {
     user.getStreamManager().stream.session.on("signal:nickName", (event) => {
@@ -211,7 +226,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title">{roomName} </div>
             <div>{user.subscribers.length + 1}명 참여중</div>
-
+            <button onClick={toggleMic}>
+              {micEnabled ? "마이크 끄기" : "마이크 켜기"}
+            </button>
             <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
             </form>
