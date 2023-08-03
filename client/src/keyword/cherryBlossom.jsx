@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./cherryBlossom.module.css";
 const TOTAL = 100;
 const petalArray = [];
 
 const CherryBlossom = () => {
   const canvasRef = useRef(null);
-
+  const [isVisible, setIsVisible] = useState(true);
   useEffect(() => {
     if (!canvasRef.current) {
       return;
@@ -79,9 +79,17 @@ const CherryBlossom = () => {
         this.draw();
       }
     }
+    const hideCanvas = () => {
+      setIsVisible(false);
+    };
+    setTimeout(hideCanvas, 15 * 1000); 
   }, [canvasRef]);
 
-  return <canvas className= {styles.size} ref={canvasRef} />
+  return (
+    <>
+      {isVisible && <canvas className={styles.size} ref={canvasRef} />}
+    </>
+  );
 };
 
 export default CherryBlossom;
