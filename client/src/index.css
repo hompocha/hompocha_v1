@@ -7,5 +7,8 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  background-color: #005791;
+  /* background-color: #005791; */
+  background-image: url("../public/asset/pocha.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
