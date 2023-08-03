@@ -14,6 +14,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const navigate = useNavigate();
   const [conToNick] = useState({});
   const [micEnabled, setMicEnabled] = useState(true);
+  const [speechBlocked, setSpeechBlocked] = useState(false);
   // let conToNick = {}; // Empty object, not an array
 
   const toggleMic = () => {
@@ -84,6 +85,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       } else {
         /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
+        /* 음성인식 재시작 */
+        setSpeechBlocked(false);
       }
 
       if (mode === undefined) {
@@ -115,11 +118,15 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   }, [user]);
 
   const enterMainRoom = () => {
-    setMode(undefined);
-    onModeChange(undefined);
+    setSpeechBlocked(true);
+    setTimeout(() => {
+      setMode(undefined);
+      onModeChange(undefined);
+    }, 1500);
   };
 
   const enterAirHockey = () => {
+    setSpeechBlocked(true);
     setMode("airHockey");
     onModeChange("airHockey");
   };
@@ -130,18 +137,27 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   };
 
   const enterSpeech = () => {
-    setMode("speechGame");
-    onModeChange("speechGame");
+    setSpeechBlocked(true);
+    setTimeout(() => {
+      setMode("speechGame");
+      onModeChange("speechGame");
+    }, 1500);
   };
 
   const enterSomaek = () => {
-    setMode("somaek");
-    onModeChange("somaek");
+    setSpeechBlocked(true);
+    setTimeout(() => {
+      setMode("somaek");
+      onModeChange("somaek");
+    }, 1500);
   };
 
   const enterAvoidGame = () => {
-    setMode("avoidGame");
-    onModeChange("avoidGame");
+    setSpeechBlocked(true);
+    setTimeout(() => {
+      setMode("avoidGame");
+      onModeChange("avoidGame");
+    }, 1500);
   };
 
   const sendEffectSignal = (string) => {
@@ -212,8 +228,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   };
 
   const returnLobby = () => {
-    endSession();
-    navigate("/Lobby");
+    setSpeechBlocked(true);
+    setTimeout(() => {
+      endSession();
+      navigate("/Lobby");
+    }, 1500);
   };
 
   console.log("CamMain rendered");
@@ -258,6 +277,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
             <UseSpeechRecognition
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
+              speechBlocked={speechBlocked}
             />
             <CamTest user={user} />
           </div>
