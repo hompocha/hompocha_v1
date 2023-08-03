@@ -75,7 +75,7 @@ const SpeechGame = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, /*stopTime*/ 1000);
+    }, /*stopTime*/ 40000); /*시연*/
     return () => {
       clearTimeout(timer);
     };
