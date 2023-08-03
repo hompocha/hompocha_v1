@@ -4,6 +4,8 @@ import styles from "./CamTest.module.scss";
 import { event } from "jquery";
 import BGM from "../sounds/roomBGM.wav";
 import useSound from "../useSound";
+import rouletteSound from "../sounds/rouletteEffect.wav";
+import { effectSound } from "../effectSound";
 
 const CamTest = (props: any) => {
   /* 배경음악 */
@@ -21,8 +23,6 @@ const CamTest = (props: any) => {
   const [counts, setCounts] = useState(0);
   // const memberCount = useRef(num);
 
-
-
   /* 부채꼴 모양으로 자른 캠 */
   const CamSlice: React.FC<Props> = ({
     index,
@@ -39,10 +39,13 @@ const CamTest = (props: any) => {
     const subscribers = props.user.getSubscriber();
     const members = [publisher, ...subscribers];
     members.sort((a, b) => {
-      return a.stream.connection.connectionId < b.stream.connection.connectionId ?
-          -1 : (a.stream.connection.connectionId > b.stream.connection.connectionId ? 1 : 0) });
+      return a.stream.connection.connectionId < b.stream.connection.connectionId
+        ? -1
+        : a.stream.connection.connectionId > b.stream.connection.connectionId
+        ? 1
+        : 0;
+    });
     console.log(members);
-
 
     const startAngleRad = ((startAngle - 90) * Math.PI) / 180;
     const endAngleRad = ((endAngle - 90) * Math.PI) / 180;
@@ -123,6 +126,7 @@ const CamTest = (props: any) => {
         .getStreamManager()
         .session.signal({ data: targetAngle, to: [], type: "rouletteSignal" })
         .then(() => {
+          effectSound(rouletteSound, false);
           console.log("Roulette Signal: ", targetAngle);
         })
         .catch((error: any) => {
@@ -142,12 +146,12 @@ const CamTest = (props: any) => {
       targetAngleOffset
     ); // 오프셋 추가
     return targetAngle;
-  }
+  };
 
   /* 룰렛 함수*/
   const roulette = (targetAngle: number) => {
     const memberCount = props.user.getSubscriber().length + 1;
-    const spinDuration = 9;
+    const spinDuration = 5;
     const targetAnglePeople = Math.abs(targetAngle % 360);
     console.log("걸린사람 : " + targetAnglePeople);
     if (svgRef.current) {
@@ -158,9 +162,9 @@ const CamTest = (props: any) => {
     console.log(memberCount);
 
     let a = 0;
-    console.log(memberCount, 360/memberCount);
+    console.log(memberCount, 360 / memberCount);
     while (targetAnglePeople >= a) {
-      a += 360/memberCount;
+      a += 360 / memberCount;
       setCounts((prevCounts: number) => prevCounts + 1);
       console.log(a, counts);
     }
@@ -176,7 +180,7 @@ const CamTest = (props: any) => {
         setCounts(0);
         console.log(flag, counts);
       }, 5000);
-    }, 9000);
+    }, 5000);
     const reset = () => {
       if (svgRef.current) {
         svgRef.current.style.transform = "rotate(0deg)";
@@ -246,7 +250,7 @@ const CamTest = (props: any) => {
         }
       });
 
-      props.user
+    props.user
       .getStreamManager()
       .session.on("signal:rouletteSignal", (event: any) => {
         console.log("받은 각도:", event.data);
@@ -294,5 +298,3 @@ const CamTest = (props: any) => {
 };
 
 export default CamTest;
-
-

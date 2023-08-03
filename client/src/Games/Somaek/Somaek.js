@@ -6,6 +6,10 @@ import { Camera } from "@mediapipe/camera_utils";
 import { Hands, VERSION } from "@mediapipe/hands";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 import LoserCam from "../loserCam/LoserCam";
+import somaekBGM from "../../sounds/somaekBGM.mp3";
+import somaekSuccess from "../../sounds/somaekSuccess.wav";
+import somaekFail from "../../sounds/somaekFail.wav";
+import { effectSound } from "../../effectSound";
 
 const objectsDefault = [
   { leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5, type: "beer" },
@@ -67,33 +71,36 @@ const Somaek = (props) => {
 
   let score = 0;
   let order = [];
-  let inBucket = []; 
+  let inBucket = [];
   let orderKorean = [];
 
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 15000;
+
+    timerPrint.current = 15000; /*시연*/
+    const sound = effectSound(somaekBGM, true, 0.2);
+
     signalInterval.current = setInterval(() => {
       sendStateSignal();
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
         const sortedScores = Object.entries(scores).sort(
-          ([, a], [, b]) => b - a,
+          ([, a], [, b]) => b - a
         );
         const lowestScorePerson = sortedScores[sortedScores.length - 1];
         setLowestConId(lowestScorePerson[0]);
         setTimeout(() => {
           if (!isGameOver) {
             setIsGameOver(true);
-           
           }
         }, 1000);
       }
     }, 1000);
     return () => {
       clearInterval(signalInterval.current);
+      sound.stop();
     };
   }, [start]);
 
@@ -309,7 +316,7 @@ const Somaek = (props) => {
         boxLocation.leftX * can_ref.width,
         boxLocation.topY * can_ref.height,
         boxLocation.lenX * can_ref.width * 0.5,
-        boxLocation.lenY * can_ref.height * 0.5,
+        boxLocation.lenY * can_ref.height * 0.5
       );
     }
     can_ctx.drawImage(
@@ -317,7 +324,7 @@ const Somaek = (props) => {
       container.leftX * can_ref.width,
       container.topY * can_ref.height,
       container.lenX * can_ref.width,
-      container.lenY * can_ref.height,
+      container.lenY * can_ref.height
     );
     /* InBucket용 */
     for (let i = 0; i < inBucket.length; i++) {
@@ -329,7 +336,7 @@ const Somaek = (props) => {
         (0.1 - 0.02 * i) * can_ref.width,
         0.4 * can_ref.height,
         0.13 * can_ref.width,
-        0.13 * can_ref.height,
+        0.13 * can_ref.height
       );
     }
 
@@ -426,9 +433,10 @@ const Somaek = (props) => {
     can_ctx.fillStyle = "red";
     can_ctx.font = "bold 20px Arial";
     can_ctx.fillText(
-      `${timerPrint.current / 1000}초`,
-      -can_ref.width + 1600,
-      40,
+      `남은시간: ${timerPrint.current / 1000}초`,
+      -can_ref.width + 20,
+      150
+
     );
   }
 
@@ -499,9 +507,14 @@ const Somaek = (props) => {
         // 있을경우
         order.splice(index, 1);
         inBucket.push(objectRef.current[boxIndex]);
+
+        effectSound(somaekSuccess, false, 1);
+
         images.madam = "../../Madam/madam2.png";
+
       } else {
         //없을경우
+        effectSound(somaekFail, false, 1);
         console.log("주문한 음료가 아님");
         images.madam = "../../Madam/madam1.png";
       }

@@ -11,8 +11,19 @@ const speech_sentence = [
   "내가 그린 기린 그림은 긴 기린 그림이다",
   "철수 책상 철 책상",
   "상업 산업 사업을 상상한다",
+  "앞 집 팥죽은 붉은 팥 풋 팥죽이다",
+  "뒷집 콩죽은 햇콩 단콩 콩죽이다",
+  "안 촉촉한 초코칩 나라에 살던 안 촉촉한 초코칩",
+  "경찰청 창살은 외철창살이다",
+  "검찰청 창살은 쌍철창살이다",
+  "네가 그린 기린 그림은 못생긴 기린 그림이다",
 ];
-const gameStartKeywords = ["발음 게임", "소맥 게임", "피하기 게임"];
+const gameStartKeywords = [
+  "사장님 발음 게임 하나 주세요",
+  "사장님 소맥 게임 하나 주세요",
+  "사장님 피하기 게임 하나 주세요",
+
+];
 
 const UseSpeechRecognition = (props) => {
   console.log(props);
@@ -41,15 +52,15 @@ const UseSpeechRecognition = (props) => {
       if (value.includes(gameStartKeyword)) {
         setExtractedValue(gameStartKeyword);
         switch (gameStartKeyword) {
-          case "발음 게임":
+          case "사장님 발음 게임 하나 주세요":
             stop();
             props.sendGameTypeSignal("speechGame");
             break;
-          case "소맥 게임":
+          case "사장님 소맥 게임 하나 주세요":
             stop();
             props.sendGameTypeSignal("somaek");
             break;
-          case "피하기 게임":
+          case "사장님 피하기 게임 하나 주세요":
             stop();
             props.sendGameTypeSignal("avoidGame");
             break;
