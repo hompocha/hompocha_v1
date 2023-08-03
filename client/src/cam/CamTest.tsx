@@ -287,6 +287,7 @@ const CamTest = (props: any) => {
           건배준비
         </button>
       </div>
+      <img className={styles.camCover} src="/asset/room/camCover3.png" />
       <div className={styles.scale}>
         <svg ref={svgRef} className={styles.position} width={700} height={700}>
           {renderCamSlices()}
