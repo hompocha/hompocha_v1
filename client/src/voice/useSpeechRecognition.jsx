@@ -3,6 +3,9 @@ import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./voice.module.css";
 import axios from "axios";
 import "regenerator-runtime/runtime";
+import somaekSuccess from "../sounds/somaekSuccess.wav";
+import somaekFail from "../sounds/somaekFail.wav";
+import { effectSound } from "../effectSound";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지"];
 const speech_sentence = [
@@ -22,7 +25,9 @@ const gameStartKeywords = [
   "사장님 발음 게임 하나 주세요",
   "사장님 소맥 게임 하나 주세요",
   "사장님 피하기 게임 하나 주세요",
-
+  "발음 게임",
+  "소맥 게임",
+  "피하기 게임",
 ];
 
 const UseSpeechRecognition = (props) => {
@@ -36,6 +41,7 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     for (const sentence of speech_sentence) {
       if (value.includes(sentence)) {
+        effectSound(somaekSuccess);
         setExtractedValue(sentence);
         props.sendSpeech(
           props.user.streamManager.stream.connection.connectionId
@@ -52,15 +58,18 @@ const UseSpeechRecognition = (props) => {
       if (value.includes(gameStartKeyword)) {
         setExtractedValue(gameStartKeyword);
         switch (gameStartKeyword) {
-          case "사장님 발음 게임 하나 주세요":
+          // case "사장님 발음 게임 하나 주세요":
+          case "발음 게임":
             stop();
             props.sendGameTypeSignal("speechGame");
             break;
-          case "사장님 소맥 게임 하나 주세요":
+          // case "사장님 소맥 게임 하나 주세요":
+          case "소맥 게임":
             stop();
             props.sendGameTypeSignal("somaek");
             break;
-          case "사장님 피하기 게임 하나 주세요":
+          // case "사장님 피하기 게임 하나 주세요":
+          case "피하기 게임":
             stop();
             props.sendGameTypeSignal("avoidGame");
             break;
@@ -81,15 +90,14 @@ const UseSpeechRecognition = (props) => {
     }
   }, [extractedValue]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      stop();
-    }, /*props.stopTime*/5000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [props.stopTime]);
-
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     stop();
+  //   }, /*props.stopTime*/ 5000);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [props.stopTime]);
 
   const onEnd = () => {
     // You could do something here after listening has finished
@@ -114,31 +122,40 @@ const UseSpeechRecognition = (props) => {
   const toggle = listening
     ? stop
     : () => {
+        console.log(props.speechBlocked);
+        console.log("asdf");
         setListenBlocked(false);
         listen({ lang });
       };
   // /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
   // /* 현재 방으로 이동 시 오류 발생, 개선필요 */
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setListenBlocked(false);
-  //     listen({ lang });
-  //   }, 1000);
+  useEffect(() => {
+    if (props.speechBlocked === true) {
+      console.log(props);
+      // onResult("");
+      // setListenBlocked(true);
+      stop();
+    } else {
+      setTimeout(() => {
+        setListenBlocked(false);
+        listen({ lang });
+      }, 1000);
 
-  //   let voiceRecog = setInterval(() => {
-  //     setTimeout(stop, 29 * 1000);
+      let voiceRecog = setInterval(() => {
+        setTimeout(stop, 29 * 1000);
 
-  //     setListenBlocked(false);
-  //     listen({ lang });
+        setListenBlocked(false);
+        listen({ lang });
 
-  //     console.log(listenBlocked);
-  //   }, 30 * 1000);
-  //   return () => {
-  //     clearInterval(voiceRecog);
-  //     stop();
-  //     console.log("음성인식 종료");
-  //   };
-  // }, []);
+        console.log(listenBlocked);
+      }, 30 * 1000);
+      return () => {
+        clearInterval(voiceRecog);
+        stop();
+        console.log("음성인식 종료");
+      };
+    }
+  }, [props.speechBlocked]);
 
   return (
     <div>

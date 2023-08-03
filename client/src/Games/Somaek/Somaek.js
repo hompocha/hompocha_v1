@@ -78,7 +78,7 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 4000; /*시연*/
+    timerPrint.current = 30 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
 
@@ -88,7 +88,7 @@ const Somaek = (props) => {
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
         const sortedScores = Object.entries(scores).sort(
-          ([, a], [, b]) => b - a,
+          ([, a], [, b]) => b - a
         );
         const lowestScorePerson = sortedScores[sortedScores.length - 1];
         setLowestConId(lowestScorePerson[0]);
@@ -275,7 +275,8 @@ const Somaek = (props) => {
         // 이미지 로딩을 Promise로 감싸 비동기로 처리
         await new Promise((resolve, reject) => {
           img.onload = () => resolve();
-          img.onerror = () => reject(new Error(`Failed to load ${images[type]}`));
+          img.onerror = () =>
+            reject(new Error(`Failed to load ${images[type]}`));
         });
         imgElements[type] = img;
       }
@@ -292,36 +293,35 @@ const Somaek = (props) => {
     can_ctx.clearRect(0, 0, can_ctx.canvas.width, can_ctx.canvas.height);
 
     const madamImg = imgElements["madam"];
-  
+
     const desiredLeftX = 0.07; // 원하는 X 위치를 설정하세요 (예시: 0).
     const desiredTopY = 0.315; // 원하는 Y 위치를 설정하세요 (예시: 0).
     const desiredWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
     const desiredHeight = 0.4; // 원하는 높이값을 설정하세요 (예시: 100).
-  
+
     can_ctx.drawImage(
       madamImg,
       desiredLeftX * can_ref.width,
       desiredTopY * can_ref.height,
       desiredWidth * can_ref.width,
-      desiredHeight *can_ref.height,
+      desiredHeight * can_ref.height
     );
 
     const speechBubbleImg = imgElements["speechBubble"];
-    
+
     const bubbleLeftX = 0.07; // 원하는 X 위치를 설정하세요 (예시: 0).
     const bubbleTopY = 0.05; // 원하는 Y 위치를 설정하세요 (예시: 0).
     const bubbleWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
     const bubbleHeight = 0.27; // 원하는 높이값을 설정하세요 (예시: 100).
-  
+
     can_ctx.drawImage(
       speechBubbleImg,
       bubbleLeftX * can_ref.width,
       bubbleTopY * can_ref.height,
       bubbleWidth * can_ref.width,
-      bubbleHeight *can_ref.height,
+      bubbleHeight * can_ref.height
     );
 
-  
     for (let i = 0; i < objs.length; i++) {
       let boxLocation = objs[i];
       const img = imgElements[boxLocation.type]; // type에 따른 이미지 선택
@@ -354,7 +354,6 @@ const Somaek = (props) => {
       );
     }
 
-
     const rectLeftX = 0.09;
     const rectTopY = 0.73;
     const rectWidth = 0.11;
@@ -364,30 +363,69 @@ const Somaek = (props) => {
     // 경로 시작
     can_ctx.beginPath();
     // 좌상단 점으로 이동
-    can_ctx.moveTo(rectLeftX * can_ref.width + borderRadius, rectTopY * can_ref.height);
+    can_ctx.moveTo(
+      rectLeftX * can_ref.width + borderRadius,
+      rectTopY * can_ref.height
+    );
     // 상단 선 그리기
-    can_ctx.lineTo(rectLeftX * can_ref.width + rectWidth * can_ref.width - borderRadius, rectTopY * can_ref.height);
+    can_ctx.lineTo(
+      rectLeftX * can_ref.width + rectWidth * can_ref.width - borderRadius,
+      rectTopY * can_ref.height
+    );
     // 우상단 라운드 그리기
-    can_ctx.arcTo(rectLeftX * can_ref.width + rectWidth * can_ref.width, rectTopY * can_ref.height, rectLeftX * can_ref.width + rectWidth * can_ref.width, rectTopY * can_ref.height + borderRadius, borderRadius);
+    can_ctx.arcTo(
+      rectLeftX * can_ref.width + rectWidth * can_ref.width,
+      rectTopY * can_ref.height,
+      rectLeftX * can_ref.width + rectWidth * can_ref.width,
+      rectTopY * can_ref.height + borderRadius,
+      borderRadius
+    );
     // 우측 선 그리기
-    can_ctx.lineTo(rectLeftX * can_ref.width + rectWidth * can_ref.width, rectTopY * can_ref.height + rectHeight * can_ref.height - borderRadius);
+    can_ctx.lineTo(
+      rectLeftX * can_ref.width + rectWidth * can_ref.width,
+      rectTopY * can_ref.height + rectHeight * can_ref.height - borderRadius
+    );
     // 우하단 라운드 그리기
-    can_ctx.arcTo(rectLeftX * can_ref.width + rectWidth * can_ref.width, rectTopY * can_ref.height + rectHeight * can_ref.height, rectLeftX * can_ref.width + rectWidth * can_ref.width - borderRadius, rectTopY * can_ref.height + rectHeight * can_ref.height, borderRadius);
+    can_ctx.arcTo(
+      rectLeftX * can_ref.width + rectWidth * can_ref.width,
+      rectTopY * can_ref.height + rectHeight * can_ref.height,
+      rectLeftX * can_ref.width + rectWidth * can_ref.width - borderRadius,
+      rectTopY * can_ref.height + rectHeight * can_ref.height,
+      borderRadius
+    );
     // 하단 선 그리기
-    can_ctx.lineTo(rectLeftX * can_ref.width + borderRadius, rectTopY * can_ref.height + rectHeight * can_ref.height);
+    can_ctx.lineTo(
+      rectLeftX * can_ref.width + borderRadius,
+      rectTopY * can_ref.height + rectHeight * can_ref.height
+    );
     // 좌하단 라운드 그리기
-    can_ctx.arcTo(rectLeftX * can_ref.width, rectTopY * can_ref.height + rectHeight * can_ref.height, rectLeftX * can_ref.width, rectTopY * can_ref.height + rectHeight * can_ref.height - borderRadius, borderRadius);
+    can_ctx.arcTo(
+      rectLeftX * can_ref.width,
+      rectTopY * can_ref.height + rectHeight * can_ref.height,
+      rectLeftX * can_ref.width,
+      rectTopY * can_ref.height + rectHeight * can_ref.height - borderRadius,
+      borderRadius
+    );
     // 좌측 선 그리기
-    can_ctx.lineTo(rectLeftX * can_ref.width, rectTopY * can_ref.height + borderRadius);
+    can_ctx.lineTo(
+      rectLeftX * can_ref.width,
+      rectTopY * can_ref.height + borderRadius
+    );
     // 좌상단 라운드 그리기
-    can_ctx.arcTo(rectLeftX * can_ref.width, rectTopY * can_ref.height, rectLeftX * can_ref.width + borderRadius, rectTopY * can_ref.height, borderRadius);
+    can_ctx.arcTo(
+      rectLeftX * can_ref.width,
+      rectTopY * can_ref.height,
+      rectLeftX * can_ref.width + borderRadius,
+      rectTopY * can_ref.height,
+      borderRadius
+    );
     // 경로 종료
     can_ctx.closePath();
     // 경로 영역 채우기
     can_ctx.fill();
     // can_ctx.globalCompositeOperation = "source-over";
     const rankImg = imgElements["rank"];
-    
+
     const rankLeftX = -0.06; // 원하는 X 위치를 설정하세요 (예시: 0).
     const rankTopY = 0.6; // 원하는 Y 위치를 설정하세요 (예시: 0).
     const rankWidth = 0.47; // 원하는 너비값을 설정하세요 (예시: 100).
@@ -399,7 +437,7 @@ const Somaek = (props) => {
       rankLeftX * can_ref.width,
       rankTopY * can_ref.height,
       rankWidth * can_ref.width,
-      rankHeight *can_ref.height,
+      rankHeight * can_ref.height
     );
     /* score 출력 부분 */
     can_ctx.save(); // 현재 컨텍스트 상태를 저장
@@ -408,7 +446,7 @@ const Somaek = (props) => {
     // can_ctx.font = "30px Arial";
     // const fontSize = can_ref.width * speechWidth * 0.1; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
     // can_ctx.fillText(`점수: ${score}`, -can_ref.width + 20, 50);
-    
+
     const speechLeftX = 0.17; // 원하는 X 위치를 설정하세요 (예시: 0).
     const speechTopY = 0.1; // 원하는 Y 위치를 설정하세요 (예시: 0).
     const speechWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
@@ -432,52 +470,48 @@ const Somaek = (props) => {
       const textY = can_ref.height * speechTopY;
       const maxWidth = can_ref.width * speechWidth; // 텍스트의 최대 너비를 캔버스 너비의 비율로 설정
       can_ctx.fillText("사장님", textX, textY, maxWidth);
-      const orderTextY = can_ref.height * speechTopY + (orderKorean.length + 1) * 30;
+      const orderTextY =
+        can_ref.height * speechTopY + (orderKorean.length + 1) * 30;
       can_ctx.fillText("주문이요~", textX, orderTextY, maxWidth);
     }
 
-    
-
     // can_ctx.fillText(`남은시간: ${timer}`, -can_ref.width + 20, 100);
-  can_ctx.fillStyle = "red";
-  can_ctx.font = "bold 20px Arial";
-  can_ctx.fillText("남은시간 : ", -can_ref.width + 1500, 40);
-  let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
-  if (blink) {
     can_ctx.fillStyle = "red";
     can_ctx.font = "bold 20px Arial";
-    can_ctx.fillText(
-      `남은시간: ${timerPrint.current / 1000}초`,
-      -can_ref.width + 20,
-      150
-
-    );
-  }
+    can_ctx.fillText("남은시간 : ", -can_ref.width + 1500, 40);
+    let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
+    if (blink) {
+      can_ctx.fillStyle = "red";
+      can_ctx.font = "bold 20px Arial";
+      can_ctx.fillText(
+        `남은시간: ${timerPrint.current / 1000}초`,
+        -can_ref.width + 20,
+        150
+      );
+    }
 
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores)
-    .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
-    .forEach(([key, value], index) => {
-      if (key == props.user.getNickname()) {
-        can_ctx.fillStyle = "green";
-      } else if (index === 0) {
-        can_ctx.fillStyle = "red"; //1등
-      } else {
-        can_ctx.fillStyle = "black";
-      }
-      /* 소수점 없이 점수 올림 해서 출력 */
-      const upValue = Math.ceil(value);
-      const scoreText = `${key}: ${upValue}`;
-      const y = 800 + (index + 1) * 30;
-      can_ctx.font = "bold 33px Arial";
+      .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
+      .forEach(([key, value], index) => {
+        if (key == props.user.getNickname()) {
+          can_ctx.fillStyle = "green";
+        } else if (index === 0) {
+          can_ctx.fillStyle = "red"; //1등
+        } else {
+          can_ctx.fillStyle = "black";
+        }
+        /* 소수점 없이 점수 올림 해서 출력 */
+        const upValue = Math.ceil(value);
+        const scoreText = `${key}: ${upValue}`;
+        const y = 800 + (index + 1) * 30;
+        can_ctx.font = "bold 33px Arial";
 
-      // 그림 위에 텍스트가 나타납니다.
-      can_ctx.globalCompositeOperation = "source-over";
-      can_ctx.fillText(scoreText, -300, y);
-    });
+        // 그림 위에 텍스트가 나타납니다.
+        can_ctx.globalCompositeOperation = "source-over";
+        can_ctx.fillText(scoreText, -300, y);
+      });
 
-
-    
     can_ctx.restore();
   };
 
@@ -485,7 +519,7 @@ const Somaek = (props) => {
     if (!canvasRef) return;
 
     const { x: fingerX, y: fingerY, z: _ } = fingerpick;
-    objectRef.current[boxIndex].leftX =                               //
+    objectRef.current[boxIndex].leftX = //
       fingerX - objectRef.current[boxIndex].lenX / 2;
     objectRef.current[boxIndex].topY =
       fingerY - objectRef.current[boxIndex].lenY / 2;
@@ -525,7 +559,6 @@ const Somaek = (props) => {
         effectSound(somaekSuccess, false, 1);
 
         images.madam = "../../Madam/madam2.png";
-
       } else {
         //없을경우
         effectSound(somaekFail, false, 1);
@@ -736,8 +769,6 @@ const Somaek = (props) => {
         console.error(error);
       });
   };
-
-  
 
   return (
     <>

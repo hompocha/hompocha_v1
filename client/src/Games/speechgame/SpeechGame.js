@@ -26,11 +26,14 @@ for (let i = 20000; i < 50001; i += 100) {
 }
 const SpeechGame = (props) => {
   // let stopTime=5000;
-  const [stopTime, setStopTime] = useState(5000);
+  const [stopTime, setStopTime] = useState(10000);
   const [randomUser, setRandomUser] = useState(props.selectID);
   const hostIp = props.selectID;
   const [timerExpired, setTimerExpired] = useState(false);
   const [firstTime, setFirstTime] = useState(true);
+
+  /* 음성인식 on/off를 위한 flag */
+  const [speechBlocked, setSpeechBlocked] = useState(false);
 
   useEffect(() => {
     /* 만약에 내가 방장이면 이 밑에서 처리를 해줌 */
@@ -82,12 +85,18 @@ const SpeechGame = (props) => {
 
   useEffect(() => {
     const bgmSound = effectSound(speechClock, true, 1);
+    /* 시연시간 -1초만큼 후에 true(인식X로 변경) */
+    const speechTimer = setTimeout(() => {
+      setSpeechBlocked(true);
+    }, 2 * 1000);
+    /* 시연시간 설정 */
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, /*stopTime*/ 40000); /*시연*/
+    }, /* stopTime */ 3 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
+      clearTimeout(speechTimer);
     };
   }, [stopTime]);
 
@@ -171,7 +180,11 @@ const SpeechGame = (props) => {
           <h1>{stopTime}</h1>
           <div className={styles.gameWord}>{sentenceState}</div>
           <div className={styles.speechPosition}>
-            <UseSpeechRecognition sendSpeech={checkPass} user={props.user} />
+            <UseSpeechRecognition
+              sendSpeech={checkPass}
+              user={props.user}
+              speechBlocked={speechBlocked}
+            />
           </div>
           <div className={styles.camPosition}>
             {/*========================테스트입니다=============================*/}
