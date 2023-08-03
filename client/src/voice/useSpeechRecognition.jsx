@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component, useRef } from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./voice.module.css";
 import axios from "axios";
@@ -6,6 +6,7 @@ import "regenerator-runtime/runtime";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지"];
 const speech_sentence = [
+  "시작",
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
   "철수 책상 철 책상",
@@ -21,6 +22,7 @@ const gameStartKeywords = [
   "사장님 발음 게임 하나 주세요",
   "사장님 소맥 게임 하나 주세요",
   "사장님 피하기 게임 하나 주세요",
+
 ];
 
 const UseSpeechRecognition = (props) => {
@@ -78,6 +80,16 @@ const UseSpeechRecognition = (props) => {
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      stop();
+    }, /*props.stopTime*/5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [props.stopTime]);
+
 
   const onEnd = () => {
     // You could do something here after listening has finished

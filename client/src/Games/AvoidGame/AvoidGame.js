@@ -9,6 +9,7 @@ import Loading from "../../Loading/Loading";
 import LoserCam from "../loserCam/LoserCam";
 import hitEffect from "../../sounds/avoid_effect2.wav"
 import { effectSound } from "../../effectSound";
+import CountDown from "../../Loading/CountDown";
 
 function newObj(src, width, height) {
   this.position = { x: 0, y: 0 };
@@ -63,6 +64,8 @@ const AvoidGame = (props) => {
   const myConnectionId = props.user.connectionId;
   const [videoReady, setVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [countDown, setCountDown] = useState(false);
+  const [start, setStart] = useState(false);
   const [lowestConId, setLowestConId] = useState(undefined);
 
   const videoRef = useRef(null);
@@ -74,6 +77,7 @@ const AvoidGame = (props) => {
   const sendInterval = useRef(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const hpLeft = useRef(100);
+  const hostId = props.selectID;
 
   const subscribers = props.user.subscribers;
   const subscriberState = {};
@@ -93,8 +97,8 @@ const AvoidGame = (props) => {
           subscriberState[`${data.currentGameState.user}`] =
             data.currentGameState;
         });
-    }
-    if (props.user.getStreamManager().stream.session) {
+
+
       props.user
         .getStreamManager()
         .stream.session.on("signal:avoidgame_result", (event) => {
@@ -107,6 +111,44 @@ const AvoidGame = (props) => {
             setIsGameOver(true);
           }
         });
+
+         /* start 시그널 받는 session on !! */
+    props.user
+    .getStreamManager()
+    .stream.session.on("signal:startSignal", (event) => {
+      setCountDown(true);
+      /* 3초후에 스타트로 바뀜!*/
+      setTimeout(() => {
+        setCountDown(false);
+        setTimeout(() => {
+          setStart(true);
+        }, 300);
+      }, 3000);
+    });
+
+    /* 내가 호스트일 경우에만, session on 함  */
+    if (
+      props.user.getStreamManager().stream.connection.connectionId === hostId
+    ) {
+      let readyPeople = [];
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:readySignal", (event) => {
+          let fromId = event.from.connectionId;
+          if (!readyPeople.includes(fromId)) {
+            readyPeople.push(fromId);
+            console.log(readyPeople);
+          }
+
+          if (readyPeople.length === subscribers.length + 1) {
+            console.log("받았다!!!");
+            sendStartSignal();
+            props.user
+              .getStreamManager()
+              .stream.session.off("signal:readySignal");
+          }
+        });
+    }
     }
   }, [props.user.getStreamManager().stream.session]);
 
@@ -114,7 +156,9 @@ const AvoidGame = (props) => {
     const handleLoaded = () => {
       if (videoRef.current && canvasRef.current) {
         setTimeout(() => {
+          console.log("ready");
           setLoaded(true);
+          sendReadySignal();
         }, 3000);
       }
     };
@@ -208,6 +252,7 @@ const AvoidGame = (props) => {
     gameState.current.user = props.user.connectionId;
 
     if(canvasRef.current){
+      if(!start) return;
     canvasCtx.current = canvasRef.current.getContext("2d");
     sendInterval.current = setInterval(() => {
       sendGameState(gameState.current);
@@ -230,7 +275,7 @@ const AvoidGame = (props) => {
       clearInterval(speedInterval.current);
       clearInterval(sendInterval.current);
     };
-  }, []);
+  }, [start]);
 
   const setObjInterval = (time) => {
     return setInterval(() => {
@@ -422,6 +467,38 @@ const AvoidGame = (props) => {
     }
   };
 
+
+
+  const sendReadySignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "readySignal",
+      })
+      .then(() => {
+        console.log("readySignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const sendStartSignal = () => {
+    props.user
+      .getStreamManager()
+      .session.signal({
+        to: [],
+        type: "startSignal",
+      })
+      .then(() => {
+        console.log("startSignal successfully sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       {props.mode === "avoidGame" && !loaded && (
@@ -430,6 +507,12 @@ const AvoidGame = (props) => {
         </div>
       )}
       {props.user.connectionId === props.host ? <h1>host</h1> : null}
+
+      {props.mode === "avoidGame" && countDown && (
+          <div>
+            <CountDown />
+          </div>
+        )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
         <video
