@@ -84,7 +84,7 @@ const SpeechGame = (props) => {
     const bgmSound = effectSound(speechClock, true, 1);
     const timer = setTimeout(() => {
       setTimerExpired(true);
-    }, /*stopTime*/ 1000);
+    }, /*stopTime*/ 40000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);

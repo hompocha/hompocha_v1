@@ -36,6 +36,7 @@ const Somaek = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [lowestConId, setLowestConId] = useState(undefined);
+  const [handStop, setHandStop] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
@@ -77,8 +78,8 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
+    timerPrint.current = 4000; /*시연*/
 
-    timerPrint.current = 15000; /*시연*/
     const sound = effectSound(somaekBGM, true, 0.2);
 
     signalInterval.current = setInterval(() => {
@@ -87,15 +88,17 @@ const Somaek = (props) => {
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
         const sortedScores = Object.entries(scores).sort(
-          ([, a], [, b]) => b - a
+          ([, a], [, b]) => b - a,
         );
         const lowestScorePerson = sortedScores[sortedScores.length - 1];
         setLowestConId(lowestScorePerson[0]);
+        setHandStop(true);
+
         setTimeout(() => {
           if (!isGameOver) {
             setIsGameOver(true);
           }
-        }, 1000);
+        }, 500);
       }
     }, 1000);
     return () => {
@@ -105,16 +108,12 @@ const Somaek = (props) => {
   }, [start]);
 
   useEffect(() => {
-    const videoNode = videoRef.current;
-    const canvasNode = canvasRef.current;
-    if (order.length === 0) {
-      order = randomDrink();
-      orderKorean = printDrinks(order);
-      console.log(order);
-    }
     let didCancel = false;
 
     const loadHandsAndCamera = async () => {
+      if (!videoRef.current || !canvasRef.current || handStop) {
+        return;
+      }
       const hands = new Hands({
         locateFile: (file) =>
           `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
@@ -139,8 +138,8 @@ const Somaek = (props) => {
               await hands.send({ image: videoRef.current });
             }
           },
-          width: 960,
-          height: 720,
+          width: videoRef.current.width,
+          height: videoRef.current.height,
         });
         camera.start();
       }
@@ -150,7 +149,21 @@ const Somaek = (props) => {
         }
       };
     };
+
     loadHandsAndCamera();
+    return () => {
+      didCancel = true;
+    };
+  }, [handStop]);
+
+  useEffect(() => {
+    const videoNode = videoRef.current;
+    const canvasNode = canvasRef.current;
+    if (order.length === 0) {
+      order = randomDrink();
+      orderKorean = printDrinks(order);
+      console.log(order);
+    }
 
     const handleLoaded = () => {
       if (videoNode && canvasNode) {
@@ -233,7 +246,7 @@ const Somaek = (props) => {
       });
 
     return () => {
-      didCancel = true;
+      // didCancel = true;
       props.user.getStreamManager().stream.session.off("signal:somaekScore");
       if (videoNode) {
         videoNode.removeEventListener("loadeddata", handleLoaded);
@@ -250,7 +263,8 @@ const Somaek = (props) => {
         objDrag(landmarks, canvasRef);
       }
     }
-    loadImages(canvasRef.current, canvasCtx.current, objectRef.current);
+    if (!handStop)
+      loadImages(canvasRef.current, canvasCtx.current, objectRef.current);
   };
 
   const loadImages = async (can_ref, can_ctx, objs) => {
