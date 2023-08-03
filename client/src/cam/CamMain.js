@@ -83,20 +83,16 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         }
         enterAvoidGame();
       } else {
+          try {
+            axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
+          } catch(error) {
+            alert("재 로그인 해야합니다~!")
+            navigate("/lobby");
+          }
         /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
         /* 음성인식 재시작 */
         setSpeechBlocked(false);
-      }
-
-      if (mode === undefined) {
-        //   try {
-        //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
-        //   } catch(error) {
-        //     alert("재 로그인 해야합니다~!")
-        //     navigate("/lobby");
-        //   }
-        // }
       }
     });
   }, []);
