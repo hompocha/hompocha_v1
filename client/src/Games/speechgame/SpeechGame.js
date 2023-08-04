@@ -286,6 +286,7 @@ const SpeechGame = (props) => {
 
             <Loading mode={props.mode}/>
 
+
           </div>
         )}
         {props.mode === "speechGame" && countDown && (

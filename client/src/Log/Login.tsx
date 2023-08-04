@@ -1,5 +1,5 @@
 /* Login.tsx */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -40,7 +40,7 @@ const Login: React.FC = () => {
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${response.data}`;
-      navigate("/Lobby");
+      navigate("/lobby");
     } catch (error) {
       console.error("로그인 오류:", error);
       alert("로그인 실패");
@@ -54,10 +54,10 @@ const Login: React.FC = () => {
       alert("비밀번호가 다릅니다.");
       return;
     } 
-    // else if (password.length < 8) {
-    //   alert("비밀번호를 8자리 이상으로 입력해주세요!");
-    //   return;
-    // }
+    else if (password.length < 8) {
+      alert("비밀번호를 8자리 이상으로 입력해주세요!");
+      return;
+    }
     // 중복된 아이디인지 확인
     try {
       const response = await axios.get(
@@ -72,7 +72,6 @@ const Login: React.FC = () => {
       console.error("중복 확인 오류:", error);
       return;
     }
-    /*=================== 우현이 수정!!! ====================*/
     //nickname 일치 여부 확인
     try {
       const response = await axios.get(
@@ -87,7 +86,6 @@ const Login: React.FC = () => {
       console.error("중복 확인 오류:", error);
       return;
     }
-    /*============================================================*/
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/user/signup`,
@@ -102,6 +100,17 @@ const Login: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error(error);
+    }
+  };
+  const handlePressKeyTosignIn = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleLogIn(event);
+    }
+  };
+
+  const hadlePressKeyToSignUp = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSignUp(event)
     }
   };
 
@@ -140,9 +149,6 @@ const Login: React.FC = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
-            {/*====================================================================================*/}
-            {/*우현 멋대로 해서 수정 필요*/}
-            {/*====================================================================================*/}
             <div className={styles.eachInput}>
               <span>닉네임</span>
               <input
@@ -150,10 +156,9 @@ const Login: React.FC = () => {
                 placeholder="nickname"
                 value={nickName}
                 onChange={(e) => setNickname(e.target.value)}
+                onKeyPress={hadlePressKeyToSignUp}
               />
             </div>
-            {/*====================================================================================*/}
-            {/*====================================================================================*/}
             <button onClick={handleSignUp}>SIGN UP</button>
           </div>
           <div className={styles.login}>
@@ -173,6 +178,7 @@ const Login: React.FC = () => {
                 placeholder="비밀번호"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
+                onKeyPress={handlePressKeyTosignIn}
               />
             </div>
             <button onClick={handleLogIn}>SIGN IN</button>

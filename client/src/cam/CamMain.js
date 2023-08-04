@@ -232,12 +232,26 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       }
     }
   };
+  const handleClick = (event) => {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+    console.log("마우스 클릭 좌표:", mouseX, mouseY);
+  };
 
+  useEffect(() => {
+    // 페이지가 로드되면 마우스 클릭 이벤트 리스너를 추가합니다.
+    document.addEventListener("click", handleClick);
+    return () => {
+      // 컴포넌트가 unmount될 때 이벤트 리스너를 제거합니다.
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
+  
   const returnLobby = () => {
     setSpeechBlocked(true);
     setTimeout(() => {
       endSession();
-      navigate("/Lobby");
+      navigate("/lobby");
     }, 1500);
   };
 
@@ -251,7 +265,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
 
 
   console.log("CamMain rendered");
-
+  const micOnImageURL = "/Bell/micOn.png";
+  const micOffImageURL = "/Bell/micOff.png";
   return (
     <div>
       {/* Main Room */}
@@ -260,31 +275,77 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title">{roomName} </div>
             <div>{user.subscribers.length + 1}명 참여중</div>
-            <button onClick={toggleMic}>
-              {micEnabled ? "마이크 끄기" : "마이크 켜기"}
-            </button>
+            <button onClick={toggleMic} style={{
+                backgroundImage: `url(${micEnabled ? micOnImageURL : micOffImageURL})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                width: "57px", // Adjust the size as needed
+                height: "57px", // Adjust the size as needed
+                border: "none", // Remove border
+                outline: "none", // Remove outline
+                cursor: "pointer",
+                backgroundColor:"transparent",
+              }}/>
             <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
             </form>
           </div>
           <div className={styles.gameListWrap}>
-            <div className={styles.gameMenu}>메 뉴 판</div>
+            <div></div>
+            <div className={styles.gameMenu}>홈술포차 메 뉴 판</div>
             <div className={styles.gameButtons}>
-              {/* <button onClick={() => sendGameTypeSignal("airHockey")}>
-                에어하키
-              </button>
-              <button onClick={() => sendGameTypeSignal("movingDuck")}>
-                오리옮기기
-              </button> */}
-              <button onClick={() => sendGameTypeSignal("speechGame")}>
-                발음게임
-              </button>
-              <button onClick={() => sendGameTypeSignal("somaek")}>
-                소맥게임
-              </button>
-              <button onClick={() => sendGameTypeSignal("avoidGame")}>
-                피하기게임
-              </button>
+              <div className={styles.eachGameMenu}>
+                <div className={styles.gameName}>발 음 게 임</div>
+                <button
+                  onClick={() => sendGameTypeSignal("speechGame")}
+                  style={{
+                    backgroundImage: `url(/asset/room/playBtn.png)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundColor: "transparent",
+                    outline: "none",
+                    border: "none",
+                    width: "45px",
+                    height: "45px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+              <div>
+                <div className={styles.gameName}>소 맥 게 임</div>
+                <button
+                  onClick={() => sendGameTypeSignal("somaek")}
+                  style={{
+                    backgroundImage: `url(/asset/room/playBtn.png)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundColor: "transparent",
+                    outline: "none",
+                    border: "none",
+                    width: "45px",
+                    height: "45px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+              <div>
+                <div className={styles.gameName}>피하기게임</div>
+                <button
+                  className={styles.imgButton}
+                  onClick={() => sendGameTypeSignal("avoidGame")}
+                  style={{
+                    backgroundImage: `url(/asset/room/playBtn.png)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundColor: "transparent",
+                    outline: "none",
+                    border: "none",
+                    width: "45px",
+                    height: "45px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
             </div>
           </div>
 
