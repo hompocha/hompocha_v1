@@ -257,23 +257,61 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
             </form>
           </div>
           <div className={styles.gameListWrap}>
-            <div className={styles.gameMenu}>메 뉴 판</div>
+            <div></div>
+            <div className={styles.gameMenu}>홈술포차 메 뉴 판</div>
             <div className={styles.gameButtons}>
-              {/* <button onClick={() => sendGameTypeSignal("airHockey")}>
-                에어하키
-              </button>
-              <button onClick={() => sendGameTypeSignal("movingDuck")}>
-                오리옮기기
-              </button> */}
-              <button onClick={() => sendGameTypeSignal("speechGame")}>
-                발음게임
-              </button>
-              <button onClick={() => sendGameTypeSignal("somaek")}>
-                소맥게임
-              </button>
-              <button onClick={() => sendGameTypeSignal("avoidGame")}>
-                피하기게임
-              </button>
+              <div className={styles.eachGameMenu}>
+                <div className={styles.gameName}>발 음 게 임</div>
+                <button
+                  onClick={() => sendGameTypeSignal("speechGame")}
+                  style={{
+                    backgroundImage: `url(/asset/room/playBtn.png)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundColor: "transparent",
+                    outline: "none",
+                    border: "none",
+                    width: "45px",
+                    height: "45px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+              <div>
+                <div className={styles.gameName}>소 맥 게 임</div>
+                <button
+                  onClick={() => sendGameTypeSignal("somaek")}
+                  style={{
+                    backgroundImage: `url(/asset/room/playBtn.png)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundColor: "transparent",
+                    outline: "none",
+                    border: "none",
+                    width: "45px",
+                    height: "45px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+              <div>
+                <div className={styles.gameName}>피하기게임</div>
+                <button
+                  className={styles.imgButton}
+                  onClick={() => sendGameTypeSignal("avoidGame")}
+                  style={{
+                    backgroundImage: `url(/asset/room/playBtn.png)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundColor: "transparent",
+                    outline: "none",
+                    border: "none",
+                    width: "45px",
+                    height: "45px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
             </div>
           </div>
 

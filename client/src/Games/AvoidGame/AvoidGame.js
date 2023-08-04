@@ -7,7 +7,8 @@ import useSound from "../../useSound";
 import BGM from "../../sounds/avoidBGM.mp3";
 import Loading from "../../Loading/Loading";
 import LoserCam from "../loserCam/LoserCam";
-import hitEffect from "../../sounds/avoid_effect2.wav"
+import hitEffect from "../../sounds/avoid_effect2.wav";
+import healEffect from "../../sounds/heal1.wav";
 import { effectSound } from "../../effectSound";
 import CountDown from "../../Loading/CountDown";
 
@@ -19,7 +20,7 @@ function newObj(src, width, height) {
   this.width = width;
   this.height = height;
   this.isAvoid = true;
-  this.type=undefined;
+  this.type = undefined;
 }
 
 /* 초기 게임 세팅*/
@@ -47,7 +48,7 @@ const defaultGameState = {
     nextPosition: { x: 0.5, y: 0.95 },
     width: 0.04,
     height: 0.09,
-    state: 0
+    state: 0,
   },
   objects: [],
 };
@@ -60,11 +61,9 @@ const images = {
   player_sick: "../../asset/game_img/sick.png",
 };
 
-
-
-/*======================================================= */  
-/*=================== 메인 함수 시작=================== */  
-/*======================================================= */  
+/*======================================================= */
+/*=================== 메인 함수 시작=================== */
+/*======================================================= */
 
 const AvoidGame = (props) => {
   const myConnectionId = props.user.connectionId;
@@ -87,17 +86,15 @@ const AvoidGame = (props) => {
 
   const subscribers = props.user.subscribers;
   const subscriberState = {};
-  const imgElements=[];
+  const imgElements = [];
   const result = [];
 
   /* 배경음악 */
-  useSound(BGM,0.7);
+  useSound(BGM, 0.7);
 
-
-
-/*======================================================= */  
-/*=================== 게임 시작=================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*=================== 게임 시작=================== */
+  /*======================================================= */
 
   /* 프레임마다 전송 */
   useEffect(() => {
@@ -107,24 +104,25 @@ const AvoidGame = (props) => {
     // }
     gameState.current.user = props.user.connectionId;
 
-    if(canvasRef.current){
-      if(!start) return;
-    canvasCtx.current = canvasRef.current.getContext("2d");
-    sendInterval.current = setInterval(() => {
-      sendGameState(gameState.current);
-    }, 1000 / 20);
+    if (canvasRef.current) {
+      if (!start) return;
+      canvasCtx.current = canvasRef.current.getContext("2d");
+      sendInterval.current = setInterval(() => {
+        sendGameState(gameState.current);
+      }, 1000 / 20);
 
-    objInterval.current = setObjInterval(
-      1000 / gameState.current.condition.objIntervalFrame,
-    );
-
-    speedInterval.current = setInterval(() => {
-      clearInterval(objInterval.current);
-      gameState.current.condition.objIntervalFrame += 5;
       objInterval.current = setObjInterval(
-        1000 / gameState.current.condition.objIntervalFrame,
+        1000 / gameState.current.condition.objIntervalFrame
       );
-    }, 7 * 1000);}
+
+      speedInterval.current = setInterval(() => {
+        clearInterval(objInterval.current);
+        gameState.current.condition.objIntervalFrame += 5;
+        objInterval.current = setObjInterval(
+          1000 / gameState.current.condition.objIntervalFrame
+        );
+      }, 7 * 1000);
+    }
 
     return () => {
       clearInterval(objInterval.current);
@@ -133,10 +131,9 @@ const AvoidGame = (props) => {
     };
   }, [start]);
 
-
-/*======================================================= */  
-/*===================손 인식 및 게임 화면 그리기=================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*===================손 인식 및 게임 화면 그리기=================== */
+  /*======================================================= */
 
   useEffect(() => {
     const handleLoaded = () => {
@@ -162,50 +159,50 @@ const AvoidGame = (props) => {
     let didCancel = false;
 
     const loadHandsAndCamera = async () => {
-        const hands = new Hands({
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
+      const hands = new Hands({
+        locateFile: (file) =>
+          `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
+      });
+      let camera;
+
+      if (videoRef.current && canvasRef.current) {
+        canvasCtx.current = canvasRef.current.getContext("2d");
+
+        hands.setOptions({
+          maxNumHands: 2,
+          modelComplexity: 1,
+          minDetectionConfidence: 0.7,
+          minTrackingConfidence: 0.7,
         });
-        let camera;
 
-        if (videoRef.current && canvasRef.current) {
-            canvasCtx.current = canvasRef.current.getContext("2d");
+        hands.onResults(onResults);
 
-            hands.setOptions({
-                maxNumHands: 2,
-                modelComplexity: 1,
-                minDetectionConfidence: 0.7,
-                minTrackingConfidence: 0.7,
-            });
-
-            hands.onResults(onResults);
-
-            camera = new Camera(videoRef.current, {
-                onFrame: async () => {
-                    if (!didCancel) {
-                        await hands.send({ image: videoRef.current });
-                    }
-                },
-                width: 960,
-                height: 720,
-            });
-
-            camera.start();
-        }
-
-        return () => {
-            if (camera) {
-                camera.stop();
+        camera = new Camera(videoRef.current, {
+          onFrame: async () => {
+            if (!didCancel) {
+              await hands.send({ image: videoRef.current });
             }
-        };
+          },
+          width: 960,
+          height: 720,
+        });
+
+        camera.start();
+      }
+
+      return () => {
+        if (camera) {
+          camera.stop();
+        }
+      };
     };
 
     loadHandsAndCamera();
 
     return () => {
-        didCancel = true;
+      didCancel = true;
     };
-}, [videoReady,canvasRef.current]);
-
+  }, [videoReady, canvasRef.current]);
 
   /* 손 위치 인식 + 패들 위치 업데이트 + 패들 캔버스에 그림 */
   const onResults = (results) => {
@@ -229,29 +226,22 @@ const AvoidGame = (props) => {
     loadImages(canvasRef.current, canvasCtx.current, gameState.current);
   };
 
-
   const setObjInterval = (time) => {
     return setInterval(() => {
       const obj = new newObj();
       if (Math.random() < 0.05) {
         obj.type = "avoid_pill";
-      }
-      else if (Math.random() < 0.5){
+      } else if (Math.random() < 0.5) {
         obj.type = "soju";
-      }
-      else {
+      } else {
         obj.type = "beer";
       }
       obj.position.y = gameState.current.condition.objDropHeight;
-      obj.position.x = Math.random()*1.3-0.15;    // 가장자리 사각지대 방지
+      obj.position.x = Math.random() * 1.3 - 0.15; // 가장자리 사각지대 방지
       gameState.current.objects.push(obj);
     }, time);
   };
 
-
-
-  
-  
   /* 이미지 로드 후 게임 그리기 */
   const loadImages = async (can_ref, can_ctx, gameState) => {
     try {
@@ -266,12 +256,11 @@ const AvoidGame = (props) => {
       }
       // 모든 이미지 로딩이 완료되면 애니메이션 시작
       drawGame(can_ref, can_ctx, gameState);
-      
     } catch (error) {
       console.error("Error loading images:", error);
     }
   };
-  
+
   /* 전체 게임을 그림 */
   const drawGame = async (can_ref, can_ctx, gameState) => {
     const w = can_ref.width;
@@ -283,14 +272,14 @@ const AvoidGame = (props) => {
       drawObj(can_ref, can_ctx, obj);
     });
 
-    if(gameState.player.state>0){
+    if (gameState.player.state > 0) {
       const grad = can_ctx.createLinearGradient(0, 0, 0, h);
-      grad.addColorStop(0.4, 'rgba(0, 0, 0, 0)');
-      grad.addColorStop(0, 'rgba(255, 0, 0, 0.6)');
+      grad.addColorStop(0.4, "rgba(0, 0, 0, 0)");
+      grad.addColorStop(0, "rgba(255, 0, 0, 0.6)");
       can_ctx.fillStyle = grad;
-      can_ctx.fillRect(0,0,w,h);
+      can_ctx.fillRect(0, 0, w, h);
     }
-    
+
     drawHpBar(can_ref, can_ctx, gameState.hpBar.hpLeft);
 
     can_ctx.restore();
@@ -301,16 +290,19 @@ const AvoidGame = (props) => {
     const w = can_ref.width;
     const h = can_ref.height;
 
-    const img = (player.state < 1)?imgElements['player_normal']:imgElements['player_sick'];
+    const img =
+      player.state < 1
+        ? imgElements["player_normal"]
+        : imgElements["player_sick"];
     can_ctx.drawImage(
       img,
-        (player.position.x - player.width / 2) * w,
-        (player.position.y - player.height / 2) * h,
-        player.width * w,
-        player.height * h,
+      (player.position.x - player.width / 2) * w,
+      (player.position.y - player.height / 2) * h,
+      player.width * w,
+      player.height * h
     );
   };
-  
+
   /* 오브젝트 그림 */
   const drawObj = (can_ref, can_ctx, obj) => {
     const w = can_ref.width;
@@ -319,8 +311,8 @@ const AvoidGame = (props) => {
     const img = imgElements[obj.type];
     can_ctx.drawImage(
       img,
-      obj.position.x*w,
-      obj.position.y*h,
+      obj.position.x * w,
+      obj.position.y * h,
       gameState.current.condition.objLenX * w,
       gameState.current.condition.objLenY * h
     );
@@ -334,7 +326,7 @@ const AvoidGame = (props) => {
       gameState.current.hpBar.location.x * w,
       gameState.current.hpBar.location.y * h,
       (hp / 100) * gameState.current.hpBar.length * w,
-      gameState.current.hpBar.height * h,
+      gameState.current.hpBar.height * h
     );
   };
 
@@ -347,23 +339,25 @@ const AvoidGame = (props) => {
     for (let i = 0; i < gameState.objects.length; i++) {
       let obj = gameState.objects[i];
       if (
-        obj.position.y + gameState.condition.objLenY/2 + gameState.condition.objSpeed >
+        obj.position.y +
+          gameState.condition.objLenY / 2 +
+          gameState.condition.objSpeed >
           gameState.player.position.y - gameState.player.height / 2 &&
-        obj.position.x + gameState.condition.objLenX/2 >
+        obj.position.x + gameState.condition.objLenX / 2 >
           gameState.player.position.x - gameState.player.width / 2 &&
-        obj.position.x + gameState.condition.objLenX/2<
+        obj.position.x + gameState.condition.objLenX / 2 <
           gameState.player.position.x + gameState.player.width / 2
       ) {
-        if (obj.isAvoid) {
+        if (obj.type !== "avoid_pill") {
           effectSound(hitEffect);
           console.log(
             "diediediediediediediediediediediedie",
-            gameState.hpBar.hpLeft.current,
+            gameState.hpBar.hpLeft.current
           );
           gameState.hpBar.hpLeft -= 10;
           gameState.player.state += 1;
-          setTimeout(()=>{
-            gameState.player.state -=1;
+          setTimeout(() => {
+            gameState.player.state -= 1;
           }, 200);
 
           if (gameState.hpBar.hpLeft < 0) {
@@ -378,9 +372,10 @@ const AvoidGame = (props) => {
           console.log(
             obj.isAvoid,
             "yumyumyumyumyumyumyumyumyumyumyumyum",
-            gameState.hpBar.hpLeft,
+            gameState.hpBar.hpLeft
           );
           gameState.hpBar.hpLeft += 5;
+          effectSound(healEffect);
         }
         gameState.objects.splice(i, 1);
       }
@@ -391,13 +386,9 @@ const AvoidGame = (props) => {
     }
   };
 
-
-
-
-
-/*======================================================= */  
-/*===================시그널 관련=================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*===================시그널 관련=================== */
+  /*======================================================= */
 
   /* 데이터 수신해서 반영 */
   useEffect(() => {
@@ -410,61 +401,58 @@ const AvoidGame = (props) => {
             data.currentGameState;
         });
 
-
       props.user
         .getStreamManager()
         .stream.session.on("signal:avoidgame_result", (event) => {
           const data = JSON.parse(event.data);
           result.push(data.user);
           console.log(result.length, subscribers.length);
-          if (result.length >= subscribers.length+1){
+          if (result.length >= subscribers.length + 1) {
             console.log(result[0]);
             setLowestConId(result[0]);
             setIsGameOver(true);
           }
         });
 
-         /* start 시그널 받는 session on !! */
-      props.user
-      .getStreamManager()
-      .stream.session.on("signal:startSignal", (event) => {
-        setCountDown(true);
-        /* 3초후에 스타트로 바뀜!*/
-        setTimeout(() => {
-          setCountDown(false);
-          setTimeout(() => {
-            setStart(true);
-          }, 300);
-        }, 3000);
-      });
-
-    /* 내가 호스트일 경우에만, session on 함  */
-    if (
-      props.user.getStreamManager().stream.connection.connectionId === hostId
-    ) {
-      let readyPeople = [];
+      /* start 시그널 받는 session on !! */
       props.user
         .getStreamManager()
-        .stream.session.on("signal:readySignal", (event) => {
-          let fromId = event.from.connectionId;
-          if (!readyPeople.includes(fromId)) {
-            readyPeople.push(fromId);
-            console.log(readyPeople);
-          }
-
-          if (readyPeople.length === subscribers.length + 1) {
-            console.log("받았다!!!");
-            sendStartSignal();
-            props.user
-              .getStreamManager()
-              .stream.session.off("signal:readySignal");
-          }
+        .stream.session.on("signal:startSignal", (event) => {
+          setCountDown(true);
+          /* 3초후에 스타트로 바뀜!*/
+          setTimeout(() => {
+            setCountDown(false);
+            setTimeout(() => {
+              setStart(true);
+            }, 300);
+          }, 3000);
         });
-    }
+
+      /* 내가 호스트일 경우에만, session on 함  */
+      if (
+        props.user.getStreamManager().stream.connection.connectionId === hostId
+      ) {
+        let readyPeople = [];
+        props.user
+          .getStreamManager()
+          .stream.session.on("signal:readySignal", (event) => {
+            let fromId = event.from.connectionId;
+            if (!readyPeople.includes(fromId)) {
+              readyPeople.push(fromId);
+              console.log(readyPeople);
+            }
+
+            if (readyPeople.length === subscribers.length + 1) {
+              console.log("받았다!!!");
+              sendStartSignal();
+              props.user
+                .getStreamManager()
+                .stream.session.off("signal:readySignal");
+            }
+          });
+      }
     }
   }, [props.user.getStreamManager().stream.session]);
-
-
 
   /* 게임 로딩 후 레디 시 전송 */
   const sendReadySignal = () => {
@@ -538,11 +526,9 @@ const AvoidGame = (props) => {
     }
   };
 
-
-
-/*======================================================= */  
-/*=================== return =================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*=================== return =================== */
+  /*======================================================= */
 
   return (
     <>
@@ -552,65 +538,66 @@ const AvoidGame = (props) => {
         </div>
       )}
       {props.user.connectionId === props.host ? <h1>host</h1> : null}
-
       {props.mode === "avoidGame" && countDown && (
-          <div>
-            <CountDown />
-          </div>
-        )}
+        <div>
+          <CountDown />
+        </div>
+      )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
-
-        <video
-          className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
-          // className={styles.avoidVideo}
-          autoPlay={true}
-          ref={(el) => {
-            videoRef.current = el;
-            setVideoReady(el);
-          }}
-        />
-        <canvas className={styles.avoidCanvas}
-                ref={canvasRef} 
-                width={"1920px"}
-                height={"1080px"}/>
-        {/* subscribers Cam */}
-        {subscribers.map((subscriber, index) => (
-          <>
-            <div
-              className={`${styles[`avoidGameSub${index + 1}`]} ${
-                !loaded && styles.hidden
-              }`}
-            >
-              <OpenViduVideoComponent
-                mode={"avoidGame"}
-                streamManager={subscriber}
-                drawGame={loadImages}
-                gameState={subscriberState}
-              />
-            </div>
-            <div
-              className={`${styles[`userNick${index + 1}`]} ${
-                !loaded && styles.hidden
-              }`}
-            >
-              닉네임이 들어갈 자리
-            </div>
-          </>
-        ))}
-      </>
-   ):(
-    <>
-      <div>
-        <LoserCam
-          selectId={lowestConId}
-          user={props.user}
-          mode={"centerCam"}
-          end={props.end}
-        />
-      </div>
-    </>
-    )};
+          <video
+            className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
+            // className={styles.avoidVideo}
+            autoPlay={true}
+            ref={(el) => {
+              videoRef.current = el;
+              setVideoReady(el);
+            }}
+          />
+          <canvas
+            className={styles.avoidCanvas}
+            ref={canvasRef}
+            width={"1920px"}
+            height={"1080px"}
+          />
+          {/* subscribers Cam */}
+          {subscribers.map((subscriber, index) => (
+            <>
+              <div
+                className={`${styles[`avoidGameSub${index + 1}`]} ${
+                  !loaded && styles.hidden
+                }`}
+              >
+                <OpenViduVideoComponent
+                  mode={"avoidGame"}
+                  streamManager={subscriber}
+                  drawGame={loadImages}
+                  gameState={subscriberState}
+                />
+              </div>
+              <div
+                className={`${styles[`userNick${index + 1}`]} ${
+                  !loaded && styles.hidden
+                }`}
+              >
+                닉네임이 들어갈 자리
+              </div>
+            </>
+          ))}
+        </>
+      ) : (
+        <>
+          <div>
+            <LoserCam
+              selectId={lowestConId}
+              user={props.user}
+              mode={"centerCam"}
+              end={props.end}
+            />
+          </div>
+        </>
+      )}
+      ;
     </>
   );
 };
