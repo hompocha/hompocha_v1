@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
@@ -15,7 +15,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [conToNick] = useState({});
   const [micEnabled, setMicEnabled] = useState(true);
   const [speechBlocked, setSpeechBlocked] = useState(false);
-
+  const [cheersReady, setCheersReady] = useState(false);
+  const [cheersSuccess, setCheersSuccess] = useState(false);
+  const canvasRef = useRef(null);
   const toggleMic = () => {
     setMicEnabled((prevState) => {
       const enabled = !prevState;
@@ -253,6 +255,15 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     }, 1500);
   };
 
+  const handleCheersReady = () =>{
+    setCheersReady(true);
+    console.log("건배모드로 변경되었음");
+  }
+
+
+
+
+
   console.log("CamMain rendered");
   const micOnImageURL = "/Bell/micOn.png";
   const micOffImageURL = "/Bell/micOff.png";
@@ -343,8 +354,13 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
               speechBlocked={speechBlocked}
+              handleCheersReady={handleCheersReady}
             />
             <CamTest user={user} />
+          </div>
+
+          <div>
+            <canvas ref={canvasRef} width={1920} height={1080}/>
           </div>
         </div>
       )}
