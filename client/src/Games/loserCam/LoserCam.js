@@ -7,7 +7,7 @@ const LoserCam = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       props.end(undefined);
-    }, 3500);
+    }, 6200);
 
     return () => {
       clearTimeout(timer);

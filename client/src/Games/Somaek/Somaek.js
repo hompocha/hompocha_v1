@@ -90,7 +90,7 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 30 * 1000; /*시연*/
+    timerPrint.current = 400 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
 
@@ -400,15 +400,15 @@ const Somaek = (props) => {
     // can_ctx.fillText(`남은시간: ${timer}`, -can_ref.width + 20, 100);
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
-    can_ctx.fillText("남은시간 : ", -can_ref.width + 1500, 40);
+    // can_ctx.fillText("남은시간 : ", -can_ref.width + 1500, 40);
     let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
     if (blink) {
-      can_ctx.fillStyle = "black";
-      can_ctx.font = "bold 20px Arial";
+      can_ctx.fillStyle = "dimgrey";
+      can_ctx.font = "bold 45px Arial";
       can_ctx.fillText(
         `남은시간: ${timerPrint.current / 1000}초`,
-        -can_ref.width + 20,
-        150
+        -can_ref.width + 1600,
+        50
       );
     }
 
