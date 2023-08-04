@@ -15,7 +15,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [conToNick] = useState({});
   const [micEnabled, setMicEnabled] = useState(true);
   const [speechBlocked, setSpeechBlocked] = useState(false);
-  // let conToNick = {}; // Empty object, not an array
 
   const toggleMic = () => {
     setMicEnabled((prevState) => {
@@ -43,8 +42,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       console.log("닉네임 리스트 ", conToNick);
     });
 
-    user.getStreamManager().stream.session.on("signal:cheersData", (event)=>{
-      const data = JSON.parse(event.data)
+    user.getStreamManager().stream.session.on("signal:cheersData", (event) => {
+      const data = JSON.parse(event.data);
       const handData = data.hand;
       console.log(handData);
     });
@@ -89,12 +88,15 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         }
         enterAvoidGame();
       } else {
-          try {
-            axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
-          } catch(error) {
-            alert("재 로그인 해야합니다~!")
-            navigate("/lobby");
-          }
+        try {
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+            status: "openGame",
+            room_idx: idx,
+          });
+        } catch (error) {
+          alert("재 로그인 해야합니다~!");
+          navigate("/lobby");
+        }
         /* data 가 undefined 일 경우 방으로 돌아감 */
         enterMainRoom();
         /* 음성인식 재시작 */

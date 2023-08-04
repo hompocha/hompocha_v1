@@ -10,7 +10,7 @@ const OpenViduVideoComponent = (props) => {
   const [loaded, setLoaded] = useState(false);
 
   console.log(props);
-  console.log(typeof(props.streamManager));
+  console.log(typeof props.streamManager);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
@@ -23,23 +23,21 @@ const OpenViduVideoComponent = (props) => {
 
   const streamId = props.streamManager.stream.connection.connectionId;
 
-  useEffect(() =>{
-    const Interval = setInterval(()=>{
+  useEffect(() => {
+    const Interval = setInterval(() => {
       sendCheersSignal();
     }, 1000);
 
-    return (()=>{
+    return () => {
       clearInterval(Interval);
-    });
-  },[]);
+    };
+  }, []);
 
-  
   useEffect(() => {
     if (videoRef.current && props.streamManager) {
       props.streamManager.addVideoElement(videoRef.current);
     }
-    if(streamId === props.myself)
-    {
+    if (streamId === props.myself) {
       const hands = new Hands({
         locateFile: (file) =>
           `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
@@ -75,21 +73,19 @@ const OpenViduVideoComponent = (props) => {
     }
 
     if (results.multiHandLandmarks && results.multiHandedness) {
-      /* 패들 구현 */
       if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
         cheersRef.current = results.multiHandLandmarks[0];
       }
     }
   };
 
-  const sendCheersSignal = (score) => {
+  const sendCheersSignal = () => {
     if (props.streamManager.session) {
-      const data = 
-        {
-          hand: cheersRef.current
-        };
-      props.streamManager
-        .session.signal({
+      const data = {
+        hand: cheersRef.current,
+      };
+      props.streamManager.session
+        .signal({
           data: JSON.stringify(data),
           to: [],
           type: "cheersData",
@@ -102,8 +98,6 @@ const OpenViduVideoComponent = (props) => {
         });
     }
   };
-
-
 
   useEffect(() => {
     if (props.mode === "avoidGame") {
