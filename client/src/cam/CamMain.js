@@ -230,7 +230,21 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       }
     }
   };
+  const handleClick = (event) => {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+    console.log("마우스 클릭 좌표:", mouseX, mouseY);
+  };
 
+  useEffect(() => {
+    // 페이지가 로드되면 마우스 클릭 이벤트 리스너를 추가합니다.
+    document.addEventListener("click", handleClick);
+    return () => {
+      // 컴포넌트가 unmount될 때 이벤트 리스너를 제거합니다.
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
+  
   const returnLobby = () => {
     setSpeechBlocked(true);
     setTimeout(() => {
