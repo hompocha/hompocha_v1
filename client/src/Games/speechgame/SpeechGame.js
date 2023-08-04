@@ -4,7 +4,8 @@ import SpeechCam from "./SpeechCam";
 import styles from "./SpeechGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 import LoserCam from "../loserCam/LoserCam";
-import speechClock from "../../sounds/speechClock.wav";
+// import speechClock from "../../sounds/speechClock.wav";
+import speechClock from "../../sounds/speechGameSpeed.mp3";
 import { effectSound } from "../../effectSound";
 import CountDown from "../../Loading/CountDown";
 import Loading from "../../Loading/Loading";
@@ -157,7 +158,9 @@ const SpeechGame = (props) => {
     const timer = setTimeout(() => {
       setTimerExpired(true);
       sentenceState="시작";
-    }, /* stopTime */ 3 * 1000); /*시연*/
+      bgmSound.stop();
+
+    }, /* stopTime */ 10 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
