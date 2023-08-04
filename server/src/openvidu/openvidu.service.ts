@@ -1,7 +1,9 @@
 import { OpenVidu } from 'openvidu-node-client';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
-const OPENVIDU_URL = 'https://hompocha.site:8443';
+// const OPENVIDU_URL = 'https://hompocha.site:8443';
+const OPENVIDU_URL = 'http://localhost:4443';
+
 const OPENVIDU_SECRET = '229';
 
 @Injectable()

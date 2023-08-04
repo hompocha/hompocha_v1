@@ -38,6 +38,7 @@ export default class OpenViduSession extends Component {
     this.unlistenHistoryEvent = history.listen(({ action }) => {
       if (action === "POP") {
         this.leaveRoom();
+        localStorage.removeItem("jwtToken");
         history.push('/');
       }
     });
@@ -50,6 +51,7 @@ export default class OpenViduSession extends Component {
     this.leaveSession();
   }
   leaveRoom = () => {
+
     try {
       const token = localStorage.getItem("jwtToken");
       axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`, {
@@ -63,6 +65,7 @@ export default class OpenViduSession extends Component {
     if (this.state.session) {
       this.leaveSession();
     }
+
   };
   handleSessionConnected = () => {
     this.setState({ sessionConnected: true });

@@ -104,6 +104,19 @@ const Login: React.FC = () => {
       console.error(error);
     }
   };
+  /*====================엔터키 넣어버림====================*/
+  const handlePressKeyTosignIn = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleLogIn(event);
+    }
+  };
+
+  const hadlePressKeyToSignUp = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSignUp(event)
+    }
+  };
+  /*===================================================*/
 
   return (
     <>
@@ -150,6 +163,7 @@ const Login: React.FC = () => {
                 placeholder="nickname"
                 value={nickName}
                 onChange={(e) => setNickname(e.target.value)}
+                onKeyPress={hadlePressKeyToSignUp}
               />
             </div>
             {/*====================================================================================*/}
@@ -173,6 +187,7 @@ const Login: React.FC = () => {
                 placeholder="비밀번호"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
+                onKeyPress={handlePressKeyTosignIn}
               />
             </div>
             <button onClick={handleLogIn}>SIGN IN</button>
