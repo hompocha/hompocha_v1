@@ -81,3 +81,15 @@
   text-align: center;
   font-weight: bold;
 }
+
+/* .bamboo {
+  background-image: url("../../public/asset/room/bamboo.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 90vw;
+  height: 90vh;
+  position: fixed;
+  top: 5vh;
+  left: 5vw;
+  z-index: 0;
+} */

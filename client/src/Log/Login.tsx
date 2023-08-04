@@ -53,8 +53,7 @@ const Login: React.FC = () => {
     } else if (password !== confirmPassword) {
       alert("비밀번호가 다릅니다.");
       return;
-    } 
-    else if (password.length < 8) {
+    } else if (password.length < 8) {
       alert("비밀번호를 8자리 이상으로 입력해주세요!");
       return;
     }
@@ -188,9 +187,9 @@ const Login: React.FC = () => {
       </div>
       {/* CSS영역 */}
       <div>
-        <div className={`${styles.menu} ${styles.il}`}>오 뎅 탕</div>
+        {/* <div className={`${styles.menu} ${styles.il}`}>오 뎅 탕</div>
         <div className={`${styles.menu} ${styles.ee}`}>계란말이</div>
-        <div className={`${styles.menu} ${styles.sam}`}>잔치국수</div>
+        <div className={`${styles.menu} ${styles.sam}`}>잔치국수</div> */}
         <div className={`${styles.wave} ${styles.zero} ${styles.even}`}></div>
         <div className={`${styles.wave} ${styles.one} ${styles.odd}`}></div>
         <div className={`${styles.wave} ${styles.two} ${styles.even}`}></div>
@@ -223,8 +222,8 @@ const Login: React.FC = () => {
         <div
           className={`${styles.wave} ${styles.nineteen} ${styles.odd}`}
         ></div>
+        <div className={styles.bottomColor}></div>
       </div>
-      <div className={styles.bottomColor}></div>
     </>
   );
 };
