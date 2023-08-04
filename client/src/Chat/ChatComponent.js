@@ -22,7 +22,7 @@ export default function ChatComponent(props) {
         ]);
         scrollToBottom();
       };
-  
+
       props.user
         .getStreamManager()
         .stream.session.on("signal:chat", onChatSignal);
@@ -33,7 +33,6 @@ export default function ChatComponent(props) {
       };
     }
   }, [props.sessionConnected, props.user]);
-  
 
   const handleChange = (event) => {
     setMessage(event.target.value);
@@ -78,24 +77,21 @@ export default function ChatComponent(props) {
   return (
     <div id="chatContainer" className={styles.chatContainer}>
       <div id="chatComponent" className={styles.chatComponent}>
-        <div id="chatToolbar" className={styles.chatToolbar}>
+        {/* <div id="chatToolbar" className={styles.chatToolbar}>
           <span>
-            {/* props.user.getStreamManager().stream.session.sessionId */}
-            채팅창
+            props.user.getStreamManager().stream.session.sessionId 채팅창
           </span>
-        </div>
+        </div> */}
         <div className={styles.messageWrap} ref={chatScroll}>
           {messageList.map((data, i) => (
             <div
               key={i}
               id="remoteUsers"
-              className={
-                `${styles.message} ${
-                  data.connectionId !== props.user.getConnectionId()
-                    ? styles.left
-                    : styles.right
-                }`
-              }
+              className={`${styles.message} ${
+                data.connectionId !== props.user.getConnectionId()
+                  ? styles.left
+                  : styles.right
+              }`}
             >
               <div className={styles.msgDetail}>
                 <div className={styles.msgContent}>
@@ -103,12 +99,16 @@ export default function ChatComponent(props) {
                   <p className={styles.text}>
                     {data.connectionId !== props.user.getConnectionId() ? (
                       <>
-                        <span className={styles.nickName}>{data.nickName}</span>{' '}
-                        <span className={styles.messageContent}>{data.message}</span>
+                        <span className={styles.nickName}>{data.nickName}</span>{" "}
+                        <span className={styles.messageContent}>
+                          {data.message}
+                        </span>
                       </>
                     ) : (
                       <>
-                        <span className={styles.messageContent}>{data.message}</span>{' '}
+                        <span className={styles.messageContent}>
+                          {data.message}
+                        </span>{" "}
                         <span className={styles.nickName}></span>
                       </>
                     )}

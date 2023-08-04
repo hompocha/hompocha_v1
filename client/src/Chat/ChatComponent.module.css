@@ -1,37 +1,39 @@
 .chatContainer {
-  position: absolute;
+  position: fixed;
   z-index: 0;
-  right: 3%;
-  bottom: 3%;
+  right: 3vw;
+  bottom: 3vh;
 }
-
 
 .chatToolbar {
   height: 30px;
-  background-color: #3d3d3d;
+  /* background-color: #3d3d3d; */
   box-sizing: border-box;
   font-weight: bold;
   font-size: 14px;
   text-align: center;
   padding-top: 4px;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  /* border-top-left-radius: 6px;
+  border-top-right-radius: 6px; */
   color: #ffffff;
 }
 
-
 .chatComponent {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px;
-  background-color: #b8b8b8;
+  padding-top: 70px;
+  /* background-color: #b8b8b8; */
   position: fixed;
   z-index: 99999;
   right: 2vw;
   bottom: 4vh;
   margin: auto;
-  height: 25vh;
-  width: 15vw;
+  height: 270px;
+  width: 290px;
   border-radius: 20px;
+  background-image: url("../../public/asset/chatCover.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .messageWrap {
@@ -80,7 +82,7 @@
   padding: 8px;
   color: #000000;
   width: auto;
-  font-weight: bold ;
+  font-weight: bold;
   max-width: 80%;
 }
 
@@ -149,8 +151,9 @@
 
 .messageInput {
   position: relative;
+  left: 15px;
   bottom: 0px;
-  width: 100%;
+  width: 90%;
   background-color: #ffffff;
   text-align: center;
   padding: 010px 0px;
