@@ -545,59 +545,57 @@ const AvoidGame = (props) => {
       )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
-          <video
-            className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
-            // className={styles.avoidVideo}
-            autoPlay={true}
-            ref={(el) => {
-              videoRef.current = el;
-              setVideoReady(el);
-            }}
-          />
-          <canvas
-            className={styles.avoidCanvas}
-            ref={canvasRef}
-            width={"1920px"}
-            height={"1080px"}
-          />
-          {/* subscribers Cam */}
-          {subscribers.map((subscriber, index) => (
-            <>
-              <div
-                className={`${styles[`avoidGameSub${index + 1}`]} ${
-                  !loaded && styles.hidden
-                }`}
-              >
-                <OpenViduVideoComponent
-                  mode={"avoidGame"}
-                  streamManager={subscriber}
-                  drawGame={loadImages}
-                  gameState={subscriberState}
-                />
-              </div>
-              <div
-                className={`${styles[`userNick${index + 1}`]} ${
-                  !loaded && styles.hidden
-                }`}
-              >
-                닉네임이 들어갈 자리
-              </div>
-            </>
-          ))}
-        </>
-      ) : (
-        <>
-          <div>
-            <LoserCam
-              selectId={lowestConId}
-              user={props.user}
-              mode={"centerCam"}
-              end={props.end}
-            />
-          </div>
-        </>
-      )}
-      ;
+        <video
+          className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
+          // className={styles.avoidVideo}
+          autoPlay={true}
+          ref={(el) => {
+            videoRef.current = el;
+            setVideoReady(el);
+          }}
+        />
+        <canvas  className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
+                ref={canvasRef}
+                width={"1920px"}
+                height={"1080px"}/>
+        {/* subscribers Cam */}
+        {subscribers.map((subscriber, index) => (
+          <>
+            <div
+              className={`${styles[`avoidGameSub${index + 1}`]} ${
+                !loaded && styles.hidden
+              }`}
+            >
+              <OpenViduVideoComponent
+                mode={"avoidGame"}
+                streamManager={subscriber}
+                drawGame={loadImages}
+                gameState={subscriberState}
+              />
+            </div>
+            <div
+              className={`${styles[`userNick${index + 1}`]} ${
+                !loaded && styles.hidden
+              }`}
+            >
+              닉네임이 들어갈 자리
+            </div>
+          </>
+        ))}
+      </>
+   ):(
+    <>
+      <div>
+        <LoserCam
+          selectId={lowestConId}
+          user={props.user}
+          mode={"centerCam"}
+          end={props.end}
+        />
+      </div>
+    </>
+    )};
+
     </>
   );
 };

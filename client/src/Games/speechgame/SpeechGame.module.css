@@ -1,3 +1,6 @@
+.hidden{
+  display: none;
+}
 .gameWord {
   position: fixed;
   left: 30vw;
@@ -20,12 +23,6 @@
   width: 800px;
   text-align: center;
   transform: scale(60%);
-}
-.text {
-  position: fixed;
-  top: 1%;
-  left: 21%;
-  display: none;
 }
 
 .speechGameCam__1 {
