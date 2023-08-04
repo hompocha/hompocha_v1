@@ -32,7 +32,6 @@ const gameStartKeywords = [
 
 const UseSpeechRecognition = (props) => {
   console.log(props);
-  // const [lang, setLang] = useState('ko-KR');
   const [value, setValue] = useState("");
   const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState("");

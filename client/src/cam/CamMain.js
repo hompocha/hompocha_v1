@@ -235,7 +235,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setSpeechBlocked(true);
     setTimeout(() => {
       endSession();
-      navigate("/Lobby");
+      navigate("/lobby");
     }, 1500);
   };
 

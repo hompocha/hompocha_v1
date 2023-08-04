@@ -14,9 +14,9 @@ const App = (): JSX.Element => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/Lobby" element={<Lobby />} />
-        <Route path="/Room" element={<Room />} />
-        <Route path="/GameCam" element={<GameCam />} />
+        <Route path="/lobby" element={<Lobby />} />
+        <Route path="/room" element={<Room />} />
+        <Route path="/gamecam" element={<GameCam />} />
       </Routes>
     </BrowserRouter>
   );
