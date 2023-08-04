@@ -254,7 +254,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   };
 
   console.log("CamMain rendered");
-
+  const micOnImageURL = "/Bell/micOn.png";
+  const micOffImageURL = "/Bell/micOff.png";
   return (
     <div>
       {/* Main Room */}
@@ -263,9 +264,17 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title">{roomName} </div>
             <div>{user.subscribers.length + 1}명 참여중</div>
-            <button onClick={toggleMic}>
-              {micEnabled ? "마이크 끄기" : "마이크 켜기"}
-            </button>
+            <button onClick={toggleMic} style={{
+                backgroundImage: `url(${micEnabled ? micOnImageURL : micOffImageURL})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                width: "57px", // Adjust the size as needed
+                height: "57px", // Adjust the size as needed
+                border: "none", // Remove border
+                outline: "none", // Remove outline
+                cursor: "pointer",
+                backgroundColor:"transparent",
+              }}/>
             <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
             </form>
