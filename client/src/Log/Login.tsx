@@ -110,12 +110,13 @@ const Login: React.FC = () => {
 
   const hadlePressKeyToSignUp = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
-      handleSignUp(event)
+      handleSignUp(event);
     }
   };
 
   return (
     <>
+      <div className={styles.loginWholeWrap}></div>
       <div className={styles.container}>
         <div className={styles.serviceTitleDiv}>
           <h1 className={styles.serviceTitle}>홈술포차</h1>
