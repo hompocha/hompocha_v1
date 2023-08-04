@@ -23,6 +23,6 @@
     transform: scale(170%);
     z-index: 9;
     background-color: rgba(255, 255, 255, 0.15);
-    animation: stamp 1s  ; /* 애니메이션 적용 */
+    animation: stamp 3s  ; /* 애니메이션 적용 */
     animation-iteration-count: 1;
 }

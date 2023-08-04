@@ -9,9 +9,11 @@ const LoserCam = (props) => {
     const timer = setTimeout(() => {
       props.end(undefined);
     }, 6200);
+
     const laughingSound = setTimeout(() => {
       effectSound(laughing, false, 1);
     }, 1000);
+
     return () => {
       clearTimeout(timer);
       clearTimeout(laughingSound);
