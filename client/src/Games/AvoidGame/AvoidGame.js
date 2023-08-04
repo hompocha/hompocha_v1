@@ -570,8 +570,8 @@ const AvoidGame = (props) => {
             setVideoReady(el);
           }}
         />
-        <canvas className={styles.avoidCanvas}
-                ref={canvasRef} 
+        <canvas  className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
+                ref={canvasRef}
                 width={"1920px"}
                 height={"1080px"}/>
         {/* subscribers Cam */}

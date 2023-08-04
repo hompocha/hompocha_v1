@@ -3,7 +3,7 @@ import styles from "./CountDown.module.css";
 const CountDown = () => {
   return (
     <div className={styles.countDown}>
-      <h3>카운트다운!!!!</h3>
+      <h2 style={{color: 'white', fontSize: '34px'}}>게임이 곧 시작됩니다!</h2>
       <img src="/Loading/countDown.gif" alt="countdown" />
       {/*<img src="/Drink/soju.png" alt="countdown" />*/}
     </div>

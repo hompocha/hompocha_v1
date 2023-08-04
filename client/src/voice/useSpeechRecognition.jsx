@@ -39,6 +39,13 @@ const UseSpeechRecognition = (props) => {
   const [woo,setWoo] = useState(true);
   const lang = "ko-Kr";
   useEffect(() => {
+
+    /* 건배 명령어 */
+    if (value.includes("건배")){
+      props.handleCheersReady();
+    }
+
+    /* 발음게임 명령어 */
     for (const sentence of speech_sentence) {
       if (value.includes(sentence)) {
         effectSound(somaekSuccess);
@@ -49,6 +56,7 @@ const UseSpeechRecognition = (props) => {
       }
     }
 
+    /* 키워드 명령어 */
     for (const word of keyword) {
       if (value.includes(word)) {
         setExtractedValue(word);
@@ -58,7 +66,7 @@ const UseSpeechRecognition = (props) => {
       }
     }
 
-
+    /* 게임시작 명령어 */
     for (const gameStartKeyword of gameStartKeywords) {
       if (value.includes(gameStartKeyword)) {
         setExtractedValue(gameStartKeyword);

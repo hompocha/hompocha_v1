@@ -817,7 +817,7 @@ const Somaek = (props) => {
       <div>
         {props.mode === "somaek" && !loaded && (
           <div>
-            <Loading />
+            <Loading mode={props.mode}/>
           </div>
         )}
         {props.mode === "somaek" && countDown && (
