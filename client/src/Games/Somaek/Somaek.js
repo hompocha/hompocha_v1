@@ -63,7 +63,7 @@ const Somaek = (props) => {
   const states = {};
   for (let i = 0; i < subscribers.length; i++) {
     const conId = subscribers[i].stream.connection.connectionId;
-    states[props.conId] = undefined;
+    states[conId] = undefined;
   }
 
   const container = {
