@@ -16,7 +16,11 @@ export function FoodImage() {
   async function loadFoodImage() {
     const frames = [
       "/Food/chicken.png",
+      "/Food/chickenWing.png",
       "/Food/riceCake.png",
+      "/Food/oDol.png",
+      "/Food/eggMalE.png",
+      "/Food/fish.png",
     ];
 
     const randomIndex = Math.floor(Math.random() * frames.length);
@@ -62,7 +66,11 @@ export function FoodImage() {
           className={styles.size}
           src={imageSrc.src}
           alt="Food Image"
-          style={{ position: "absolute", left: imagePosition.x, top: imagePosition.y }}
+          style={{
+            position: "absolute",
+            left: imagePosition.x,
+            top: imagePosition.y,
+          }}
           width="350"
           height="250"
         />
