@@ -12,6 +12,7 @@ const UserVideoComponent = (props) => {
                 index = {props.index}
                 num = {props.num}
                 myself = {props.myself}
+                setVideoInfo={props.setVideoInfo}
             />
         ) : null}
       </>

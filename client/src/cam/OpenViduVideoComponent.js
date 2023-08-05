@@ -5,6 +5,13 @@ import { Camera } from "@mediapipe/camera_utils";
 import { drawPaddle } from "../Games/AirHockey/drawPaddle";
 import NewDrawBalls from "../Games/AirHockey/NewDrawBalls";
 
+
+
+
+/*======================================================= */  
+/*=================== 메인 함수 시작=================== */  
+/*======================================================= */  
+
 const OpenViduVideoComponent = (props) => {
   const [videoReady, setVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -14,19 +21,20 @@ const OpenViduVideoComponent = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
-  const paddleRef = useRef(null);
-  const paddleCtx = useRef(null);
+  // const paddleRef = useRef(null);
+  // const paddleCtx = useRef(null);
   const canvasSubRef = useRef(null);
   const canvasSubCtx = useRef(null);
   const gameStateRef = useRef(null);
   const cheersRef = useRef(null);
+  const noHands = useRef(false);
 
   const streamId = props.streamManager.stream.connection.connectionId;
 
   useEffect(() => {
     const Interval = setInterval(() => {
       sendCheersSignal();
-    }, 1000);
+    }, 1000/60);
 
     return () => {
       clearInterval(Interval);
@@ -37,12 +45,28 @@ const OpenViduVideoComponent = (props) => {
     if (videoRef.current && props.streamManager) {
       props.streamManager.addVideoElement(videoRef.current);
     }
-    if (streamId === props.myself) {
+
+    let didCancel = false;
+
+    if (videoRef.current && canvasRef.current) {
+      const computedStyle = window.getComputedStyle(videoRef.current);
+      const width=parseFloat(computedStyle.getPropertyValue('width'));
+      const height=parseFloat(computedStyle.getPropertyValue('height'));
+      const left=parseFloat(computedStyle.getPropertyValue('left'));
+      const top=parseFloat(computedStyle.getPropertyValue('top'));
+      let scale = computedStyle.getPropertyValue('transform');
+      scale = parseFloat(scale.split('(')[1].split(')')[0].split(',')[0])*(-1);
+      console.log(scale);
+      props.setVideoInfo(streamId, width, height, left, top, scale);
+    }
+
+    const loadHandsAndCamera = async() => {
       const hands = new Hands({
         locateFile: (file) =>
           `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
       });
 
+      let camera;
       if (videoRef.current && canvasRef.current) {
         canvasCtx.current = canvasRef.current.getContext("2d");
 
@@ -55,37 +79,65 @@ const OpenViduVideoComponent = (props) => {
 
         /* onResults: hands가 하나의 프레임을 처리하고 나서 바로 실행될 함수 */
         hands.onResults(onResults);
-        const camera = new Camera(videoRef.current, {
+        camera = new Camera(videoRef.current, {
           onFrame: async () => {
-            await hands.send({ image: videoRef.current });
+            if (!didCancel) {
+              await hands.send({ image: videoRef.current });
+            }
           },
-          width: 960,
-          height: 720,
+          width: videoRef.current.width,
+          height: videoRef.current.height,
         });
         camera.start();
       }
+
+      return () =>{
+        if(camera) {
+          camera.stop();
+        }
+      }
+    };
+
+    if(streamId === props.myself){
+      loadHandsAndCamera();
     }
-  }, [videoReady]);
+
+    return ()=>{
+      didCancel = true;
+    };
+  }, [videoReady, canvasRef.current]);
+
+
 
   const onResults = (results) => {
-    if (canvasRef.current && canvasCtx.current) {
-      setLoaded(true);
-    }
+    // if (canvasRef.current && canvasCtx.current) {
+    //   setLoaded(true);
+    // }
 
     if (results.multiHandLandmarks && results.multiHandedness) {
-      if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
+      /* 패들 구현 */
+      if (results.multiHandLandmarks[0]) {
+        noHands.current = false;
         cheersRef.current = results.multiHandLandmarks[0];
+      }
+      else {
+        cheersRef.current = undefined;
       }
     }
   };
 
   const sendCheersSignal = () => {
+    if(noHands.current===true) return;
     if (props.streamManager.session) {
-      const data = {
-        hand: cheersRef.current,
-      };
-      props.streamManager.session
-        .signal({
+      if (!cheersRef.current) {
+        noHands.current=true;
+      }
+      const data = 
+        {
+          hand: cheersRef.current
+        };
+      props.streamManager
+        .session.signal({
           data: JSON.stringify(data),
           to: [],
           type: "cheersData",
@@ -114,7 +166,7 @@ const OpenViduVideoComponent = (props) => {
             gameStateRef.current,
           );
         }
-      }, 1000 / 20);
+      }, 1000 / 60);
       return () => {
         clearInterval(interval);
       };
@@ -166,33 +218,33 @@ const OpenViduVideoComponent = (props) => {
       }
 
       {
-        /* 하키게임할 때 플레이어 캠 */
-        props.mode === "airHockey" ? (
-          <>
-            <video
-              className={styles.videoCanvas}
-              autoPlay={true}
-              ref={(el) => {
-                videoRef.current = el;
-                setVideoReady(!!el);
-              }}
-            />
-            <canvas className={styles.videoCanvas} ref={canvasRef} />
-            <canvas className={styles.videoCanvas} ref={paddleRef} />
-            <NewDrawBalls />
-          </>
-        ) : null
+        // /* 하키게임할 때 플레이어 캠 */
+        // props.mode === "airHockey" ? (
+        //   <>
+        //     <video
+        //       className={styles.videoCanvas}
+        //       autoPlay={true}
+        //       ref={(el) => {
+        //         videoRef.current = el;
+        //         setVideoReady(!!el);
+        //       }}
+        //     />
+        //     <canvas className={styles.videoCanvas} ref={canvasRef} />
+        //     <canvas className={styles.videoCanvas} ref={paddleRef} />
+        //     <NewDrawBalls />
+        //   </>
+        // ) : null
       }
 
       {
-        /* 오리옮기기 게임할 때 불러와지는 플레이어 캠 */
-        props.mode === "movingDuck" ? (
-          <div>
-            <span>오리 옮기기 모드</span>
-            <video autoPlay={true} ref={videoRef} />
-            <canvas ref={canvasRef} width={700} height={600} />
-          </div>
-        ) : null
+        // /* 오리옮기기 게임할 때 불러와지는 플레이어 캠 */
+        // props.mode === "movingDuck" ? (
+        //   <div>
+        //     <span>오리 옮기기 모드</span>
+        //     <video autoPlay={true} ref={videoRef} />
+        //     <canvas ref={canvasRef} width={700} height={600} />
+        //   </div>
+        // ) : null
       }
       {
         /* 룰렛돌리기할 때 불러와지는 플레이어 캠 */
