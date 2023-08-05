@@ -17,7 +17,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef(null);
+
   const toggleMic = () => {
     setMicEnabled((prevState) => {
       const enabled = !prevState;

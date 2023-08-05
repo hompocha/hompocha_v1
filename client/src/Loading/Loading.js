@@ -12,9 +12,10 @@ const Loading = (props) => {
 
   return (
     <div className={styles.loading}>
-      <h2>{text}</h2>
-      <h3>Loading...</h3>
-      <PacmanLoader color="#36d7b7" />
+      <span style={{ color: 'white', fontSize: '40px' }}>{text}</span>
+      <span style={{ color: 'whitesmoke', fontSize: '40px' }}>Loading...</span>
+      <img src="/Loading/LoadingSoju-unscreen.gif" alt="sojuLoading" style={{ width: '450px', height: '450px' }} />
+      {/*<PacmanLoader color="#36d7b7" />*/}
     </div>
   );
 };

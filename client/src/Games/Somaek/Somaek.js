@@ -99,11 +99,11 @@ const Somaek = (props) => {
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
-        // const sortedScores = Object.entries(scores).sort(
-        //   ([, a], [, b]) => b - a
-        // );
-        // const lowestScorePerson = sortedScores[sortedScores.length - 1];
-        // setLowestConId(lowestScorePerson[0]);
+        const sortedScores = Object.entries(scores.current).sort(
+          ([, a], [, b]) => b - a
+        );
+        const lowestScorePerson = sortedScores[sortedScores.length - 1];
+        setLowestConId(lowestScorePerson[0]);
         setHandStop(true);
 
         setTimeout(() => {
