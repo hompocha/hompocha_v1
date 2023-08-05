@@ -21,6 +21,7 @@ const CamTest = (props: any) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [flag, setFlag] = useState(0);
   const [counts, setCounts] = useState(0);
+  
   // const memberCount = useRef(num);
 
   /* 부채꼴 모양으로 자른 캠 */
@@ -147,9 +148,11 @@ const CamTest = (props: any) => {
     ); // 오프셋 추가
     return targetAngle;
   };
+  const [dark,setDark] = useState(false);
 
   /* 룰렛 함수*/
   const roulette = (targetAngle: number) => {
+    setDark(true);
     const memberCount = props.user.getSubscriber().length + 1;
     const spinDuration = 5;
     const targetAnglePeople = Math.abs(targetAngle % 360);
@@ -180,6 +183,7 @@ const CamTest = (props: any) => {
         setCounts(0);
         console.log(flag, counts);
       }, 5000);
+      setDark(false);
     }, 5000);
     const reset = () => {
       if (svgRef.current) {
@@ -276,6 +280,13 @@ const CamTest = (props: any) => {
 
   return (
     <div>
+      {dark && (
+      <>
+        {/* <img className={styles.lights} src="/Lights_010.png"/> */}
+        <div className={styles.darkScreen}/>
+        <div className={styles.circleLight}></div>
+      </>
+      )}
       <div className={styles.triangleDown} />
       <div>
         <button type="submit" onClick={sendRouletteSignal}>
