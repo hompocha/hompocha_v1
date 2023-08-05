@@ -98,7 +98,7 @@ const UseSpeechRecognition = (props) => {
         setExtractedValue(themeChangeKeyword);
         let randomNum = Math.floor(Math.random() * 3);
         if (randomNum === props.theme) {
-          randomNum = (randomNum + 1) / 3;
+          randomNum = (randomNum + 1) % 3;
         }
         switch (randomNum) {
           // 포차 테마

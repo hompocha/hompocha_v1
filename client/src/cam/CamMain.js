@@ -20,15 +20,19 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
 
   const [theme, setTheme] = useState(0);
   let bg_img;
+  let bg_items;
   switch (theme) {
     case 0:
       bg_img = `${styles.themePocha}`;
+      bg_items = `${styles.themePochaItem}`;
       break;
     case 1:
       bg_img = `${styles.themeBar}`;
+      bg_items = `${styles.themeBarItem}`;
       break;
     case 2:
       bg_img = `${styles.themeIzakaya}`;
+      bg_items = `${styles.themeIzakayaItem}`;
       break;
     default:
       break;
@@ -379,8 +383,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               </div>
             </div>
           </div>
-          <div className={`${styles.images} ${styles.leftImage}`}></div>
-          <div className={`${styles.images} ${styles.rightImage}`}></div>
+          <div className={bg_items}></div>
           <div className={styles.camAndVoice}>
             <UseSpeechRecognition
               sendEffectSignal={sendEffectSignal}
