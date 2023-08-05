@@ -6,6 +6,7 @@ import "regenerator-runtime/runtime";
 import somaekSuccess from "../sounds/somaekSuccess.wav";
 import somaekFail from "../sounds/somaekFail.wav";
 import { effectSound } from "../effectSound";
+import styless from "./shootingStar.module.scss";
 import { set } from "mongoose";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
@@ -31,9 +32,9 @@ const gameStartKeywords = [
 ];
 
 const themeChangeKeywords = ["변경"];
-
 const UseSpeechRecognition = (props) => {
   console.log(props);
+  const [shootingStar, setShootingStar] = useState(true);
   const [value, setValue] = useState("");
   const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState("");
@@ -104,14 +105,17 @@ const UseSpeechRecognition = (props) => {
           // 포차 테마
           case 0:
             props.setTheme(0);
+            setShootingStar(true);
             break;
           // 바 테마
           case 1:
             props.setTheme(1);
+            setShootingStar(false);
             break;
           // 이자카야 테마
           case 2:
             props.setTheme(2);
+            setShootingStar(false);
             break;
           default:
             break;
@@ -209,6 +213,14 @@ const UseSpeechRecognition = (props) => {
 
   return (
     <div>
+      {shootingStar === true && (
+        <div className={styless.night}>
+          <div className={styless.shooting_star}></div>
+          <div className={styless.shooting_star}></div>
+          <div className={styless.shooting_star}></div>
+          <div className={styless.shooting_star}></div>
+        </div>
+      )}
       <div className={styles.container}>
         <form id="speech-recognition-form">
           {!supported && (

@@ -9,6 +9,13 @@ import { effectSound } from "../effectSound";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 
+
+
+const images:{[name:string]: string} = {
+  // soju: "../../asset/game_img/soju.png",
+  beer: "../../asset/cheers/beerForCheers2.png",
+};
+
 const CamTest = (props: any) => {
   /* 배경음악 */
   useSound(BGM, 1);
@@ -28,9 +35,11 @@ const CamTest = (props: any) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
-
+  
   const myself = props.user.connectionId;
-  const handData: { [id: string]: any } = {};
+  const handData:{[id: string]: any}={};
+  const imgElements:{[key: string]: HTMLImageElement} = {};
+
 
   /* 부채꼴 모양으로 자른 캠 */
   const CamSlice: React.FC<Props> = ({
@@ -154,7 +163,8 @@ const CamTest = (props: any) => {
   useEffect(() => {
     if (canvasRef.current && canvasCtx.current) {
       console.log("hello");
-      const interval = setInterval(() => {
+      loadCupImages();
+      const interval = setInterval(()=>{
         drawHands(canvasRef.current, canvasCtx.current, handData);
       }, 1000 / 60);
 
@@ -169,24 +179,75 @@ const CamTest = (props: any) => {
     can_ctx.save();
     can_ctx.clearRect(0, 0, can_ref.width, can_ref.height);
     const videoInfos = videoInfosRef.current;
-    for (let id in handData) {
-      if (handData[id] && videoInfos[id]) {
-        console.log(handData, videoInfos);
+    for (let id in handData){
+      if (handData[id] && videoInfos[id]){
         const videoInfo = videoInfos[id];
-        handData[id].forEach(
-          (landmark: { x: number; y: number; z: number }) => {
-            const cal = calculateLocation(landmark.x, landmark.y, videoInfo);
-            can_ctx.beginPath();
-            can_ctx.fillStyle = "red";
-            can_ctx.arc(cal.x, cal.y, 5, 0, 2 * Math.PI);
-            can_ctx.fill();
-            can_ctx.closePath();
-          }
-        );
+        
+        const hand5 = handData[id][5];
+        const hand17 = handData[id][17];
+        const handVector = {x: hand5.x-hand17.x, y: hand5.y-hand17.y, z: hand5.z-hand17.z};
+        drawCup(can_ref, can_ctx, handData[id], videoInfo);
+
+        // handData[id].forEach((landmark:{x:number, y:number, z:number})=>{
+        //   const cal = calculateLocation(landmark.x, landmark.y, videoInfo);
+        //   can_ctx.beginPath();
+        //   can_ctx.fillStyle = "red";
+        //   can_ctx.arc(cal.x, cal.y, 5, 0, 2 * Math.PI);
+        //   can_ctx.fill();
+        //   can_ctx.closePath();
+        // })
       }
     }
     can_ctx.restore();
+  }
+
+  // const loadCupImages = async (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any) => {
+  const loadCupImages = async () => {
+    try {
+      for (let type in images) {
+        const img = new Image();
+        img.src = images[type];
+        // 이미지 로딩을 Promise로 감싸 비동기로 처리
+        await new Promise<void>((resolve) => {
+          img.onload = () => resolve();
+        });
+        imgElements[type] = img;
+      }
+      // 모든 이미지 로딩이 완료되면 애니메이션 시작
+    } catch (error) {
+      console.error("Error loading cup images:", error);
+    }
   };
+
+
+  const drawCup = (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any, videoInfo:any): void => {
+    const w = can_ref.width;
+    const h = can_ref.height;
+    const hand5 = hand[5];
+    const hand17 = hand[17];
+    const handVector = {x: hand5.x-hand17.x, y: hand5.y-hand17.y, z: hand5.z-hand17.z};
+    const handVectorDistance = (handVector.x**2 + handVector.y**2+handVector.z**2)**0.5;
+    const angle = Math.acos(Math.abs(handVector.y)/handVectorDistance);
+    const cupSize = Math.abs(handVector.y)*3*videoInfo.scale;
+    // console.log(handVector.y,cupSize);
+    const img = imgElements["beer"];
+      // (player.state < 1)
+      //   ? imgElements["player_normal"]
+      //   : imgElements["player_sick"];
+    // console.log(hand5);
+    const cal = calculateLocation(hand5.x, hand5.y, videoInfo);
+    // console.log(cal);
+    if(angle < 0.7)
+    {  can_ctx.drawImage(
+        img,
+        (cal.x - w * cupSize/2),
+        (cal.y - h * cupSize/2),
+        cupSize * w,
+        cupSize * h
+      );
+    }
+  }
+
 
   const calculateLocation = (
     x: number,
@@ -400,7 +461,7 @@ const CamTest = (props: any) => {
 
   return (
     <div>
-      {!dark && <div className={styles.circleLight}></div>}
+      <div className={styles.circleLight}> </div>
       {dark && (
         <>
           {/* <img className={styles.lights} src="/Lights_010.png"/> */}

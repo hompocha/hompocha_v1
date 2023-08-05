@@ -14,15 +14,3 @@ body {
   background-size: cover; */
   /* background-color: rgb(255, 85, 0); */
 }
-
-.themePocha {
-  background-image: url("../public/asset/room/roomBackground.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.themeBar {
-  background-image: url("../public/asset/room/theme_bar/roomBarBackground.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-}

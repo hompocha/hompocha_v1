@@ -18,6 +18,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
 
+  // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
   const [theme, setTheme] = useState(0);
   let bg_img;
   let bg_items;
@@ -64,12 +65,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         conToNick[conId] = nick;
       }
       console.log("닉네임 리스트 ", conToNick);
-    });
-
-    user.getStreamManager().stream.session.on("signal:cheersData", (event) => {
-      const data = JSON.parse(event.data);
-      const handData = data.hand;
-      console.log(handData);
     });
 
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {

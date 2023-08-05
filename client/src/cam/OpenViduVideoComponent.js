@@ -119,6 +119,10 @@ const OpenViduVideoComponent = (props) => {
       if (results.multiHandLandmarks[0]) {
         noHands.current = false;
         cheersRef.current = results.multiHandLandmarks[0];
+        console.log(results.multiHandLandmarks[0][5]);
+        console.log(results.multiHandLandmarks[0][9]);
+        console.log(results.multiHandLandmarks[0][13]);
+        console.log(results.multiHandLandmarks[0][17]);
       }
       else {
         cheersRef.current = undefined;
