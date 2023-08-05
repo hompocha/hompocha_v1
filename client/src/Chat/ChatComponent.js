@@ -120,7 +120,7 @@ export default function ChatComponent(props) {
         </div>
         <div id="messageInput" className={styles.messageInput}>
           <input
-            placeholder="Send a messge"
+            placeholder="보낼 메세지"
             id="chatInput"
             value={message}
             onChange={handleChange}
@@ -131,7 +131,7 @@ export default function ChatComponent(props) {
             className={styles.sendButton}
             onClick={sendMessage}
           >
-            send
+            전송
           </button>
         </div>
       </div>
