@@ -146,17 +146,18 @@ const SpeechGame = (props) => {
   useEffect(() => {
     if(!start)return;
     const bgmSound = effectSound(speechClock, true, 1);
-    /* 시연시간 -1초만큼 후에 true(인식X로 변경) */
+    /* 시간 -1초만큼 후에 true(인식X로 변경) */
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
-    }, 490 * 1000);
-    /* 시연시간 설정 */
+
+    }, /* stopTime - 1000 */ 9 * 1000);/* 시연*/
+
     const timer = setTimeout(() => {
       setTimerExpired(true);
       setLoser(randomUser);
       sentenceState="시작";
       bgmSound.stop();
-    }, /* stopTime */ 500 * 1000); /*시연*/
+    }, /* stopTime */ 10 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
@@ -290,7 +291,6 @@ const SpeechGame = (props) => {
         )}
         {!timerExpired? (
           <div className={!loaded ? styles.hidden : ""}>
-            <h1>{stopTime}</h1>
             <div className={styles.gameWord}>{sentenceState}</div>
             <div className={styles.speechPosition}>
               <UseSpeechRecognition

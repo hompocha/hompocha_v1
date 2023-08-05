@@ -3,7 +3,8 @@ import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 import styles from "./LoserCam.module.css";
 import { effectSound } from "../../effectSound";
 import laughing from "../../sounds/laughing.wav";
-
+import loserSound from "../../sounds/Loser.mp3"
+import stampSound from "../../sounds/StampSound.wav"
 const LoserCam = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -11,7 +12,10 @@ const LoserCam = (props) => {
     }, 6200);
 
     const laughingSound = setTimeout(() => {
-      effectSound(laughing, false, 1);
+      effectSound(loserSound, false, 1);
+      setTimeout(()=>{
+        effectSound(stampSound,false,1);
+      },1500)
     }, 1000);
 
     return () => {
