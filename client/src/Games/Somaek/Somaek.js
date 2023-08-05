@@ -840,8 +840,8 @@ const Somaek = (props) => {
             <canvas
               className={`${styles.somaekCanvas} ${!start && styles.hidden}`}
               ref={canvasRef}
-              width={"1920px"}
-              height={"1080px"}
+              width={"960px"}
+              height={"720px"}
             />
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (

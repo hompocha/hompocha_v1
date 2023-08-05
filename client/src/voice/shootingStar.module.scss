@@ -11,10 +11,10 @@ $shooting-time: 3000ms;
 
 .night {
   position: fixed;
-  top:0vh;
-  left:-25vw;
-  width: 100%;
-  height: 100%;
+  top:11vh;
+  left:11vw;
+  width: 0vh;
+  height: 0vw;
   transform: rotateZ(35deg);
   z-index: -1;
   // animation: sky 200000ms linear infinite;
@@ -126,4 +126,3 @@ $shooting-time: 3000ms;
     transform: rotate(45 + 360deg);
   }
 }
-

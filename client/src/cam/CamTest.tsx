@@ -233,6 +233,7 @@ const CamTest = (props: any) => {
   const [dark, setDark] = useState(false);
   const sendRouletteSignal = () => {
     const targetAngle = rouletteAngle();
+    
     if (props.user.getStreamManager().session) {
       props.user
         .getStreamManager()
@@ -263,6 +264,7 @@ const CamTest = (props: any) => {
   /* 룰렛 함수*/
   const roulette = (targetAngle: number) => {
     setDark(true);
+
     const memberCount = props.user.getSubscriber().length + 1;
     const spinDuration = 5;
     const targetAnglePeople = Math.abs(targetAngle % 360);
@@ -383,6 +385,7 @@ const CamTest = (props: any) => {
   }, []);
 
   const sendCheersReadySignal = () => {
+    
     if (props.user.getStreamManager().session) {
       props.user
         .getStreamManager()
@@ -420,7 +423,7 @@ const CamTest = (props: any) => {
         </button>
       </div>
       <div className={styles.scale}>
-        <svg ref={svgRef} className={styles.position} width={700} height={700}>
+        <svg ref={svgRef} style={{ position : "absolute", left : "28%", top : "13%", zIndex : "15"}}width={700} height={700}>
           {renderCamSlices(setVideoInfo)}
         </svg>
         <canvas

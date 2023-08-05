@@ -1,10 +1,11 @@
 .size {
   display: block;
-  position: absolute;
+  position: fixed;
   width: 300px;
   height: auto;
   animation: food 1.5s ease;
   transform-origin: center center;
+  z-index: 40;
 }
 
 @keyframes food {

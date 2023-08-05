@@ -215,10 +215,11 @@ const UseSpeechRecognition = (props) => {
     <div>
       {shootingStar === true && (
         <div className={styless.night}>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
+          {Array.from({ length: 24 }, (_, index) => (
+            <>
+            <div className={styless.shooting_star} key={index}></div>
+            </>
+          ))}
         </div>
       )}
       <div className={styles.container}>
