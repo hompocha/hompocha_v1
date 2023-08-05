@@ -479,9 +479,10 @@ const CamTest = (props: any) => {
           {/* <img className={styles.lights} src="/Lights_010.png"/> */}
           <div className={styles.darkScreen} />
           <div className={styles.circleRouletteLight}></div>
+          <div className={styles.triangleDown} />
         </>
       )}
-      <div className={styles.triangleDown} />
+      
       <div>
         <button type="submit" onClick={sendRouletteSignal}>
           돌려
