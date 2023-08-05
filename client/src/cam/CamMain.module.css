@@ -20,19 +20,7 @@ body {
   background-image: url("../../public/asset/room/theme_pocha/roomPochaBackground.png");
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-/* 포차 테마일 때 소품 */
-.themePochaItem {
-  width: 400px;
-  height: 400px;
-  z-index: 1;
-  position: fixed;
-  top: 60vh;
-  left: 3vw;
-  background-image: url("../../public/asset/room/theme_pocha/pocha.png");
-  background-repeat: no-repeat;
-  background-size: contain;
+  transition: all 1s linear 0.25s;
 }
 /* 바 테마일 때 배경 */
 .themeBar {
@@ -45,19 +33,7 @@ body {
   background-image: url("../../public/asset/room/theme_bar/roomBarBackground.png");
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-/* 바 테마일 때 소품 */
-.themeBarItem {
-  width: 400px;
-  height: 400px;
-  z-index: 1;
-  position: fixed;
-  top: 60vh;
-  left: 3vw;
-  background-image: url("../../public/asset/room/theme_bar/restaurent.png");
-  background-repeat: no-repeat;
-  background-size: contain;
+  transition: all 1s linear 0.25s;
 }
 /* 이자카야 테마일 때 배경 */
 .themeIzakaya {
@@ -66,24 +42,50 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 0;
+  z-index: -1;
   background-image: url("../../public/asset/room/theme_izakaya/roomIzakayaBackground2.png");
   background-repeat: no-repeat;
   background-size: cover;
+  transition: all 1s linear 0.25s;
+}
+/* 포차 테마일 때 소품 */
+.themePochaItem {
+  width: 400px;
+  height: 400px;
+  position: fixed;
+  z-index: 1;
+  top: 57vh;
+  left: 3vw;
+  background-image: url("../../public/asset/room/theme_pocha/pocha.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: all 1s linear 0.25s;
+}
+/* 바 테마일 때 소품 */
+.themeBarItem {
+  width: 400px;
+  height: 400px;
+  position: fixed;
+  z-index: 1;
+  top: 57vh;
+  left: 3vw;
+  background-image: url("../../public/asset/room/theme_bar/restaurent.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: all 1s linear 0.25s;
 }
 /* 이자카야 테마일 때 소품 */
 .themeIzakayaItem {
   width: 400px;
   height: 400px;
-  z-index: 1;
   position: fixed;
-  top: 60vh;
+  z-index: 1;
+  top: 57vh;
   left: 3vw;
   background-image: url("../../public/asset/room/theme_izakaya/ramen.png");
-  z-index: -1;
-  background-image: url("../../public/asset/room/theme_izakaya/roomIzakayaBackground.png");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
+  transition: all 1s linear 0.25s;
 }
 
 .camMainWrap {
@@ -170,14 +172,30 @@ body {
   font-weight: bold;
 }
 
-/* .bamboo {
-  background-image: url("../../public/asset/room/bamboo.png");
+.modalArrowText {
+  position: relative;
+  top: 85vh;
+  left: 10vw;
+  height: 10vh;
+  width: 15vw;
+}
+
+.modalArrow {
+  background-image: url("../../public/asset/room/modal/modalArrow3.png");
+  position: fixed;
+  top: 87vh;
+  left: 5vw;
+  height: 8vh;
+  width: 8vw;
   background-repeat: no-repeat;
   background-size: contain;
-  width: 90vw;
-  height: 90vh;
+}
+
+.modalText {
+  color: white;
   position: fixed;
-  top: 5vh;
-  left: 5vw;
-  z-index: 0;
-} */
+  top: 91vh;
+  left: 10vw;
+  font-size: 40px;
+  font-family: "Gowun Dodum", sans-serif;
+}

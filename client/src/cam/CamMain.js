@@ -8,6 +8,11 @@ import SpeechGame from "../Games/speechgame/SpeechGame";
 import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
+import Modal from "./Modal";
+import { effectSound } from "../effectSound";
+// import pochaBGM from "../sounds/StampSound.wav";
+import barBGM from "../sounds/themeBGM/PIANO MAN.mp3";
+// import izakayaBGM from "../sounds/heal4.wav";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
@@ -17,23 +22,31 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
   const [theme, setTheme] = useState(0);
   let bg_img;
   let bg_items;
+  let mainBGM;
   switch (theme) {
     case 0:
+      // mainBGM.stop();
       bg_img = `${styles.themePocha}`;
       bg_items = `${styles.themePochaItem}`;
+      mainBGM = effectSound(pochaBGM, true, 1);
       break;
     case 1:
+      // mainBGM.stop();
       bg_img = `${styles.themeBar}`;
       bg_items = `${styles.themeBarItem}`;
+      mainBGM = effectSound(barBGM, true, 1);
       break;
     case 2:
+      // mainBGM.stop();
       bg_img = `${styles.themeIzakaya}`;
       bg_items = `${styles.themeIzakayaItem}`;
+      mainBGM = effectSound(izakayaBGM, true, 1);
       break;
     default:
       break;
@@ -378,7 +391,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               </div>
             </div>
           </div>
-          <div className={bg_items}></div>
+          <div className={bg_items} onClick={() => setModalOpen(true)}></div>
+          <div className={styles.modalArrowText}>
+            <div className={styles.modalArrow}></div>
+            <div className={styles.modalText}>홈술포차 사용 설명서</div>
+          </div>
+          {modalOpen && <Modal setModalOpen={setModalOpen} />}
           <div className={styles.camAndVoice}>
             <UseSpeechRecognition
               sendEffectSignal={sendEffectSignal}
@@ -387,6 +405,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               handleCheersReady={handleCheersReady}
               theme={theme}
               setTheme={setTheme}
+              mainBGM={mainBGM}
             />
             <CamTest user={user} />
           </div>
