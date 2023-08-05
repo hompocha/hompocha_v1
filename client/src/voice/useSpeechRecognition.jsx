@@ -45,7 +45,10 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
     if (value.includes("건배")) {
-      props.handleCheersReady();
+      props.sendCheersOnSignal();
+    }
+    if (value.includes("담배")) {
+      props.sendCheersOffSignal();
     }
     for(const keyword of wheelKeyword){
       if(value.includes(keyword)){

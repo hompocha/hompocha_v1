@@ -32,6 +32,7 @@ const CamTest = (props: any) => {
   const [flag, setFlag] = useState(0);
   const [counts, setCounts] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [cheersMode, setCheersMode] = useState(false);
   const [wheelStart, setWheelStart] =useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
@@ -163,17 +164,47 @@ const CamTest = (props: any) => {
 
   useEffect(() => {
     if (canvasRef.current && canvasCtx.current) {
-      console.log("hello");
+      console.log("CamTest test test ");
       loadCupImages();
       const interval = setInterval(()=>{
         drawHands(canvasRef.current, canvasCtx.current, handData);
       }, 1000 / 60);
-
       return () => {
         clearInterval(interval);
       };
     }
   }, []);
+
+
+  /* 건배 신호를 받기 위한 세션 열기 */
+  useEffect(() => {
+    const session = props.user.getStreamManager().session;
+
+    const onCheersOn = (event:any) => {
+      // if(!cheersMode)
+        setCheersMode(true);
+      console.log("건배모드 켜기");
+    }
+
+    const onCheersOff = (event:any) => {
+      // if(cheersMode)
+        setCheersMode(false);
+      console.log("건배모드 끄기");
+      console.log("cheersMode:",cheersMode);
+    }
+
+    session.on("signal:cheersOn", onCheersOn);
+    session.on("signal:cheersOff", onCheersOff);
+
+    return () => {
+      session.off("signal:cheersOn", onCheersOn);
+      session.off("signal:cheersOff", onCheersOff);
+    }
+  }, []);
+
+  useEffect(() =>{
+    console.log("건배모드 상태!!!",cheersMode);
+  }, [cheersMode])
 
   const drawHands = (can_ref: any, can_ctx: any, handData: any) => {
     // console.log('drawhands');
@@ -295,7 +326,6 @@ const CamTest = (props: any) => {
   const [dark, setDark] = useState(false);
   const sendRouletteSignal = () => {
     const targetAngle = rouletteAngle();
-    
     if (props.user.getStreamManager().session) {
       props.user
         .getStreamManager()
@@ -326,7 +356,6 @@ const CamTest = (props: any) => {
   /* 룰렛 함수*/
   const roulette = (targetAngle: number) => {
     setDark(true);
-
     const memberCount = props.user.getSubscriber().length + 1;
     const spinDuration = 5;
     const targetAnglePeople = Math.abs(targetAngle % 360);
@@ -447,7 +476,6 @@ const CamTest = (props: any) => {
   }, []);
 
   const sendCheersReadySignal = () => {
-    
     if (props.user.getStreamManager().session) {
       props.user
         .getStreamManager()
@@ -482,7 +510,7 @@ const CamTest = (props: any) => {
           <div className={styles.triangleDown} />
         </>
       )}
-      
+
       <div>
         <button type="submit" onClick={sendRouletteSignal}>
           돌려
@@ -498,7 +526,7 @@ const CamTest = (props: any) => {
           {renderCamSlices(setVideoInfo)}
         </svg>
         <canvas
-          className={styles.position}
+          className={`${styles.position} ${!cheersMode ? styles.hidden : ''}`}
           ref={canvasRef}
           width={700}
           height={700}
