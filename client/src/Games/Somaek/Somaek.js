@@ -52,13 +52,14 @@ const Somaek = (props) => {
   const timerPrint = useRef(15000);
   const imgElements = [];
   const subscribers = props.user.subscribers;
-  const scores = {};
+  // const scores = {};
 
+  const scores = useRef({});
   for (let i = 0; i < subscribers.length; i++) {
     const conId = subscribers[i].stream.connection.connectionId;
-    scores[props.conToNick[conId]] = 0;
+    scores.current[props.conToNick[conId]] = 0;
   }
-  scores[props.user.getNickname()] = 0;
+  scores.current[props.user.getNickname()] = 0;
 
   const states = {};
   for (let i = 0; i < subscribers.length; i++) {
@@ -89,7 +90,7 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 30 * 1000; /*시연*/
+    timerPrint.current = 400 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
 
@@ -98,11 +99,11 @@ const Somaek = (props) => {
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
-        const sortedScores = Object.entries(scores).sort(
-          ([, a], [, b]) => b - a
-        );
-        const lowestScorePerson = sortedScores[sortedScores.length - 1];
-        setLowestConId(lowestScorePerson[0]);
+        // const sortedScores = Object.entries(scores).sort(
+        //   ([, a], [, b]) => b - a
+        // );
+        // const lowestScorePerson = sortedScores[sortedScores.length - 1];
+        // setLowestConId(lowestScorePerson[0]);
         setHandStop(true);
 
         setTimeout(() => {
@@ -375,50 +376,50 @@ const Somaek = (props) => {
     /* 소주1병, 맥주1명 주문내역 텍스트 캔버스에 출력 */
     orderKorean.forEach((text, index) => {
       can_ctx.fillStyle = "black"; // 텍스트 색상을 검은색으로 설정
-      const fontSize = can_ref.width * speechWidth * 0.1; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
+      const fontSize = can_ref.width * speechWidth * 0.13; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
       can_ctx.font = `${fontSize}px Arial`; // 폰트와 크기를 설정
       const textX = -can_ref.width * speechLeftX;
-      const textY = can_ref.height * speechTopY + (index + 1) * 30;
+      const textY = can_ref.height * speechTopY + (index + 1) * 35;
       const maxWidth = can_ref.width * speechWidth; // 텍스트의 최대 너비를 캔버스 너비의 비율로 설정
       can_ctx.fillText(text, textX, textY, maxWidth); // 텍스트를 캔버스에 쓰기
     });
 
     if (orderKorean[0] !== "감사합니다!!") {
       can_ctx.fillStyle = "black";
-      const fontSize = can_ref.width * speechWidth * 0.1; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
+      const fontSize = can_ref.width * speechWidth * 0.13; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
       can_ctx.font = `${fontSize}px Arial`;
       const textX = -can_ref.width * speechLeftX;
       const textY = can_ref.height * speechTopY;
       const maxWidth = can_ref.width * speechWidth; // 텍스트의 최대 너비를 캔버스 너비의 비율로 설정
       can_ctx.fillText("사장님", textX, textY, maxWidth);
       const orderTextY =
-        can_ref.height * speechTopY + (orderKorean.length + 1) * 30;
+        can_ref.height * speechTopY + (orderKorean.length + 1) * 35;
       can_ctx.fillText("주문이요~", textX, orderTextY, maxWidth);
     }
 
     // can_ctx.fillText(`남은시간: ${timer}`, -can_ref.width + 20, 100);
-    can_ctx.fillStyle = "red";
+    can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
-    can_ctx.fillText("남은시간 : ", -can_ref.width + 1500, 40);
+    // can_ctx.fillText("남은시간 : ", -can_ref.width + 1500, 40);
     let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
     if (blink) {
-      can_ctx.fillStyle = "red";
-      can_ctx.font = "bold 20px Arial";
+      can_ctx.fillStyle = "dimgrey";
+      can_ctx.font = "bold 45px Arial";
       can_ctx.fillText(
         `남은시간: ${timerPrint.current / 1000}초`,
-        -can_ref.width + 20,
-        150
+        -can_ref.width + 1600,
+        50
       );
     }
 
     /* 점수가 높은사람부터 출력 */
-    Object.entries(scores)
+    Object.entries(scores.current)
       .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
       .forEach(([key, value], index) => {
         if (key == props.user.getNickname()) {
           can_ctx.fillStyle = "green";
         } else if (index === 0) {
-          can_ctx.fillStyle = "red"; //1등
+          can_ctx.fillStyle = "blue"; //1등
         } else {
           can_ctx.fillStyle = "black";
         }
@@ -663,12 +664,12 @@ const Somaek = (props) => {
         let getScore = data.score;
 
         /* 먼저 그 점수에 도달한 사람이 있으면 0.1을 깎아서 저장 */
-        while (Object.values(scores).includes(getScore)) {
+        while (Object.values(scores.current).includes(getScore)) {
           getScore -= 0.1;
           getScore = Math.round(getScore * 10) / 10; // 자바스크립트 부동소수점 오류잡으려면 이런식으로 하라는데?
         }
 
-        scores[props.conToNick[connectionId]] = getScore;
+        scores.current[props.conToNick[connectionId]] = getScore;
       });
 
     props.user
@@ -817,7 +818,7 @@ const Somaek = (props) => {
       <div>
         {props.mode === "somaek" && !loaded && (
           <div>
-            <Loading />
+            <Loading mode={props.mode}/>
           </div>
         )}
         {props.mode === "somaek" && countDown && (

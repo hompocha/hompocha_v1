@@ -1,10 +1,31 @@
 @import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
 
+/* body { */
+/* background-image: url("../../public/asset/pocha.jpeg"); */
+/* background-repeat: no-repeat;
+  background-size: cover; */
+/* } */
+
+.loginWholeWrap {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: url("../../public/asset/pocha.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+}
+
 .container {
+  padding: 30px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .serviceTitleDiv {
@@ -36,7 +57,7 @@
   padding: 20px;
   width: 250px;
   height: 250px;
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -47,7 +68,7 @@
   padding: 20px;
   width: 250px;
   height: 250px;
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
   display: flex;
   flex-direction: column;

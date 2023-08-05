@@ -1,17 +1,17 @@
 .countDown {
     position: fixed;
     z-index: 9;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(180%);
-    width: 35vw;  /*승규 형 나중에 고쳐주세요 */
-    height: 50vh;
+    top: 25.5vh;
+    left: 33.5vw;
+    transform: scale(170%);
+    width: 33vw;
+    height: 45vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.5);
-    background-size: cover;
+    background-color: rgba(0, 0,0, 0.7);
+    /*background-size: cover;*/
 }
 
 .loading-image {

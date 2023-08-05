@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
@@ -15,7 +15,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [conToNick] = useState({});
   const [micEnabled, setMicEnabled] = useState(true);
   const [speechBlocked, setSpeechBlocked] = useState(false);
-
+  const [cheersReady, setCheersReady] = useState(false);
+  const [cheersSuccess, setCheersSuccess] = useState(false);
+  const canvasRef = useRef(null);
   const toggleMic = () => {
     setMicEnabled((prevState) => {
       const enabled = !prevState;
@@ -254,13 +256,18 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       document.removeEventListener("click", handleClick);
     };
   }, []);
-  
+
   const returnLobby = () => {
     setSpeechBlocked(true);
     setTimeout(() => {
       endSession();
-      navigate("/Lobby");
+      navigate("/lobby");
     }, 1500);
+  };
+
+  const handleCheersReady = () => {
+    setCheersReady(true);
+    console.log("건배모드로 변경되었음");
   };
 
   console.log("CamMain rendered");
@@ -271,11 +278,16 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       {/* Main Room */}
       {mode === undefined && (
         <div id="session" className={styles.camMainWrap}>
+          {/* <div className={styles.bamboo}></div> */}
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title">{roomName} </div>
             <div>{user.subscribers.length + 1}명 참여중</div>
-            <button onClick={toggleMic} style={{
-                backgroundImage: `url(${micEnabled ? micOnImageURL : micOffImageURL})`,
+            <button
+              onClick={toggleMic}
+              style={{
+                backgroundImage: `url(${
+                  micEnabled ? micOnImageURL : micOffImageURL
+                })`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 width: "57px", // Adjust the size as needed
@@ -283,8 +295,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
                 border: "none", // Remove border
                 outline: "none", // Remove outline
                 cursor: "pointer",
-                backgroundColor:"transparent",
-              }}/>
+                backgroundColor: "transparent",
+              }}
+            />
             <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
             </form>
@@ -353,8 +366,13 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
               speechBlocked={speechBlocked}
+              handleCheersReady={handleCheersReady}
             />
             <CamTest user={user} />
+          </div>
+
+          <div>
+            <canvas ref={canvasRef} width={1920} height={1080} />
           </div>
         </div>
       )}

@@ -89,8 +89,8 @@ const AvoidGame = (props) => {
   const imgElements = [];
   const result = [];
 
-  /* 배경음악 */
-  useSound(BGM, 0.7);
+  // /* 배경음악 */
+  // useSound(BGM, 0.7);
 
   /*======================================================= */
   /*=================== 게임 시작=================== */
@@ -98,14 +98,18 @@ const AvoidGame = (props) => {
 
   /* 프레임마다 전송 */
   useEffect(() => {
-    // console.log(props.user.connectionId, props.host);
-    // if (props.user.connectionId === props.host ){
-    //   console.log('I am the host!');
-    // }
+
+    if (!start) return;
+    const avoidBGM =effectSound(BGM,true,0.7);
+
     gameState.current.user = props.user.connectionId;
+    if(isGameOver) {
+      avoidBGM.stop();
+      return;
+    }
+
 
     if (canvasRef.current) {
-      if (!start) return;
       canvasCtx.current = canvasRef.current.getContext("2d");
       sendInterval.current = setInterval(() => {
         sendGameState(gameState.current);
@@ -128,8 +132,9 @@ const AvoidGame = (props) => {
       clearInterval(objInterval.current);
       clearInterval(speedInterval.current);
       clearInterval(sendInterval.current);
+      avoidBGM.stop();
     };
-  }, [start]);
+  }, [start, isGameOver]);
 
   /*======================================================= */
   /*===================손 인식 및 게임 화면 그리기=================== */
@@ -411,6 +416,7 @@ const AvoidGame = (props) => {
             console.log(result[0]);
             setLowestConId(result[0]);
             setIsGameOver(true);
+
           }
         });
 
@@ -545,59 +551,57 @@ const AvoidGame = (props) => {
       )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
-          <video
-            className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
-            // className={styles.avoidVideo}
-            autoPlay={true}
-            ref={(el) => {
-              videoRef.current = el;
-              setVideoReady(el);
-            }}
-          />
-          <canvas
-            className={styles.avoidCanvas}
-            ref={canvasRef}
-            width={"1920px"}
-            height={"1080px"}
-          />
-          {/* subscribers Cam */}
-          {subscribers.map((subscriber, index) => (
-            <>
-              <div
-                className={`${styles[`avoidGameSub${index + 1}`]} ${
-                  !loaded && styles.hidden
-                }`}
-              >
-                <OpenViduVideoComponent
-                  mode={"avoidGame"}
-                  streamManager={subscriber}
-                  drawGame={loadImages}
-                  gameState={subscriberState}
-                />
-              </div>
-              <div
-                className={`${styles[`userNick${index + 1}`]} ${
-                  !loaded && styles.hidden
-                }`}
-              >
-                닉네임이 들어갈 자리
-              </div>
-            </>
-          ))}
-        </>
-      ) : (
-        <>
-          <div>
-            <LoserCam
-              selectId={lowestConId}
-              user={props.user}
-              mode={"centerCam"}
-              end={props.end}
-            />
-          </div>
-        </>
-      )}
-      ;
+        <video
+          className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
+          // className={styles.avoidVideo}
+          autoPlay={true}
+          ref={(el) => {
+            videoRef.current = el;
+            setVideoReady(el);
+          }}
+        />
+        <canvas  className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
+                ref={canvasRef}
+                width={"1920px"}
+                height={"1080px"}/>
+        {/* subscribers Cam */}
+        {subscribers.map((subscriber, index) => (
+          <>
+            <div
+              className={`${styles[`avoidGameSub${index + 1}`]} ${
+                !loaded && styles.hidden
+              }`}
+            >
+              <OpenViduVideoComponent
+                mode={"avoidGame"}
+                streamManager={subscriber}
+                drawGame={loadImages}
+                gameState={subscriberState}
+              />
+            </div>
+            <div
+              className={`${styles[`userNick${index + 1}`]} ${
+                !loaded && styles.hidden
+              }`}
+            >
+              닉네임이 들어갈 자리
+            </div>
+          </>
+        ))}
+      </>
+   ):(
+    <>
+      <div>
+        <LoserCam
+          selectId={lowestConId}
+          user={props.user}
+          mode={"centerCam"}
+          end={props.end}
+        />
+      </div>
+    </>
+    )};
+
     </>
   );
 };

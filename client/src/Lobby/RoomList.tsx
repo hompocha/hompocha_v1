@@ -42,7 +42,7 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
               Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
             },});
       console.log(response.data);
-      navigate("/Room", { state: { roomName: room_name, idx: idx , nickName:nickName} });
+      navigate("/room", { state: { roomName: room_name, idx: idx , nickName:nickName} });
     } catch (error) {
       console.error(error);
     }
