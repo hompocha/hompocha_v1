@@ -32,10 +32,10 @@ const CamTest = (props: any) => {
   const [flag, setFlag] = useState(0);
   const [counts, setCounts] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [cheersMode, setCheersMode] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
-  
   const myself = props.user.connectionId;
   const handData:{[id: string]: any}={};
   const imgElements:{[key: string]: HTMLImageElement} = {};
@@ -162,17 +162,47 @@ const CamTest = (props: any) => {
 
   useEffect(() => {
     if (canvasRef.current && canvasCtx.current) {
-      console.log("hello");
+      console.log("CamTest test test ");
       loadCupImages();
       const interval = setInterval(()=>{
         drawHands(canvasRef.current, canvasCtx.current, handData);
       }, 1000 / 60);
-
       return () => {
         clearInterval(interval);
       };
     }
   }, []);
+
+
+  /* 건배 신호를 받기 위한 세션 열기 */
+  useEffect(() => {
+    const session = props.user.getStreamManager().session;
+
+    const onCheersOn = (event:any) => {
+      // if(!cheersMode)
+        setCheersMode(true);
+      console.log("건배모드 켜기");
+    }
+
+    const onCheersOff = (event:any) => {
+      // if(cheersMode)
+        setCheersMode(false);
+      console.log("건배모드 끄기");
+      console.log("cheersMode:",cheersMode);
+    }
+
+    session.on("signal:cheersOn", onCheersOn);
+    session.on("signal:cheersOff", onCheersOff);
+
+    return () => {
+      session.off("signal:cheersOn", onCheersOn);
+      session.off("signal:cheersOff", onCheersOff);
+    }
+  }, []);
+
+  useEffect(() =>{
+    console.log("건배모드 상태!!!",cheersMode);
+  }, [cheersMode])
 
   const drawHands = (can_ref: any, can_ctx: any, handData: any) => {
     // console.log('drawhands');
@@ -485,7 +515,7 @@ const CamTest = (props: any) => {
           {renderCamSlices(setVideoInfo)}
         </svg>
         <canvas
-          className={styles.position}
+          className={`${styles.position} ${!cheersMode ? styles.hidden : ''}`}
           ref={canvasRef}
           width={700}
           height={700}

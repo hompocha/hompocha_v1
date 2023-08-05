@@ -288,9 +288,31 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     }, 1500);
   };
 
-  const handleCheersReady = () => {
-    setCheersReady(true);
-    console.log("건배모드로 변경되었음");
+  const sendCheersOnSignal= () => {
+    user
+      .getStreamManager()
+      .session.signal({to: [], type: "cheersOn" })
+      .then(() => {
+        // console.log("one more user is ready to drink");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log("sendCheersOnSignal 실행");
+  };
+
+  const sendCheersOffSignal= () => {
+    user
+      .getStreamManager()
+      .session.signal({to: [], type: "cheersOff" })
+      .then(() => {
+        // console.log("one more user is ready to drink");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log("sendCheersOffSignal 실행");
   };
 
   console.log("CamMain rendered");
@@ -399,11 +421,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
               speechBlocked={speechBlocked}
-              handleCheersReady={handleCheersReady}
+              sendCheersOnSignal={sendCheersOnSignal}
+              sendCheersOffSignal={sendCheersOffSignal}
               theme={theme}
               setTheme={setTheme}
             />
-            <CamTest user={user} />
+            <CamTest user={user} cheersReady={cheersReady} />
           </div>
 
           <div>
