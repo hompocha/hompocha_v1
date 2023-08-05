@@ -24,7 +24,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [wheel, setWheel]=useState(false);
+  const [wheel, setWheel] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
@@ -37,7 +37,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       // mainBGM.stop();
       bg_img = `${styles.themePocha}`;
       bg_items = `${styles.themePochaItem}`;
-      mainBGM = effectSound(pochaBGM, true, 1);
+      // mainBGM = effectSound(pochaBGM, true, 1);
       break;
     case 1:
       // mainBGM.stop();
@@ -49,7 +49,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       // mainBGM.stop();
       bg_img = `${styles.themeIzakaya}`;
       bg_items = `${styles.themeIzakayaItem}`;
-      mainBGM = effectSound(izakayaBGM, true, 1);
+      // mainBGM = effectSound(izakayaBGM, true, 1);
       break;
     default:
       break;
@@ -123,29 +123,28 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         }
         enterAvoidGame();
       } else {
-          try {
-            axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-              status: "openGame",
-              room_idx: idx,
-            });
-          } catch (error) {
-            alert("재 로그인 해야합니다~!");
-            navigate("/");
-          }
-          enterMainRoom();
+        try {
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+            status: "openGame",
+            room_idx: idx,
+          });
+        } catch (error) {
+          alert("재 로그인 해야합니다~!");
+          navigate("/");
+        }
+        enterMainRoom();
         /* data 가 undefined 일 경우 방으로 돌아감 */
         /* 음성인식 재시작 */
       }
     });
   }, []);
 
-  useEffect(()=>{
-    if(!canvasRef.current) return;
-    setTimeout(()=> {
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    setTimeout(() => {
       setLoaded(true);
-    },3000);
-
-  },[canvasRef])
+    }, 3000);
+  }, [canvasRef]);
   useEffect(() => {
     user
       .getStreamManager()
@@ -167,9 +166,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode(undefined);
       onModeChange(undefined);
-      setTimeout(()=>{
+      setTimeout(() => {
         setLoaded(true);
-      },2000)
+      }, 2000);
     }, 1500);
   };
 
@@ -228,10 +227,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         });
     }
   };
-  function hubTospeechFromCamtest(){
+  function hubTospeechFromCamtest() {
     setWheel(true);
   }
-  function hubForWheelFalse(){
+  function hubForWheelFalse() {
     setWheel(false);
   }
 
@@ -306,10 +305,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     }, 1500);
   };
 
-  const sendCheersOnSignal= () => {
+  const sendCheersOnSignal = () => {
     user
       .getStreamManager()
-      .session.signal({to: [], type: "cheersOn" })
+      .session.signal({ to: [], type: "cheersOn" })
       .then(() => {
         // console.log("one more user is ready to drink");
       })
@@ -319,10 +318,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     console.log("sendCheersOnSignal 실행");
   };
 
-  const sendCheersOffSignal= () => {
+  const sendCheersOffSignal = () => {
     user
       .getStreamManager()
-      .session.signal({to: [], type: "cheersOff" })
+      .session.signal({ to: [], type: "cheersOff" })
       .then(() => {
         // console.log("one more user is ready to drink");
       })
@@ -343,12 +342,17 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
 
       {mode === undefined && !loaded && (
         <div>
-          <Loading mode={mode}/>
+          <Loading mode={mode} />
         </div>
       )}
       {mode === undefined && (
         // <div id="session" className={styles.camMainWrap}>
-        <div id="session" className={`${loaded? styles.camMainWrap: ''} ${!loaded ? styles.hidden : ''}`}>
+        <div
+          id="session"
+          className={`${loaded ? styles.camMainWrap : ""} ${
+            !loaded ? styles.hidden : ""
+          }`}
+        >
           {/*<div id="session" className={ !loaded ? styles.hidden : ''}>*/}
 
           {/* <div className={styles.bamboo}></div> */}
@@ -451,7 +455,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               mainBGM={mainBGM}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
             />
-            <CamTest user={user} wheel={wheel} hubForWheelFalse={hubForWheelFalse}/>
+            <CamTest
+              user={user}
+              wheel={wheel}
+              hubForWheelFalse={hubForWheelFalse}
+            />
           </div>
 
           <div>
