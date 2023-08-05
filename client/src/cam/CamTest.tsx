@@ -407,6 +407,7 @@ const CamTest = (props: any) => {
         <div className={styless.shooting_star}></div>
         <div className={styless.shooting_star}></div>
       </div>
+      <div className={styles.circleLight}> </div>
       {dark && (
         <>
           {/* <img className={styles.lights} src="/Lights_010.png"/> */}
