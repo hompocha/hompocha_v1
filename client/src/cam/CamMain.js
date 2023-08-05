@@ -18,6 +18,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
+  const [wheel, setWheel]=useState(false);
   const [loaded, setLoaded] = useState(false);
 
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
@@ -83,7 +84,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           });
         } catch (error) {
           alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
+          navigate("/");
         }
         enterSpeech();
       } else if (data === "somaek") {
@@ -94,7 +95,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           });
         } catch (error) {
           alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
+          navigate("/");
         }
         enterSomaek();
       } else if (data === "avoidGame") {
@@ -105,25 +106,23 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           });
         } catch (error) {
           alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
+          navigate("/");
         }
         enterAvoidGame();
       } else {
-        try {
-          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-            status: "openGame",
-            room_idx: idx,
-          });
-        } catch (error) {
-          alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
-        }
+          try {
+            axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+              status: "openGame",
+              room_idx: idx,
+            });
+          } catch (error) {
+            alert("재 로그인 해야합니다~!");
+            navigate("/");
+          }
+          enterMainRoom();
         /* data 가 undefined 일 경우 방으로 돌아감 */
-        enterMainRoom();
         /* 음성인식 재시작 */
-        setSpeechBlocked(false);
       }
-
     });
   }, []);
 
@@ -216,6 +215,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         });
     }
   };
+  function hubTospeechFromCamtest(){
+    setWheel(true);
+  }
+  function hubForWheelFalse(){
+    setWheel(false);
+  }
 
   const sendGameTypeSignal = (string) => {
     if (user.getStreamManager().session) {
@@ -402,8 +407,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               handleCheersReady={handleCheersReady}
               theme={theme}
               setTheme={setTheme}
+              hubTospeechFromCamtest={hubTospeechFromCamtest}
             />
-            <CamTest user={user} />
+            <CamTest user={user} wheel={wheel} hubForWheelFalse={hubForWheelFalse}/>
           </div>
 
           <div>

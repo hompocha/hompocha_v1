@@ -38,13 +38,12 @@ const SpeechGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [isGameOver,setIsGameOver] = useState(false);
+  const [loser, setLoser]=useState("")
+
+
+
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
-
-
-
-
 
   /* 준비 신호 받는 세션을 열기위한 useEffect */
   useEffect( () => {
@@ -69,7 +68,6 @@ const SpeechGame = (props) => {
         }
 
         if (readyPeople.length === subscribers.length + 1) {
-          console.log("받았다!!!");
           sendStartSignal();
           props.user
             .getStreamManager()
@@ -78,8 +76,6 @@ const SpeechGame = (props) => {
       });
 
     }
-
-
     /* start 시그널 받는 session on !! */
     props.user
       .getStreamManager()
@@ -153,10 +149,12 @@ const SpeechGame = (props) => {
     /* 시간 -1초만큼 후에 true(인식X로 변경) */
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
+
     }, /* stopTime - 1000 */ 9 * 1000);/* 시연*/
 
     const timer = setTimeout(() => {
       setTimerExpired(true);
+      setLoser(randomUser);
       sentenceState="시작";
       bgmSound.stop();
     }, /* stopTime */ 10 * 1000); /*시연*/
@@ -165,7 +163,7 @@ const SpeechGame = (props) => {
       clearTimeout(timer);
       clearTimeout(speechTimer);
     };
-  }, [stopTime,start]);
+  }, [stopTime,start,loser]);
 
   /*signal 보내는데 맞춘사람 id보냄*/
   function checkPass(sentId) {
@@ -254,8 +252,6 @@ const SpeechGame = (props) => {
       });
   };
 
-
-
   /* 랜덤요소 고르는 함수 */
   function getRandomElement(list) {
     if (list.length === 0) {
@@ -285,10 +281,7 @@ const SpeechGame = (props) => {
       <div>
         {props.mode === "speechGame" && !loaded && (
           <div>
-
             <Loading mode={props.mode}/>
-
-
           </div>
         )}
         {props.mode === "speechGame" && countDown && (
@@ -298,7 +291,6 @@ const SpeechGame = (props) => {
         )}
         {!timerExpired? (
           <div className={!loaded ? styles.hidden : ""}>
-            <h1>{stopTime}</h1>
             <div className={styles.gameWord}>{sentenceState}</div>
             <div className={styles.speechPosition}>
               <UseSpeechRecognition
@@ -331,7 +323,7 @@ const SpeechGame = (props) => {
         ) : (
           <div>
             <LoserCam
-              selectId={randomUser}
+              selectId={loser}
               user={props.user}
               mode={"centerCam"}
               end={props.end}
