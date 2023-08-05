@@ -17,9 +17,29 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const canvasRef = useRef(null);
 
+  // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
+  const [theme, setTheme] = useState(0);
+  let bg_img;
+  let bg_items;
+  switch (theme) {
+    case 0:
+      bg_img = `${styles.themePocha}`;
+      bg_items = `${styles.themePochaItem}`;
+      break;
+    case 1:
+      bg_img = `${styles.themeBar}`;
+      bg_items = `${styles.themeBarItem}`;
+      break;
+    case 2:
+      bg_img = `${styles.themeIzakaya}`;
+      bg_items = `${styles.themeIzakayaItem}`;
+      break;
+    default:
+      break;
+  }
+
+  const canvasRef = useRef(null);
   const toggleMic = () => {
     setMicEnabled((prevState) => {
       const enabled = !prevState;
@@ -35,6 +55,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   };
 
   useEffect(() => {
+    console.log(theme);
     user.getStreamManager().stream.session.on("signal:nickName", (event) => {
       let nick = event.data;
       let conId = event.from.connectionId;
@@ -44,12 +65,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         conToNick[conId] = nick;
       }
       console.log("닉네임 리스트 ", conToNick);
-    });
-
-    user.getStreamManager().stream.session.on("signal:cheersData", (event) => {
-      const data = JSON.parse(event.data);
-      const handData = data.hand;
-      console.log(handData);
     });
 
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {
@@ -107,15 +122,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         setSpeechBlocked(false);
       }
 
-      if (mode === undefined) {
-        //   try {
-        //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
-        //   } catch(error) {
-        //     alert("재 로그인 해야합니다~!")
-        //     navigate("/lobby");
-        //   }
-        // }
-      }
     });
   }, []);
 
@@ -277,6 +283,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const micOffImageURL = "/Bell/micOff.png";
   return (
     <div>
+      <div className={bg_img}></div>
       {/* Main Room */}
       {mode === undefined && (
         <div id="session" className={styles.camMainWrap}>
@@ -362,13 +369,15 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               </div>
             </div>
           </div>
-
+          <div className={bg_items}></div>
           <div className={styles.camAndVoice}>
             <UseSpeechRecognition
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
               speechBlocked={speechBlocked}
               handleCheersReady={handleCheersReady}
+              theme={theme}
+              setTheme={setTheme}
             />
             <CamTest user={user} />
           </div>
