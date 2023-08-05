@@ -1,10 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
 
-/* body { */
-/* background-image: url("../../public/asset/pocha.jpeg"); */
-/* background-repeat: no-repeat;
-  background-size: cover; */
-/* } */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
 
 .loginWholeWrap {
   width: 100vw;

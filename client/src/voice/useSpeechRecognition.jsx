@@ -6,9 +6,9 @@ import "regenerator-runtime/runtime";
 import somaekSuccess from "../sounds/somaekSuccess.wav";
 import somaekFail from "../sounds/somaekFail.wav";
 import { effectSound } from "../effectSound";
-import {set} from "mongoose";
+import { set } from "mongoose";
 
-const keyword = ["고양이", "구름", "벚꽃", "강아지","그만해","뭐 먹을까"];
+const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
@@ -30,17 +30,18 @@ const gameStartKeywords = [
   "피하기 게임",
 ];
 
+const themeChangeKeywords = ["변경"];
+
 const UseSpeechRecognition = (props) => {
   console.log(props);
   const [value, setValue] = useState("");
   const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState("");
-  const [woo,setWoo] = useState(true);
+  const [woo, setWoo] = useState(true);
   const lang = "ko-Kr";
   useEffect(() => {
-
     /* 건배 명령어 */
-    if (value.includes("건배")){
+    if (value.includes("건배")) {
       props.handleCheersReady();
     }
 
@@ -90,18 +91,45 @@ const UseSpeechRecognition = (props) => {
         }
       }
     }
+
+    /* 테마 변경을 위한 음성 인식 */
+    for (const themeChangeKeyword of themeChangeKeywords) {
+      if (value.includes(themeChangeKeyword)) {
+        setExtractedValue(themeChangeKeyword);
+        let randomNum = Math.floor(Math.random() * 3);
+        if (randomNum === props.theme) {
+          randomNum = (randomNum + 1) / 3;
+        }
+        switch (randomNum) {
+          // 포차 테마
+          case 0:
+            props.setTheme(0);
+            break;
+          // 바 테마
+          case 1:
+            props.setTheme(1);
+            break;
+          // 이자카야 테마
+          case 2:
+            props.setTheme(2);
+            break;
+          default:
+            break;
+        }
+      }
+    }
     console.log("Value:", value); // 추가된 부분
   }, [value]);
 
-  useEffect(()=>{
-    if(!woo){
+  useEffect(() => {
+    if (!woo) {
       const timeout = setTimeout(() => {
         setWoo(true);
-        listen({lang});
+        listen({ lang });
       }, 500);
       return () => clearTimeout(timeout);
     }
-  },[woo])
+  }, [woo]);
 
   useEffect(() => {
     if (extractedValue !== "") {
