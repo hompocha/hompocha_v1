@@ -413,7 +413,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           </div>
 
           <div>
-            <canvas ref={canvasRef} width={1920} height={1080} />
+            <canvas ref={canvasRef} width={960} height={720} />
           </div>
         </div>
       )}
