@@ -1,0 +1,16 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  /* background-color: #005791; */
+  /* background-image: url("../public/asset/room/roomBackground.png"); */
+  /* background-image: url("../public/asset/room/theme_bar/roomBarBackground.jpg"); */
+  /* background-repeat: no-repeat;
+  background-size: cover; */
+  /* background-color: rgb(255, 85, 0); */
+}

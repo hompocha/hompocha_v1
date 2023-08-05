@@ -11,8 +11,18 @@
   top: 13%;
   z-index: 15;
 }
-.circleLight{
-  box-shadow :0 0 150px #fff;
+.circleLight {
+  box-shadow: 0 0 80px #a2a2a2;
+  width: 910px;
+  height: 910px;
+  border-radius: 50%;
+  position: fixed;
+  left: 24%;
+  top: 8%;
+  z-index: 13;
+}
+.circleRouletteLight {
+  box-shadow: 0 0 100px #d7d6d6;
   width: 910px;
   height: 910px;
   border-radius: 50%;
