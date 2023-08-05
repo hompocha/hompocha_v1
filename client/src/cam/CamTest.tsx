@@ -90,6 +90,7 @@ const CamTest = (props: any) => {
               index={index}
               num={num}
               mode={mode}
+
               myself = {myself}
               setVideoInfo={setVideoInfo}
               />
