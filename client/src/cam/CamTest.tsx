@@ -32,10 +32,11 @@ const CamTest = (props: any) => {
   const [flag, setFlag] = useState(0);
   const [counts, setCounts] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [wheelStart, setWheelStart] =useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
-  
+
   const myself = props.user.connectionId;
   const handData:{[id: string]: any}={};
   const imgElements:{[key: string]: HTMLImageElement} = {};
@@ -458,6 +459,14 @@ const CamTest = (props: any) => {
   };
 
   /* ========================================================= */
+
+  /*===========================================================*/
+  useEffect(()=>{
+    if(props.wheel === true){
+      sendRouletteSignal();
+      props.hubForWheelFalse();
+    }
+  },[props.wheel])
 
   return (
     <div>
