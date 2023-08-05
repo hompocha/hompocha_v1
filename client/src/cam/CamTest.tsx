@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./CamTest.module.scss";
-import styless from "./shootingStar.module.scss";
 import { event } from "jquery";
 import BGM from "../sounds/roomBGM.wav";
 import useSound from "../useSound";
@@ -401,12 +400,6 @@ const CamTest = (props: any) => {
 
   return (
     <div>
-      <div className={styless.night}>
-        <div className={styless.shooting_star}></div>
-        <div className={styless.shooting_star}></div>
-        <div className={styless.shooting_star}></div>
-        <div className={styless.shooting_star}></div>
-      </div>
       <div className={styles.circleLight}> </div>
       {dark && (
         <>
