@@ -99,11 +99,11 @@ const Somaek = (props) => {
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
-        // const sortedScores = Object.entries(scores).sort(
-        //   ([, a], [, b]) => b - a
-        // );
-        // const lowestScorePerson = sortedScores[sortedScores.length - 1];
-        // setLowestConId(lowestScorePerson[0]);
+        const sortedScores = Object.entries(scores.current).sort(
+          ([, a], [, b]) => b - a
+        );
+        const lowestScorePerson = sortedScores[sortedScores.length - 1];
+        setLowestConId(lowestScorePerson[0]);
         setHandStop(true);
 
         setTimeout(() => {
@@ -487,6 +487,7 @@ const Somaek = (props) => {
         console.log("주문한 음료가 아님");
         images.madam = "../../Madam/madam1.png";
       }
+      /* 주문을 다 처리했으면 새로운 주문을 생성*/
       if (order.length === 0) {
         order = randomDrink();
         score += 1;
@@ -633,6 +634,7 @@ const Somaek = (props) => {
   useEffect(() => {
     const videoNode = videoRef.current;
     const canvasNode = canvasRef.current;
+    /* 첫 주문을 생성 */
     if (order.length === 0) {
       order = randomDrink();
       orderKorean = printDrinks(order);
@@ -840,8 +842,8 @@ const Somaek = (props) => {
             <canvas
               className={`${styles.somaekCanvas} ${!start && styles.hidden}`}
               ref={canvasRef}
-              width={"1920px"}
-              height={"1080px"}
+              width={"960px"}
+              height={"720px"}
             />
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (

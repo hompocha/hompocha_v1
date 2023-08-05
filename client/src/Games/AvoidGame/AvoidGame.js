@@ -540,7 +540,8 @@ const AvoidGame = (props) => {
     <>
       {props.mode === "avoidGame" && !loaded && (
         <div>
-          <Loading />
+          <Loading
+          mode={props.mode}/>
         </div>
       )}
       {props.user.connectionId === props.host ? <h1>host</h1> : null}
@@ -562,8 +563,8 @@ const AvoidGame = (props) => {
         />
         <canvas  className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
                 ref={canvasRef}
-                width={"1920px"}
-                height={"1080px"}/>
+                width={"960px"}
+                height={"720px"}/>
         {/* subscribers Cam */}
         {subscribers.map((subscriber, index) => (
           <>

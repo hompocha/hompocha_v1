@@ -11,6 +11,7 @@ import { set } from "mongoose";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
+  "시작",
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
   "철수 책상 철 책상",
@@ -30,6 +31,7 @@ const gameStartKeywords = [
   "소맥 게임",
   "피하기 게임",
 ];
+const wheelKeyword = ["돌려"];
 
 const themeChangeKeywords = ["변경"];
 const UseSpeechRecognition = (props) => {
@@ -43,12 +45,20 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
     if (value.includes("건배")) {
-      props.handleCheersReady();
+      props.sendCheersOnSignal();
+    }
+    if (value.includes("담배")) {
+      props.sendCheersOffSignal();
+    }
+    for(const keyword of wheelKeyword){
+      if(value.includes(keyword)){
+        props.hubTospeechFromCamtest();
+      }
     }
 
     /* 발음게임 명령어 */
     for (const sentence of speech_sentence) {
-      if (value.includes(sentence)) {
+      if (value.includes(sentence) && props.mode ==="speechGame") {
         effectSound(somaekSuccess);
         setExtractedValue(sentence);
         props.sendSpeech(
@@ -188,9 +198,6 @@ const UseSpeechRecognition = (props) => {
   // /* 현재 방으로 이동 시 오류 발생, 개선필요 */
   useEffect(() => {
     if (props.speechBlocked === true) {
-      console.log(props);
-      // onResult("");
-      // setListenBlocked(true);
       stop();
     } else {
       setTimeout(() => {
@@ -218,10 +225,11 @@ const UseSpeechRecognition = (props) => {
     <div>
       {shootingStar === true && (
         <div className={styless.night}>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
+          {Array.from({ length: 24 }, (_, index) => (
+            <>
+            <div className={styless.shooting_star} key={index}></div>
+            </>
+          ))}
         </div>
       )}
       <div className={styles.container}>

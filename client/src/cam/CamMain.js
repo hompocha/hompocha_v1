@@ -13,6 +13,7 @@ import { effectSound } from "../effectSound";
 // import pochaBGM from "../sounds/StampSound.wav";
 import barBGM from "../sounds/themeBGM/PIANO MAN.mp3";
 // import izakayaBGM from "../sounds/heal4.wav";
+import Loading from "../Loading/Loading";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
@@ -23,6 +24,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [wheel, setWheel]=useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
   const [theme, setTheme] = useState(0);
@@ -94,7 +97,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           });
         } catch (error) {
           alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
+          navigate("/");
         }
         enterSpeech();
       } else if (data === "somaek") {
@@ -105,7 +108,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           });
         } catch (error) {
           alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
+          navigate("/");
         }
         enterSomaek();
       } else if (data === "avoidGame") {
@@ -116,37 +119,33 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
           });
         } catch (error) {
           alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
+          navigate("/");
         }
         enterAvoidGame();
       } else {
-        try {
-          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-            status: "openGame",
-            room_idx: idx,
-          });
-        } catch (error) {
-          alert("재 로그인 해야합니다~!");
-          navigate("/lobby");
-        }
+          try {
+            axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+              status: "openGame",
+              room_idx: idx,
+            });
+          } catch (error) {
+            alert("재 로그인 해야합니다~!");
+            navigate("/");
+          }
+          enterMainRoom();
         /* data 가 undefined 일 경우 방으로 돌아감 */
-        enterMainRoom();
         /* 음성인식 재시작 */
-        setSpeechBlocked(false);
-      }
-
-      if (mode === undefined) {
-        //   try {
-        //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
-        //   } catch(error) {
-        //     alert("재 로그인 해야합니다~!")
-        //     navigate("/lobby");
-        //   }
-        // }
       }
     });
   }, []);
 
+  useEffect(()=>{
+    if(!canvasRef.current) return;
+    setTimeout(()=> {
+      setLoaded(true);
+    },3000);
+
+  },[canvasRef])
   useEffect(() => {
     user
       .getStreamManager()
@@ -168,6 +167,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode(undefined);
       onModeChange(undefined);
+      setTimeout(()=>{
+        setLoaded(true);
+      },2000)
     }, 1500);
   };
 
@@ -187,6 +189,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode("speechGame");
       onModeChange("speechGame");
+      setLoaded(false);
     }, 1500);
   };
 
@@ -195,6 +198,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode("somaek");
       onModeChange("somaek");
+      setLoaded(false);
     }, 1500);
   };
 
@@ -203,6 +207,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode("avoidGame");
       onModeChange("avoidGame");
+      setLoaded(false);
     }, 1500);
   };
 
@@ -223,6 +228,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         });
     }
   };
+  function hubTospeechFromCamtest(){
+    setWheel(true);
+  }
+  function hubForWheelFalse(){
+    setWheel(false);
+  }
 
   const sendGameTypeSignal = (string) => {
     if (user.getStreamManager().session) {
@@ -295,9 +306,31 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     }, 1500);
   };
 
-  const handleCheersReady = () => {
-    setCheersReady(true);
-    console.log("건배모드로 변경되었음");
+  const sendCheersOnSignal= () => {
+    user
+      .getStreamManager()
+      .session.signal({to: [], type: "cheersOn" })
+      .then(() => {
+        // console.log("one more user is ready to drink");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log("sendCheersOnSignal 실행");
+  };
+
+  const sendCheersOffSignal= () => {
+    user
+      .getStreamManager()
+      .session.signal({to: [], type: "cheersOff" })
+      .then(() => {
+        // console.log("one more user is ready to drink");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log("sendCheersOffSignal 실행");
   };
 
   console.log("CamMain rendered");
@@ -307,8 +340,17 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     <div>
       <div className={bg_img}></div>
       {/* Main Room */}
+
+      {mode === undefined && !loaded && (
+        <div>
+          <Loading mode={mode}/>
+        </div>
+      )}
       {mode === undefined && (
-        <div id="session" className={styles.camMainWrap}>
+        // <div id="session" className={styles.camMainWrap}>
+        <div id="session" className={`${loaded? styles.camMainWrap: ''} ${!loaded ? styles.hidden : ''}`}>
+          {/*<div id="session" className={ !loaded ? styles.hidden : ''}>*/}
+
           {/* <div className={styles.bamboo}></div> */}
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title">{roomName} </div>
@@ -402,12 +444,14 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
               speechBlocked={speechBlocked}
-              handleCheersReady={handleCheersReady}
+              sendCheersOnSignal={sendCheersOnSignal}
+              sendCheersOffSignal={sendCheersOffSignal}
               theme={theme}
               setTheme={setTheme}
               mainBGM={mainBGM}
+              hubTospeechFromCamtest={hubTospeechFromCamtest}
             />
-            <CamTest user={user} />
+            <CamTest user={user} wheel={wheel} hubForWheelFalse={hubForWheelFalse}/>
           </div>
 
           <div>
