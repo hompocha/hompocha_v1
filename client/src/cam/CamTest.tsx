@@ -79,16 +79,16 @@ const CamTest = (props: any) => {
               index={index}
               num={num}
               mode={mode}
-              myself = {myself}
-              />
-              )}
+              myself={myself}
+            />
+          )}
           {flag === 1 && (
             <UserVideoComponent
-            streamManager={members[counts - 1]}
-            index={1}
-            num={num}
-            mode="roulette"
-            myself = {myself}
+              streamManager={members[counts - 1]}
+              index={1}
+              num={num}
+              mode="roulette"
+              myself={myself}
             />
           )}
         </foreignObject>
@@ -289,7 +289,7 @@ const CamTest = (props: any) => {
           건배준비
         </button>
       </div>
-      <img className={styles.camCover} src="/asset/room/camCover3.png" />
+      {/* <img className={styles.camCover} src="/asset/room/camCover3.png" /> */}
       <div className={styles.scale}>
         <svg ref={svgRef} className={styles.position} width={700} height={700}>
           {renderCamSlices()}
