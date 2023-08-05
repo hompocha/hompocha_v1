@@ -17,6 +17,24 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
+
+  // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
+  const [theme, setTheme] = useState(0);
+  let bg_img;
+  switch (theme) {
+    case 0:
+      bg_img = `${styles.themePocha}`;
+      break;
+    case 1:
+      bg_img = `${styles.themeBar}`;
+      break;
+    case 2:
+      bg_img = `${styles.themeIzakaya}`;
+      break;
+    default:
+      break;
+  }
+
   const canvasRef = useRef(null);
   const toggleMic = () => {
     setMicEnabled((prevState) => {
@@ -33,6 +51,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   };
 
   useEffect(() => {
+    console.log(theme);
     user.getStreamManager().stream.session.on("signal:nickName", (event) => {
       let nick = event.data;
       let conId = event.from.connectionId;
@@ -275,6 +294,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const micOffImageURL = "/Bell/micOff.png";
   return (
     <div>
+      <div className={bg_img}></div>
       {/* Main Room */}
       {mode === undefined && (
         <div id="session" className={styles.camMainWrap}>
@@ -360,13 +380,16 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               </div>
             </div>
           </div>
-
+          <div className={`${styles.images} ${styles.leftImage}`}></div>
+          <div className={`${styles.images} ${styles.rightImage}`}></div>
           <div className={styles.camAndVoice}>
             <UseSpeechRecognition
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
               speechBlocked={speechBlocked}
               handleCheersReady={handleCheersReady}
+              theme={theme}
+              setTheme={setTheme}
             />
             <CamTest user={user} />
           </div>
