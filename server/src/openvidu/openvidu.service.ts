@@ -1,5 +1,6 @@
 import { OpenVidu } from 'openvidu-node-client';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+
 //환경변수;
 // const OPENVIDU_URL = 'https://hompocha.site:8443';
 const OPENVIDU_URL = 'http://localhost:4443';

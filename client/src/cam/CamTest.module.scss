@@ -2,14 +2,13 @@
   display:none;
 }
 .scale {
-  position: fixed;
+  position: absolute;
   transform: scale(130%);
   left: 24%;
   top: 8%;
-  z-index: 15;
 }
 .position {
-  position: fixed;
+  position: absolute;
   left: 28%;
   top: 13%;
   z-index: 15;
@@ -22,7 +21,6 @@
   position: fixed;
   left: 24%;
   top: 8%;
-  z-index: 13;
 }
 .circleRouletteLight {
   box-shadow: 0 0 100px #d7d6d6;
@@ -52,7 +50,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 11;
+  // z-index: 1;
 }
 .cheersImgVer {
   height: 25vh;

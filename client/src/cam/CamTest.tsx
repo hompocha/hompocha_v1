@@ -33,9 +33,11 @@ const CamTest = (props: any) => {
   const [counts, setCounts] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [cheersMode, setCheersMode] = useState(false);
+  const [wheelStart, setWheelStart] =useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
+
   const myself = props.user.connectionId;
   const handData:{[id: string]: any}={};
   const imgElements:{[key: string]: HTMLImageElement} = {};
@@ -489,6 +491,14 @@ const CamTest = (props: any) => {
 
   /* ========================================================= */
 
+  /*===========================================================*/
+  useEffect(()=>{
+    if(props.wheel === true){
+      sendRouletteSignal();
+      props.hubForWheelFalse();
+    }
+  },[props.wheel])
+
   return (
     <div>
       <div className={styles.circleLight}> </div>
@@ -497,9 +507,10 @@ const CamTest = (props: any) => {
           {/* <img className={styles.lights} src="/Lights_010.png"/> */}
           <div className={styles.darkScreen} />
           <div className={styles.circleRouletteLight}></div>
+          <div className={styles.triangleDown} />
         </>
       )}
-      <div className={styles.triangleDown} />
+
       <div>
         <button type="submit" onClick={sendRouletteSignal}>
           돌려
@@ -511,7 +522,7 @@ const CamTest = (props: any) => {
         </button>
       </div>
       <div className={styles.scale}>
-        <svg ref={svgRef} className={styles.position} width={700} height={700}>
+        <svg ref={svgRef} style={{ position : "absolute", left : "28%", top : "13%", zIndex : "15"}}width={700} height={700}>
           {renderCamSlices(setVideoInfo)}
         </svg>
         <canvas
