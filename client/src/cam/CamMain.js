@@ -122,15 +122,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         setSpeechBlocked(false);
       }
 
-      if (mode === undefined) {
-        //   try {
-        //     axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {status: "openGame", room_idx: idx})
-        //   } catch(error) {
-        //     alert("재 로그인 해야합니다~!")
-        //     navigate("/lobby");
-        //   }
-        // }
-      }
     });
   }, []);
 

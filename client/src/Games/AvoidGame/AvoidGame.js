@@ -540,7 +540,8 @@ const AvoidGame = (props) => {
     <>
       {props.mode === "avoidGame" && !loaded && (
         <div>
-          <Loading />
+          <Loading
+          mode={props.mode}/>
         </div>
       )}
       {props.user.connectionId === props.host ? <h1>host</h1> : null}
