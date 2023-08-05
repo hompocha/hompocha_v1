@@ -217,7 +217,7 @@ const CamTest = (props: any) => {
       };
     console.log(videoInfos);
   }
-
+  const [dark,setDark] = useState(false);
   const sendRouletteSignal = () => {
     const targetAngle = rouletteAngle();
     if (props.user.getStreamManager().session) {
@@ -249,6 +249,7 @@ const CamTest = (props: any) => {
 
   /* 룰렛 함수*/
   const roulette = (targetAngle: number) => {
+    setDark(true);
     const memberCount = props.user.getSubscriber().length + 1;
     const spinDuration = 5;
     const targetAnglePeople = Math.abs(targetAngle % 360);
@@ -278,6 +279,7 @@ const CamTest = (props: any) => {
         setFlag(0);
         setCounts(0);
         console.log(flag, counts);
+        setDark(false);
       }, 5000);
     }, 5000);
     const reset = () => {
@@ -387,6 +389,13 @@ const CamTest = (props: any) => {
 
   return (
     <div>
+      {dark && (
+      <>
+        {/* <img className={styles.lights} src="/Lights_010.png"/> */}
+        <div className={styles.darkScreen}/>
+        <div className={styles.circleLight}></div>
+      </>
+      )}
       <div className={styles.triangleDown} />
       <div>
         <button type="submit" onClick={sendRouletteSignal}>
