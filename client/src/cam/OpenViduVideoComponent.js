@@ -55,7 +55,9 @@ const OpenViduVideoComponent = (props) => {
       const left=parseFloat(computedStyle.getPropertyValue('left'));
       const top=parseFloat(computedStyle.getPropertyValue('top'));
       let scale = computedStyle.getPropertyValue('transform');
-      scale = parseFloat(scale.split('(')[1].split(')')[0].split(',')[0])*(-1);
+      console.log(scale);
+      if(scale === 'none') return;
+        scale = parseFloat(scale.split('(')[1].split(')')[0].split(',')[0])*(-1);
       console.log(scale);
       props.setVideoInfo(streamId, width, height, left, top, scale);
     }

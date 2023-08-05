@@ -8,6 +8,7 @@ import SpeechGame from "../Games/speechgame/SpeechGame";
 import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
+import Loading from "../Loading/Loading";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
@@ -17,6 +18,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
   const [theme, setTheme] = useState(0);
@@ -125,6 +127,13 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     });
   }, []);
 
+  useEffect(()=>{
+    if(!canvasRef.current) return;
+    setTimeout(()=> {
+      setLoaded(true);
+    },3000);
+
+  },[canvasRef])
   useEffect(() => {
     user
       .getStreamManager()
@@ -146,6 +155,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode(undefined);
       onModeChange(undefined);
+      setTimeout(()=>{
+        setLoaded(true);
+      },2000)
     }, 1500);
   };
 
@@ -165,6 +177,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode("speechGame");
       onModeChange("speechGame");
+      setLoaded(false);
     }, 1500);
   };
 
@@ -173,6 +186,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode("somaek");
       onModeChange("somaek");
+      setLoaded(false);
     }, 1500);
   };
 
@@ -181,6 +195,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode("avoidGame");
       onModeChange("avoidGame");
+      setLoaded(false);
     }, 1500);
   };
 
@@ -285,8 +300,17 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     <div>
       <div className={bg_img}></div>
       {/* Main Room */}
+
+      {mode === undefined && !loaded && (
+        <div>
+          <Loading mode={mode}/>
+        </div>
+      )}
       {mode === undefined && (
-        <div id="session" className={styles.camMainWrap}>
+        // <div id="session" className={styles.camMainWrap}>
+        <div id="session" className={`${loaded? styles.camMainWrap: ''} ${!loaded ? styles.hidden : ''}`}>
+          {/*<div id="session" className={ !loaded ? styles.hidden : ''}>*/}
+
           {/* <div className={styles.bamboo}></div> */}
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title">{roomName} </div>

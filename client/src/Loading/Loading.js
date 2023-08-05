@@ -9,6 +9,8 @@ const Loading = (props) => {
     text="소맥 게임 실행중.."
   else if(props.mode === "avoidGame")
     text="피하기 게임 실행중.."
+  else
+    text="메인화면으로 이동중..."
 
   return (
     <div className={styles.loading}>
