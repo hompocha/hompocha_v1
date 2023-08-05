@@ -487,6 +487,7 @@ const Somaek = (props) => {
         console.log("주문한 음료가 아님");
         images.madam = "../../Madam/madam1.png";
       }
+      /* 주문을 다 처리했으면 새로운 주문을 생성*/
       if (order.length === 0) {
         order = randomDrink();
         score += 1;
@@ -633,6 +634,7 @@ const Somaek = (props) => {
   useEffect(() => {
     const videoNode = videoRef.current;
     const canvasNode = canvasRef.current;
+    /* 첫 주문을 생성 */
     if (order.length === 0) {
       order = randomDrink();
       orderKorean = printDrinks(order);
