@@ -55,6 +55,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       break;
   }
 
+  /* 모드변경되면 음성인식 재시작 하도록 */
+  useEffect(() => {
+    setSpeechBlocked(false);
+  }, [mode]);
+
   const canvasRef = useRef(null);
   const toggleMic = () => {
     setMicEnabled((prevState) => {
