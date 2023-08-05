@@ -114,16 +114,19 @@ const UseSpeechRecognition = (props) => {
         switch (randomNum) {
           // 포차 테마
           case 0:
+            props.mainBGM.stop();
             props.setTheme(0);
             setShootingStar(true);
             break;
           // 바 테마
           case 1:
+            props.mainBGM.stop();
             props.setTheme(1);
             setShootingStar(false);
             break;
           // 이자카야 테마
           case 2:
+            props.mainBGM.stop();
             props.setTheme(2);
             setShootingStar(false);
             break;
