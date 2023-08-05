@@ -29,7 +29,7 @@ body {
   z-index: 0;
   background-image: url("../../public/asset/room/theme_bar/roomBarBackground.png");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 .themeIzakaya {
   position: fixed;
@@ -40,7 +40,7 @@ body {
   z-index: 0;
   background-image: url("../../public/asset/room/theme_izakaya/roomIzakayaBackground.png");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
 .camMainWrap {
