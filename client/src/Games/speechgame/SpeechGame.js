@@ -176,7 +176,7 @@ const SpeechGame = (props) => {
   }, [props.voice]);
 
   /*signal 보내는데 맞춘사람 id보냄*/
-  function checkPass(sentId) {
+  function checkPass(passedId) {
     if (props.user.getStreamManager().session) {
       props.user
         .getStreamManager()

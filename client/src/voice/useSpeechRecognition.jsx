@@ -8,6 +8,7 @@ import somaekFail from "../sounds/somaekFail.wav";
 import { effectSound } from "../effectSound";
 import styless from "./shootingStar.module.scss";
 import { set } from "mongoose";
+import UserInput from "./UserInput";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
@@ -185,6 +186,10 @@ const UseSpeechRecognition = (props) => {
     }
   };
 
+  const handleUserInput = (input) => {
+    setValue(input); // Update the value when user submits the form
+  };
+
   const { listen, listening, stop, supported } = useSpeechRecognition({
     onResult,
     onEnd,
@@ -229,7 +234,10 @@ const UseSpeechRecognition = (props) => {
   return (
     <div>
       {props.mode === "speechGame" && (
-        <div className={styles.speechWord}> {value} </div>
+
+        <div className={styles.speechWord}> {value}
+          <UserInput onSubmit={handleUserInput} />
+        </div>
       )} 
       {props.mode !== "speechGame" && shootingStar === true && (
         <div className={styless.night}>
