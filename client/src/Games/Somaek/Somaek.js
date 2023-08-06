@@ -91,7 +91,7 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 40 * 1000; /*시연*/
+    timerPrint.current = 15 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
 
@@ -100,11 +100,11 @@ const Somaek = (props) => {
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
-        // const sortedScores = Object.entries(scores).sort(
-        //   ([, a], [, b]) => b - a
-        // );
-        // const lowestScorePerson = sortedScores[sortedScores.length - 1];
-        // setLowestConId(lowestScorePerson[0]);
+        const sortedScores = Object.entries(scores.current).sort(
+          ([, a], [, b]) => b - a
+        );
+        const lowestScorePerson = sortedScores[sortedScores.length - 1];
+        setLowestConId(lowestScorePerson[0]);
         setHandStop(true);
 
         setTimeout(() => {

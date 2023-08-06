@@ -9,18 +9,21 @@ import { effectSound } from "../effectSound";
 import styless from "./shootingStar.module.scss";
 import { set } from "mongoose";
 
-const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
+const keyword = ["고양이", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
-  "시작",
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
   "철수 책상 철 책상",
   "상업 산업 사업을 상상한다",
-  "앞 집 팥죽은 붉은 팥 풋 팥죽이다",
   "뒷집 콩죽은 햇콩 단콩 콩죽이다",
   "안 촉촉한 초코칩 나라에 살던 안 촉촉한 초코칩",
-  "검찰청 창살은 쌍철창살이다",
   "네가 그린 기린 그림은 못생긴 기린 그림이다",
+  "시골 찹쌀 햇찹쌀",
+  "도시 찹쌀 촌 찹쌀",
+  "확률분포표",
+  "빼빼 마른 빼빼로",
+  "난방 방법 변경",
+  "상담 담당 선생님",
 ];
 const gameStartKeywords = [
   "사장님 발음 게임이요",
@@ -29,10 +32,13 @@ const gameStartKeywords = [
   "발음 게임",
   "소맥 게임",
   "피하기 게임",
+  "소맥 게임이요",
+  "발음 게임이요",
+  "피하기 게임 이요",
 ];
-const wheelKeyword = ["돌려"];
+const wheelKeyword = ["돌려주세요"];
 
-const themeChangeKeywords = ["변경"];
+const themeChangeKeywords = ["테마 바꿔 주세요"];
 const UseSpeechRecognition = (props) => {
   console.log(props);
   const [shootingStar, setShootingStar] = useState(true);
@@ -44,7 +50,7 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
 
-    if (value.includes("건배")) {
+    if (value.includes("우리 한잔할까")) {
       stop();
       setStopSign(false);
       props.sendCheersOnSignal();
@@ -99,18 +105,18 @@ const UseSpeechRecognition = (props) => {
       if (value.includes(gameStartKeyword)) {
         setExtractedValue(gameStartKeyword);
         switch (gameStartKeyword) {
-          // case "사장님 발음 게임 하나 주세요":
-          case "발음 게임":
+          case "발음 게임이요":
+          // case "발음 게임":
             stop();
             props.sendGameTypeSignal("speechGame");
             break;
-          // case "사장님 소맥 게임 하나 주세요":
-          case "소맥 게임":
+          case "소맥 게임이요":
+          // case "소맥 게임":
             stop();
             props.sendGameTypeSignal("somaek");
             break;
-          // case "사장님 피하기 게임 하나 주세요":
-          case "피하기 게임":
+          case "피하기 게임 이요":
+          // case "피하기 게임":
             stop();
             props.sendGameTypeSignal("avoidGame");
             break;
