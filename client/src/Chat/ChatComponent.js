@@ -5,12 +5,15 @@ import styles from "./ChatComponent.module.css";
 export default function ChatComponent(props) {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
+  const [messageWindow, setMessageWindow] = useState(true);
+  const [messageCome, setMessageCome] = useState(false);
   const chatScroll = useRef();
 
   useEffect(() => {
     if (props.sessionConnected) {
       const onChatSignal = (event) => {
         const data = JSON.parse(event.data);
+        setMessageCome(true);
         console.log("set Message");
         setMessageList((prevMessageList) => [
           ...prevMessageList,
@@ -36,6 +39,10 @@ export default function ChatComponent(props) {
 
   const handleChange = (event) => {
     setMessage(event.target.value);
+  };
+  const messageWindowOnOff = () => {
+    setMessageWindow(prevMessageWindow => !prevMessageWindow );
+    setMessageCome(false);
   };
 
   const handlePressKey = (event) => {
@@ -75,13 +82,16 @@ export default function ChatComponent(props) {
   const styleChat = { display: props.chatDisplay };
 
   return (
+    <>
+    {messageWindow === false && (
+      <button className = {messageCome === true ? styles.messageOpenSend : styles.messageOpen} onClick={messageWindowOnOff}> 열기 </button>
+    )}
+    {messageWindow === true &&(
     <div id="chatContainer" className={styles.chatContainer}>
       <div id="chatComponent" className={styles.chatComponent}>
-        {/* <div id="chatToolbar" className={styles.chatToolbar}>
-          <span>
-            props.user.getStreamManager().stream.session.sessionId 채팅창
-          </span>
-        </div> */}
+        <div id="chatToolbar" className={styles.chatToolbar}>
+          <button onClick={messageWindowOnOff}> 닫기 </button>
+        </div>
         <div className={styles.messageWrap} ref={chatScroll}>
           {messageList.map((data, i) => (
             <div
@@ -130,11 +140,13 @@ export default function ChatComponent(props) {
             id="sendButton"
             className={styles.sendButton}
             onClick={sendMessage}
-          >
+            >
             전송
           </button>
         </div>
       </div>
     </div>
+    )}
+  </>
   );
 }

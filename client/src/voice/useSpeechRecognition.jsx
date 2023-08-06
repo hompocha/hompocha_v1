@@ -45,17 +45,20 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
     if (value.includes("건배")) {
-      props.handleCheersReady();
+      props.sendCheersOnSignal();
     }
-    for(const keyword of wheelKeyword){
-      if(value.includes(keyword)){
+    if (value.includes("담배")) {
+      props.sendCheersOffSignal();
+    }
+    for (const keyword of wheelKeyword) {
+      if (value.includes(keyword)) {
         props.hubTospeechFromCamtest();
       }
     }
 
     /* 발음게임 명령어 */
     for (const sentence of speech_sentence) {
-      if (value.includes(sentence) && props.mode ==="speechGame") {
+      if (value.includes(sentence) && props.mode === "speechGame") {
         effectSound(somaekSuccess);
         setExtractedValue(sentence);
         props.sendSpeech(
@@ -111,16 +114,19 @@ const UseSpeechRecognition = (props) => {
         switch (randomNum) {
           // 포차 테마
           case 0:
+            // props.mainBGM.stop();
             props.setTheme(0);
             setShootingStar(true);
             break;
           // 바 테마
           case 1:
+            // props.mainBGM.stop();
             props.setTheme(1);
             setShootingStar(false);
             break;
           // 이자카야 테마
           case 2:
+            // props.mainBGM.stop();
             props.setTheme(2);
             setShootingStar(false);
             break;
@@ -219,10 +225,11 @@ const UseSpeechRecognition = (props) => {
     <div>
       {shootingStar === true && (
         <div className={styless.night}>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
-          <div className={styless.shooting_star}></div>
+          {Array.from({ length: 24 }, (_, index) => (
+            <>
+              <div className={styless.shooting_star} key={index}></div>
+            </>
+          ))}
         </div>
       )}
       <div className={styles.container}>
