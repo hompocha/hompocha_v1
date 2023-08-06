@@ -23,22 +23,15 @@ const Lobby = () => {
       localStorage.removeItem("jwtToken");
       history.push('/');
     };
-    const handleBeforeUnload = () => {
-      localStorage.removeItem("jwtToken");
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
     const unlistenHistoryEvent = history.listen(({ action }) => {
       if (action === "POP") {
         handleHistoryPop();
       }
     });
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
       unlistenHistoryEvent();
     };
   }, []);
-
   useEffect(() => {
       const token = localStorage.getItem("jwtToken");
       if(!token){
