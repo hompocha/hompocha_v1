@@ -10,7 +10,7 @@ import styless from "./shootingStar.module.scss";
 import { set } from "mongoose";
 import UserInput from "./UserInput";
 
-const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
+const keyword = ["고양이", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
@@ -33,10 +33,13 @@ const gameStartKeywords = [
   "발음 게임",
   "소맥 게임",
   "피하기 게임",
+  "소맥 게임이요",
+  "발음 게임이요",
+  "피하기 게임 이요",
 ];
-const wheelKeyword = ["돌려"];
+const wheelKeyword = ["돌려주세요"];
 
-const themeChangeKeywords = ["변경"];
+const themeChangeKeywords = ["테마 바꿔 주세요"];
 const UseSpeechRecognition = (props) => {
   console.log(props);
   const [shootingStar, setShootingStar] = useState(true);
@@ -48,7 +51,7 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
 
-    if (value.includes("건배")) {
+    if (value.includes("우리 한잔할까")) {
       stop();
       setStopSign(false);
       props.sendCheersOnSignal();
@@ -103,18 +106,18 @@ const UseSpeechRecognition = (props) => {
       if (value.includes(gameStartKeyword)) {
         setExtractedValue(gameStartKeyword);
         switch (gameStartKeyword) {
-          // case "사장님 발음 게임 하나 주세요":
-          case "발음 게임":
+          case "발음 게임이요":
+          // case "발음 게임":
             stop();
             props.sendGameTypeSignal("speechGame");
             break;
-          // case "사장님 소맥 게임 하나 주세요":
-          case "소맥 게임":
+          case "소맥 게임이요":
+          // case "소맥 게임":
             stop();
             props.sendGameTypeSignal("somaek");
             break;
-          // case "사장님 피하기 게임 하나 주세요":
-          case "피하기 게임":
+          case "피하기 게임 이요":
+          // case "피하기 게임":
             stop();
             props.sendGameTypeSignal("avoidGame");
             break;
