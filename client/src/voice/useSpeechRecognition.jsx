@@ -19,7 +19,6 @@ const speech_sentence = [
   "앞 집 팥죽은 붉은 팥 풋 팥죽이다",
   "뒷집 콩죽은 햇콩 단콩 콩죽이다",
   "안 촉촉한 초코칩 나라에 살던 안 촉촉한 초코칩",
-  "경찰청 창살은 외철창살이다",
   "검찰청 창살은 쌍철창살이다",
   "네가 그린 기린 그림은 못생긴 기린 그림이다",
 ];
@@ -40,18 +39,25 @@ const UseSpeechRecognition = (props) => {
   const [value, setValue] = useState("");
   const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState("");
-  const [woo, setWoo] = useState(true);
+  const [stopSign, setStopSign] = useState(true);
   const lang = "ko-Kr";
   useEffect(() => {
     /* 건배 명령어 */
+    
     if (value.includes("건배")) {
+      stop();
+      setStopSign(false);
       props.sendCheersOnSignal();
     }
     if (value.includes("담배")) {
+      stop();
+      setStopSign(false);
       props.sendCheersOffSignal();
     }
     for (const keyword of wheelKeyword) {
       if (value.includes(keyword)) {
+        stop();
+        setStopSign(false);
         props.hubTospeechFromCamtest();
       }
     }
@@ -72,7 +78,7 @@ const UseSpeechRecognition = (props) => {
       if (value.includes(word)) {
         setExtractedValue(word);
         stop();
-        setWoo(false);
+        setStopSign(false);
         props.sendEffectSignal(word);
       }
     }
@@ -139,14 +145,14 @@ const UseSpeechRecognition = (props) => {
   }, [value]);
 
   useEffect(() => {
-    if (!woo) {
+    if (!stopSign) {
       const timeout = setTimeout(() => {
-        setWoo(true);
+        setStopSign(true);
         listen({ lang });
       }, 500);
       return () => clearTimeout(timeout);
     }
-  }, [woo]);
+  }, [stopSign]);
 
   useEffect(() => {
     if (extractedValue !== "") {

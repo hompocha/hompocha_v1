@@ -92,7 +92,8 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 15 * 1000; /*시연*/
+
+    timerPrint.current = 40 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
 

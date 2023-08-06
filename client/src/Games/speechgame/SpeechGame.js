@@ -66,7 +66,6 @@ const SpeechGame = (props) => {
         if (!readyPeople.includes(fromId)) {
           readyPeople.push(fromId);
         }
-
         if (readyPeople.length === subscribers.length + 1) {
           sendStartSignal();
           props.user
@@ -150,19 +149,19 @@ const SpeechGame = (props) => {
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
 
-    }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
+    }, /* stopTime - 1000 */ 9 * 1000);/* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
       setLoser(randomUser);
       sentenceState="시작";
       bgmSound.stop();
-    }, /* stopTime */ 40 * 1000); /*시연*/
+    }, /* stopTime */ 10 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
       clearTimeout(speechTimer);
     };
-  }, [stopTime,start,loser]);
+  }, [stopTime,start]);
 
   useEffect(()=>{
     if(props.voice ===false){
@@ -170,7 +169,7 @@ const SpeechGame = (props) => {
       const timer = setTimeout(() => {
         props.voiceOn()
         props.end()
-      }, 1000);
+      }, 1500);
       return () => {
         clearTimeout(timer);
       };
@@ -335,6 +334,7 @@ const SpeechGame = (props) => {
           </div>
         ) : (
           <div>
+            <h1>{props.conToNick[loser]}</h1>
             <LoserCam
               selectId={loser}
               user={props.user}
