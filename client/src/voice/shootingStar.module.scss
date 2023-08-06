@@ -29,6 +29,7 @@ $shooting-time: 3000ms;
   background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
   border-radius: 999px;
   filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
+  visibility: hidden;
   animation:
     tail $shooting-time ease-in-out infinite,
     shooting $shooting-time ease-in-out infinite;
@@ -47,9 +48,7 @@ $shooting-time: 3000ms;
   }
 
   &::after {
-    // CodePen Error
-    // @extend .shooting_star::before;
-    
+
     content: '';
     position: absolute;
     top: calc(50% - 1px);
@@ -64,6 +63,7 @@ $shooting-time: 3000ms;
   }
   
   @for $i from 1 through 20 {
+    
     &:nth-child(#{$i}) {
       $delay: random(9999) + 0ms;
       top: calc(50% - #{random(1500) - 200px});
@@ -109,10 +109,12 @@ $shooting-time: 3000ms;
 
 @keyframes shooting {
   0% {
+    visibility: visible; 
     transform: translateX(0);
   }
   
   100% {
+    visibility: visible; 
     transform: translateX(500px);
   }
 }
