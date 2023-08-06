@@ -882,6 +882,7 @@ const Somaek = (props) => {
               user={props.user}
               mode={"centerCam"}
               end={props.end}
+              conToNick={props.conToNick}
             />
           </div>
         )}
