@@ -31,11 +31,9 @@ const images = {
   signboard: "../../Signboard.png",
 };
 
-
-
-/*======================================================= */  
-/*=================== 메인 함수 시작=================== */  
-/*======================================================= */  
+/*======================================================= */
+/*=================== 메인 함수 시작=================== */
+/*======================================================= */
 
 const Somaek = (props) => {
   const [loaded, setLoaded] = useState(false);
@@ -62,7 +60,9 @@ const Somaek = (props) => {
     scores.current[conId] = 0;
   }
   // scores.current[props.user.getNickname()] = 0;   /*변경*/
-  scores.current[props.user.getStreamManager().stream.connection.connectionId] = 0;
+  scores.current[
+    props.user.getStreamManager().stream.connection.connectionId
+  ] = 0;
 
   const states = {};
   for (let i = 0; i < subscribers.length; i++) {
@@ -85,11 +85,9 @@ const Somaek = (props) => {
   let inBucket = [];
   let orderKorean = [];
 
-
-
-/*======================================================= */  
-/*=================== 게임 시작=================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*=================== 게임 시작=================== */
+  /*======================================================= */
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
@@ -123,10 +121,9 @@ const Somaek = (props) => {
     };
   }, [start]);
 
-
-/*======================================================= */  
-/*===================손 인식 및 게임 화면 그리기=================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*===================손 인식 및 게임 화면 그리기=================== */
+  /*======================================================= */
   /* 손 인식 부분 */
   useEffect(() => {
     let didCancel = false;
@@ -176,8 +173,6 @@ const Somaek = (props) => {
       didCancel = true;
     };
   }, [handStop]);
-
-  
 
   /* on Results */
   const onResults = (results) => {
@@ -294,7 +289,6 @@ const Somaek = (props) => {
       );
     }
 
-    
     // can_ctx.globalCompositeOperation = "source-over";
     const rankImg = imgElements["rank"];
 
@@ -349,23 +343,29 @@ const Somaek = (props) => {
 
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
+    const timerLeftX = 0.6; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const timerTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const titmerWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
     let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
     // if (blink) {
-      can_ctx.fillStyle = "yellow";
-      can_ctx.font = "bold 50px Arial";
-      can_ctx.fillText(
-        `남은시간: ${timerPrint.current / 1000}초`,
-        -can_ref.width * 0.6,
-        50
-      );
+    can_ctx.fillStyle = "yellow";
+
+    const fontSize = can_ref.width * speechWidth * 0.2;
+    can_ctx.font = `${fontSize}px Arial`;
+    const timerX = -can_ref.width * timerLeftX;
+    const timerY = can_ref.height * timerTopY;
+    can_ctx.fillText(`남은시간: ${timerPrint.current / 1000}초`, timerX, timerY);
+
     // }
 
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores.current)
       .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
       .forEach(([key, value], index) => {
-        if(key === props.user.getStreamManager().stream.connection.connectionId){
-        // if (key == props.user.getNickname()) {
+        if (
+          key === props.user.getStreamManager().stream.connection.connectionId
+        ) {
+          // if (key == props.user.getNickname()) {
           can_ctx.fillStyle = "green";
         } else if (index === 0) {
           can_ctx.fillStyle = "blue"; //1등
@@ -376,7 +376,7 @@ const Somaek = (props) => {
         const upValue = Math.ceil(value);
         const scoreText = `${props.conToNick[key]}: ${upValue}`;
         // const scoreText = 'nono';
-        const y = 743+ (index + 1) * 35;
+        const y = 743 + (index + 1) * 35;
         can_ctx.font = "bold 35px Arial";
 
         // 그림 위에 텍스트가 나타납니다.
@@ -533,7 +533,7 @@ const Somaek = (props) => {
     const drinkCount = new Map();
 
     // 각 요소에 대해
-    
+
     drinks.forEach((drink) => {
       // 현재 요소의 빈도를 가져옴 (없으면 0)
       const currentCount = drinkCount.get(drink) || 0;
@@ -570,14 +570,9 @@ const Somaek = (props) => {
     return drinkPrintList;
   }
 
-
-
-
-
-
-/*======================================================= */  
-/*===================시그널 관련=================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*===================시그널 관련=================== */
+  /*======================================================= */
 
   /* 시그널 받는 부분 */
   useEffect(() => {
@@ -679,8 +674,6 @@ const Somaek = (props) => {
     };
   }, [videoRef.current, canvasRef.current]);
 
-
-
   /*게임 로드 후 레디 시그널 전송 */
   const sendReadySignal = () => {
     props.user
@@ -759,17 +752,16 @@ const Somaek = (props) => {
     }
   };
 
-
-/*======================================================= */  
-/*=================== return =================== */  
-/*======================================================= */  
+  /*======================================================= */
+  /*=================== return =================== */
+  /*======================================================= */
 
   return (
     <>
       <div>
         {props.mode === "somaek" && !loaded && (
           <div>
-            <Loading mode={props.mode}/>
+            <Loading mode={props.mode} />
           </div>
         )}
         {props.mode === "somaek" && countDown && (
@@ -782,6 +774,7 @@ const Somaek = (props) => {
             <span className={!loaded ? styles.hidden : ""}>
               {loaded ? null : "소맥"}
             </span>
+            <div className={styles.mainUserCamBorder}></div>
             <video
               className={`${styles.somaekVideo} ${!loaded && styles.hidden}`}
               autoPlay={true}
@@ -797,6 +790,9 @@ const Somaek = (props) => {
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
               <>
+                <div
+                  className={`${styles[`GameSubBorder${index + 1}`]}`}
+                ></div>
                 <div
                   className={`${styles[`somaekGameSub${index + 1}`]} ${
                     !loaded && styles.hidden

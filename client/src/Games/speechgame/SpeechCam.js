@@ -22,6 +22,7 @@ const SpeechCam = (props) => {
       <>
         {/*========================여기까지================================*/}
         <OpenViduVideoComponent mode={"centerCam"} streamManager={selectStreamManager} />
+
       </>
     );
   }

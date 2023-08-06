@@ -10,6 +10,18 @@
   transform: rotateY(180deg);
   border-radius: 3%;
 }
+
+.mainUserCamBorder {
+  position: fixed;
+  top: 8vh;
+  left: 21vw;
+  width: 58vw;
+  height: 44vw;
+  /* border: 4px solid white; */
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
 .somaekCanvas {
   position: fixed;
   top: 10vh;
@@ -29,6 +41,16 @@
   border-radius: 3%;
   background-color: transparent;
 }
+.gameSubBorder1 {
+  position: fixed;
+  top: 9vh;
+  left: 2vw;
+  width: 18vw;
+  height: 24vh;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
 .somaekGameSub2 {
   transform: rotateY(180deg);
   position: fixed;
@@ -37,6 +59,17 @@
   border-radius: 3%;
   background-color: transparent;
 }
+
+.gameSubBorder2 {
+  position: fixed;
+  top: 38.25vh;
+  left: 2vw;
+  width: 18vw;
+  height: 24vh;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
 .somaekGameSub3 {
   transform: rotateY(180deg);
   position: fixed;
@@ -45,12 +78,34 @@
   border-radius: 3%;
   background-color: transparent;
 }
+
+.gameSubBorder3 {
+  position: fixed;
+  top: 67.5vh;
+  left: 2vw;
+  width: 18vw;
+  height: 24vh;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
 .somaekGameSub4 {
   transform: rotateY(180deg);
   position: fixed;
   top: 10vh;
   left: 81vw;
 }
+
+.gameSubBorder4 {
+  position: fixed;
+  top: 9vh;
+  left: 80vw;
+  width: 18vw;
+  height: 24vh;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
 .somaekGameSub5 {
   transform: rotateY(180deg);
   position: fixed;
@@ -58,6 +113,16 @@
   left: 81vw;
   border-radius: 3%;
   background-color: transparent;
+}
+
+.gameSubBorder5 {
+  position: fixed;
+  top: 38.25vh;
+  left: 80vw;
+  width: 18vw;
+  height: 24vh;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .userNick1 {
@@ -96,7 +161,7 @@
   display: flex;
   justify-content: center;
 }
-.drinkItem{
+.drinkItem {
   position: fixed;
   top: 1%;
   right: 1%;
