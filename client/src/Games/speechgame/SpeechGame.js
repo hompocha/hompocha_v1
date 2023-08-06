@@ -149,13 +149,13 @@ const SpeechGame = (props) => {
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
 
-    }, /* stopTime - 1000 */ 9 * 1000);/* 시연*/
+    }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
       setLoser(randomUser);
       sentenceState="시작";
       bgmSound.stop();
-    }, /* stopTime */ 10 * 1000); /*시연*/
+    }, /* stopTime */ 40 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
@@ -309,6 +309,7 @@ const SpeechGame = (props) => {
                 sendSpeech={checkPass}
                 user={props.user}
                 speechBlocked={speechBlocked}
+                mode = {props.mode}
               />
             </div>
             <div className={styles.camPosition}>
