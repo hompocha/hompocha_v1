@@ -11,8 +11,9 @@
   width: 75px;
   height: 75px;
   border-radius: 50%;
-  background: #febf00;
+  background: #506117;
   cursor: pointer;
+  box-shadow: 0 0 10px #a2a2a2;
 }
 .messageOpenSend{
   position: fixed;
@@ -99,7 +100,7 @@
   width: 290px;
   border-radius: 20px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.15);
   /* background-image: url("../../public/asset/chatCover.png"); */
   background-repeat: no-repeat;
   background-size: cover;

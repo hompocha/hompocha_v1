@@ -7,13 +7,21 @@ export default function ChatComponent(props) {
   const [message, setMessage] = useState("");
   const [messageWindow, setMessageWindow] = useState(false);
   const [messageCome, setMessageCome] = useState(false);
+  let propsChatToggle = props.chatToggle; // 수정
   const chatScroll = useRef();
+
+  useEffect(() => {
+    if (props.chatToggle !== propsChatToggle) {
+      propsChatToggle = props.chatToggle;
+    }
+  }, [props.chatToggle, propsChatToggle]);
 
   useEffect(() => {
     if (props.sessionConnected) {
       const onChatSignal = (event) => {
         const data = JSON.parse(event.data);
         setMessageCome(true);
+        
         console.log("set Message");
         setMessageList((prevMessageList) => [
           ...prevMessageList,
@@ -41,7 +49,8 @@ export default function ChatComponent(props) {
     setMessage(event.target.value);
   };
   const messageWindowOnOff = () => {
-    setMessageWindow(prevMessageWindow => !prevMessageWindow );
+    // setMessageWindow(propsChatToggle => !propsChatToggle);
+    props.setChatToggle((currentChatToggle) => !currentChatToggle);
     setMessageCome(false);
   };
 
@@ -83,10 +92,10 @@ export default function ChatComponent(props) {
 
   return (
     <>
-    {messageWindow === false && (
+    {propsChatToggle === false && (
       <button className = {messageCome === true ? styles.messageOpenSend : styles.messageOpen} onClick={messageWindowOnOff}> 열기 </button>
     )}
-    {messageWindow === true &&(
+    {propsChatToggle === true &&(
     <div id="chatContainer" className={styles.chatContainer}>
       <div id="chatComponent" className={styles.chatComponent}>
         <div id="chatToolbar" className={styles.chatToolbar}>

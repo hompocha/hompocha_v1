@@ -30,6 +30,7 @@ const gameStartKeywords = [
   "피하기 게임",
 ];
 const wheelKeyword = ["돌려"];
+const chatKeyword = ["채팅"];
 
 const themeChangeKeywords = ["변경"];
 const UseSpeechRecognition = (props) => {
@@ -58,6 +59,13 @@ const UseSpeechRecognition = (props) => {
         stop();
         setStopSign(false);
         props.hubTospeechFromCamtest();
+      }
+    }
+    for (const keyword of chatKeyword) {
+      if (value.includes(keyword)) {
+        stop();
+        setStopSign(false);
+        props.chatChange();
       }
     }
 
