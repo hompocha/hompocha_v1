@@ -8,6 +8,7 @@
   width: 56vw;
   height: 42vw;
   transform: rotateY(180deg);
+  border-radius: 3%;
 }
 .somaekCanvas {
   position: fixed;
@@ -16,6 +17,8 @@
   width: 56vw;
   height: 42vw;
   transform: rotateY(180deg);
+  border-radius: 3%;
+  background-color: transparent;
 }
 
 .somaekGameSub1 {
@@ -23,18 +26,24 @@
   position: fixed;
   top: 10vh;
   left: 3vw;
+  border-radius: 3%;
+  background-color: transparent;
 }
 .somaekGameSub2 {
   transform: rotateY(180deg);
   position: fixed;
   top: 39.25vh;
   left: 3vw;
+  border-radius: 3%;
+  background-color: transparent;
 }
 .somaekGameSub3 {
   transform: rotateY(180deg);
   position: fixed;
   top: 68.5vh;
   left: 3vw;
+  border-radius: 3%;
+  background-color: transparent;
 }
 .somaekGameSub4 {
   transform: rotateY(180deg);
@@ -47,6 +56,8 @@
   position: fixed;
   top: 39.25vh;
   left: 81vw;
+  border-radius: 3%;
+  background-color: transparent;
 }
 
 .userNick1 {
