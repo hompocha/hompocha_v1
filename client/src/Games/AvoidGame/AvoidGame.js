@@ -98,16 +98,14 @@ const AvoidGame = (props) => {
 
   /* 프레임마다 전송 */
   useEffect(() => {
-
     if (!start) return;
-    const avoidBGM =effectSound(BGM,true,0.7);
+    const avoidBGM = effectSound(BGM, true, 0.7);
 
     gameState.current.user = props.user.connectionId;
-    if(isGameOver) {
+    if (isGameOver) {
       avoidBGM.stop();
       return;
     }
-
 
     if (canvasRef.current) {
       canvasCtx.current = canvasRef.current.getContext("2d");
@@ -416,7 +414,6 @@ const AvoidGame = (props) => {
             console.log(result[0]);
             setLowestConId(result[0]);
             setIsGameOver(true);
-
           }
         });
 
@@ -540,8 +537,7 @@ const AvoidGame = (props) => {
     <>
       {props.mode === "avoidGame" && !loaded && (
         <div>
-          <Loading
-          mode={props.mode}/>
+          <Loading mode={props.mode} />
         </div>
       )}
       {props.user.connectionId === props.host ? <h1>host</h1> : null}
@@ -552,58 +548,60 @@ const AvoidGame = (props) => {
       )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
-        <video
-          className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
-          // className={styles.avoidVideo}
-          autoPlay={true}
-          ref={(el) => {
-            videoRef.current = el;
-            setVideoReady(el);
-          }}
-        />
-        <canvas  className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
-                ref={canvasRef}
-                width={"960px"}
-                height={"720px"}/>
-        {/* subscribers Cam */}
-        {subscribers.map((subscriber, index) => (
-          <>
-            <div
-              className={`${styles[`avoidGameSub${index + 1}`]} ${
-                !loaded && styles.hidden
-              }`}
-            >
-              <OpenViduVideoComponent
-                mode={"avoidGame"}
-                streamManager={subscriber}
-                drawGame={loadImages}
-                gameState={subscriberState}
-              />
-            </div>
-            <div
-              className={`${styles[`userNick${index + 1}`]} ${
-                !loaded && styles.hidden
-              }`}
-            >
-              닉네임이 들어갈 자리
-            </div>
-          </>
-        ))}
-      </>
-   ):(
-    <>
-      <div>
-        <LoserCam
-          selectId={lowestConId}
-          user={props.user}
-          mode={"centerCam"}
-          end={props.end}
-          conToNick={props.conToNick}
-        />
-      </div>
-    </>
-    )};
-
+          <div className={styles.mainUserCamBorder}></div>
+          <video
+            className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
+            // className={styles.avoidVideo}
+            autoPlay={true}
+            ref={(el) => {
+              videoRef.current = el;
+              setVideoReady(el);
+            }}
+          />
+          <canvas
+            className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
+            ref={canvasRef}
+            width={"960px"}
+            height={"720px"}
+          />
+          {/* subscribers Cam */}
+          {subscribers.map((subscriber, index) => (
+            <>
+              <div
+                className={`${styles[`avoidGameSub${index + 1}`]} ${
+                  !loaded && styles.hidden
+                }`}
+              >
+                <OpenViduVideoComponent
+                  mode={"avoidGame"}
+                  streamManager={subscriber}
+                  drawGame={loadImages}
+                  gameState={subscriberState}
+                />
+              </div>
+              <div
+                className={`${styles[`userNick${index + 1}`]} ${
+                  !loaded && styles.hidden
+                }`}
+              >
+                닉네임이 들어갈 자리
+              </div>
+            </>
+          ))}
+        </>
+      ) : (
+        <>
+          <div className={styles.mainUserCamBorder}></div>
+          <LoserCam
+            selectId={lowestConId}
+            user={props.user}
+            mode={"centerCam"}
+            end={props.end}
+            conToNick={props.conToNick}
+          />
+        </>
+      )}
+      ;
     </>
   );
 };

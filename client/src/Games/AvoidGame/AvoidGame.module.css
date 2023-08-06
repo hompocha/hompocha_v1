@@ -1,87 +1,95 @@
-
 .hidden {
   display: none;
-
 }
 
-
 .avoidVideo {
-    position: fixed;
-    top: 10vh;
-    left: 22vw;
-    width: 56vw;
-    height: 42vw;
-    transform: rotateY(180deg);
-  }
-  .avoidCanvas {
-    position: fixed;
-    top: 10vh;
-    left: 22vw;
-    width: 56vw;
-    height: 42vw;
-    transform: rotateY(180deg);
-  }
+  position: fixed;
+  top: 10vh;
+  left: 22vw;
+  width: 56vw;
+  height: 42vw;
+  transform: rotateY(180deg);
+}
 
-  h1 {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
+.mainUserCamBorder {
+  position: fixed;
+  top: 6vh;
+  left: 20vw;
+  width: 60vw;
+  height: 46vw;
+  /* border: 4px solid white; */
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
 
-  .avoidGameSub1 {
-    transform: rotateY(180deg);
-    position: fixed;
-    top: 10vh;
-    left: 19vw;
-  }
-  .avoidGameSub2 {
-    transform: rotateY(180deg);
-    position: fixed;
-    top: 39.25vh;
-    left: 19vw;
-  }
-  .avoidGameSub3 {
-    transform: rotateY(180deg);
-    position: fixed;
-    top: 68.5vh;
-    left: 19vw;
-  }
-  .avoidGameSub4 {
-    transform: rotateY(180deg);
-    position: fixed;
-    top: 10vh;
-    left: 97vw;
-  }
-  .avoidGameSub5 {
-    transform: rotateY(180deg);
-    position: fixed;
-    top: 40vh;
-    left: 97vw;
-  }
+.avoidCanvas {
+  position: fixed;
+  top: 10vh;
+  left: 22vw;
+  width: 56vw;
+  height: 42vw;
+  transform: rotateY(180deg);
+}
 
-  .userNick1 {
-    position: fixed;
-    top: 32vh;
-    left: 3vw;
-  }
-  .userNick2 {
-    position: fixed;
-    top: 62vh;
-    left: 3vw;
-  }
-  .userNick3 {
-    position: fixed;
-    top: 92vh;
-    left: 3vw;
-  }
-  .userNick4 {
-    position: fixed;
-    top: 32vh;
-    left: 81vw;
-  }
-  .userNick5 {
-    position: fixed;
-    top: 62vh;
-    left: 81vw;
-  }
+h1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
 
+.avoidGameSub1 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 10vh;
+  left: 19vw;
+}
+.avoidGameSub2 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 39.25vh;
+  left: 19vw;
+}
+.avoidGameSub3 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 68.5vh;
+  left: 19vw;
+}
+.avoidGameSub4 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 10vh;
+  left: 97vw;
+}
+.avoidGameSub5 {
+  transform: rotateY(180deg);
+  position: fixed;
+  top: 40vh;
+  left: 97vw;
+}
+
+.userNick1 {
+  position: fixed;
+  top: 32vh;
+  left: 3vw;
+}
+.userNick2 {
+  position: fixed;
+  top: 62vh;
+  left: 3vw;
+}
+.userNick3 {
+  position: fixed;
+  top: 92vh;
+  left: 3vw;
+}
+.userNick4 {
+  position: fixed;
+  top: 32vh;
+  left: 81vw;
+}
+.userNick5 {
+  position: fixed;
+  top: 62vh;
+  left: 81vw;
+}

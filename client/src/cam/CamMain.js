@@ -15,7 +15,14 @@ import barBGM from "../sounds/themeBGM/themeBarBGM.mp3";
 import izakayaBGM from "../sounds/themeBGM/themeIzakayaBGM.mp3";
 import Loading from "../Loading/Loading";
 
-const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatChange }) => {
+const CamMain = ({
+  user,
+  roomName,
+  onModeChange,
+  sessionConnected,
+  idx,
+  chatChange,
+}) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [conToNick] = useState({});
@@ -54,6 +61,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
   }
   // 테마 변경에 따른 음악 변경
   useEffect(() => {
+    console.log(musicOn);
     let mainBGM;
     switch (theme) {
       case 0:
@@ -73,9 +81,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
         break;
     }
     return () => {
-      if (mode === undefined) mainBGM.stop();
+      if (mode === undefined && musicOn === true) {
+        mainBGM.stop();
+      }
     };
-  }, [theme, mode, musicOn]);
+  }, [theme /* mode */, musicOn]);
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
@@ -414,7 +424,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
                 if (musicOn === false) setMusicOn(true);
               }}
             >
-              {musicOn?"음악끄기":"음악켜기"}
+              {musicOn ? "음악끄기" : "음악켜기"}
             </button>
             <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
@@ -495,6 +505,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
               setTheme={setTheme}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
               chatChange={chatChange}
+              setMusicOn={setMusicOn}
             />
             <CamTest
               user={user}
