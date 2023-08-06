@@ -23,6 +23,7 @@
   width: 800px;
   text-align: center;
   transform: scale(60%);
+  z-index: 3;
 }
 
 .speechGameCam__1 {
