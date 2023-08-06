@@ -11,10 +11,10 @@ $shooting-time: 3000ms;
 
 .night {
   position: fixed;
-  top:0vh;
-  left:-25vw;
-  width: 100%;
-  height: 100%;
+  top:11vh;
+  left:11vw;
+  width: 0vh;
+  height: 0vw;
   transform: rotateZ(35deg);
   z-index: -1;
   // animation: sky 200000ms linear infinite;
@@ -24,11 +24,12 @@ $shooting-time: 3000ms;
   position: absolute;
   left: 50%;
   top: 50%;
-  // width: 100px;
-  height: 2px;
+  width: 300px;
+  height: 6px;
   background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
   border-radius: 999px;
   filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
+  visibility: hidden;
   animation:
     tail $shooting-time ease-in-out infinite,
     shooting $shooting-time ease-in-out infinite;
@@ -47,9 +48,7 @@ $shooting-time: 3000ms;
   }
 
   &::after {
-    // CodePen Error
-    // @extend .shooting_star::before;
-    
+
     content: '';
     position: absolute;
     top: calc(50% - 1px);
@@ -64,6 +63,7 @@ $shooting-time: 3000ms;
   }
   
   @for $i from 1 through 20 {
+    
     &:nth-child(#{$i}) {
       $delay: random(9999) + 0ms;
       top: calc(50% - #{random(1500) - 200px});
@@ -109,10 +109,12 @@ $shooting-time: 3000ms;
 
 @keyframes shooting {
   0% {
+    visibility: visible; 
     transform: translateX(0);
   }
   
   100% {
+    visibility: visible; 
     transform: translateX(500px);
   }
 }
@@ -126,4 +128,3 @@ $shooting-time: 3000ms;
     transform: rotate(45 + 360deg);
   }
 }
-

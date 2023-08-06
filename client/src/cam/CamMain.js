@@ -8,6 +8,11 @@ import SpeechGame from "../Games/speechgame/SpeechGame";
 import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
+import Modal from "./Modal";
+import { effectSound } from "../effectSound";
+// import pochaBGM from "../sounds/StampSound.wav";
+import barBGM from "../sounds/themeBGM/PIANO MAN.mp3";
+// import izakayaBGM from "../sounds/heal4.wav";
 import Loading from "../Loading/Loading";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
@@ -18,30 +23,45 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
-  const [wheel, setWheel]=useState(false);
+
   const [speechGamevoice,setspeechGamevoice] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [wheel, setWheel] = useState(false);
+
   const [loaded, setLoaded] = useState(false);
 
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
   const [theme, setTheme] = useState(0);
   let bg_img;
   let bg_items;
+  let mainBGM;
   switch (theme) {
     case 0:
+      // mainBGM.stop();
       bg_img = `${styles.themePocha}`;
       bg_items = `${styles.themePochaItem}`;
+      // mainBGM = effectSound(pochaBGM, true, 1);
       break;
     case 1:
+      // mainBGM.stop();
       bg_img = `${styles.themeBar}`;
       bg_items = `${styles.themeBarItem}`;
+      mainBGM = effectSound(barBGM, true, 1);
       break;
     case 2:
+      // mainBGM.stop();
       bg_img = `${styles.themeIzakaya}`;
       bg_items = `${styles.themeIzakayaItem}`;
+      // mainBGM = effectSound(izakayaBGM, true, 1);
       break;
     default:
       break;
   }
+
+  /* 모드변경되면 음성인식 재시작 하도록 */
+  useEffect(() => {
+    setSpeechBlocked(false);
+  }, [mode]);
 
   const canvasRef = useRef(null);
   const toggleMic = () => {
@@ -110,29 +130,28 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         }
         enterAvoidGame();
       } else {
-          try {
-            axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-              status: "openGame",
-              room_idx: idx,
-            });
-          } catch (error) {
-            alert("재 로그인 해야합니다~!");
-            navigate("/");
-          }
-          enterMainRoom();
+        try {
+          axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
+            status: "openGame",
+            room_idx: idx,
+          });
+        } catch (error) {
+          alert("재 로그인 해야합니다~!");
+          navigate("/");
+        }
+        enterMainRoom();
         /* data 가 undefined 일 경우 방으로 돌아감 */
         /* 음성인식 재시작 */
       }
     });
   }, []);
 
-  useEffect(()=>{
-    if(!canvasRef.current) return;
-    setTimeout(()=> {
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    setTimeout(() => {
       setLoaded(true);
-    },3000);
-
-  },[canvasRef])
+    }, 3000);
+  }, [canvasRef]);
   useEffect(() => {
     user
       .getStreamManager()
@@ -154,9 +173,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     setTimeout(() => {
       setMode(undefined);
       onModeChange(undefined);
-      setTimeout(()=>{
+      setTimeout(() => {
         setLoaded(true);
-      },2000)
+      }, 2000);
     }, 1500);
   };
 
@@ -215,10 +234,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
         });
     }
   };
-  function hubTospeechFromCamtest(){
+  function hubTospeechFromCamtest() {
     setWheel(true);
   }
-  function hubForWheelFalse(){
+  function hubForWheelFalse() {
     setWheel(false);
   }
   function offSpeechGame(){
@@ -299,9 +318,31 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
     }, 1500);
   };
 
-  const handleCheersReady = () => {
-    setCheersReady(true);
-    console.log("건배모드로 변경되었음");
+  const sendCheersOnSignal = () => {
+    user
+      .getStreamManager()
+      .session.signal({ to: [], type: "cheersOn" })
+      .then(() => {
+        // console.log("one more user is ready to drink");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log("sendCheersOnSignal 실행");
+  };
+
+  const sendCheersOffSignal = () => {
+    user
+      .getStreamManager()
+      .session.signal({ to: [], type: "cheersOff" })
+      .then(() => {
+        // console.log("one more user is ready to drink");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log("sendCheersOffSignal 실행");
   };
 
   console.log("CamMain rendered");
@@ -314,12 +355,17 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
 
       {mode === undefined && !loaded && (
         <div>
-          <Loading mode={mode}/>
+          <Loading mode={mode} />
         </div>
       )}
       {mode === undefined && (
         // <div id="session" className={styles.camMainWrap}>
-        <div id="session" className={`${loaded? styles.camMainWrap: ''} ${!loaded ? styles.hidden : ''}`}>
+        <div
+          id="session"
+          className={`${loaded ? styles.camMainWrap : ""} ${
+            !loaded ? styles.hidden : ""
+          }`}
+        >
           {/*<div id="session" className={ !loaded ? styles.hidden : ''}>*/}
 
           {/* <div className={styles.bamboo}></div> */}
@@ -404,18 +450,29 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               </div>
             </div>
           </div>
-          <div className={bg_items}></div>
+          <div className={bg_items} onClick={() => setModalOpen(true)}></div>
+          <div className={styles.modalArrowText}>
+            <div className={styles.modalArrow}></div>
+            <div className={styles.modalText}>홈술포차 사용 설명서</div>
+          </div>
+          {modalOpen && <Modal setModalOpen={setModalOpen} />}
           <div className={styles.camAndVoice}>
             <UseSpeechRecognition
               sendEffectSignal={sendEffectSignal}
               sendGameTypeSignal={sendGameTypeSignal}
               speechBlocked={speechBlocked}
-              handleCheersReady={handleCheersReady}
+              sendCheersOnSignal={sendCheersOnSignal}
+              sendCheersOffSignal={sendCheersOffSignal}
               theme={theme}
               setTheme={setTheme}
+              mainBGM={mainBGM}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
             />
-            <CamTest user={user} wheel={wheel} hubForWheelFalse={hubForWheelFalse}/>
+            <CamTest
+              user={user}
+              wheel={wheel}
+              hubForWheelFalse={hubForWheelFalse}
+            />
           </div>
 
           <div>

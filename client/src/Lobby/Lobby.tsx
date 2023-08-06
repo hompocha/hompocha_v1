@@ -5,7 +5,7 @@ import styles from "./Lobby.module.css";
 import RoomList from "./RoomList";
 import axios from "axios";
 import RoomCreate from "./RoomCreate";
-import {createBrowserHistory} from "history";
+import { createBrowserHistory } from "history";
 import Login from "../Log/Login";
 
 const Lobby = () => {
@@ -21,7 +21,7 @@ const Lobby = () => {
   useEffect(() => {
     const handleHistoryPop = () => {
       localStorage.removeItem("jwtToken");
-      history.push('/');
+      history.push("/");
     };
     const unlistenHistoryEvent = history.listen(({ action }) => {
       if (action === "POP") {
@@ -33,9 +33,9 @@ const Lobby = () => {
     };
   }, []);
   useEffect(() => {
-      const token = localStorage.getItem("jwtToken");
-      if(!token){
-      alert("잘못된 접근입니다!")
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      alert("잘못된 접근입니다!");
       navigate("/");
     }
   }, [navigate]);
@@ -43,13 +43,16 @@ const Lobby = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('jwtToken');
-        console.log("token")
+        const token = localStorage.getItem("jwtToken");
+        console.log("token");
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/lobby`,{
-          headers: {
-            Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
-          },});
+          `${process.env.REACT_APP_API_URL}/lobby`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
+            },
+          }
+        );
         setNickname(response.data);
       } catch (error) {
         console.error(error);
@@ -58,40 +61,46 @@ const Lobby = () => {
     fetchData();
   }, []);
 
-  const handleOptionClick = () =>{
+  const handleOptionClick = () => {
     setFlag((prevFlag) => (prevFlag === 0 ? 1 : 0));
-  }
-
+  };
+  const bg_img = `${styles.themePocha}`;
   if (!localStorage.getItem("jwtToken")) {
     return (
-        <>
-          <Login/>
-        </>
-    )
-  }
-  else {
+      <>
+        <Login />
+      </>
+    );
+  } else {
     return (
-        <>
-
-          <div className={styles.option} onClick={handleOptionClick} tabIndex={0} role="button">방 생성</div>
-          <div className={styles.lobbyWrap}>
-            <div className={styles.lobbyInfo}>
-              <RoomList nickName={nickName}/>
-              {/* <UserList /> */}
-            </div>
+      <>
+        <div className={bg_img}></div>
+        <div
+          className={styles.option}
+          onClick={handleOptionClick}
+          tabIndex={0}
+          role="button"
+        >
+          방 생성
+        </div>
+        <div className={styles.lobbyWrap}>
+          <div className={styles.lobbyInfo}>
+            <RoomList nickName={nickName} />
+            {/* <UserList /> */}
           </div>
-          <div className={styles.nav}>
-            <div className={styles.userName}>{nickName}</div>
-            <div className={styles.logoutBtn}>
-              <input onClick={handleLogout} type="button" value="로그아웃"/>
-            </div>
+        </div>
+        <div className={styles.nav}>
+          <div className={styles.userName}>{nickName}</div>
+          <div className={styles.logoutBtn}>
+            <input onClick={handleLogout} type="button" value="로그아웃" />
           </div>
-          {flag === 1 &&
-              <div className={styles.roomCreateWrap}>
-                <RoomCreate nickName={nickName}/>
-              </div>
-          }
-        </>
+        </div>
+        {flag === 1 && (
+          <div className={styles.roomCreateWrap}>
+            <RoomCreate nickName={nickName} />
+          </div>
+        )}
+      </>
     );
   }
 };

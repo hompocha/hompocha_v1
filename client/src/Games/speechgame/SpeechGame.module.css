@@ -1,4 +1,4 @@
-.hidden{
+.hidden {
   display: none;
 }
 .gameWord {
@@ -17,12 +17,13 @@
   border-radius: 10px;
 }
 .speechPosition {
-  position: absolute;
-  left: 65%;
-  top: 70%;
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 800px;
   text-align: center;
   transform: scale(60%);
+  z-index: 3;
 }
 
 .speechGameCam__1 {

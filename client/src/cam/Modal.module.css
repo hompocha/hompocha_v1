@@ -1,0 +1,46 @@
+.modalWrap {
+  z-index: 16;
+  position: fixed;
+  width: 90vw;
+  height: 85vh;
+  left: 5vw;
+  top: 10vh;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+}
+
+.modlaInterior {
+  z-index: 17;
+  position: fixed;
+  width: 85vw;
+  height: 75vh;
+  left: 7.5vw;
+  top: 15vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+}
+
+.modalClose {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  top: 5%;
+  left: 95%;
+  border: none;
+  background-color: transparent;
+}
+
+.modalText {
+  z-index: 17;
+  position: fixed;
+  width: 75vw;
+  height: 67vh;
+  left: 7.5vw;
+  top: 23vh;
+  padding: 0 5vw;
+  color: white;
+}
+
+.textHeader {
+  font-size: 30px;
+}
