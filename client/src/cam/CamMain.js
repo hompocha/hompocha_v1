@@ -30,6 +30,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
 
   const [loaded, setLoaded] = useState(false);
 
+  const [musicOn, setMusicOn] = useState(true);
+
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
   const [theme, setTheme] = useState(0);
   let bg_img;
@@ -50,18 +52,21 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
     default:
       break;
   }
-  // 테마 변경에
+  // 테마 변경에 따른 음악 변경
   useEffect(() => {
     let mainBGM;
     switch (theme) {
       case 0:
-        if (mode === undefined) mainBGM = effectSound(pochaBGM, true, 0.2);
+        if (mode === undefined) mainBGM = effectSound(pochaBGM, true, 0.1);
+        if (musicOn === false) mainBGM.stop();
         break;
       case 1:
-        if (mode === undefined) mainBGM = effectSound(barBGM, true, 0.2);
+        if (mode === undefined) mainBGM = effectSound(barBGM, true, 0.1);
+        if (musicOn === false) mainBGM.stop();
         break;
       case 2:
-        if (mode === undefined) mainBGM = effectSound(izakayaBGM, true, 0.2);
+        if (mode === undefined) mainBGM = effectSound(izakayaBGM, true, 0.1);
+        if (musicOn === false) mainBGM.stop();
         break;
 
       default:
@@ -70,7 +75,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
     return () => {
       if (mode === undefined) mainBGM.stop();
     };
-  }, [theme, mode]);
+  }, [theme, mode, musicOn]);
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
@@ -403,6 +408,14 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
                 backgroundColor: "transparent",
               }}
             />
+            <button
+              onClick={() => {
+                if (musicOn === true) setMusicOn(false);
+                if (musicOn === false) setMusicOn(true);
+              }}
+            >
+              {musicOn?"음악끄기":"음악켜기"}
+            </button>
             <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
             </form>
