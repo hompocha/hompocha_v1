@@ -15,7 +15,7 @@ import barBGM from "../sounds/themeBGM/themeBarBGM.mp3";
 import izakayaBGM from "../sounds/themeBGM/themeIzakayaBGM.mp3";
 import Loading from "../Loading/Loading";
 
-const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatChange }) => {
+const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatChangeOn, chatChangeOff }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [conToNick] = useState({});
@@ -494,7 +494,8 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
               theme={theme}
               setTheme={setTheme}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
-              chatChange={chatChange}
+              chatChangeOn={chatChangeOn}
+              chatChangeOff={chatChangeOff}
             />
             <CamTest
               user={user}

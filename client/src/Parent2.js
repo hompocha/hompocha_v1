@@ -11,9 +11,14 @@ const Parent2 = ({ roomName, idx }) => {
   const [mode, setMode] = useState(undefined);
   const [chatToggle,setChatToggle] = useState(false);
 
-  const chatChange = () => {
-    setChatToggle(prevChatToggle => !prevChatToggle);
+  const chatChangeOn = () => {
+    setChatToggle(true);
+    // setChatToggle(prevChatToggle => !prevChatToggle);
   }
+  const chatChangeOff = () => {
+    setChatToggle(false);
+  // setChatToggle(prevChatToggle => !prevChatToggle);
+}
 
   const onModeChange = (newMode) => {
     setMode(newMode);
@@ -45,7 +50,8 @@ const Parent2 = ({ roomName, idx }) => {
                 onModeChange={onModeChange}
                 roomName={roomName}
                 idx={idx}
-                chatChange={chatChange}
+                chatChangeOn={chatChangeOn}
+                chatChangeOff={chatChangeOff}
               />
             </div>
             <div className={styles.zindex}>

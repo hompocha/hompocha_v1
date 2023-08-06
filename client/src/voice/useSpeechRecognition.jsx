@@ -30,7 +30,6 @@ const gameStartKeywords = [
   "피하기 게임",
 ];
 const wheelKeyword = ["돌려"];
-const chatKeyword = ["채팅"];
 
 const themeChangeKeywords = ["변경"];
 const UseSpeechRecognition = (props) => {
@@ -61,13 +60,17 @@ const UseSpeechRecognition = (props) => {
         props.hubTospeechFromCamtest();
       }
     }
-    for (const keyword of chatKeyword) {
-      if (value.includes(keyword)) {
-        stop();
-        setStopSign(false);
-        props.chatChange();
-      }
+    if (value.includes("채팅창 보여 줘")) {
+      stop();
+      setStopSign(false);
+      props.chatChangeOn();
     }
+    if (value.includes("채팅 창 닫아 줘")) {
+      stop();
+      setStopSign(false);
+      props.chatChangeOff();
+    }
+
 
     /* 발음게임 명령어 */
     for (const sentence of speech_sentence) {
