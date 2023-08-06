@@ -70,7 +70,7 @@
   left: 3vw;
 }
 
-.somaekGameSubBorder2 {
+.somaekGameSubBorder3 {
   position: fixed;
   top: 67.5vh;
   left: 2vw;
@@ -86,11 +86,32 @@
   top: 10vh;
   left: 81vw;
 }
+
+.somaekGameSubBorder4 {
+  position: fixed;
+  top: 9vh;
+  left: 80vw;
+  width: 18vw;
+  height: 24vh;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
 .somaekGameSub5 {
   transform: rotateY(180deg);
   position: fixed;
   top: 39.25vh;
   left: 81vw;
+}
+
+.somaekGameSubBorder5 {
+  position: fixed;
+  top: 38.25vh;
+  left: 80vw;
+  width: 18vw;
+  height: 24vh;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .userNick1 {
