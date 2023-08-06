@@ -10,9 +10,9 @@ import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
 import Modal from "./Modal";
 import { effectSound } from "../effectSound";
-// import pochaBGM from "../sounds/StampSound.wav";
-import barBGM from "../sounds/themeBGM/PIANO MAN.mp3";
-// import izakayaBGM from "../sounds/heal4.wav";
+import pochaBGM from "../sounds/themeBGM/themePochaBGM.mp3";
+import barBGM from "../sounds/themeBGM/themeBarBGM.mp3";
+import izakayaBGM from "../sounds/themeBGM/themeIzakayaBGM.mp3";
 import Loading from "../Loading/Loading";
 
 const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
@@ -34,29 +34,43 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [theme, setTheme] = useState(0);
   let bg_img;
   let bg_items;
-  let mainBGM;
   switch (theme) {
     case 0:
-      // mainBGM.stop();
       bg_img = `${styles.themePocha}`;
       bg_items = `${styles.themePochaItem}`;
-      // mainBGM = effectSound(pochaBGM, true, 1);
       break;
     case 1:
-      // mainBGM.stop();
       bg_img = `${styles.themeBar}`;
       bg_items = `${styles.themeBarItem}`;
-      // mainBGM = effectSound(barBGM, true, 1);
       break;
     case 2:
-      // mainBGM.stop();
       bg_img = `${styles.themeIzakaya}`;
       bg_items = `${styles.themeIzakayaItem}`;
-      // mainBGM = effectSound(izakayaBGM, true, 1);
       break;
     default:
       break;
   }
+  // 테마 변경에
+  useEffect(() => {
+    let mainBGM;
+    switch (theme) {
+      case 0:
+        if (mode === undefined) mainBGM = effectSound(pochaBGM, true, 0.2);
+        break;
+      case 1:
+        if (mode === undefined) mainBGM = effectSound(barBGM, true, 0.2);
+        break;
+      case 2:
+        if (mode === undefined) mainBGM = effectSound(izakayaBGM, true, 0.2);
+        break;
+
+      default:
+        break;
+    }
+    return () => {
+      if (mode === undefined) mainBGM.stop();
+    };
+  }, [theme, mode]);
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
@@ -466,7 +480,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               sendCheersOffSignal={sendCheersOffSignal}
               theme={theme}
               setTheme={setTheme}
-              mainBGM={mainBGM}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
             />
             <CamTest

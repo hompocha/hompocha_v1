@@ -42,7 +42,7 @@ const UseSpeechRecognition = (props) => {
   const lang = "ko-Kr";
   useEffect(() => {
     /* 건배 명령어 */
-    
+
     if (value.includes("건배")) {
       stop();
       setStopSign(false);
@@ -119,19 +119,16 @@ const UseSpeechRecognition = (props) => {
         switch (randomNum) {
           // 포차 테마
           case 0:
-            // props.mainBGM.stop();
             props.setTheme(0);
             setShootingStar(true);
             break;
           // 바 테마
           case 1:
-            // props.mainBGM.stop();
             props.setTheme(1);
             setShootingStar(false);
             break;
           // 이자카야 테마
           case 2:
-            // props.mainBGM.stop();
             props.setTheme(2);
             setShootingStar(false);
             break;
@@ -161,7 +158,6 @@ const UseSpeechRecognition = (props) => {
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
-
 
   const onEnd = () => {
     // You could do something here after listening has finished
