@@ -88,12 +88,14 @@ h1 {
   background-color: rgba(255, 255, 255, 0.7);
 }
 
+
 .avoidGameSub4 {
   transform: rotateY(180deg);
   position: fixed;
   top: 10vh;
   left: 97vw;
 }
+
 
 .gameSubBorder4 {
   position: fixed;
@@ -104,6 +106,7 @@ h1 {
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.7);
 }
+
 
 .avoidGameSub5 {
   transform: rotateY(180deg);

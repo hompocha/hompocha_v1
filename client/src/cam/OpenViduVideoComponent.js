@@ -55,10 +55,8 @@ const OpenViduVideoComponent = (props) => {
       const left=parseFloat(computedStyle.getPropertyValue('left'));
       const top=parseFloat(computedStyle.getPropertyValue('top'));
       let scale = computedStyle.getPropertyValue('transform');
-      console.log(scale);
       if(scale === 'none') return;
         scale = parseFloat(scale.split('(')[1].split(')')[0].split(',')[0])*(-1);
-      console.log(scale);
       props.setVideoInfo(streamId, width, height, left, top, scale);
     }
 
@@ -80,7 +78,9 @@ const OpenViduVideoComponent = (props) => {
         });
 
         /* onResults: hands가 하나의 프레임을 처리하고 나서 바로 실행될 함수 */
-        hands.onResults(onResults);
+        if(props.cheers){
+          console.log(props.cheers);
+          hands.onResults(onResults); }
         camera = new Camera(videoRef.current, {
           onFrame: async () => {
             if (!didCancel) {
@@ -120,11 +120,8 @@ const OpenViduVideoComponent = (props) => {
       /* 패들 구현 */
       if (results.multiHandLandmarks[0]) {
         noHands.current = false;
-        cheersRef.current = results.multiHandLandmarks[0];
-        console.log(results.multiHandLandmarks[0][5]);
-        console.log(results.multiHandLandmarks[0][9]);
-        console.log(results.multiHandLandmarks[0][13]);
-        console.log(results.multiHandLandmarks[0][17]);
+        cheersRef.current = {hand5: results.multiHandLandmarks[0][5],
+          hand17: results.multiHandLandmarks[0][17]};
       }
       else {
         cheersRef.current = undefined;

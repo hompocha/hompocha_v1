@@ -19,7 +19,6 @@ const speech_sentence = [
   "앞 집 팥죽은 붉은 팥 풋 팥죽이다",
   "뒷집 콩죽은 햇콩 단콩 콩죽이다",
   "안 촉촉한 초코칩 나라에 살던 안 촉촉한 초코칩",
-  "경찰청 창살은 외철창살이다",
   "검찰청 창살은 쌍철창살이다",
   "네가 그린 기린 그림은 못생긴 기린 그림이다",
 ];
@@ -38,10 +37,14 @@ const SpeechGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [loser, setLoser] = useState("");
 
+  const [isGameOver,setIsGameOver] = useState(false);
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
+
+
+
+
 
   /* 준비 신호 받는 세션을 열기위한 useEffect */
   useEffect(() => {
@@ -71,6 +74,8 @@ const SpeechGame = (props) => {
           }
         });
     }
+
+
     /* start 시그널 받는 session on !! */
     props.user
       .getStreamManager()
@@ -143,13 +148,13 @@ const SpeechGame = (props) => {
     /* 시간 -1초만큼 후에 true(인식X로 변경) */
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
-    }, /* stopTime - 1000 */ 9 * 1000); /* 시연*/
+
+    }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
-      setLoser(randomUser);
-      sentenceState = "시작";
+      sentenceState="시작";
       bgmSound.stop();
-    }, /* stopTime */ 10 * 1000); /*시연*/
+    }, /* stopTime */ 40 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
@@ -257,6 +262,8 @@ const SpeechGame = (props) => {
       });
   };
 
+
+
   /* 랜덤요소 고르는 함수 */
   function getRandomElement(list) {
     if (list.length === 0) {
@@ -285,7 +292,9 @@ const SpeechGame = (props) => {
       <div>
         {props.mode === "speechGame" && !loaded && (
           <div>
-            <Loading mode={props.mode} />
+
+            <Loading mode={props.mode}/>
+
           </div>
         )}
         {props.mode === "speechGame" && countDown && (
@@ -295,18 +304,20 @@ const SpeechGame = (props) => {
         )}
         {!timerExpired ? (
           <div className={!loaded ? styles.hidden : ""}>
+            <h1>{stopTime}</h1>
             <div className={styles.gameWord}>{sentenceState}</div>
             <div className={styles.speechPosition}>
               <UseSpeechRecognition
                 sendSpeech={checkPass}
                 user={props.user}
                 speechBlocked={speechBlocked}
+                mode = {props.mode}
               />
             </div>
             <div className={styles.camPosition}>
               <div className={styles.mainUserCamBorder}></div>
               <div className={styles[`speechGameCam__${0}`]}>
-                <SpeechCam selectId={randomUser} user={props.user} />
+                <SpeechCam key={randomUser} selectId={randomUser} user={props.user} />
               </div>
 
               {/*=============================딴애들=========================================================*/}
@@ -317,6 +328,7 @@ const SpeechGame = (props) => {
                   ></div>
                   <div className={styles[`speechGameCam__${index + 1}`]}>
                     <OpenViduVideoComponent
+                      key={randomUser}
                       mode={"speechGame"}
                       streamManager={subscriber}
                     />
@@ -331,7 +343,7 @@ const SpeechGame = (props) => {
         ) : (
           <div>
             <LoserCam
-              selectId={loser}
+              selectId={randomUser}
               user={props.user}
               mode={"centerCam"}
               end={props.end}

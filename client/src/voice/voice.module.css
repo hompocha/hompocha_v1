@@ -67,3 +67,15 @@
 .Title {
   text-align: center;
 }
+
+.speechWord {
+  position: fixed;
+  top: 4vh;
+  left: 22.5vw;
+  width: 1800px;
+  height: 100px;
+  font-size: 70px;
+  color: white;
+  background-color: rgba(54, 39, 110, 0.3);
+  border-radius: 10px;
+}

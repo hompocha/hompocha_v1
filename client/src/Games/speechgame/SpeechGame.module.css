@@ -3,17 +3,17 @@
 }
 .gameWord {
   position: fixed;
-  left: 30vw;
+  left: 22.5vw;
   top: 13vh;
-  width: 40vw;
-  height: 4vh;
+  width: 55vw;
+  height: 6vh;
   z-index: 1;
   background-color: rgba(255, 255, 255, 0.3);
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 40px;
   border-radius: 10px;
 }
 .speechPosition {

@@ -90,7 +90,7 @@ const Lobby = () => {
           </div>
         </div>
         <div className={styles.nav}>
-          <div className={styles.userName}>{nickName}</div>
+          <h2 className={styles.userName}>{nickName}</h2>
           <div className={styles.logoutBtn}>
             <input onClick={handleLogout} type="button" value="로그아웃" />
           </div>

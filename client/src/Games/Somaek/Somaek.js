@@ -28,7 +28,7 @@ const images = {
   madam: "../../Madam/madam3.png",
   speechBubble: "../../speechBubble.png",
   rank: "../../rank.png",
-  signboard: "../../signboard.png",
+  signboard: "../../Signboard.png",
 };
 
 /*======================================================= */
@@ -91,7 +91,6 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-
     timerPrint.current = 40 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
@@ -101,11 +100,11 @@ const Somaek = (props) => {
       if (start && timerPrint.current > 0) timerPrint.current -= 1000;
       /* 게임이 끝났을 경우 */ else {
         clearInterval(signalInterval.current);
-        const sortedScores = Object.entries(scores.current).sort(
-          ([, a], [, b]) => b - a
-        );
-        const lowestScorePerson = sortedScores[sortedScores.length - 1];
-        setLowestConId(lowestScorePerson[0]);
+        // const sortedScores = Object.entries(scores).sort(
+        //   ([, a], [, b]) => b - a
+        // );
+        // const lowestScorePerson = sortedScores[sortedScores.length - 1];
+        // setLowestConId(lowestScorePerson[0]);
         setHandStop(true);
 
         setTimeout(() => {
@@ -344,15 +343,19 @@ const Somaek = (props) => {
 
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
+    const timerLeftX = 0.6; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const timerTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const titmerWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
     let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
     // if (blink) {
     can_ctx.fillStyle = "yellow";
-    can_ctx.font = "bold 50px Arial";
-    can_ctx.fillText(
-      `남은시간: ${timerPrint.current / 1000}초`,
-      -can_ref.width * 0.6,
-      50
-    );
+
+    const fontSize = can_ref.width * speechWidth * 0.2;
+    can_ctx.font = `${fontSize}px Arial`;
+    const timerX = -can_ref.width * timerLeftX;
+    const timerY = can_ref.height * timerTopY;
+    can_ctx.fillText(`남은시간: ${timerPrint.current / 1000}초`, timerX, timerY);
+
     // }
 
     /* 점수가 높은사람부터 출력 */
@@ -434,7 +437,6 @@ const Somaek = (props) => {
         console.log("주문한 음료가 아님");
         images.madam = "../../Madam/madam1.png";
       }
-      /* 주문을 다 처리했으면 새로운 주문을 생성*/
       if (order.length === 0) {
         order = randomDrink();
         score += 1;
@@ -576,7 +578,6 @@ const Somaek = (props) => {
   useEffect(() => {
     const videoNode = videoRef.current;
     const canvasNode = canvasRef.current;
-    /* 첫 주문을 생성 */
     if (order.length === 0) {
       order = randomDrink();
       orderKorean = printDrinks(order);

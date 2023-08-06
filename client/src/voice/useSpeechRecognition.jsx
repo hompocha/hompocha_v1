@@ -11,6 +11,7 @@ import { set } from "mongoose";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
+  "시작",
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
   "철수 책상 철 책상",
@@ -30,7 +31,6 @@ const gameStartKeywords = [
   "피하기 게임",
 ];
 const wheelKeyword = ["돌려"];
-const chatKeyword = ["채팅"];
 
 const themeChangeKeywords = ["변경"];
 const UseSpeechRecognition = (props) => {
@@ -61,13 +61,17 @@ const UseSpeechRecognition = (props) => {
         props.hubTospeechFromCamtest();
       }
     }
-    for (const keyword of chatKeyword) {
-      if (value.includes(keyword)) {
-        stop();
-        setStopSign(false);
-        props.chatChange();
-      }
+    if (value.includes("채팅창 보여 줘")) {
+      stop();
+      setStopSign(false);
+      props.chatChangeOn();
     }
+    if (value.includes("채팅 창 닫아 줘")) {
+      stop();
+      setStopSign(false);
+      props.chatChangeOff();
+    }
+
 
     /* 발음게임 명령어 */
     for (const sentence of speech_sentence) {
@@ -224,7 +228,10 @@ const UseSpeechRecognition = (props) => {
 
   return (
     <div>
-      {shootingStar === true && (
+      {props.mode === "speechGame" && (
+        <div className={styles.speechWord}> {value} </div>
+      )} 
+      {props.mode !== "speechGame" && shootingStar === true && (
         <div className={styless.night}>
           {Array.from({ length: 24 }, (_, index) => (
             <>
@@ -233,6 +240,7 @@ const UseSpeechRecognition = (props) => {
           ))}
         </div>
       )}
+      {props.mode !== "speechGame" && (
       <div className={styles.container}>
         <form id="speech-recognition-form">
           {!supported && (
@@ -273,6 +281,7 @@ const UseSpeechRecognition = (props) => {
           )}
         </form>
       </div>
+      )}
     </div>
   );
 };

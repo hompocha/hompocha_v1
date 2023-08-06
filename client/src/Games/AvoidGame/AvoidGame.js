@@ -15,8 +15,6 @@ import CountDown from "../../Loading/CountDown";
 function newObj(src, width, height) {
   this.position = { x: 0, y: 0 };
   this.nextPosition = { x: 0, y: 0 };
-  // this.image = new Image();
-  // this.image.src = src;
   this.width = width;
   this.height = height;
   this.isAvoid = true;
@@ -28,11 +26,11 @@ const defaultGameState = {
   roomId: "room",
   user: "connectionId",
   condition: {
-    objSize: 0.1,
-    objLenX: 0.1,
-    objLenY: 0.1,
+    objSize: 0.15,
+    objLenX: 0.15,
+    objLenY: 0.15,
     objDropHeight: 0.08,
-    ground: 0.98,
+    ground: 0.92,
     objSpeed: 0.05,
     objIntervalFrame: 10,
     defaultTime: 1000 * 60,
@@ -46,8 +44,8 @@ const defaultGameState = {
   player: {
     position: { x: 0.5, y: 0.95 },
     nextPosition: { x: 0.5, y: 0.95 },
-    width: 0.04,
-    height: 0.09,
+    width: 0.06,
+    height: 0.135,
     state: 0,
   },
   objects: [],
