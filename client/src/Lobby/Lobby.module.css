@@ -47,3 +47,17 @@
   background-color: bisque;
   border-radius: 1vw;
 }
+
+/* 포차 테마일 때 배경 */
+.themePocha {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-image: url("../../public/asset/room/theme_pocha/roomPochaBackground.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all 1s linear 0.25s;
+}
