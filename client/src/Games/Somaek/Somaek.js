@@ -790,7 +790,7 @@ const Somaek = (props) => {
             {subscribers.map((subscriber, index) => (
               <>
                 <div
-                  className={`${styles[`somaekGameSubBorder${index + 1}`]}`}
+                  className={`${styles[`GameSubBorder${index + 1}`]}`}
                 ></div>
                 <div
                   className={`${styles[`somaekGameSub${index + 1}`]} ${

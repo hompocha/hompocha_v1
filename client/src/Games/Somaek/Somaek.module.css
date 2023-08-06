@@ -36,7 +36,7 @@
   top: 10vh;
   left: 3vw;
 }
-.somaekGameSubBorder1 {
+.gameSubBorder1 {
   position: fixed;
   top: 9vh;
   left: 2vw;
@@ -53,7 +53,7 @@
   left: 3vw;
 }
 
-.somaekGameSubBorder2 {
+.gameSubBorder2 {
   position: fixed;
   top: 38.25vh;
   left: 2vw;
@@ -70,7 +70,7 @@
   left: 3vw;
 }
 
-.somaekGameSubBorder3 {
+.gameSubBorder3 {
   position: fixed;
   top: 67.5vh;
   left: 2vw;
@@ -87,7 +87,7 @@
   left: 81vw;
 }
 
-.somaekGameSubBorder4 {
+.gameSubBorder4 {
   position: fixed;
   top: 9vh;
   left: 80vw;
@@ -104,7 +104,7 @@
   left: 81vw;
 }
 
-.somaekGameSubBorder5 {
+.gameSubBorder5 {
   position: fixed;
   top: 38.25vh;
   left: 80vw;

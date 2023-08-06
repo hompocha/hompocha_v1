@@ -38,16 +38,13 @@ const SpeechGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [loser, setLoser]=useState("")
-
-
+  const [loser, setLoser] = useState("");
 
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
 
   /* 준비 신호 받는 세션을 열기위한 useEffect */
-  useEffect( () => {
-
+  useEffect(() => {
     /* 강제 로딩 3초 줌 */
     setTimeout(() => {
       setLoaded(true);
@@ -62,37 +59,35 @@ const SpeechGame = (props) => {
       props.user
         .getStreamManager()
         .stream.session.on("signal:readySignal", (event) => {
-        let fromId = event.from.connectionId;
-        if (!readyPeople.includes(fromId)) {
-          readyPeople.push(fromId);
-        }
-        if (readyPeople.length === subscribers.length + 1) {
-          sendStartSignal();
-          props.user
-            .getStreamManager()
-            .stream.session.off("signal:readySignal");
-        }
-      });
-
+          let fromId = event.from.connectionId;
+          if (!readyPeople.includes(fromId)) {
+            readyPeople.push(fromId);
+          }
+          if (readyPeople.length === subscribers.length + 1) {
+            sendStartSignal();
+            props.user
+              .getStreamManager()
+              .stream.session.off("signal:readySignal");
+          }
+        });
     }
     /* start 시그널 받는 session on !! */
     props.user
       .getStreamManager()
       .stream.session.on("signal:startSignal", (event) => {
-      setCountDown(true);
-      /* 3초후에 스타트로 바뀜!*/
-      setTimeout(() => {
-        setCountDown(false);
+        setCountDown(true);
+        /* 3초후에 스타트로 바뀜!*/
         setTimeout(() => {
-          setStart(true);
-        }, 100);
-      }, 3000);
-    });
-
-  }, [props.user])
+          setCountDown(false);
+          setTimeout(() => {
+            setStart(true);
+          }, 100);
+        }, 3000);
+      });
+  }, [props.user]);
 
   useEffect(() => {
-    if(!start) return;
+    if (!start) return;
 
     /* 만약에 내가 방장이면 이 밑에서 처리를 해줌 */
     if (props.user.streamManager.stream.connection.connectionId === hostId) {
@@ -143,17 +138,16 @@ const SpeechGame = (props) => {
   }, [props.user, randomUser, stopTime, start]);
 
   useEffect(() => {
-    if(!start)return;
+    if (!start) return;
     const bgmSound = effectSound(speechClock, true, 0.3);
     /* 시간 -1초만큼 후에 true(인식X로 변경) */
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
-
-    }, /* stopTime - 1000 */ 9 * 1000);/* 시연*/
+    }, /* stopTime - 1000 */ 9 * 1000); /* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
       setLoser(randomUser);
-      sentenceState="시작";
+      sentenceState = "시작";
       bgmSound.stop();
     }, /* stopTime */ 10 * 1000); /*시연*/
     return () => {
@@ -161,21 +155,20 @@ const SpeechGame = (props) => {
       clearTimeout(timer);
       clearTimeout(speechTimer);
     };
-  }, [stopTime,start]);
+  }, [stopTime, start]);
 
-  useEffect(()=>{
-    if(props.voice ===false){
+  useEffect(() => {
+    if (props.voice === false) {
       setSpeechBlocked(true);
       const timer = setTimeout(() => {
-        props.voiceOn()
-        props.end()
+        props.voiceOn();
+        props.end();
       }, 1500);
       return () => {
         clearTimeout(timer);
       };
-
     }
-  },[props.voice])
+  }, [props.voice]);
 
   /*signal 보내는데 맞춘사람 id보냄*/
   function checkPass(sentId) {
@@ -237,9 +230,9 @@ const SpeechGame = (props) => {
     props.user
       .getStreamManager()
       .session.signal({
-      to: [],
-      type: "readySignal",
-    })
+        to: [],
+        type: "readySignal",
+      })
       .then(() => {
         console.log("readySignal successfully sent");
       })
@@ -253,9 +246,9 @@ const SpeechGame = (props) => {
     props.user
       .getStreamManager()
       .session.signal({
-      to: [],
-      type: "startSignal",
-    })
+        to: [],
+        type: "startSignal",
+      })
       .then(() => {
         console.log("startSignal successfully sent");
       })
@@ -283,7 +276,6 @@ const SpeechGame = (props) => {
   }
   /*================================================*/
 
-
   /*======================================================= */
   /*=================== return =================== */
   /*======================================================= */
@@ -293,7 +285,7 @@ const SpeechGame = (props) => {
       <div>
         {props.mode === "speechGame" && !loaded && (
           <div>
-            <Loading mode={props.mode}/>
+            <Loading mode={props.mode} />
           </div>
         )}
         {props.mode === "speechGame" && countDown && (
@@ -301,7 +293,7 @@ const SpeechGame = (props) => {
             <CountDown />
           </div>
         )}
-        {!timerExpired? (
+        {!timerExpired ? (
           <div className={!loaded ? styles.hidden : ""}>
             <div className={styles.gameWord}>{sentenceState}</div>
             <div className={styles.speechPosition}>
@@ -312,6 +304,7 @@ const SpeechGame = (props) => {
               />
             </div>
             <div className={styles.camPosition}>
+              <div className={styles.mainUserCamBorder}></div>
               <div className={styles[`speechGameCam__${0}`]}>
                 <SpeechCam selectId={randomUser} user={props.user} />
               </div>
@@ -319,6 +312,9 @@ const SpeechGame = (props) => {
               {/*=============================딴애들=========================================================*/}
               {findSubscriber(randomUser).map((subscriber, index) => (
                 <>
+                  <div
+                    className={`${styles[`GameSubBorder${index + 1}`]}`}
+                  ></div>
                   <div className={styles[`speechGameCam__${index + 1}`]}>
                     <OpenViduVideoComponent
                       mode={"speechGame"}
@@ -339,7 +335,7 @@ const SpeechGame = (props) => {
               user={props.user}
               mode={"centerCam"}
               end={props.end}
-              conToNick = {props.conToNick}
+              conToNick={props.conToNick}
             />
           </div>
         )}

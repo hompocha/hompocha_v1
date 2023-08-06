@@ -568,7 +568,7 @@ const AvoidGame = (props) => {
           {subscribers.map((subscriber, index) => (
             <>
               <div
-                className={`${styles[`avoidGameSub${index + 1}`]} ${
+                className={`${styles[`gameSub${index + 1}`]} ${
                   !loaded && styles.hidden
                 }`}
               >
