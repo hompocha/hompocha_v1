@@ -144,7 +144,7 @@ const SpeechGame = (props) => {
 
   useEffect(() => {
     if(!start)return;
-    const bgmSound = effectSound(speechClock, true, 1);
+    const bgmSound = effectSound(speechClock, true, 0.3);
     /* 시간 -1초만큼 후에 true(인식X로 변경) */
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
@@ -334,7 +334,6 @@ const SpeechGame = (props) => {
           </div>
         ) : (
           <div>
-            <h1>{props.conToNick[loser]}</h1>
             <LoserCam
               selectId={loser}
               user={props.user}
