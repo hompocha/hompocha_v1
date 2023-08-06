@@ -2,23 +2,31 @@ import React from "react";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 
 const SpeechCam = (props) => {
-  const selectId = props.user.subscribers.find(
+  /* selectId가 내가 아닌 subscribers중에 있는지 없으면 undefined를 반환함*/
+  const selectStreamManager = props.user.subscribers.find(
     (subscriber) =>
       subscriber.stream.connection.connectionId === props.selectId,
   );
+  /* 나일경우에도 undefined반환함 */
+
   if (
-    selectId &&
+    selectStreamManager &&
     (props.selectId ||
-      selectId.stream.connection.connectionId ===
+      selectStreamManager.stream.connection.connectionId ===
         props.user.streamManager.stream.connection.connectionId)
-  ) {
+  )
+
+  /*다른사람일경우*/
+  {
     return (
       <>
         {/*========================여기까지================================*/}
-        <OpenViduVideoComponent mode={"centerCam"} streamManager={selectId} />
+        <OpenViduVideoComponent mode={"centerCam"} streamManager={selectStreamManager} />
       </>
     );
-  } else {
+  }
+  /*나일경우*/
+  else {
     return (
       <>
         <OpenViduVideoComponent
