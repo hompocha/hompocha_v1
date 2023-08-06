@@ -224,7 +224,10 @@ const UseSpeechRecognition = (props) => {
 
   return (
     <div>
-      {shootingStar === true && (
+      {props.mode === "speechGame" && (
+        <div className={styles.speechWord}> {value} </div>
+      )} 
+      {props.mode !== "speechGame" && shootingStar === true && (
         <div className={styless.night}>
           {Array.from({ length: 24 }, (_, index) => (
             <>
@@ -233,6 +236,7 @@ const UseSpeechRecognition = (props) => {
           ))}
         </div>
       )}
+      {props.mode !== "speechGame" && (
       <div className={styles.container}>
         <form id="speech-recognition-form">
           {!supported && (
@@ -273,6 +277,7 @@ const UseSpeechRecognition = (props) => {
           )}
         </form>
       </div>
+      )}
     </div>
   );
 };
