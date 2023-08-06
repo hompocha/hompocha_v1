@@ -46,7 +46,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       // mainBGM.stop();
       bg_img = `${styles.themeBar}`;
       bg_items = `${styles.themeBarItem}`;
-      mainBGM = effectSound(barBGM, true, 1);
+      // mainBGM = effectSound(barBGM, true, 1);
       break;
     case 2:
       // mainBGM.stop();

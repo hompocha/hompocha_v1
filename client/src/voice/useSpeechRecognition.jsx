@@ -11,7 +11,6 @@ import { set } from "mongoose";
 
 const keyword = ["고양이", "구름", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
-  "시작",
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
   "철수 책상 철 책상",
@@ -64,7 +63,7 @@ const UseSpeechRecognition = (props) => {
 
     /* 발음게임 명령어 */
     for (const sentence of speech_sentence) {
-      if (value.includes(sentence) && props.mode === "speechGame") {
+      if (value.includes(sentence)) {
         effectSound(somaekSuccess);
         setExtractedValue(sentence);
         props.sendSpeech(
@@ -149,7 +148,7 @@ const UseSpeechRecognition = (props) => {
       const timeout = setTimeout(() => {
         setStopSign(true);
         listen({ lang });
-      }, 500);
+      }, 1000);
       return () => clearTimeout(timeout);
     }
   }, [stopSign]);
@@ -163,14 +162,6 @@ const UseSpeechRecognition = (props) => {
     }
   }, [extractedValue]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     stop();
-  //   }, /*props.stopTime*/ 5000);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [props.stopTime]);
 
   const onEnd = () => {
     // You could do something here after listening has finished
