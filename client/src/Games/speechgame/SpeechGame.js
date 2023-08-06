@@ -38,12 +38,13 @@ const SpeechGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [loser, setLoser]=useState("")
-
-
-
+  const [isGameOver,setIsGameOver] = useState(false);
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
+
+
+
+
 
   /* 준비 신호 받는 세션을 열기위한 useEffect */
   useEffect( () => {
@@ -67,6 +68,7 @@ const SpeechGame = (props) => {
           readyPeople.push(fromId);
         }
         if (readyPeople.length === subscribers.length + 1) {
+          console.log("받았다!!!");
           sendStartSignal();
           props.user
             .getStreamManager()
@@ -75,6 +77,8 @@ const SpeechGame = (props) => {
       });
 
     }
+
+
     /* start 시그널 받는 session on !! */
     props.user
       .getStreamManager()
@@ -152,7 +156,6 @@ const SpeechGame = (props) => {
     }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
-      setLoser(randomUser);
       sentenceState="시작";
       bgmSound.stop();
     }, /* stopTime */ 40 * 1000); /*시연*/
@@ -264,6 +267,8 @@ const SpeechGame = (props) => {
       });
   };
 
+
+
   /* 랜덤요소 고르는 함수 */
   function getRandomElement(list) {
     if (list.length === 0) {
@@ -293,7 +298,10 @@ const SpeechGame = (props) => {
       <div>
         {props.mode === "speechGame" && !loaded && (
           <div>
+
             <Loading mode={props.mode}/>
+
+
           </div>
         )}
         {props.mode === "speechGame" && countDown && (
@@ -303,6 +311,7 @@ const SpeechGame = (props) => {
         )}
         {!timerExpired? (
           <div className={!loaded ? styles.hidden : ""}>
+            <h1>{stopTime}</h1>
             <div className={styles.gameWord}>{sentenceState}</div>
             <div className={styles.speechPosition}>
               <UseSpeechRecognition
@@ -336,7 +345,7 @@ const SpeechGame = (props) => {
         ) : (
           <div>
             <LoserCam
-              selectId={loser}
+              selectId={randomUser}
               user={props.user}
               mode={"centerCam"}
               end={props.end}
