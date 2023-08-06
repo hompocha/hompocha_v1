@@ -9,9 +9,7 @@ import { effectSound } from "../effectSound";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 
-
-
-const images:{[name:string]: string} = {
+const images: { [name: string]: string } = {
   // soju: "../../asset/game_img/soju.png",
   beer: "../../asset/cheers/beerForCheers2.png",
 };
@@ -33,15 +31,14 @@ const CamTest = (props: any) => {
   const [counts, setCounts] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [cheersMode, setCheersMode] = useState(false);
-  const [wheelStart, setWheelStart] =useState(false);
+  const [wheelStart, setWheelStart] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
 
   const myself = props.user.connectionId;
-  const handData:{[id: string]: any}={};
-  const imgElements:{[key: string]: HTMLImageElement} = {};
-
+  const handData: { [id: string]: any } = {};
+  const imgElements: { [key: string]: HTMLImageElement } = {};
 
   /* 부채꼴 모양으로 자른 캠 */
   const CamSlice: React.FC<Props> = ({
@@ -166,7 +163,7 @@ const CamTest = (props: any) => {
     if (canvasRef.current && canvasCtx.current) {
       console.log("CamTest test test ");
       loadCupImages();
-      const interval = setInterval(()=>{
+      const interval = setInterval(() => {
         drawHands(canvasRef.current, canvasCtx.current, handData);
       }, 1000 / 60);
       return () => {
@@ -175,23 +172,22 @@ const CamTest = (props: any) => {
     }
   }, []);
 
-
   /* 건배 신호를 받기 위한 세션 열기 */
   useEffect(() => {
     const session = props.user.getStreamManager().session;
 
-    const onCheersOn = (event:any) => {
+    const onCheersOn = (event: any) => {
       // if(!cheersMode)
-        setCheersMode(true);
+      setCheersMode(true);
       console.log("건배모드 켜기");
-    }
+    };
 
-    const onCheersOff = (event:any) => {
+    const onCheersOff = (event: any) => {
       // if(cheersMode)
-        setCheersMode(false);
+      setCheersMode(false);
       console.log("건배모드 끄기");
-      console.log("cheersMode:",cheersMode);
-    }
+      console.log("cheersMode:", cheersMode);
+    };
 
     session.on("signal:cheersOn", onCheersOn);
     session.on("signal:cheersOff", onCheersOff);
@@ -199,25 +195,29 @@ const CamTest = (props: any) => {
     return () => {
       session.off("signal:cheersOn", onCheersOn);
       session.off("signal:cheersOff", onCheersOff);
-    }
+    };
   }, []);
 
-  useEffect(() =>{
-    console.log("건배모드 상태!!!",cheersMode);
-  }, [cheersMode])
+  useEffect(() => {
+    console.log("건배모드 상태!!!", cheersMode);
+  }, [cheersMode]);
 
   const drawHands = (can_ref: any, can_ctx: any, handData: any) => {
     // console.log('drawhands');
     can_ctx.save();
     can_ctx.clearRect(0, 0, can_ref.width, can_ref.height);
     const videoInfos = videoInfosRef.current;
-    for (let id in handData){
-      if (handData[id] && videoInfos[id]){
+    for (let id in handData) {
+      if (handData[id] && videoInfos[id]) {
         const videoInfo = videoInfos[id];
-        
+
         const hand5 = handData[id][5];
         const hand17 = handData[id][17];
-        const handVector = {x: hand5.x-hand17.x, y: hand5.y-hand17.y, z: hand5.z-hand17.z};
+        const handVector = {
+          x: hand5.x - hand17.x,
+          y: hand5.y - hand17.y,
+          z: hand5.z - hand17.z,
+        };
         drawCup(can_ref, can_ctx, handData[id], videoInfo);
 
         // handData[id].forEach((landmark:{x:number, y:number, z:number})=>{
@@ -231,7 +231,7 @@ const CamTest = (props: any) => {
       }
     }
     can_ctx.restore();
-  }
+  };
 
   // const loadCupImages = async (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any) => {
   const loadCupImages = async () => {
@@ -251,35 +251,43 @@ const CamTest = (props: any) => {
     }
   };
 
-
-  const drawCup = (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any, videoInfo:any): void => {
+  const drawCup = (
+    can_ref: HTMLCanvasElement,
+    can_ctx: CanvasRenderingContext2D,
+    hand: any,
+    videoInfo: any
+  ): void => {
     const w = can_ref.width;
     const h = can_ref.height;
     const hand5 = hand[5];
     const hand17 = hand[17];
-    const handVector = {x: hand5.x-hand17.x, y: hand5.y-hand17.y, z: hand5.z-hand17.z};
-    const handVectorDistance = (handVector.x**2 + handVector.y**2+handVector.z**2)**0.5;
-    const angle = Math.acos(Math.abs(handVector.y)/handVectorDistance);
-    const cupSize = Math.abs(handVector.y)*3*videoInfo.scale;
+    const handVector = {
+      x: hand5.x - hand17.x,
+      y: hand5.y - hand17.y,
+      z: hand5.z - hand17.z,
+    };
+    const handVectorDistance =
+      (handVector.x ** 2 + handVector.y ** 2 + handVector.z ** 2) ** 0.5;
+    const angle = Math.acos(Math.abs(handVector.y) / handVectorDistance);
+    const cupSize = Math.abs(handVector.y) * 3 * videoInfo.scale;
     // console.log(handVector.y,cupSize);
     const img = imgElements["beer"];
-      // (player.state < 1)
-      //   ? imgElements["player_normal"]
-      //   : imgElements["player_sick"];
+    // (player.state < 1)
+    //   ? imgElements["player_normal"]
+    //   : imgElements["player_sick"];
     // console.log(hand5);
     const cal = calculateLocation(hand5.x, hand5.y, videoInfo);
     // console.log(cal);
-    if(angle < 0.7)
-    {  can_ctx.drawImage(
+    if (angle < 0.7) {
+      can_ctx.drawImage(
         img,
-        (cal.x - w * cupSize/2),
-        (cal.y - h * cupSize/2),
+        cal.x - (w * cupSize) / 2,
+        cal.y - (h * cupSize) / 2,
         cupSize * w,
         cupSize * h
       );
     }
-  }
-
+  };
 
   const calculateLocation = (
     x: number,
@@ -492,12 +500,12 @@ const CamTest = (props: any) => {
   /* ========================================================= */
 
   /*===========================================================*/
-  useEffect(()=>{
-    if(props.wheel === true){
+  useEffect(() => {
+    if (props.wheel === true) {
       sendRouletteSignal();
       props.hubForWheelFalse();
     }
-  },[props.wheel])
+  }, [props.wheel]);
 
   return (
     <div>
@@ -522,11 +530,22 @@ const CamTest = (props: any) => {
         </button>
       </div>
       <div className={styles.scale}>
-        <svg ref={svgRef} style={{ position : "absolute", left : "28%", top : "13%", zIndex : "15"}}width={700} height={700}>
+        <svg
+          ref={svgRef}
+          className={styles.position}
+          // style={{
+          //   position: "absolute",
+          //   left: "28%",
+          //   top: "13%",
+          //   zIndex: "15",
+          // }}
+          width={700}
+          height={700}
+        >
           {renderCamSlices(setVideoInfo)}
         </svg>
         <canvas
-          className={`${styles.position} ${!cheersMode ? styles.hidden : ''}`}
+          className={`${styles.position} ${!cheersMode ? styles.hidden : ""}`}
           ref={canvasRef}
           width={700}
           height={700}
