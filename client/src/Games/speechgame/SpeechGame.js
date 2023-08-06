@@ -19,7 +19,6 @@ const speech_sentence = [
   "앞 집 팥죽은 붉은 팥 풋 팥죽이다",
   "뒷집 콩죽은 햇콩 단콩 콩죽이다",
   "안 촉촉한 초코칩 나라에 살던 안 촉촉한 초코칩",
-  "경찰청 창살은 외철창살이다",
   "검찰청 창살은 쌍철창살이다",
   "네가 그린 기린 그림은 못생긴 기린 그림이다",
 ];
@@ -38,7 +37,6 @@ const SpeechGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [loser, setLoser]=useState("")
 
 
 
@@ -152,7 +150,6 @@ const SpeechGame = (props) => {
     }, /* stopTime - 1000 */ 9 * 1000);/* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
-      setLoser(randomUser);
       sentenceState="시작";
       bgmSound.stop();
     }, /* stopTime */ 10 * 1000); /*시연*/
@@ -313,7 +310,7 @@ const SpeechGame = (props) => {
             </div>
             <div className={styles.camPosition}>
               <div className={styles[`speechGameCam__${0}`]}>
-                <SpeechCam selectId={randomUser} user={props.user} />
+                <SpeechCam key={randomUser} selectId={randomUser} user={props.user} />
               </div>
 
               {/*=============================딴애들=========================================================*/}
@@ -321,6 +318,7 @@ const SpeechGame = (props) => {
                 <>
                   <div className={styles[`speechGameCam__${index + 1}`]}>
                     <OpenViduVideoComponent
+                      key={randomUser}
                       mode={"speechGame"}
                       streamManager={subscriber}
                     />
@@ -335,7 +333,7 @@ const SpeechGame = (props) => {
         ) : (
           <div>
             <LoserCam
-              selectId={loser}
+              selectId={randomUser}
               user={props.user}
               mode={"centerCam"}
               end={props.end}
