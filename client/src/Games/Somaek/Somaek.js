@@ -57,9 +57,11 @@ const Somaek = (props) => {
   const scores = useRef({});
   for (let i = 0; i < subscribers.length; i++) {
     const conId = subscribers[i].stream.connection.connectionId;
-    scores.current[props.conToNick[conId]] = 0;
+    // scores.current[props.conToNick[conId]] = 0; /*변경*/
+    scores.current[conId] = 0;
   }
-  scores.current[props.user.getNickname()] = 0;
+  // scores.current[props.user.getNickname()] = 0;   /*변경*/
+  scores.current[props.user.getStreamManager().stream.connection.connectionId] = 0;
 
   const states = {};
   for (let i = 0; i < subscribers.length; i++) {
@@ -90,7 +92,7 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 400 * 1000; /*시연*/
+    timerPrint.current = 15 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
 
@@ -397,26 +399,25 @@ const Somaek = (props) => {
       can_ctx.fillText("주문이요~", textX, orderTextY, maxWidth);
     }
 
-    // can_ctx.fillText(`남은시간: ${timer}`, -can_ref.width + 20, 100);
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
-    // can_ctx.fillText("남은시간 : ", -can_ref.width + 1500, 40);
     let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
-    if (blink) {
+    // if (blink) {
       can_ctx.fillStyle = "dimgrey";
       can_ctx.font = "bold 45px Arial";
       can_ctx.fillText(
         `남은시간: ${timerPrint.current / 1000}초`,
-        -can_ref.width + 1600,
+        -can_ref.width * 0.2,
         50
       );
-    }
+    // }
 
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores.current)
       .sort(([, a], [, b]) => b - a) // 점수를 기준으로 내림차순 정렬합니다.
       .forEach(([key, value], index) => {
-        if (key == props.user.getNickname()) {
+        if(key === props.user.getStreamManager().stream.connection.connectionId){
+        // if (key == props.user.getNickname()) {
           can_ctx.fillStyle = "green";
         } else if (index === 0) {
           can_ctx.fillStyle = "blue"; //1등
@@ -425,13 +426,14 @@ const Somaek = (props) => {
         }
         /* 소수점 없이 점수 올림 해서 출력 */
         const upValue = Math.ceil(value);
-        const scoreText = `${key}: ${upValue}`;
-        const y = 800 + (index + 1) * 30;
+        const scoreText = `${props.conToNick[key]}: ${upValue}`;
+        // const scoreText = 'nono';
+        const y = 750+ (index + 1) * 30;
         can_ctx.font = "bold 33px Arial";
 
         // 그림 위에 텍스트가 나타납니다.
-        can_ctx.globalCompositeOperation = "source-over";
-        can_ctx.fillText(scoreText, -300, y);
+        // can_ctx.globalCompositeOperation = "source-over";
+        can_ctx.fillText(scoreText, -can_ref.width * 0.2, y);
       });
 
     can_ctx.restore();
@@ -671,7 +673,8 @@ const Somaek = (props) => {
           getScore = Math.round(getScore * 10) / 10; // 자바스크립트 부동소수점 오류잡으려면 이런식으로 하라는데?
         }
 
-        scores.current[props.conToNick[connectionId]] = getScore;
+        // scores.current[props.conToNick[connectionId]] = getScore;
+        scores.current[connectionId] = getScore;
       });
 
     props.user
@@ -842,8 +845,8 @@ const Somaek = (props) => {
             <canvas
               className={`${styles.somaekCanvas} ${!start && styles.hidden}`}
               ref={canvasRef}
-              width={"960px"}
-              height={"720px"}
+              width={"1920px"}
+              height={"1080px"}
             />
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
