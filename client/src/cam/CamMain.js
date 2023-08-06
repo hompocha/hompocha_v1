@@ -466,7 +466,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               theme={theme}
               setTheme={setTheme}
               mainBGM={mainBGM}
-              loaded = {loaded}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
             />
             <CamTest
