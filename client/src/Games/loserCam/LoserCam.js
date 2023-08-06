@@ -24,15 +24,16 @@ const LoserCam = (props) => {
     };
   }, []);
 
-  const selectId = props.user.subscribers.find(
+  const selectStreamManager = props.user.subscribers.find(
     (subscriber) => subscriber.stream.connection.connectionId === props.selectId
   );
   if (
-    selectId &&
+    selectStreamManager &&
     (props.selectId ||
-      selectId.stream.connection.connectionId ===
+      selectStreamManager.stream.connection.connectionId ===
         props.user.streamManager.stream.connection.connectionId)
   ) {
+    /* 루저가 내가 아닐때 */
     return (
       <>
         <img
@@ -41,11 +42,14 @@ const LoserCam = (props) => {
           alt={"woo"}
         />
         <div>
-          <OpenViduVideoComponent mode={props.mode} streamManager={selectId} />
+          <h2> {props.conToNick[props.selectId]}</h2>
+          <OpenViduVideoComponent mode={props.mode} streamManager={selectStreamManager} />
         </div>
       </>
     );
-  } else {
+  }
+  /*루저가 나일때*/
+  else {
     return (
       <>
         <img
@@ -54,6 +58,7 @@ const LoserCam = (props) => {
           alt={"woo"}
         />
         <div>
+          <h2> {props.conToNick[props.selectId]}</h2>
           <OpenViduVideoComponent
             mode={props.mode}
             streamManager={props.user.streamManager}
