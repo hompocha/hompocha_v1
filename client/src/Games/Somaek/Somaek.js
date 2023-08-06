@@ -28,6 +28,7 @@ const images = {
   madam: "../../Madam/madam3.png",
   speechBubble: "../../speechBubble.png",
   rank: "../../rank.png",
+  signboard: "../../signboard.png",
 };
 
 
@@ -219,10 +220,10 @@ const Somaek = (props) => {
 
     const madamImg = imgElements["madam"];
 
-    const desiredLeftX = 0.07; // 원하는 X 위치를 설정하세요 (예시: 0).
-    const desiredTopY = 0.315; // 원하는 Y 위치를 설정하세요 (예시: 0).
-    const desiredWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
-    const desiredHeight = 0.4; // 원하는 높이값을 설정하세요 (예시: 100).
+    const desiredLeftX = 0.017; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const desiredTopY = 0.39; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const desiredWidth = 0.2; // 원하는 너비값을 설정하세요 (예시: 100).
+    const desiredHeight = 0.6; // 원하는 높이값을 설정하세요 (예시: 100).
 
     can_ctx.drawImage(
       madamImg,
@@ -232,12 +233,27 @@ const Somaek = (props) => {
       desiredHeight * can_ref.height
     );
 
+    const signboardImg = imgElements["signboard"];
+
+    const signboardLeftX = 0.18; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const signboardTopY = 0.67; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const signboardWidth = 0.17; // 원하는 너비값을 설정하세요 (예시: 100).
+    const signboardHeight = 0.33; // 원하는 높이값을 설정하세요 (예시: 100).
+
+    can_ctx.drawImage(
+      signboardImg,
+      signboardLeftX * can_ref.width,
+      signboardTopY * can_ref.height,
+      signboardWidth * can_ref.width,
+      signboardHeight * can_ref.height
+    );
+
     const speechBubbleImg = imgElements["speechBubble"];
 
-    const bubbleLeftX = 0.07; // 원하는 X 위치를 설정하세요 (예시: 0).
-    const bubbleTopY = 0.05; // 원하는 Y 위치를 설정하세요 (예시: 0).
-    const bubbleWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
-    const bubbleHeight = 0.27; // 원하는 높이값을 설정하세요 (예시: 100).
+    const bubbleLeftX = -0.005; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const bubbleTopY = -0.01; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const bubbleWidth = 0.24; // 원하는 너비값을 설정하세요 (예시: 100).
+    const bubbleHeight = 0.38; // 원하는 높이값을 설정하세요 (예시: 100).
 
     can_ctx.drawImage(
       speechBubbleImg,
@@ -272,89 +288,21 @@ const Somaek = (props) => {
 
       can_ctx.drawImage(
         img,
-        (0.1 - 0.02 * i) * can_ref.width,
-        0.4 * can_ref.height,
+        (0.09 - 0.023 * i) * can_ref.width,
+        0.575 * can_ref.height,
         0.13 * can_ref.width,
         0.13 * can_ref.height
       );
     }
 
-    const rectLeftX = 0.09;
-    const rectTopY = 0.73;
-    const rectWidth = 0.11;
-    const rectHeight = 0.265;
-    const borderRadius = 10; // 원하는 테두리 둥글기 값을 설정하세요 (예시: 10).
-    can_ctx.fillStyle = "rgba(255, 204, 153, 0.8)";
-    // 경로 시작
-    can_ctx.beginPath();
-    // 좌상단 점으로 이동
-    can_ctx.moveTo(
-      rectLeftX * can_ref.width + borderRadius,
-      rectTopY * can_ref.height
-    );
-    // 상단 선 그리기
-    can_ctx.lineTo(
-      rectLeftX * can_ref.width + rectWidth * can_ref.width - borderRadius,
-      rectTopY * can_ref.height
-    );
-    // 우상단 라운드 그리기
-    can_ctx.arcTo(
-      rectLeftX * can_ref.width + rectWidth * can_ref.width,
-      rectTopY * can_ref.height,
-      rectLeftX * can_ref.width + rectWidth * can_ref.width,
-      rectTopY * can_ref.height + borderRadius,
-      borderRadius
-    );
-    // 우측 선 그리기
-    can_ctx.lineTo(
-      rectLeftX * can_ref.width + rectWidth * can_ref.width,
-      rectTopY * can_ref.height + rectHeight * can_ref.height - borderRadius
-    );
-    // 우하단 라운드 그리기
-    can_ctx.arcTo(
-      rectLeftX * can_ref.width + rectWidth * can_ref.width,
-      rectTopY * can_ref.height + rectHeight * can_ref.height,
-      rectLeftX * can_ref.width + rectWidth * can_ref.width - borderRadius,
-      rectTopY * can_ref.height + rectHeight * can_ref.height,
-      borderRadius
-    );
-    // 하단 선 그리기
-    can_ctx.lineTo(
-      rectLeftX * can_ref.width + borderRadius,
-      rectTopY * can_ref.height + rectHeight * can_ref.height
-    );
-    // 좌하단 라운드 그리기
-    can_ctx.arcTo(
-      rectLeftX * can_ref.width,
-      rectTopY * can_ref.height + rectHeight * can_ref.height,
-      rectLeftX * can_ref.width,
-      rectTopY * can_ref.height + rectHeight * can_ref.height - borderRadius,
-      borderRadius
-    );
-    // 좌측 선 그리기
-    can_ctx.lineTo(
-      rectLeftX * can_ref.width,
-      rectTopY * can_ref.height + borderRadius
-    );
-    // 좌상단 라운드 그리기
-    can_ctx.arcTo(
-      rectLeftX * can_ref.width,
-      rectTopY * can_ref.height,
-      rectLeftX * can_ref.width + borderRadius,
-      rectTopY * can_ref.height,
-      borderRadius
-    );
-    // 경로 종료
-    can_ctx.closePath();
-    // 경로 영역 채우기
-    can_ctx.fill();
+    
     // can_ctx.globalCompositeOperation = "source-over";
     const rankImg = imgElements["rank"];
 
-    const rankLeftX = -0.06; // 원하는 X 위치를 설정하세요 (예시: 0).
-    const rankTopY = 0.6; // 원하는 Y 위치를 설정하세요 (예시: 0).
-    const rankWidth = 0.47; // 원하는 너비값을 설정하세요 (예시: 100).
-    const rankHeight = 0.47; // 원하는 높이값을 설정하세요 (예시: 100).
+    const rankLeftX = 0.1; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const rankTopY = 0.563; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const rankWidth = 0.42; // 원하는 너비값을 설정하세요 (예시: 100).
+    const rankHeight = 0.42; // 원하는 높이값을 설정하세요 (예시: 100).
 
     // can_ctx.globalCompositeOperation = "destination-over";
     can_ctx.drawImage(
@@ -373,30 +321,30 @@ const Somaek = (props) => {
     // can_ctx.fillText(`점수: ${score}`, -can_ref.width + 20, 50);
 
     const speechLeftX = 0.17; // 원하는 X 위치를 설정하세요 (예시: 0).
-    const speechTopY = 0.1; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const speechTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
     const speechWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
 
     /* 소주1병, 맥주1명 주문내역 텍스트 캔버스에 출력 */
     orderKorean.forEach((text, index) => {
       can_ctx.fillStyle = "black"; // 텍스트 색상을 검은색으로 설정
-      const fontSize = can_ref.width * speechWidth * 0.13; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
+      const fontSize = can_ref.width * speechWidth * 0.2; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
       can_ctx.font = `${fontSize}px Arial`; // 폰트와 크기를 설정
       const textX = -can_ref.width * speechLeftX;
-      const textY = can_ref.height * speechTopY + (index + 1) * 35;
+      const textY = can_ref.height * speechTopY + (index + 1) * 47;
       const maxWidth = can_ref.width * speechWidth; // 텍스트의 최대 너비를 캔버스 너비의 비율로 설정
       can_ctx.fillText(text, textX, textY, maxWidth); // 텍스트를 캔버스에 쓰기
     });
 
     if (orderKorean[0] !== "감사합니다!!") {
       can_ctx.fillStyle = "black";
-      const fontSize = can_ref.width * speechWidth * 0.13; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
+      const fontSize = can_ref.width * speechWidth * 0.2;
       can_ctx.font = `${fontSize}px Arial`;
       const textX = -can_ref.width * speechLeftX;
       const textY = can_ref.height * speechTopY;
       const maxWidth = can_ref.width * speechWidth; // 텍스트의 최대 너비를 캔버스 너비의 비율로 설정
       can_ctx.fillText("사장님", textX, textY, maxWidth);
       const orderTextY =
-        can_ref.height * speechTopY + (orderKorean.length + 1) * 35;
+        can_ref.height * speechTopY + (orderKorean.length + 1) * 47;
       can_ctx.fillText("주문이요~", textX, orderTextY, maxWidth);
     }
 
@@ -404,11 +352,11 @@ const Somaek = (props) => {
     can_ctx.font = "bold 20px Arial";
     let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
     // if (blink) {
-      can_ctx.fillStyle = "dimgrey";
-      can_ctx.font = "bold 45px Arial";
+      can_ctx.fillStyle = "yellow";
+      can_ctx.font = "bold 50px Arial";
       can_ctx.fillText(
         `남은시간: ${timerPrint.current / 1000}초`,
-        -can_ref.width * 0.2,
+        -can_ref.width * 0.6,
         50
       );
     // }
@@ -429,12 +377,12 @@ const Somaek = (props) => {
         const upValue = Math.ceil(value);
         const scoreText = `${props.conToNick[key]}: ${upValue}`;
         // const scoreText = 'nono';
-        const y = 750+ (index + 1) * 30;
-        can_ctx.font = "bold 33px Arial";
+        const y = 743+ (index + 1) * 35;
+        can_ctx.font = "bold 35px Arial";
 
         // 그림 위에 텍스트가 나타납니다.
         // can_ctx.globalCompositeOperation = "source-over";
-        can_ctx.fillText(scoreText, -can_ref.width * 0.2, y);
+        can_ctx.fillText(scoreText, -can_ref.width * 0.29, y);
       });
 
     can_ctx.restore();
