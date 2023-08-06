@@ -9,6 +9,16 @@ const Parent2 = ({ roomName, idx }) => {
   const [sessionConnected, setSessionConnected] = useState(false);
   const [userStream, setUserStream] = useState(null);
   const [mode, setMode] = useState(undefined);
+  const [chatToggle,setChatToggle] = useState(false);
+
+  const chatChangeOn = () => {
+    setChatToggle(true);
+    // setChatToggle(prevChatToggle => !prevChatToggle);
+  }
+  const chatChangeOff = () => {
+    setChatToggle(false);
+  // setChatToggle(prevChatToggle => !prevChatToggle);
+}
 
   const onModeChange = (newMode) => {
     setMode(newMode);
@@ -40,6 +50,8 @@ const Parent2 = ({ roomName, idx }) => {
                 onModeChange={onModeChange}
                 roomName={roomName}
                 idx={idx}
+                chatChangeOn={chatChangeOn}
+                chatChangeOff={chatChangeOff}
               />
             </div>
             <div className={styles.zindex}>
@@ -47,6 +59,8 @@ const Parent2 = ({ roomName, idx }) => {
                 user={userStream}
                 sessionConnected={sessionConnected}
                 roomName={roomName}
+                chatToggle={chatToggle}
+                setChatToggle={setChatToggle}
               />
 
             </div>

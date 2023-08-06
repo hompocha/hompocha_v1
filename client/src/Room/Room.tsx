@@ -27,7 +27,7 @@ function Room() {
     }else{
         return (
             <>
-                <div className={styles.nickName}>{nickName}</div>
+                {/* <h2 className={styles.nickName}>{nickName}</h2> */}
                 {/*<ParentComponent roomName = {roomName} idx = {idx}/>*/}
                 <Parent2 roomName = {roomName} idx = {idx} />
             </>

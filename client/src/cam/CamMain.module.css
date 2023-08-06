@@ -103,7 +103,7 @@ body {
   color: white;
   width: 100vw;
   height: 5vh;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 10px;
   padding: 10px;
   display: flex;
@@ -203,4 +203,10 @@ body {
   left: 10vw;
   font-size: 40px;
   font-family: "Gowun Dodum", sans-serif;
+}
+.nickName {
+  position: fixed;
+  top: 0vh;
+  right: 10vw;
+  color: white;
 }

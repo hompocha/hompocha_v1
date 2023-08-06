@@ -43,7 +43,7 @@ const UseSpeechRecognition = (props) => {
   const lang = "ko-Kr";
   useEffect(() => {
     /* 건배 명령어 */
-    
+
     if (value.includes("건배")) {
       stop();
       setStopSign(false);
@@ -61,6 +61,17 @@ const UseSpeechRecognition = (props) => {
         props.hubTospeechFromCamtest();
       }
     }
+    if (value.includes("채팅창 보여 줘")) {
+      stop();
+      setStopSign(false);
+      props.chatChangeOn();
+    }
+    if (value.includes("채팅 창 닫아 줘")) {
+      stop();
+      setStopSign(false);
+      props.chatChangeOff();
+    }
+
 
     /* 발음게임 명령어 */
     for (const sentence of speech_sentence) {
@@ -120,19 +131,16 @@ const UseSpeechRecognition = (props) => {
         switch (randomNum) {
           // 포차 테마
           case 0:
-            // props.mainBGM.stop();
             props.setTheme(0);
             setShootingStar(true);
             break;
           // 바 테마
           case 1:
-            // props.mainBGM.stop();
             props.setTheme(1);
             setShootingStar(false);
             break;
           // 이자카야 테마
           case 2:
-            // props.mainBGM.stop();
             props.setTheme(2);
             setShootingStar(false);
             break;
@@ -162,7 +170,6 @@ const UseSpeechRecognition = (props) => {
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
-
 
   const onEnd = () => {
     // You could do something here after listening has finished
@@ -221,7 +228,10 @@ const UseSpeechRecognition = (props) => {
 
   return (
     <div>
-      {shootingStar === true && (
+      {props.mode === "speechGame" && (
+        <div className={styles.speechWord}> {value} </div>
+      )} 
+      {props.mode !== "speechGame" && shootingStar === true && (
         <div className={styless.night}>
           {Array.from({ length: 24 }, (_, index) => (
             <>
@@ -230,6 +240,7 @@ const UseSpeechRecognition = (props) => {
           ))}
         </div>
       )}
+      {props.mode !== "speechGame" && (
       <div className={styles.container}>
         <form id="speech-recognition-form">
           {!supported && (
@@ -270,6 +281,7 @@ const UseSpeechRecognition = (props) => {
           )}
         </form>
       </div>
+      )}
     </div>
   );
 };

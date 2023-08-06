@@ -12,6 +12,8 @@
     width: 56vw;
     height: 42vw;
     transform: rotateY(180deg);
+    border-radius: 3%;
+    background-color: transparent;
   }
   .avoidCanvas {
     position: fixed;
@@ -20,6 +22,8 @@
     width: 56vw;
     height: 42vw;
     transform: rotateY(180deg);
+    border-radius: 3%;
+    background-color: transparent;
   }
 
   h1 {
@@ -33,30 +37,40 @@
     position: fixed;
     top: 10vh;
     left: 19vw;
+    border-radius: 3%;
+    background-color: transparent;
   }
   .avoidGameSub2 {
     transform: rotateY(180deg);
     position: fixed;
     top: 39.25vh;
     left: 19vw;
+    border-radius: 3%;
+    background-color: transparent;
   }
   .avoidGameSub3 {
     transform: rotateY(180deg);
     position: fixed;
     top: 68.5vh;
     left: 19vw;
+    border-radius: 3%;
+    background-color: transparent;
   }
   .avoidGameSub4 {
     transform: rotateY(180deg);
     position: fixed;
     top: 10vh;
     left: 97vw;
+    border-radius: 3%;
+    background-color: transparent;
   }
   .avoidGameSub5 {
     transform: rotateY(180deg);
     position: fixed;
     top: 40vh;
     left: 97vw;
+    border-radius: 3%;
+    background-color: transparent;
   }
 
   .userNick1 {

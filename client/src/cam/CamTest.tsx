@@ -5,6 +5,7 @@ import { event } from "jquery";
 import BGM from "../sounds/roomBGM.wav";
 import useSound from "../useSound";
 import rouletteSound from "../sounds/rouletteEffect.wav";
+import cheers_sample from "../sounds/cheers_sample.wav"
 import { effectSound } from "../effectSound";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
@@ -12,8 +13,7 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 
 
 const images:{[name:string]: string} = {
-  // soju: "../../asset/game_img/soju.png",
-  beer: "../../asset/cheers/beerForCheers2.png",
+  beer: "../../Drink/beerForCheers.png",
 };
 
 const CamTest = (props: any) => {
@@ -33,14 +33,17 @@ const CamTest = (props: any) => {
   const [counts, setCounts] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [cheersMode, setCheersMode] = useState(false);
-  const [wheelStart, setWheelStart] =useState(false);
+  const [wheelStart, setWheelStart] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
-
+  const imgLoaded = useRef<Boolean>(false);
+  
   const myself = props.user.connectionId;
-  const handData:{[id: string]: any}={};
+  const newHandData:{[id: string]: any}={};
+  const cheersCup: {[id:string]: any}={};
   const imgElements:{[key: string]: HTMLImageElement} = {};
+  const cheersRef = useRef<Boolean>(false);
 
 
   /* 부채꼴 모양으로 자른 캠 */
@@ -100,6 +103,7 @@ const CamTest = (props: any) => {
               index={index}
               num={num}
               mode={mode}
+              cheers={cheersMode}
               myself={myself}
               setVideoInfo={setVideoInfo}
             />
@@ -165,9 +169,9 @@ const CamTest = (props: any) => {
   useEffect(() => {
     if (canvasRef.current && canvasCtx.current) {
       console.log("CamTest test test ");
-      loadCupImages();
       const interval = setInterval(()=>{
-        drawHands(canvasRef.current, canvasCtx.current, handData);
+        updateCups(canvasRef.current,newHandData);
+        drawHands(canvasRef.current, canvasCtx.current, newHandData);
       }, 1000 / 60);
       return () => {
         clearInterval(interval);
@@ -175,23 +179,22 @@ const CamTest = (props: any) => {
     }
   }, []);
 
-
   /* 건배 신호를 받기 위한 세션 열기 */
   useEffect(() => {
     const session = props.user.getStreamManager().session;
 
-    const onCheersOn = (event:any) => {
+    const onCheersOn = (event: any) => {
       // if(!cheersMode)
-        setCheersMode(true);
+      setCheersMode(true);
       console.log("건배모드 켜기");
-    }
+    };
 
-    const onCheersOff = (event:any) => {
+    const onCheersOff = (event: any) => {
       // if(cheersMode)
-        setCheersMode(false);
+      setCheersMode(false);
       console.log("건배모드 끄기");
-      console.log("cheersMode:",cheersMode);
-    }
+      console.log("cheersMode:", cheersMode);
+    };
 
     session.on("signal:cheersOn", onCheersOn);
     session.on("signal:cheersOff", onCheersOff);
@@ -199,39 +202,75 @@ const CamTest = (props: any) => {
     return () => {
       session.off("signal:cheersOn", onCheersOn);
       session.off("signal:cheersOff", onCheersOff);
-    }
+    };
   }, []);
 
-  useEffect(() =>{
-    console.log("건배모드 상태!!!",cheersMode);
-  }, [cheersMode])
+  useEffect(() => {
+    console.log("건배모드 상태!!!", cheersMode);
+  }, [cheersMode]);
 
-  const drawHands = (can_ref: any, can_ctx: any, handData: any) => {
+  const updateCups = (can_ref:any, newHandData:any) => {
+    const keys = Object.keys(newHandData);
+    for (let i=0; i<keys.length; i++) {
+      for (let j=i+1; j<keys.length; j++){
+        const cupA = newHandData[keys[i]];
+        const cupB = newHandData[keys[j]];
+        // const distance = ((cupA.transformedHand.x - cupB.transformedHand.x)**2 
+        //                   + (cupA.transformedHand.y - cupB.transformedHand.y)**2) **0.5;
+        const distanceX = Math.abs(cupA.transformedHand.x - cupB.transformedHand.x);
+        const distanceY = Math.abs(cupA.transformedHand.y - cupB.transformedHand.y);
+        if(
+          (distanceX < (cupA.cupSize + cupB.cupSize)*0.58/2*0.7 * can_ref.width) &&
+          (distanceY < (cupA.cupSize + cupB.cupSize)/2 *0.7* can_ref.height)
+        ) {
+          // console.log('collision: ', keys[i], keys[j]);
+          // if (cupA.collision===false && cupB.collision===false){
+          //   effectSound(cheers_sample, false);
+          // }
+          cupA.collision=true;
+          cupB.collision=true;
+        } else {
+          cupA.collision=false;
+          cupB.collision=false;
+        }
+      }
+    }
+    let cheers = false;
+    for (let id in newHandData){
+      if(newHandData[id].collision === false){
+        newHandData[id].cup = newHandData[id].transformedHand;
+      } else {
+        cheers = true;
+      }
+    }
+    if (cheers){
+      if (!cheersRef.current){
+        effectSound(cheers_sample, false);
+        cheersRef.current = true;
+      }
+    } else {
+      cheersRef.current=false;
+    }
+  }
+
+  const drawHands = async (can_ref: any, can_ctx: any, newHandData:any) => {
     // console.log('drawhands');
     can_ctx.save();
     can_ctx.clearRect(0, 0, can_ref.width, can_ref.height);
-    const videoInfos = videoInfosRef.current;
-    for (let id in handData){
-      if (handData[id] && videoInfos[id]){
-        const videoInfo = videoInfos[id];
-        
-        const hand5 = handData[id][5];
-        const hand17 = handData[id][17];
-        const handVector = {x: hand5.x-hand17.x, y: hand5.y-hand17.y, z: hand5.z-hand17.z};
-        drawCup(can_ref, can_ctx, handData[id], videoInfo);
-
-        // handData[id].forEach((landmark:{x:number, y:number, z:number})=>{
-        //   const cal = calculateLocation(landmark.x, landmark.y, videoInfo);
-        //   can_ctx.beginPath();
-        //   can_ctx.fillStyle = "red";
-        //   can_ctx.arc(cal.x, cal.y, 5, 0, 2 * Math.PI);
-        //   can_ctx.fill();
-        //   can_ctx.closePath();
-        // })
+    // const videoInfos = videoInfosRef.current;
+    // console.log("imgLoaded: ",imgLoaded);
+    if(!imgLoaded.current){
+      await loadCupImages();
+      imgLoaded.current=true;
+    }
+    for (let id in newHandData){
+      if (newHandData[id]){
+        const mine = (id === myself)? true:false;
+        drawCup(can_ref, can_ctx, newHandData[id]);
       }
     }
     can_ctx.restore();
-  }
+  };
 
   // const loadCupImages = async (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any) => {
   const loadCupImages = async () => {
@@ -252,34 +291,20 @@ const CamTest = (props: any) => {
   };
 
 
-  const drawCup = (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any, videoInfo:any): void => {
+  const drawCup = (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any): void => {
     const w = can_ref.width;
     const h = can_ref.height;
-    const hand5 = hand[5];
-    const hand17 = hand[17];
-    const handVector = {x: hand5.x-hand17.x, y: hand5.y-hand17.y, z: hand5.z-hand17.z};
-    const handVectorDistance = (handVector.x**2 + handVector.y**2+handVector.z**2)**0.5;
-    const angle = Math.acos(Math.abs(handVector.y)/handVectorDistance);
-    const cupSize = Math.abs(handVector.y)*3*videoInfo.scale;
-    // console.log(handVector.y,cupSize);
     const img = imgElements["beer"];
-      // (player.state < 1)
-      //   ? imgElements["player_normal"]
-      //   : imgElements["player_sick"];
-    // console.log(hand5);
-    const cal = calculateLocation(hand5.x, hand5.y, videoInfo);
-    // console.log(cal);
-    if(angle < 0.7)
+    if(hand.angle < 0.7)
     {  can_ctx.drawImage(
         img,
-        (cal.x - w * cupSize/2),
-        (cal.y - h * cupSize/2),
-        cupSize * w,
-        cupSize * h
+        (hand.cup.x - w * hand.cupSize * 0.58 / 2),
+        (hand.cup.y - h * hand.cupSize/2),
+        hand.cupSize *0.58* w,
+        hand.cupSize * h
       );
     }
-  }
-
+  };
 
   const calculateLocation = (
     x: number,
@@ -321,7 +346,6 @@ const CamTest = (props: any) => {
       top: top,
       scale: scale,
     };
-    console.log(videoInfos);
   };
   const [dark, setDark] = useState(false);
   const sendRouletteSignal = () => {
@@ -452,10 +476,38 @@ const CamTest = (props: any) => {
       .getStreamManager()
       .stream.session.on("signal:cheersData", (event: any) => {
         const data = JSON.parse(event.data);
-        // handData.current = data.hand;
-        // console.log(handData.current);
-        handData[event.from.connectionId] = data.hand;
-        console.log(handData);
+        const id = event.from.connectionId;
+        if(data.hand!==null && data.hand!==undefined){
+          if (videoInfosRef.current[id]) {
+            const hand = data.hand;
+            const videoInfo = videoInfosRef.current[id]
+            // const mine = (id === myself)? true:false;
+            const transformedHand = calculateLocation(hand.hand5.x, hand.hand5.y, videoInfo);
+            const handVector = {x: hand.hand5.x - hand.hand17.x, y: hand.hand5.y-hand.hand17.y, z: hand.hand5.z-hand.hand17.z};
+            const handVectorDistance = (handVector.x**2 + handVector.y**2+handVector.z**2)**0.5;
+            const angle = Math.acos(Math.abs(handVector.y)/handVectorDistance);
+            let cupSize = Math.abs(handVector.y)*3*videoInfo.scale;
+            cupSize = (cupSize>0.35)? 0.35:cupSize;
+
+            if(newHandData[id]===undefined){
+              const d = {
+                transformedHand: transformedHand,
+                angle: angle,
+                cupSize: cupSize,
+                hand: hand,
+                collision: false,
+                cup: transformedHand
+              };
+              newHandData[id] = d;
+            } else {
+              newHandData[id].transformedHand = transformedHand;
+              newHandData[id].angle = angle;
+              newHandData[id].cupSize = cupSize;
+              newHandData[id].hand = hand;
+              // newHandData[id].collision = false;
+            }
+          }
+        }
       });
 
     props.user
@@ -492,12 +544,12 @@ const CamTest = (props: any) => {
   /* ========================================================= */
 
   /*===========================================================*/
-  useEffect(()=>{
-    if(props.wheel === true){
+  useEffect(() => {
+    if (props.wheel === true) {
       sendRouletteSignal();
       props.hubForWheelFalse();
     }
-  },[props.wheel])
+  }, [props.wheel]);
 
   return (
     <div>
@@ -507,9 +559,9 @@ const CamTest = (props: any) => {
           {/* <img className={styles.lights} src="/Lights_010.png"/> */}
           <div className={styles.darkScreen} />
           <div className={styles.circleRouletteLight}></div>
-          <div className={styles.triangleDown} />
         </>
       )}
+      <div className={styles.triangleDown} />
 
       <div>
         <button type="submit" onClick={sendRouletteSignal}>
@@ -517,16 +569,27 @@ const CamTest = (props: any) => {
         </button>
       </div>
       <div>
-        <button type="submit" onClick={sendCheersReadySignal}>
+        <button type="submit" onClick={props.sendCheersOnSignal}>
           건배준비
         </button>
       </div>
       <div className={styles.scale}>
-        <svg ref={svgRef} style={{ position : "absolute", left : "28%", top : "13%", zIndex : "15"}}width={700} height={700}>
+        <svg
+          ref={svgRef}
+          className={styles.position}
+          // style={{
+          //   position: "absolute",
+          //   left: "28%",
+          //   top: "13%",
+          //   zIndex: "15",
+          // }}
+          width={700}
+          height={700}
+        >
           {renderCamSlices(setVideoInfo)}
         </svg>
         <canvas
-          className={`${styles.position} ${!cheersMode ? styles.hidden : ''}`}
+          className={`${styles.position} ${!cheersMode ? styles.hidden : ""}`}
           ref={canvasRef}
           width={700}
           height={700}
