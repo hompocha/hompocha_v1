@@ -204,3 +204,9 @@ body {
   font-size: 40px;
   font-family: "Gowun Dodum", sans-serif;
 }
+.nickName {
+  position: fixed;
+  top: 0vh;
+  right: 10vw;
+  color: white;
+}
