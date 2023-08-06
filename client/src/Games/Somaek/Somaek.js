@@ -349,15 +349,17 @@ const Somaek = (props) => {
 
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
+    const timerLeftX = 0.6; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const timerTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const titmerWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
     let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
     // if (blink) {
-      can_ctx.fillStyle = "yellow";
-      can_ctx.font = "bold 50px Arial";
-      can_ctx.fillText(
-        `남은시간: ${timerPrint.current / 1000}초`,
-        -can_ref.width * 0.6,
-        50
-      );
+    can_ctx.fillStyle = "yellow";
+    const fontSize = can_ref.width * speechWidth * 0.2;
+    can_ctx.font = `${fontSize}px Arial`;
+    const timerX = -can_ref.width * timerLeftX;
+    const timerY = can_ref.height * timerTopY;
+    can_ctx.fillText(`남은시간: ${timerPrint.current / 1000}초`, timerX, timerY);
     // }
 
     /* 점수가 높은사람부터 출력 */
