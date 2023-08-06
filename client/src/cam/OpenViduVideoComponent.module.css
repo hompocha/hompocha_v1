@@ -210,6 +210,8 @@
   position:fixed;
   top: 0;
   left: 0;
+  border-radius: 3%;
+  background-color: transparent;
 }
 
 .avoidGameSubCan{
@@ -218,6 +220,8 @@
   position:fixed;
   top: 0;
   left: 0;
+  border-radius: 3%;
+  background-color: transparent;
 }
 
 .centerCam {
@@ -227,11 +231,15 @@
   width: 56vw;
   height: 42vw;
   transform: rotateY(180deg);
+  border-radius: 3%;
+  background-color: transparent;
 }
 
 .speechGameSub {
   width: 16vw;
   height: auto;
+  border-radius: 3%;
+  background-color: transparent;
 
 }
 /* */
@@ -241,6 +249,8 @@
   height: auto;
   top: 0;
   left: 0;
+  border-radius: 3%;
+  background-color: transparent;
   }
   
   .somaekGameSubCan{
@@ -249,4 +259,6 @@
   position:fixed;
   top: 0;
   left: 0;
+  border-radius: 3%;
+  background-color: transparent;
   }
