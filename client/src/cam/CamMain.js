@@ -370,8 +370,9 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
 
           {/* <div className={styles.bamboo}></div> */}
           <div id="session-header" className={styles.camMainHeader}>
-            <div id="session-title">{roomName} </div>
-            <div>{user.subscribers.length + 1}명 참여중</div>
+            <h2 id="session-title">{roomName} </h2>
+            <h2>{user.subscribers.length + 1}명 참여중</h2>
+            <h2 className={styles.nickName}>{user.getNickname()}</h2>
             <button
               onClick={toggleMic}
               style={{

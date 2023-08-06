@@ -8,8 +8,8 @@
   position: fixed;
   bottom: 3vh;
   right: 3vw;
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   background: #febf00;
   cursor: pointer;
@@ -45,27 +45,27 @@
   }
 
   15% {
-    transform: scale(1.15);
+    transform: scale(1.2);
   }
 
   20% {
-    transform: scale(1.15) rotate(-7deg);
+    transform: scale(1.2) rotate(-7deg);
   }
 
   25% {
-    transform: scale(1.15) rotate(7deg);
+    transform: scale(1.2) rotate(7deg);
   }
 
   30% {
-    transform: scale(1.15) rotate(-4deg);
+    transform: scale(1.2) rotate(-4deg);
   }
 
   35% {
-    transform: scale(1.15) rotate(3deg);
+    transform: scale(1.2) rotate(3deg);
   }
 
   40% {
-    transform: scale(1.15) rotate(0);
+    transform: scale(1.2) rotate(0);
   }
 }
 
@@ -98,7 +98,9 @@
   height: 270px;
   width: 290px;
   border-radius: 20px;
-  background-image: url("../../public/asset/chatCover.png");
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  /* background-image: url("../../public/asset/chatCover.png"); */
   background-repeat: no-repeat;
   background-size: cover;
 }

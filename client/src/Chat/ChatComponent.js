@@ -5,7 +5,7 @@ import styles from "./ChatComponent.module.css";
 export default function ChatComponent(props) {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
-  const [messageWindow, setMessageWindow] = useState(true);
+  const [messageWindow, setMessageWindow] = useState(false);
   const [messageCome, setMessageCome] = useState(false);
   const chatScroll = useRef();
 
