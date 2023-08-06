@@ -1,11 +1,11 @@
-.hidden{
-  display:none;
+.hidden {
+  display: none;
 }
 .scale {
-  position: absolute;
+  position: fixed;
   transform: scale(130%);
   left: 24%;
-  top: 8%;
+  top: 4%;
 }
 .position {
   position: absolute;
@@ -20,7 +20,7 @@
   border-radius: 50%;
   position: fixed;
   left: 24%;
-  top: 8%;
+  top: 4%;
 }
 .circleRouletteLight {
   box-shadow: 0 0 100px #d7d6d6;
@@ -29,14 +29,14 @@
   border-radius: 50%;
   position: fixed;
   left: 24%;
-  top: 8%;
+  top: 4%;
   z-index: 13;
 }
 .triangleDown {
   position: fixed;
   width: 0;
   height: 0;
-  top: 7.3%;
+  top: 4%;
   left: 47.2%;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;

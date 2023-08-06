@@ -24,7 +24,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
 
-  const [speechGamevoice,setspeechGamevoice] = useState(true);
+  const [speechGamevoice, setspeechGamevoice] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [wheel, setWheel] = useState(false);
 
@@ -46,7 +46,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       // mainBGM.stop();
       bg_img = `${styles.themeBar}`;
       bg_items = `${styles.themeBarItem}`;
-      mainBGM = effectSound(barBGM, true, 1);
+      // mainBGM = effectSound(barBGM, true, 1);
       break;
     case 2:
       // mainBGM.stop();
@@ -240,10 +240,10 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   function hubForWheelFalse() {
     setWheel(false);
   }
-  function offSpeechGame(){
+  function offSpeechGame() {
     setspeechGamevoice(false);
   }
-  function onSpeechGame(){
+  function onSpeechGame() {
     setspeechGamevoice(true);
   }
 
@@ -526,7 +526,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
             end={sendGameTypeSignal}
             mode={mode}
             conToNick={conToNick}
-            voice ={speechGamevoice}
+            voice={speechGamevoice}
             voiceOn={onSpeechGame}
           />
           <form className={styles.ReturnRoom}>
