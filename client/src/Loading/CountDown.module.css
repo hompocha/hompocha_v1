@@ -1,20 +1,20 @@
 .countDown {
-    position: fixed;
-    z-index: 9;
-    top: 25.5vh;
-    left: 33.5vw;
-    transform: scale(170%);
-    width: 33vw;
-    height: 45vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0,0, 0.7);
-    /*background-size: cover;*/
+  position: fixed;
+  z-index: 9;
+  top: 25.75vh;
+  left: 33.5vw;
+  transform: scale(170%);
+  width: 33vw;
+  height: 45vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  /*background-size: cover;*/
 }
 
 .loading-image {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
