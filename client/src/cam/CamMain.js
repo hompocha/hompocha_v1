@@ -23,8 +23,11 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const [cheersReady, setCheersReady] = useState(false);
   const [cheersSuccess, setCheersSuccess] = useState(false);
+
+  const [speechGamevoice,setspeechGamevoice] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [wheel, setWheel] = useState(false);
+
   const [loaded, setLoaded] = useState(false);
 
   // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
@@ -70,7 +73,6 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
       } else {
         publisher.publishAudio(false);
       }
-      console.log("sssssStream:", user.getStreamManager().stream); // 로그 출력
       return enabled;
     });
   };
@@ -237,6 +239,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   }
   function hubForWheelFalse() {
     setWheel(false);
+  }
+  function offSpeechGame(){
+    setspeechGamevoice(false);
+  }
+  function onSpeechGame(){
+    setspeechGamevoice(true);
   }
 
   const sendGameTypeSignal = (string) => {
@@ -518,10 +526,12 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
             end={sendGameTypeSignal}
             mode={mode}
             conToNick={conToNick}
+            voice ={speechGamevoice}
+            voiceOn={onSpeechGame}
           />
           <form className={styles.ReturnRoom}>
             <input
-              onClick={() => sendGameTypeSignal(undefined)}
+              onClick={() => offSpeechGame()}
               type="button"
               value="방으로 이동"
             />

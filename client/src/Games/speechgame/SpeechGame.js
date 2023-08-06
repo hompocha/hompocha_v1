@@ -150,20 +150,33 @@ const SpeechGame = (props) => {
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
 
-    }, /* stopTime - 1000 */ 9 * 1000);/* 시연*/
-
+    }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
       setLoser(randomUser);
       sentenceState="시작";
       bgmSound.stop();
-    }, /* stopTime */ 10 * 1000); /*시연*/
+    }, /* stopTime */ 40 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
       clearTimeout(speechTimer);
     };
   }, [stopTime,start,loser]);
+
+  useEffect(()=>{
+    if(props.voice ===false){
+      setSpeechBlocked(true);
+      const timer = setTimeout(() => {
+        props.voiceOn()
+        props.end()
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+
+    }
+  },[props.voice])
 
   /*signal 보내는데 맞춘사람 id보냄*/
   function checkPass(sentId) {
