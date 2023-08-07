@@ -1,10 +1,10 @@
 .modalWrap {
   z-index: 16;
   position: fixed;
-  width: 90vw;
+  width: 52vw;
   height: 85vh;
-  left: 5vw;
-  top: 10vh;
+  left: 24vw;
+  top: 7vh;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
 }
@@ -12,10 +12,10 @@
 .modlaInterior {
   z-index: 17;
   position: fixed;
-  width: 85vw;
+  width: 48vw;
   height: 75vh;
-  left: 7.5vw;
-  top: 15vh;
+  left: 26vw;
+  top: 12.5vh;
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 10px;
 }
@@ -33,14 +33,15 @@
 .modalText {
   z-index: 17;
   position: fixed;
-  width: 75vw;
-  height: 67vh;
-  left: 7.5vw;
+  width: 40vw;
+  height: 65vh;
+  left: 27vw;
   top: 23vh;
-  padding: 0 5vw;
+  padding: 0 3vw;
   color: white;
+  font-size: 18px;
 }
 
 .textHeader {
-  font-size: 30px;
+  font-size: 35px;
 }
