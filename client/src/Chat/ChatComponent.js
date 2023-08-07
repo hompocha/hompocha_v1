@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./ChatComponent.module.css";
+import { Cursor } from "mongoose";
 // import "./ChatComponent.module.css";
 
 export default function ChatComponent(props) {
@@ -93,13 +94,13 @@ export default function ChatComponent(props) {
   return (
     <>
     {propsChatToggle === false && (
-      <button className = {messageCome === true ? styles.messageOpenSend : styles.messageOpen} onClick={messageWindowOnOff}> 열기 </button>
+      <button className = {messageCome === true ? styles.messageOpenSend : styles.messageOpen} onClick={messageWindowOnOff}><img style={{width : "2.5vw", height : "4vh" }} src="/Chat/chatbutton.png"/></button>
     )}
     {propsChatToggle === true &&(
     <div id="chatContainer" className={styles.chatContainer}>
       <div id="chatComponent" className={styles.chatComponent}>
         <div id="chatToolbar" className={styles.chatToolbar}>
-          <button onClick={messageWindowOnOff}> 닫기 </button>
+          <button onClick={messageWindowOnOff} style={{ padding: 0, border: "none", background: "transparent" ,cursor : "pointer"}}> <img src="/Chat/chatCloseButton.png" style={{width:"2vw", height : "3vh"}}></img> </button>
         </div>
         <div className={styles.messageWrap} ref={chatScroll}>
           {messageList.map((data, i) => (
