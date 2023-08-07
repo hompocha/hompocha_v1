@@ -184,6 +184,7 @@ body {
 
 .gameButtons {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-evenly;
   margin: 3vh 0;
@@ -193,7 +194,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .gameName {
@@ -265,4 +266,13 @@ body {
   70% {
     transform: scale(1);
   }
+}
+
+.gameButton {
+  width: 45px;
+  height: 45px;
+  z-index: 1;
+  background-image: url("../../public/asset/room/gameButton.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }

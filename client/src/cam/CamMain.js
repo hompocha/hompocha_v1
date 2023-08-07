@@ -15,8 +15,15 @@ import barBGM from "../sounds/themeBGM/themeBarBGM.mp3";
 import izakayaBGM from "../sounds/themeBGM/themeIzakayaBGM.mp3";
 import Loading from "../Loading/Loading";
 
-
-const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatChangeOn, chatChangeOff }) => {
+const CamMain = ({
+  user,
+  roomName,
+  onModeChange,
+  sessionConnected,
+  idx,
+  chatChangeOn,
+  chatChangeOff,
+}) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [conToNick] = useState({});
@@ -425,60 +432,28 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx , chatCha
             </form>
           </div>
           <div className={styles.gameListWrap}>
-            <div></div>
             <div className={styles.gameMenu}>홈술포차 메 뉴 판</div>
             <div className={styles.gameButtons}>
               <div className={styles.eachGameMenu}>
                 <div className={styles.gameName}>발 음 게 임</div>
-                <button
+                <div
                   onClick={() => sendGameTypeSignal("speechGame")}
-                  style={{
-                    backgroundImage: `url(/asset/room/playBtn.png)`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    backgroundColor: "transparent",
-                    outline: "none",
-                    border: "none",
-                    width: "45px",
-                    height: "45px",
-                    cursor: "pointer",
-                  }}
-                />
+                  className={styles.gameButton}
+                ></div>
               </div>
-              <div>
+              <div className={styles.eachGameMenu}>
                 <div className={styles.gameName}>소 맥 게 임</div>
-                <button
+                <div
                   onClick={() => sendGameTypeSignal("somaek")}
-                  style={{
-                    backgroundImage: `url(/asset/room/playBtn.png)`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    backgroundColor: "transparent",
-                    outline: "none",
-                    border: "none",
-                    width: "45px",
-                    height: "45px",
-                    cursor: "pointer",
-                  }}
-                />
+                  className={styles.gameButton}
+                ></div>
               </div>
-              <div>
+              <div className={styles.eachGameMenu}>
                 <div className={styles.gameName}>피하기게임</div>
-                <button
-                  className={styles.imgButton}
+                <div
                   onClick={() => sendGameTypeSignal("avoidGame")}
-                  style={{
-                    backgroundImage: `url(/asset/room/playBtn.png)`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    backgroundColor: "transparent",
-                    outline: "none",
-                    border: "none",
-                    width: "45px",
-                    height: "45px",
-                    cursor: "pointer",
-                  }}
-                />
+                  className={styles.gameButton}
+                ></div>
               </div>
             </div>
           </div>
