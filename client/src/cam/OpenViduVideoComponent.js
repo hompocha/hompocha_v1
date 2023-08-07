@@ -301,7 +301,7 @@ const OpenViduVideoComponent = (props) => {
             <canvas className={styles.avoidGameSubCan} ref={canvasSubRef} />
             <div className={styles.avoidGameSubHp}>
 
-          <HealthBar hp={hpLeft} maxHp={100}/>
+          <HealthBar hp={hpLeft} maxHp={100} main={false}/>
             </div>
           </>
         ) : null

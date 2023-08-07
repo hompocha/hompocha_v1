@@ -1,0 +1,50 @@
+.healthBar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 52vw;
+    height: 50px;
+    padding: 5px;
+    background: #6f6f6f;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    position: fixed;
+    font-size: 40px;
+    color: white;
+    left:24vw;
+    top: 7vw;
+  }
+
+  .subHealthBar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 16vw;
+    height: 25px;
+    padding: 2px;
+    background: #6f6f6f;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 21px;
+    color: white;
+  }
+
+  .bar {
+    background: #c54;
+    width: 100%;
+    height: 40px;
+    position: relative;
+  
+    transition: width 0.6s cubic-bezier(0.47, 1.64, 0.41, 0.8);
+  }
+
+  .subBar {
+    background: #c54;
+    width: 100%;
+    height: 21px;
+    position: relative;
+  
+    transition: width 0.6s cubic-bezier(0.47, 1.64, 0.41, 0.8);
+  }
