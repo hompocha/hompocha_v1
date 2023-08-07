@@ -18,7 +18,6 @@ import Loading from "../Loading/Loading";
 import { MicButton } from "./MicButton";
 import BgmButton from "./BgmButton";
 
-
 const CamMain = ({
   user,
   roomName,
@@ -257,8 +256,7 @@ const CamMain = ({
     }
   };
   function hubTospeechFromCamtest() {
-    if(mode === undefined)
-      setWheel(true);
+    if (mode === undefined) setWheel(true);
   }
   function hubForWheelFalse() {
     setWheel(false);
@@ -374,13 +372,9 @@ const CamMain = ({
   };
 
   console.log("CamMain rendered");
-  /*MicToggle*/
-  const onMicToggle = (enabled) => {
-    console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
-  };
   return (
     <div>
-      <div className={bg_img} ></div>
+      <div className={bg_img}></div>
       {/* Main Room */}
 
       {mode === undefined && !loaded && (
@@ -450,8 +444,12 @@ const CamMain = ({
               </div>
             </div>
           </div>
-          <div className={bg_items} onMouseOver={() => setModalOpen(true)}  onMouseLeave={() => setModalOpen(false)}></div>
-          <div className={styles.modalArrowText} >
+          <div
+            className={bg_items}
+            onMouseOver={() => setModalOpen(true)}
+            onMouseLeave={() => setModalOpen(false)}
+          ></div>
+          <div className={styles.modalArrowText}>
             <div className={styles.modalArrow}></div>
             <div className={styles.modalText}>홈술포차 사용 설명서</div>
           </div>
