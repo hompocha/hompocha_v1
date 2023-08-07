@@ -265,7 +265,8 @@ const CamMain = ({
     }
   };
   function hubTospeechFromCamtest() {
-    setWheel(true);
+    if(mode === undefined)
+      setWheel(true);
   }
   function hubForWheelFalse() {
     setWheel(false);
