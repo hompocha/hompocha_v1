@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
+import styles from "./MicButton.module.css";
 
-export function MicButton({onMicToggle, user}) {
-  const micOnImageURL = "/Bell/micOn.png";
-  const micOffImageURL = "/Bell/micOff.png";
+export function MicButton({ onMicToggle, user }) {
 
   const [micEnabled, setMicEnabled] = useState(true);
 
@@ -22,19 +21,23 @@ export function MicButton({onMicToggle, user}) {
   };
 
   return (
-    <button
-      onClick={toggleMic}
-      style={{
-        backgroundImage: `url(${micEnabled ? micOnImageURL : micOffImageURL})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        width: '57px',
-        height: '57px',
-        border: 'none',
-        outline: 'none',
-        cursor: 'pointer',
-        backgroundColor: 'transparent',
-      }}
-    />
+
+    <>
+      <input
+        className={styles.reactSwitchCheckbox}
+        id={`reactMicSwtich`}
+        type="checkbox"
+      />
+      <label
+        className={styles.reactSwitchLabel}
+        htmlFor={`reactMicSwtich`}
+        onClick={toggleMic}
+      >
+        <span className={styles.reactSwitchButton}>
+          {micEnabled ? "on" : "off"}
+        </span>
+      </label>
+    </>
+
   );
 }

@@ -584,7 +584,7 @@ const CamTest = (props: any) => {
         </>
       )}
 
-      <div>
+      {/* <div>
         <button type="submit" onClick={sendRouletteSignal}>
           돌려
         </button>
@@ -593,7 +593,7 @@ const CamTest = (props: any) => {
         <button type="submit" onClick={props.sendCheersOnSignal}>
           건배준비
         </button>
-      </div>
+      </div> */}
       <div className={styles.scale}>
         <svg
           ref={svgRef}
