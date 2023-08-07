@@ -11,6 +11,7 @@ import hitEffect from "../../sounds/avoid_effect2.wav";
 import healEffect from "../../sounds/heal1.wav";
 import { effectSound } from "../../effectSound";
 import CountDown from "../../Loading/CountDown";
+import { HealthBar, SubHealthBar } from "./hpBar";
 
 function newObj(src, width, height) {
   this.position = { x: 0, y: 0 };
@@ -25,6 +26,7 @@ function newObj(src, width, height) {
 const defaultGameState = {
   roomId: "room",
   user: "connectionId",
+  gameEnd: false,
   condition: {
     objSize: 0.15,
     objLenX: 0.15,
@@ -32,7 +34,7 @@ const defaultGameState = {
     objDropHeight: 0.08,
     ground: 0.92,
     objSpeed: 0.05,
-    objIntervalFrame: 10,
+    objIntervalFrame: 15,
     defaultTime: 1000 * 60,
   },
   hpBar: {
@@ -74,12 +76,14 @@ const AvoidGame = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
-  const gameState = useRef(defaultGameState);
+  const gameState = useRef(JSON.parse(JSON.stringify(defaultGameState)));
   const objInterval = useRef(null);
   const speedInterval = useRef(null);
   const sendInterval = useRef(null);
   const [isGameOver, setIsGameOver] = useState(false);
-  const hpLeft = useRef(100);
+  // const hpLeft = useRef(100);
+  const [hpLeft, setHpLeft] = useState(100);
+  const [subHpLeft, setSubHpLeft] = useState(null);
   const hostId = props.selectID;
 
   const subscribers = props.user.subscribers;
@@ -98,7 +102,6 @@ const AvoidGame = (props) => {
   useEffect(() => {
     if (!start) return;
     const avoidBGM = effectSound(BGM, true, 0.7);
-
     gameState.current.user = props.user.connectionId;
     if (isGameOver) {
       avoidBGM.stop();
@@ -268,6 +271,13 @@ const AvoidGame = (props) => {
     const h = can_ref.height;
     can_ctx.save();
     can_ctx.clearRect(0, 0, w, h);
+    if (gameState.gameEnd){
+      can_ctx.fillStyle = 'black';
+      can_ctx.globalAlpha = "0.7"; // 채우기 투명도 설정
+      can_ctx.fillRect(0,0,w,h);
+      can_ctx.restore();
+      return;
+    }
     drawPlayer(can_ref, can_ctx, gameState.player);
     gameState.objects.forEach((obj) => {
       drawObj(can_ref, can_ctx, obj);
@@ -280,8 +290,6 @@ const AvoidGame = (props) => {
       can_ctx.fillStyle = grad;
       can_ctx.fillRect(0, 0, w, h);
     }
-
-    drawHpBar(can_ref, can_ctx, gameState.hpBar.hpLeft);
 
     can_ctx.restore();
   };
@@ -351,31 +359,31 @@ const AvoidGame = (props) => {
       ) {
         if (obj.type !== "avoid_pill") {
           effectSound(hitEffect);
-          console.log(
-            "diediediediediediediediediediediedie",
-            gameState.hpBar.hpLeft.current
-          );
           gameState.hpBar.hpLeft -= 10;
+          setHpLeft((hpLeft)=>(hpLeft-10));
           gameState.player.state += 1;
           setTimeout(() => {
             gameState.player.state -= 1;
           }, 200);
-
-          if (gameState.hpBar.hpLeft < 0) {
+          
+          // if (hpLeft <= 0) {
+          if (gameState.hpBar.hpLeft <= 0) {
+            gameState.gameEnd=true;
             gameState.objects = [];
-            gameState.hpBar.hpLeft = 100;
+            // gameState.hpBar.hpLeft = 100;
+
+            // setHpLeft(100);
             clearInterval(speedInterval.current);
             clearInterval(objInterval.current);
             clearInterval(sendInterval.current);
+            sendGameState(gameState);
             sendGameResult();
+            gameState=JSON.parse(JSON.stringify(defaultGameState));
+            console.log(gameState);
           }
         } else {
-          console.log(
-            obj.isAvoid,
-            "yumyumyumyumyumyumyumyumyumyumyumyum",
-            gameState.hpBar.hpLeft
-          );
           gameState.hpBar.hpLeft += 5;
+          setHpLeft((hpLeft)=>(hpLeft+5));
           effectSound(healEffect);
         }
         gameState.objects.splice(i, 1);
@@ -547,6 +555,7 @@ const AvoidGame = (props) => {
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
           <div className={styles.mainUserCamBorder}></div>
+          <div>
           <video
             className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
             // className={styles.avoidVideo}
@@ -562,6 +571,9 @@ const AvoidGame = (props) => {
             width={"960px"}
             height={"720px"}
           />
+          <HealthBar hp={hpLeft} maxHp={100}/>
+          </div>
+          {/* <HealthBar hp={gameState.current.hpBar.hpLeft} maxHp={100}/> */}
           {/* subscribers Cam */}
           {subscribers.map((subscriber, index) => (
             <>
