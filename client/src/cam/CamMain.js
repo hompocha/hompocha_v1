@@ -380,7 +380,7 @@ const CamMain = ({
   const micOffImageURL = "/Bell/micOff.png";
   return (
     <div>
-      <div className={bg_img}></div>
+      <div className={bg_img} ></div>
       {/* Main Room */}
 
       {mode === undefined && !loaded && (
@@ -457,8 +457,8 @@ const CamMain = ({
               </div>
             </div>
           </div>
-          <div className={bg_items} onClick={() => setModalOpen(true)}></div>
-          <div className={styles.modalArrowText}>
+          <div className={bg_items} onMouseOver={() => setModalOpen(true)}  onMouseLeave={() => setModalOpen(false)}></div>
+          <div className={styles.modalArrowText} >
             <div className={styles.modalArrow}></div>
             <div className={styles.modalText}>홈술포차 사용 설명서</div>
           </div>

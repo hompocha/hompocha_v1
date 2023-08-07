@@ -59,7 +59,7 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_pocha/pocha.png");
   background-repeat: no-repeat;
   background-size: contain;
@@ -79,7 +79,7 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_bar/restaurent.png");
   background-repeat: no-repeat;
   background-size: contain;
@@ -98,7 +98,7 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_izakaya/ramen.png");
   background-repeat: no-repeat;
   background-size: contain;
