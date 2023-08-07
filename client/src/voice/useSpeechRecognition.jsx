@@ -36,7 +36,7 @@ const gameStartKeywords = [
   "발음 게임이요",
   "피하기 게임 이요",
 ];
-const wheelKeyword = ["돌려주세요"];
+const wheelKeyword = ["돌려주세요","돌려 주세요"];
 
 const themeChangeKeywords = ["테마 바꿔 주세요"];
 const UseSpeechRecognition = (props) => {
