@@ -565,7 +565,8 @@ const AvoidGame = (props) => {
           {/* subscribers Cam */}
           {subscribers.map((subscriber, index) => (
             <>
-              <div className={`${styles[`GameSubBorder${index + 1}`]}`}></div>
+              
+              <div className={`${styles[`gameSubBorder${index + 1}`]}`}></div>
               <div
                 className={`${styles[`avoidGameSub${index + 1}`]} ${
                   !loaded && styles.hidden
@@ -583,7 +584,8 @@ const AvoidGame = (props) => {
                   !loaded && styles.hidden
                 }`}
               >
-                닉네임이 들어갈 자리
+                {/* 닉네임이 들어갈 자리 */}
+                {props.conToNick[subscriber.stream.connection.connectionId]}
               </div>
             </>
           ))}

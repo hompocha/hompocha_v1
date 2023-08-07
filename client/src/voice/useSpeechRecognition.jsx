@@ -37,7 +37,7 @@ const gameStartKeywords = [
   "발음 게임이요",
   "피하기 게임 이요",
 ];
-const wheelKeyword = ["돌려주세요"];
+const wheelKeyword = ["돌려주세요","돌려 주세요"];
 
 const themeChangeKeywords = ["테마 바꿔 주세요"];
 const UseSpeechRecognition = (props) => {
@@ -51,21 +51,24 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
 
-    if (value.includes("우리 한잔할까")) {
-      stop();
-      setStopSign(false);
-      props.sendCheersOnSignal();
-    }
+
     if (value.includes("담배")) {
       stop();
       setStopSign(false);
       props.sendCheersOffSignal();
     }
-    for (const keyword of wheelKeyword) {
-      if (value.includes(keyword)) {
+    if(props.mode === undefined) {
+      for (const keyword of wheelKeyword) {
+        if (value.includes(keyword)) {
+          stop();
+          setStopSign(false);
+          props.hubTospeechFromCamtest();
+        }
+      }
+      if (value.includes("우리 한잔할까")) {
         stop();
         setStopSign(false);
-        props.hubTospeechFromCamtest();
+        props.sendCheersOnSignal();
       }
     }
     if (value.includes("채팅창 보여 줘")) {
@@ -78,6 +81,7 @@ const UseSpeechRecognition = (props) => {
       setStopSign(false);
       props.chatChangeOff();
     }
+
 
 
     /* 발음게임 명령어 */
@@ -210,8 +214,8 @@ const UseSpeechRecognition = (props) => {
         setListenBlocked(false);
         listen({ lang });
       };
-  // /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
-  // /* 현재 방으로 이동 시 오류 발생, 개선필요 */
+  /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
+  /* 현재 방으로 이동 시 오류 발생, 개선필요 */
   useEffect(() => {
     if (props.speechBlocked === true) {
       stop();

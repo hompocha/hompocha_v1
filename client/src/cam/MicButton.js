@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./MicButton.module.css";
 
 export function MicButton({ onMicToggle, user }) {
+
   const [micEnabled, setMicEnabled] = useState(true);
 
   const toggleMic = () => {
@@ -20,6 +21,7 @@ export function MicButton({ onMicToggle, user }) {
   };
 
   return (
+
     <>
       <input
         className={styles.reactSwitchCheckbox}
@@ -36,5 +38,6 @@ export function MicButton({ onMicToggle, user }) {
         </span>
       </label>
     </>
+
   );
 }

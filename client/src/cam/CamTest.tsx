@@ -94,6 +94,7 @@ const CamTest = (props: any) => {
           height="100%"
           clipPath={`url(#${videoClipId})`}
         >
+           {/*flag 0이면 일반대화모드 */}
           {flag === 0 && (
             <UserVideoComponent
               streamManager={members[index]}
@@ -105,6 +106,7 @@ const CamTest = (props: any) => {
               setVideoInfo={setVideoInfo}
             />
           )}
+          {/*flag 1이면 룰렛 결과가 나오는거*/}
           {flag === 1 && (
             <UserVideoComponent
               streamManager={members[counts - 1]}
