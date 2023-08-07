@@ -33,15 +33,16 @@
 .modalText {
   z-index: 17;
   position: fixed;
-  width: 40vw;
+  width: 43.5vw;
   height: 65vh;
-  left: 27vw;
-  top: 23vh;
+  left: 25.5vw;
+  top: 20vh;
   padding: 0 3vw;
   color: white;
-  font-size: 18px;
+  font-size: 30px;
+  line-height: 37px;
 }
 
 .textHeader {
-  font-size: 35px;
+  font-size: 40px;
 }
