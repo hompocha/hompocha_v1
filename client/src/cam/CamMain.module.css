@@ -59,12 +59,13 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_pocha/pocha.png");
   background-repeat: no-repeat;
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
 }
 
 .themePochaItem:hover {
@@ -78,12 +79,13 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_bar/restaurent.png");
   background-repeat: no-repeat;
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
 }
 
 .themeBarItem:hover {
@@ -96,12 +98,14 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_izakaya/ramen.png");
   background-repeat: no-repeat;
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
+  
 }
 .themeIzakayaItem:hover {
   animation: grow 1300ms ease infinite;
@@ -184,6 +188,7 @@ body {
 
 .gameButtons {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-evenly;
   margin: 3vh 0;
@@ -193,7 +198,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .gameName {
@@ -265,4 +270,13 @@ body {
   70% {
     transform: scale(1);
   }
+}
+
+.gameButton {
+  width: 45px;
+  height: 45px;
+  z-index: 1;
+  background-image: url("../../public/asset/room/gameButton.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }

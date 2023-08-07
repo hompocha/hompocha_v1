@@ -5,20 +5,18 @@ import { event } from "jquery";
 import BGM from "../sounds/roomBGM.wav";
 import useSound from "../useSound";
 import rouletteSound from "../sounds/rouletteEffect.wav";
-import cheers_sample from "../sounds/cheers_sample.wav"
+import cheers_sample from "../sounds/cheers_sample.wav";
 import { effectSound } from "../effectSound";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 
-
-
-const images:{[name:string]: string} = {
+const images: { [name: string]: string } = {
   beer: "../../Drink/beerForCheers.png",
 };
 
 const CamTest = (props: any) => {
   /* 배경음악 */
-  useSound(BGM, 1);
+  useSound(BGM, 0.5);
   interface Props {
     index: number;
     radius: number;
@@ -38,13 +36,12 @@ const CamTest = (props: any) => {
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
   const imgLoaded = useRef<Boolean>(false);
-  
-  const myself = props.user.connectionId;
-  const newHandData:{[id: string]: any}={};
-  const cheersCup: {[id:string]: any}={};
-  const imgElements:{[key: string]: HTMLImageElement} = {};
-  const cheersRef = useRef<Boolean>(false);
 
+  const myself = props.user.connectionId;
+  const newHandData: { [id: string]: any } = {};
+  const cheersCup: { [id: string]: any } = {};
+  const imgElements: { [key: string]: HTMLImageElement } = {};
+  const cheersRef = useRef<Boolean>(false);
 
   /* 부채꼴 모양으로 자른 캠 */
   const CamSlice: React.FC<Props> = ({
@@ -169,8 +166,8 @@ const CamTest = (props: any) => {
   useEffect(() => {
     if (canvasRef.current && canvasCtx.current) {
       console.log("CamTest test test ");
-      const interval = setInterval(()=>{
-        updateCups(canvasRef.current,newHandData);
+      const interval = setInterval(() => {
+        updateCups(canvasRef.current, newHandData);
         drawHands(canvasRef.current, canvasCtx.current, newHandData);
       }, 1000 / 60);
       return () => {
@@ -209,63 +206,70 @@ const CamTest = (props: any) => {
     console.log("건배모드 상태!!!", cheersMode);
   }, [cheersMode]);
 
-  const updateCups = (can_ref:any, newHandData:any) => {
+  const updateCups = (can_ref: any, newHandData: any) => {
     const keys = Object.keys(newHandData);
-    for (let i=0; i<keys.length; i++) {
-      for (let j=i+1; j<keys.length; j++){
+    for (let i = 0; i < keys.length; i++) {
+      for (let j = i + 1; j < keys.length; j++) {
         const cupA = newHandData[keys[i]];
         const cupB = newHandData[keys[j]];
-        // const distance = ((cupA.transformedHand.x - cupB.transformedHand.x)**2 
+        // const distance = ((cupA.transformedHand.x - cupB.transformedHand.x)**2
         //                   + (cupA.transformedHand.y - cupB.transformedHand.y)**2) **0.5;
-        const distanceX = Math.abs(cupA.transformedHand.x - cupB.transformedHand.x);
-        const distanceY = Math.abs(cupA.transformedHand.y - cupB.transformedHand.y);
-        if(
-          (distanceX < (cupA.cupSize + cupB.cupSize)*0.58/2*0.7 * can_ref.width) &&
-          (distanceY < (cupA.cupSize + cupB.cupSize)/2 *0.7* can_ref.height)
+        const distanceX = Math.abs(
+          cupA.transformedHand.x - cupB.transformedHand.x
+        );
+        const distanceY = Math.abs(
+          cupA.transformedHand.y - cupB.transformedHand.y
+        );
+        if (
+          distanceX <
+            (((cupA.cupSize + cupB.cupSize) * 0.58) / 2) *
+              0.7 *
+              can_ref.width &&
+          distanceY < ((cupA.cupSize + cupB.cupSize) / 2) * 0.7 * can_ref.height
         ) {
           // console.log('collision: ', keys[i], keys[j]);
           // if (cupA.collision===false && cupB.collision===false){
           //   effectSound(cheers_sample, false);
           // }
-          cupA.collision=true;
-          cupB.collision=true;
+          cupA.collision = true;
+          cupB.collision = true;
         } else {
-          cupA.collision=false;
-          cupB.collision=false;
+          cupA.collision = false;
+          cupB.collision = false;
         }
       }
     }
     let cheers = false;
-    for (let id in newHandData){
-      if(newHandData[id].collision === false){
+    for (let id in newHandData) {
+      if (newHandData[id].collision === false) {
         newHandData[id].cup = newHandData[id].transformedHand;
       } else {
         cheers = true;
       }
     }
-    if (cheers){
-      if (!cheersRef.current){
+    if (cheers) {
+      if (!cheersRef.current) {
         effectSound(cheers_sample, false);
         cheersRef.current = true;
       }
     } else {
-      cheersRef.current=false;
+      cheersRef.current = false;
     }
-  }
+  };
 
-  const drawHands = async (can_ref: any, can_ctx: any, newHandData:any) => {
+  const drawHands = async (can_ref: any, can_ctx: any, newHandData: any) => {
     // console.log('drawhands');
     can_ctx.save();
     can_ctx.clearRect(0, 0, can_ref.width, can_ref.height);
     // const videoInfos = videoInfosRef.current;
     // console.log("imgLoaded: ",imgLoaded);
-    if(!imgLoaded.current){
+    if (!imgLoaded.current) {
       await loadCupImages();
-      imgLoaded.current=true;
+      imgLoaded.current = true;
     }
-    for (let id in newHandData){
-      if (newHandData[id]){
-        const mine = (id === myself)? true:false;
+    for (let id in newHandData) {
+      if (newHandData[id]) {
+        const mine = id === myself ? true : false;
         drawCup(can_ref, can_ctx, newHandData[id]);
       }
     }
@@ -290,17 +294,20 @@ const CamTest = (props: any) => {
     }
   };
 
-
-  const drawCup = (can_ref: HTMLCanvasElement, can_ctx: CanvasRenderingContext2D, hand:any): void => {
+  const drawCup = (
+    can_ref: HTMLCanvasElement,
+    can_ctx: CanvasRenderingContext2D,
+    hand: any
+  ): void => {
     const w = can_ref.width;
     const h = can_ref.height;
     const img = imgElements["beer"];
-    if(hand.angle < 0.7)
-    {  can_ctx.drawImage(
+    if (hand.angle < 0.7) {
+      can_ctx.drawImage(
         img,
-        (hand.cup.x - w * hand.cupSize * 0.58 / 2),
-        (hand.cup.y - h * hand.cupSize/2),
-        hand.cupSize *0.58* w,
+        hand.cup.x - (w * hand.cupSize * 0.58) / 2,
+        hand.cup.y - (h * hand.cupSize) / 2,
+        hand.cupSize * 0.58 * w,
         hand.cupSize * h
       );
     }
@@ -477,26 +484,38 @@ const CamTest = (props: any) => {
       .stream.session.on("signal:cheersData", (event: any) => {
         const data = JSON.parse(event.data);
         const id = event.from.connectionId;
-        if(data.hand!==null && data.hand!==undefined){
+        if (data.hand !== null && data.hand !== undefined) {
           if (videoInfosRef.current[id]) {
             const hand = data.hand;
-            const videoInfo = videoInfosRef.current[id]
+            const videoInfo = videoInfosRef.current[id];
             // const mine = (id === myself)? true:false;
-            const transformedHand = calculateLocation(hand.hand5.x, hand.hand5.y, videoInfo);
-            const handVector = {x: hand.hand5.x - hand.hand17.x, y: hand.hand5.y-hand.hand17.y, z: hand.hand5.z-hand.hand17.z};
-            const handVectorDistance = (handVector.x**2 + handVector.y**2+handVector.z**2)**0.5;
-            const angle = Math.acos(Math.abs(handVector.y)/handVectorDistance);
-            let cupSize = Math.abs(handVector.y)*3*videoInfo.scale;
-            cupSize = (cupSize>0.35)? 0.35:cupSize;
+            const transformedHand = calculateLocation(
+              hand.hand5.x,
+              hand.hand5.y,
+              videoInfo
+            );
+            const handVector = {
+              x: hand.hand5.x - hand.hand17.x,
+              y: hand.hand5.y - hand.hand17.y,
+              z: hand.hand5.z - hand.hand17.z,
+            };
+            const handVectorDistance =
+              (handVector.x ** 2 + handVector.y ** 2 + handVector.z ** 2) **
+              0.5;
+            const angle = Math.acos(
+              Math.abs(handVector.y) / handVectorDistance
+            );
+            let cupSize = Math.abs(handVector.y) * 3 * videoInfo.scale;
+            cupSize = cupSize > 0.35 ? 0.35 : cupSize;
 
-            if(newHandData[id]===undefined){
+            if (newHandData[id] === undefined) {
               const d = {
                 transformedHand: transformedHand,
                 angle: angle,
                 cupSize: cupSize,
                 hand: hand,
                 collision: false,
-                cup: transformedHand
+                cup: transformedHand,
               };
               newHandData[id] = d;
             } else {
