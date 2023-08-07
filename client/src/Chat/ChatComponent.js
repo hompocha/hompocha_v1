@@ -151,7 +151,7 @@ export default function ChatComponent(props) {
             className={styles.sendButton}
             onClick={sendMessage}
             >
-            전송
+            <img style = {{position : "absolute", width : "30px", height : "22px" , top : "14px", left : "3px"}} src="/Chat/sendButton.png"></img>
           </button>
         </div>
       </div>
