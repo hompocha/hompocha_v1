@@ -4,7 +4,7 @@ export function MicButton({onMicToggle, user}) {
   const micOnImageURL = "/Bell/micOn.png";
   const micOffImageURL = "/Bell/micOff.png";
 
-  const [micEnabled, setMicEnabled] = useState(false);
+  const [micEnabled, setMicEnabled] = useState(true);
 
   const toggleMic = () => {
     setMicEnabled((prevState) => {
