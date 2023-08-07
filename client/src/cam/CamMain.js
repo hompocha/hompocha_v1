@@ -14,6 +14,8 @@ import pochaBGM from "../sounds/themeBGM/themePochaBGM.mp3";
 import barBGM from "../sounds/themeBGM/themeBarBGM.mp3";
 import izakayaBGM from "../sounds/themeBGM/themeIzakayaBGM.mp3";
 import Loading from "../Loading/Loading";
+import { MicButton } from "./MicButton";
+import BgmButton from "./BgmButton";
 
 const CamMain = ({
   user,
@@ -94,18 +96,6 @@ const CamMain = ({
   }, [mode]);
 
   const canvasRef = useRef(null);
-  const toggleMic = () => {
-    setMicEnabled((prevState) => {
-      const enabled = !prevState;
-      const publisher = user.getStreamManager();
-      if (enabled) {
-        publisher.publishAudio(true);
-      } else {
-        publisher.publishAudio(false);
-      }
-      return enabled;
-    });
-  };
 
   useEffect(() => {
     console.log(theme);
@@ -376,8 +366,10 @@ const CamMain = ({
   };
 
   console.log("CamMain rendered");
-  const micOnImageURL = "/Bell/micOn.png";
-  const micOffImageURL = "/Bell/micOff.png";
+  /*MicToggle*/
+  const onMicToggle = (enabled) => {
+    console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
+  };
   return (
     <div>
       <div className={bg_img}></div>
@@ -398,38 +390,31 @@ const CamMain = ({
         >
           {/*<div id="session" className={ !loaded ? styles.hidden : ''}>*/}
 
-          {/* <div className={styles.bamboo}></div> */}
           <div id="session-header" className={styles.camMainHeader}>
-            <h2 id="session-title">{roomName} </h2>
-            <h2>{user.subscribers.length + 1}명 참여중</h2>
-            <h2 className={styles.nickName}>{user.getNickname()}</h2>
-            <button
-              onClick={toggleMic}
-              style={{
-                backgroundImage: `url(${
-                  micEnabled ? micOnImageURL : micOffImageURL
-                })`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                width: "57px", // Adjust the size as needed
-                height: "57px", // Adjust the size as needed
-                border: "none", // Remove border
-                outline: "none", // Remove outline
-                cursor: "pointer",
-                backgroundColor: "transparent",
-              }}
-            />
-            <button
-              onClick={() => {
-                if (musicOn === true) setMusicOn(false);
-                if (musicOn === false) setMusicOn(true);
-              }}
-            >
-              {musicOn ? "음악끄기" : "음악켜기"}
-            </button>
-            <form className={styles.ReturnRoom}>
+            <div id="session-title" className={styles.roomName}>
+              {roomName}
+            </div>
+            <div className={styles.numOfUsers}>
+              {user.subscribers.length + 1}명 참여중
+            </div>
+            {/* <div className={styles.micToggleWrap}> */}
+            <div className={styles.nickName}>{user.getNickname()}</div>
+            <div className={styles.mic}>
+              <span>Mic</span>
+              <div className={styles.micControl}>
+                <MicButton onMicToggle={onMicToggle} user={user} />
+              </div>
+            </div>
+            <div className={styles.bgm}>
+              <span>BGM</span>
+              <div className={styles.bgmControl}>
+                <BgmButton musicOn={musicOn} setMusicOn={setMusicOn} />
+              </div>
+            </div>
+            <div className={styles.toLobbyButton} onClick={returnLobby}></div>
+            {/* <form className={styles.ReturnRoom}>
               <input onClick={returnLobby} type="button" value="로비로 이동" />
-            </form>
+            </form> */}
           </div>
           <div className={styles.gameListWrap}>
             <div className={styles.gameMenu}>홈술포차 메 뉴 판</div>
