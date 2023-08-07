@@ -14,6 +14,7 @@ import pochaBGM from "../sounds/themeBGM/themePochaBGM.mp3";
 import barBGM from "../sounds/themeBGM/themeBarBGM.mp3";
 import izakayaBGM from "../sounds/themeBGM/themeIzakayaBGM.mp3";
 import Loading from "../Loading/Loading";
+import {MicButton} from "./MicButton";
 
 const CamMain = ({
   user,
@@ -94,18 +95,6 @@ const CamMain = ({
   }, [mode]);
 
   const canvasRef = useRef(null);
-  const toggleMic = () => {
-    setMicEnabled((prevState) => {
-      const enabled = !prevState;
-      const publisher = user.getStreamManager();
-      if (enabled) {
-        publisher.publishAudio(true);
-      } else {
-        publisher.publishAudio(false);
-      }
-      return enabled;
-    });
-  };
 
   useEffect(() => {
     console.log(theme);
@@ -376,6 +365,11 @@ const CamMain = ({
     console.log("sendCheersOffSignal 실행");
   };
 
+  /*MicToggle*/
+  const onMicToggle = (enabled) => {
+    console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
+  };
+
   console.log("CamMain rendered");
   const micOnImageURL = "/Bell/micOn.png";
   const micOffImageURL = "/Bell/micOff.png";
@@ -404,22 +398,8 @@ const CamMain = ({
             <h2 id="session-title">{roomName} </h2>
             <h2>{user.subscribers.length + 1}명 참여중</h2>
             <h2 className={styles.nickName}>{user.getNickname()}</h2>
-            <button
-              onClick={toggleMic}
-              style={{
-                backgroundImage: `url(${
-                  micEnabled ? micOnImageURL : micOffImageURL
-                })`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                width: "57px", // Adjust the size as needed
-                height: "57px", // Adjust the size as needed
-                border: "none", // Remove border
-                outline: "none", // Remove outline
-                cursor: "pointer",
-                backgroundColor: "transparent",
-              }}
-            />
+            <MicButton onMicToggle={onMicToggle} user={user} />
+
             <button
               onClick={() => {
                 if (musicOn === true) setMusicOn(false);
