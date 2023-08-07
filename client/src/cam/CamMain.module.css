@@ -65,6 +65,7 @@ body {
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
 }
 
 .themePochaItem:hover {
@@ -84,6 +85,7 @@ body {
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
 }
 
 .themeBarItem:hover {
@@ -102,6 +104,8 @@ body {
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
+  
 }
 .themeIzakayaItem:hover {
   animation: grow 1300ms ease infinite;
