@@ -205,6 +205,7 @@ body {
   background-image: url("../../public/asset/room/toLobbyButton.png");
   background-repeat: no-repeat;
   background-size: contain;
+  cursor: pointer;
 }
 
 .camAndVoice {
