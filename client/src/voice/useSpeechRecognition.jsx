@@ -279,9 +279,9 @@ const UseSpeechRecognition = (props) => {
 
         <div className={styles.speechWord}>
           {value}
-          {/* <UserInput onSubmit={handleUserInput} /> */}
-        </div>
-      )}  */}
+          <UserInput onSubmit={handleUserInput} />
+        /* </div>
+      )}    */}
       {props.mode !== "speechGame" && shootingStar === true && (
         <div className={styless.night}>
           {Array.from({ length: 24 }, (_, index) => (
