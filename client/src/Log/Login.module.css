@@ -146,6 +146,9 @@ button {
   flex-direction: row;
   justify-content: space-between;
 }
+.buttonContainer > button {
+  cursor: pointer;
+}
 
 .menu {
   position: fixed;
