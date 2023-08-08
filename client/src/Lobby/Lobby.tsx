@@ -90,10 +90,11 @@ const Lobby = () => {
           </div>
         </div>
         <div className={styles.nav}>
-          <h2 className={styles.userName}>{nickName}</h2>
-          <div className={styles.logoutBtn}>
+          <div className={styles.userName}>{nickName}</div>
+          {/* <div className={styles.logoutBtn}>
             <input onClick={handleLogout} type="button" value="로그아웃" />
-          </div>
+          </div> */}
+          <div onClick={handleLogout} className={styles.logoutBtn}></div>
         </div>
         {flag === 1 && (
           <div className={styles.roomCreateWrap}>

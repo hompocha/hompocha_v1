@@ -398,7 +398,6 @@ const CamMain = ({
             <div className={styles.numOfUsers}>
               {user.subscribers.length + 1}명 참여중
             </div>
-            <div className={styles.nickName}>{user.getNickname()}</div>
             <div className={styles.mic}>
               <div className={styles.micControl}>
                 <MicButton onMicToggle={onMicToggle} user={user} />
@@ -409,6 +408,7 @@ const CamMain = ({
                 <BgmButton musicOn={musicOn} setMusicOn={setMusicOn} />
               </div>
             </div>
+            <div className={styles.nickName}>{user.getNickname()}</div>
             <div className={styles.toLobbyButton} onClick={returnLobby}></div>
           </div>
           <div className={styles.gameListWrap}>

@@ -9,26 +9,25 @@
   align-items: center;
   z-index: 3;
 }
-.roomList{
+.roomList {
   display: flex;
   width: 50vw;
 }
-.roomName{
+.roomName {
   width: 18vw;
 }
-.roomPeople{
+.roomPeople {
   width: 11vw;
 }
-.roomStatus{
+.roomStatus {
   width: 9vw;
 }
-.roomInButton{
+.roomInButton {
   border-radius: 10%;
   width: 4vw;
   height: 4vh;
 }
-img{
-  
+img {
   width: 25vw;
   height: 40vh;
   -webkit-user-select: none;
@@ -41,14 +40,14 @@ img{
   -moz-user-drag: none;
   -o-user-drag: none;
 }
-.page {
-  transform-origin: left center;
-}
-.page1 {
-  position: absolute;
-  top: 16vw;
-  left: 26.5vw;  
-  z-index: 1;
-  scale: 200%;
-  transition-delay: 0.1s;
+
+.roomListContainer {
+  width: 1000px;
+  height: 800px;
+  /* border: 1px solid white; */
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 35px 0 rgba(255, 255, 255, 0.7);
+  font-family: "Gowun Dodum", sans-serif;
 }

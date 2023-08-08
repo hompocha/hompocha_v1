@@ -62,3 +62,24 @@
   background-size: cover;
   transition: all 1s linear 0.25s;
 }
+
+.logoutBtn {
+  position: fixed;
+  top: 25px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-image: url("../../public/asset/lobby/logout.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.userName {
+  position: fixed;
+  top: 8px;
+  right: 140px;
+  color: white;
+  font-size: 50px;
+  font-family: "Gowun Dodum", sans-serif;
+}

@@ -190,10 +190,11 @@ body {
 
 .nickName {
   position: fixed;
-  top: 18px;
+  top: 8px;
   right: 140px;
   color: white;
   font-size: 50px;
+  font-family: "Gowun Dodum", sans-serif;
 }
 
 .toLobbyButton {
