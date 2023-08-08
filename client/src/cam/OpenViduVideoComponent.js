@@ -4,6 +4,7 @@ import styles from "./OpenViduVideoComponent.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { drawPaddle } from "../Games/AirHockey/drawPaddle";
 import NewDrawBalls from "../Games/AirHockey/NewDrawBalls";
+import { HealthBar } from "../Games/AvoidGame/hpBar";
 
 
 
@@ -28,6 +29,7 @@ const OpenViduVideoComponent = (props) => {
   const gameStateRef = useRef(null);
   const cheersRef = useRef(null);
   const noHands = useRef(false);
+  const [hpLeft, setHpLeft] = useState(100);
 
   const streamId = props.streamManager.stream.connection.connectionId;
 
@@ -163,6 +165,7 @@ const OpenViduVideoComponent = (props) => {
             `${props.streamManager.stream.connection.connectionId}`
           ];
         if (gameStateRef.current !== undefined) {
+          setHpLeft(gameStateRef.current.hpBar.hpLeft);
           props.drawGame(
             canvasSubRef.current,
             canvasSubCtx.current,
@@ -296,6 +299,10 @@ const OpenViduVideoComponent = (props) => {
               ref={videoRef}
             />
             <canvas className={styles.avoidGameSubCan} ref={canvasSubRef} />
+            <div className={styles.avoidGameSubHp}>
+
+          <HealthBar hp={hpLeft} maxHp={100} main={false}/>
+            </div>
           </>
         ) : null
       }
