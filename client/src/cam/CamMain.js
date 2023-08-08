@@ -2,21 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
-import GameCam from "../Games/GameCam";
 import styles from "../cam/CamMain.module.css";
 import SpeechGame from "../Games/speechgame/SpeechGame";
 import Somaek from "../Games/Somaek/Somaek";
 import { AvoidGame } from "../Games/AvoidGame/AvoidGame";
 import axios from "axios";
-import Modal from "./Modal";
-import { effectSound } from "../effectSound";
-import pochaBGM from "../sounds/themeBGM/themePochaBGM.mp3";
-import barBGM from "../sounds/themeBGM/themeBarBGM.mp3";
-import izakayaBGM from "../sounds/themeBGM/themeIzakayaBGM.mp3";
 import Loading from "../Loading/Loading";
-
 import { MicButton } from "./MicButton";
-import BgmButton from "./BgmButton";
+import Theme from "./Theme";
 
 const CamMain = ({
   user,
@@ -30,66 +23,10 @@ const CamMain = ({
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [conToNick] = useState({});
-  const [micEnabled, setMicEnabled] = useState(true);
   const [speechBlocked, setSpeechBlocked] = useState(false);
-  const [cheersReady, setCheersReady] = useState(false);
-  const [cheersSuccess, setCheersSuccess] = useState(false);
-
   const [speechGamevoice, setspeechGamevoice] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
   const [wheel, setWheel] = useState(false);
-
   const [loaded, setLoaded] = useState(false);
-
-  const [musicOn, setMusicOn] = useState(true);
-
-  // 테마 변경을 위해 theme State 선언, 음성인시을 통한 테마 변경을 위해 theme과 setTheme을 useSpeechRecog...로 props 전달
-  const [theme, setTheme] = useState(0);
-  let bg_img;
-  let bg_items;
-  switch (theme) {
-    case 0:
-      bg_img = `${styles.themePocha}`;
-      bg_items = `${styles.themePochaItem}`;
-      break;
-    case 1:
-      bg_img = `${styles.themeBar}`;
-      bg_items = `${styles.themeBarItem}`;
-      break;
-    case 2:
-      bg_img = `${styles.themeIzakaya}`;
-      bg_items = `${styles.themeIzakayaItem}`;
-      break;
-    default:
-      break;
-  }
-  // 테마 변경에 따른 음악 변경
-  useEffect(() => {
-    console.log(musicOn);
-    let mainBGM;
-    switch (theme) {
-      case 0:
-        if (mode === undefined) mainBGM = effectSound(pochaBGM, true, 0.1);
-        if (musicOn === false) mainBGM.stop();
-        break;
-      case 1:
-        if (mode === undefined) mainBGM = effectSound(barBGM, true, 0.1);
-        if (musicOn === false) mainBGM.stop();
-        break;
-      case 2:
-        if (mode === undefined) mainBGM = effectSound(izakayaBGM, true, 0.1);
-        if (musicOn === false) mainBGM.stop();
-        break;
-
-      default:
-        break;
-    }
-    return () => {
-      if (mode === undefined && musicOn === true) {
-        mainBGM.stop();
-      }
-    };
-  }, [theme /* mode */, musicOn]);
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
@@ -99,7 +36,6 @@ const CamMain = ({
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    console.log(theme);
     user.getStreamManager().stream.session.on("signal:nickName", (event) => {
       let nick = event.data;
       let conId = event.from.connectionId;
@@ -319,7 +255,7 @@ const CamMain = ({
   const handleClick = (event) => {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
-    console.log("마우스 클릭 좌표:", mouseX, mouseY);
+    // console.log("마우스 클릭 좌표:", mouseX, mouseY);
   };
 
   useEffect(() => {
@@ -366,6 +302,16 @@ const CamMain = ({
     console.log("sendCheersOffSignal 실행");
   };
 
+  const sendThemeSignal = () => {
+    user
+      .getStreamManager()
+      .session.signal({to: [], type: "theme" })
+      .then(() => {
+        console.log("테마 변경 명령을 보냄 !!")
+      })
+    console.log("sendCheersOffSignal 실행");
+  };
+
   /*MicToggle*/
   const onMicToggle = (enabled) => {
     console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
@@ -373,23 +319,20 @@ const CamMain = ({
   console.log("CamMain rendered");
   return (
     <div>
-      <div className={bg_img}></div>
       {/* Main Room */}
-
+      <Theme mode={mode} camMainLoaded={loaded} user={user}/>
       {mode === undefined && !loaded && (
         <div>
           <Loading mode={mode} />
         </div>
       )}
       {mode === undefined && (
-        // <div id="session" className={styles.camMainWrap}>
         <div
           id="session"
           className={`${loaded ? styles.camMainWrap : ""} ${
             !loaded ? styles.hidden : ""
           }`}
         >
-          {/*<div id="session" className={ !loaded ? styles.hidden : ''}>*/}
 
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title" className={styles.roomName}>
@@ -402,11 +345,6 @@ const CamMain = ({
             <div className={styles.mic}>
               <div className={styles.micControl}>
                 <MicButton onMicToggle={onMicToggle} user={user} />
-              </div>
-            </div>
-            <div className={styles.bgm}>
-              <div className={styles.bgmControl}>
-                <BgmButton musicOn={musicOn} setMusicOn={setMusicOn} />
               </div>
             </div>
             <div className={styles.toLobbyButton} onClick={returnLobby}></div>
@@ -437,16 +375,11 @@ const CamMain = ({
               </div>
             </div>
           </div>
-          <div
-            className={bg_items}
-            onMouseOver={() => setModalOpen(true)}
-            onMouseLeave={() => setModalOpen(false)}
-          ></div>
+
           <div className={styles.modalArrowText}>
             <div className={styles.modalArrow}></div>
             <div className={styles.modalText}>홈술포차 사용 설명서</div>
           </div>
-          {modalOpen && <Modal setModalOpen={setModalOpen} />}
           <div className={styles.camAndVoice}>
             <UseSpeechRecognition
               sendEffectSignal={sendEffectSignal}
@@ -454,8 +387,7 @@ const CamMain = ({
               speechBlocked={speechBlocked}
               sendCheersOnSignal={sendCheersOnSignal}
               sendCheersOffSignal={sendCheersOffSignal}
-              theme={theme}
-              setTheme={setTheme}
+              sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
               chatChangeOn={chatChangeOn}
               chatChangeOff={chatChangeOff}
@@ -473,41 +405,6 @@ const CamMain = ({
         </div>
       )}
 
-      {/* 에어하키 모드 */}
-      {mode === "airHockey" && (
-        <div>
-          <GameCam
-            mode={mode}
-            user={user}
-            sessionConnected={sessionConnected}
-          />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => sendGameTypeSignal(undefined)}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
-        </div>
-      )}
-
-      {/* 오리 옮기기 모드 */}
-      {mode === "movingDuck" && (
-        <div>
-          <GameCam
-            mode={mode}
-            user={user}
-            sessionConnected={sessionConnected}
-          />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => sendGameTypeSignal(undefined)}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
-        </div>
-      )}
 
       {/* 발음 게임 */}
       {mode === "speechGame" && (
@@ -521,13 +418,10 @@ const CamMain = ({
             voice={speechGamevoice}
             voiceOn={onSpeechGame}
           />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => offSpeechGame()}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
+          <div
+            onClick={() => offSpeechGame()}
+            className={styles.toRoomButton}
+          ></div>
         </div>
       )}
       {/*소맥게임*/}
@@ -541,13 +435,10 @@ const CamMain = ({
             conToNick={conToNick}
             end={sendGameTypeSignal}
           />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => sendGameTypeSignal(undefined)}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
+          <div
+            onClick={() => sendGameTypeSignal(undefined)}
+            className={styles.toRoomButton}
+          ></div>
         </div>
       )}
 
@@ -561,13 +452,10 @@ const CamMain = ({
             mode={mode}
             conToNick={conToNick}
           />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => sendGameTypeSignal(undefined)}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
+          <div
+            onClick={() => sendGameTypeSignal(undefined)}
+            className={styles.toRoomButton}
+          ></div>
         </div>
       )}
     </div>

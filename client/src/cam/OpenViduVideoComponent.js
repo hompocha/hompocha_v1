@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import styles from "./OpenViduVideoComponent.module.css";
 import { Camera } from "@mediapipe/camera_utils";
-import { drawPaddle } from "../Games/AirHockey/drawPaddle";
-import NewDrawBalls from "../Games/AirHockey/NewDrawBalls";
 import { HealthBar } from "../Games/AvoidGame/hpBar";
 
 
@@ -22,8 +20,6 @@ const OpenViduVideoComponent = (props) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
-  // const paddleRef = useRef(null);
-  // const paddleCtx = useRef(null);
   const canvasSubRef = useRef(null);
   const canvasSubCtx = useRef(null);
   const gameStateRef = useRef(null);
@@ -222,36 +218,7 @@ const OpenViduVideoComponent = (props) => {
           </div>
         ) : null
       }
-
-      {
-        // /* 하키게임할 때 플레이어 캠 */
-        // props.mode === "airHockey" ? (
-        //   <>
-        //     <video
-        //       className={styles.videoCanvas}
-        //       autoPlay={true}
-        //       ref={(el) => {
-        //         videoRef.current = el;
-        //         setVideoReady(!!el);
-        //       }}
-        //     />
-        //     <canvas className={styles.videoCanvas} ref={canvasRef} />
-        //     <canvas className={styles.videoCanvas} ref={paddleRef} />
-        //     <NewDrawBalls />
-        //   </>
-        // ) : null
-      }
-
-      {
-        // /* 오리옮기기 게임할 때 불러와지는 플레이어 캠 */
-        // props.mode === "movingDuck" ? (
-        //   <div>
-        //     <span>오리 옮기기 모드</span>
-        //     <video autoPlay={true} ref={videoRef} />
-        //     <canvas ref={canvasRef} width={700} height={600} />
-        //   </div>
-        // ) : null
-      }
+      
       {
         /* 룰렛돌리기할 때 불러와지는 플레이어 캠 */
         props.mode === "roulette" ? (

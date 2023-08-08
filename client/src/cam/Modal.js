@@ -4,7 +4,7 @@ import styles from "./Modal.module.css";
 function Modal(props) {
   return (
     <div className={styles.modalWrap}>
-      <div className={styles.modlaInterior}>
+      <div className={styles.modalInterior}>
         {/* <input
           className={styles.modalClose}
           type="button"

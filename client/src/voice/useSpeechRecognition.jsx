@@ -1,14 +1,11 @@
-import React, { useState, useEffect, Component, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./voice.module.css";
-import axios from "axios";
 import "regenerator-runtime/runtime";
 import somaekSuccess from "../sounds/somaekSuccess.wav";
-import somaekFail from "../sounds/somaekFail.wav";
 import { effectSound } from "../effectSound";
-import styless from "./shootingStar.module.scss";
-import { set } from "mongoose";
 import UserInput from "./UserInput";
+import 'animate.css';
 
 const keyword = ["고양이", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
@@ -30,9 +27,6 @@ const gameStartKeywords = [
   "사장님 발음 게임이요",
   "사장님 소맥 게임이요",
   "사장님 피하기 게임이요",
-  "발음 게임",
-  "소맥 게임",
-  "피하기 게임",
   "소맥 게임이요",
   "발음 게임이요",
   "피하기 게임 이요",
@@ -41,8 +35,7 @@ const wheelKeyword = ["돌려주세요","돌려 주세요"];
 
 const themeChangeKeywords = ["테마 바꿔 주세요"];
 const UseSpeechRecognition = (props) => {
-  console.log(props);
-  const [shootingStar, setShootingStar] = useState(true);
+  // console.log(props);
   const [value, setValue] = useState("");
   const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState("");
@@ -51,116 +44,104 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
 
-
     if (value.includes("담배")) {
       stop();
       setStopSign(false);
       props.sendCheersOffSignal();
     }
+
+    /* 대화모드일때만 발동*/
     if(props.mode === undefined) {
       for (const keyword of wheelKeyword) {
         if (value.includes(keyword)) {
           stop();
           setStopSign(false);
+          setExtractedValue("돌려주세요");
           props.hubTospeechFromCamtest();
         }
       }
       if (value.includes("우리 한잔할까")) {
         stop();
         setStopSign(false);
+        setExtractedValue("우리 한잔할까");
         props.sendCheersOnSignal();
       }
+
+      /* 키워드 명령어 */
+      for (const word of keyword) {
+        if (value.includes(word)) {
+          setExtractedValue(word);
+          stop();
+          setStopSign(false);
+          props.sendEffectSignal(word);
+        }
+      }
+
+      /* 게임시작 명령어 */
+      for (const gameStartKeyword of gameStartKeywords) {
+        if (value.includes(gameStartKeyword)) {
+          setExtractedValue(gameStartKeyword);
+          switch (gameStartKeyword) {
+            case "발음 게임이요":
+              stop();
+              props.sendGameTypeSignal("speechGame");
+              break;
+            case "소맥 게임이요":
+              stop();
+              props.sendGameTypeSignal("somaek");
+              break;
+            case "피하기 게임 이요":
+              stop();
+              props.sendGameTypeSignal("avoidGame");
+              break;
+            default:
+              break;
+          }
+        }
+      }
     }
+    /*여기까지...---*/
+
     if (value.includes("채팅창 보여 줘")) {
       stop();
       setStopSign(false);
+      setExtractedValue("채팅창 보여줘");
       props.chatChangeOn();
     }
     if (value.includes("채팅 창 닫아 줘")) {
       stop();
       setStopSign(false);
+      setExtractedValue("채팅창 닫아줘");
       props.chatChangeOff();
     }
 
 
 
     /* 발음게임 명령어 */
-    for (const sentence of speech_sentence) {
-      if (value.includes(sentence)) {
-        effectSound(somaekSuccess);
-        setExtractedValue(sentence);
-        props.sendSpeech(
-          props.user.streamManager.stream.connection.connectionId
-        );
-      }
-    }
-
-    /* 키워드 명령어 */
-    for (const word of keyword) {
-      if (value.includes(word)) {
-        setExtractedValue(word);
-        stop();
-        setStopSign(false);
-        props.sendEffectSignal(word);
-      }
-    }
-
-    /* 게임시작 명령어 */
-    for (const gameStartKeyword of gameStartKeywords) {
-      if (value.includes(gameStartKeyword)) {
-        setExtractedValue(gameStartKeyword);
-        switch (gameStartKeyword) {
-          case "발음 게임이요":
-          // case "발음 게임":
-            stop();
-            props.sendGameTypeSignal("speechGame");
-            break;
-          case "소맥 게임이요":
-          // case "소맥 게임":
-            stop();
-            props.sendGameTypeSignal("somaek");
-            break;
-          case "피하기 게임 이요":
-          // case "피하기 게임":
-            stop();
-            props.sendGameTypeSignal("avoidGame");
-            break;
-          default:
-            break;
+    if(props.mode === "speechGame") {
+      for (const sentence of speech_sentence) {
+        if (value.includes(sentence)) {
+          effectSound(somaekSuccess);
+          setExtractedValue(sentence);
+          props.sendSpeech(
+            props.user.streamManager.stream.connection.connectionId
+          );
         }
       }
     }
+
+
 
     /* 테마 변경을 위한 음성 인식 */
     for (const themeChangeKeyword of themeChangeKeywords) {
       if (value.includes(themeChangeKeyword)) {
         setExtractedValue(themeChangeKeyword);
-        let randomNum = Math.floor(Math.random() * 3);
-        if (randomNum === props.theme) {
-          randomNum = (randomNum + 1) % 3;
-        }
-        switch (randomNum) {
-          // 포차 테마
-          case 0:
-            props.setTheme(0);
-            setShootingStar(true);
-            break;
-          // 바 테마
-          case 1:
-            props.setTheme(1);
-            setShootingStar(false);
-            break;
-          // 이자카야 테마
-          case 2:
-            props.setTheme(2);
-            setShootingStar(false);
-            break;
-          default:
-            break;
-        }
+        stop();
+        setStopSign(false);
+        props.sendThemeSignal();
       }
     }
-    console.log("Value:", value); // 추가된 부분
+    // console.log("Value:", value); // 추가된 부분
   }, [value]);
 
   useEffect(() => {
@@ -168,7 +149,7 @@ const UseSpeechRecognition = (props) => {
       const timeout = setTimeout(() => {
         setStopSign(true);
         listen({ lang });
-      }, 1000);
+      }, 1500);
       return () => clearTimeout(timeout);
     }
   }, [stopSign]);
@@ -177,7 +158,7 @@ const UseSpeechRecognition = (props) => {
     if (extractedValue !== "") {
       const timeout = setTimeout(() => {
         setExtractedValue(" ");
-      }, 500);
+      }, 5000);
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
@@ -197,7 +178,7 @@ const UseSpeechRecognition = (props) => {
   };
 
   const handleUserInput = (input) => {
-    setValue(input); // Update the value when user submits the form
+    setValue(input);
   };
 
   const { listen, listening, stop, supported } = useSpeechRecognition({
@@ -206,6 +187,7 @@ const UseSpeechRecognition = (props) => {
     onError,
   });
 
+  /* 듣기가 멈춰있으면 */
   const toggle = listening
     ? stop
     : () => {
@@ -241,65 +223,31 @@ const UseSpeechRecognition = (props) => {
     }
   }, [props.speechBlocked]);
 
+  const [animationClass, setAnimationClass] = useState("");
+  useEffect(() => {
+    if (extractedValue !== "") {
+      setAnimationClass("animate__animated animate__fadeIn");
+
+      const timeout = setTimeout(() => {
+        setAnimationClass("animate__animated animate__fadeOut");
+      }, (0.5 + 1.5) * 1000); // backInLeft가 1.5초 동안 진행되고, 2초 동안 정지
+
+      return () => clearTimeout(timeout);
+    }
+  }, [extractedValue]);
+
+
   return (
     <div>
-      {props.mode === "speechGame" && (
-
+      {/* {props.mode === "speechGame" && (
         <div className={styles.speechWord}>
-          {value}
-          {/* <UserInput onSubmit={handleUserInput} /> */}
+          <UserInput onSubmit={handleUserInput} />
+        /* </div> )}    */}
+
+      {props.mode === undefined && (
+        <div className={styles.keywordEffect}>
+          <div className={`${animationClass} ${styles.extractedValue}`} > {extractedValue} </div>
         </div>
-      )} 
-      {props.mode !== "speechGame" && shootingStar === true && (
-        <div className={styless.night}>
-          {Array.from({ length: 24 }, (_, index) => (
-            <>
-              <div className={styless.shooting_star} key={index}></div>
-            </>
-          ))}
-        </div>
-      )}
-      {props.mode !== "speechGame" && (
-      <div className={styles.container}>
-        <form id="speech-recognition-form">
-          {!supported && (
-            <p>
-              Oh no, it looks like your browser doesn&#39;t support Speech
-              Recognition.
-            </p>
-          )}
-          {supported && (
-            <>
-              <label htmlFor="transcript">사용자 음성</label>
-              <textarea
-                id="transcript"
-                name="transcript"
-                placeholder="음성 기다리는중..."
-                value={value}
-                rows={3}
-                disabled
-              />
-              <button disabled={listenBlocked} type="button" onClick={toggle}>
-                {listening ? "정지" : "듣기"}
-              </button>
-              {listenBlocked && (
-                <p style={{ color: "red" }}>
-                  The microphone is blocked for this site in your browser.
-                </p>
-              )}
-              <label htmlFor="extractedValue">일치 키워드</label>
-              <textarea
-                id="extractedValue"
-                name="extractedValue"
-                placeholder="..."
-                value={extractedValue}
-                rows={2}
-                disabled
-              />
-            </>
-          )}
-        </form>
-      </div>
       )}
     </div>
   );
