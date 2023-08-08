@@ -35,7 +35,7 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
       alert("최대 인원 초과!!");
       return;
     }
-    if (room_status === "ingame") {
+    if (room_status === "게임 중") {
       alert("게임중입니다!!");
       return;
     }

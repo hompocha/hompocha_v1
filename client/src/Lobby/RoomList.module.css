@@ -29,7 +29,7 @@
 }
 .roomInfo {
   /* border: 1px solid red; */
-  width: 850px;
+  width: 800px;
   display: flex;
   margin-bottom: 10px;
 }
@@ -37,15 +37,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
+  font-size: 37px;
   font-weight: bold;
 }
 .roomTitle {
-  width: 350px;
+  width: 300px;
   height: 50px;
 }
 .roomNumOfUsers {
-  width: 200px;
+  width: 250px;
   height: 50px;
 }
 .roomState {
@@ -57,26 +57,26 @@
   height: 50px;
 }
 .roomList {
-  width: 850px;
+  width: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
 }
-.roomList > * {
+.roomList > div {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 25px;
+  font-size: 30px;
   /* border: 2px solid white; */
 }
 
 .roomName {
-  width: 350px;
+  width: 300px;
   height: 50px;
 }
 .roomPeople {
-  width: 200px;
+  width: 250px;
   height: 50px;
 }
 .roomStatus {
@@ -91,6 +91,7 @@
   border: none;
   border-radius: 3px;
   color: #362100;
+  font-size: 25px;
 }
 img {
   width: 25vw;

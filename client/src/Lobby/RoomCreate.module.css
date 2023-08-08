@@ -1,5 +1,20 @@
-.roomCreateWrap {
+.roomCreateContainer {
+  width: 440px;
+  height: 400px;
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  top: 200px;
+  left: 1450px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 35px 0 rgba(255, 255, 255, 0.7);
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  /* display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 10px;
@@ -7,5 +22,44 @@
   top: 10vh;
   right: 20vw;
   background-color: bisque;
-  border-radius: 1vw;
+  border-radius: 1vw; */
+}
+
+.roomCreateButton {
+  margin: 0;
+  padding: 0;
+  width: 150px;
+  height: 60px;
+  font-family: "Gowun Dodum", sans-serif;
+  font-size: 35px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.roomCreateInput {
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: block;
+  font-family: "Gowun Dodum", sans-serif;
+  font-size: 35px;
+  letter-spacing: 0.15rem;
+  padding: 10px;
+  width: 90%;
+  height: 55px;
+  color: white;
+}
+
+.roomCreateTag {
+  font-size: 35px;
+}
+
+.roomCreateNum {
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 35px;
 }

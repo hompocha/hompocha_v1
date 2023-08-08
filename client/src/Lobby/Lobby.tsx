@@ -92,11 +92,7 @@ const Lobby = () => {
           <div className={styles.userName}>{nickName}</div>
           <div onClick={handleLogout} className={styles.logoutBtn}></div>
         </div>
-        {flag === 1 && (
-          <div className={styles.roomCreateWrap}>
-            <RoomCreate nickName={nickName} />
-          </div>
-        )}
+        {flag === 1 && <RoomCreate nickName={nickName} />}
       </>
     );
   }
