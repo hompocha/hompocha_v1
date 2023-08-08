@@ -3,9 +3,9 @@
 }
 .scale {
   position: fixed;
-  transform: scale(130%);
+  transform: scale(140%);
   left: 24%;
-  top: 4%;
+  top: 3%;
 }
 .position {
   position: absolute;
@@ -15,28 +15,28 @@
 }
 .circleLight {
   box-shadow: 0 0 80px #a2a2a2;
-  width: 910px;
-  height: 910px;
+  width: 980px;
+  height: 980px;
   border-radius: 50%;
   position: fixed;
   left: 24%;
-  top: 4%;
+  top: 3%;
 }
 .circleRouletteLight {
   box-shadow: 0 0 100px #d7d6d6;
-  width: 910px;
-  height: 910px;
+  width: 980px;
+  height: 980px;
   border-radius: 50%;
   position: fixed;
   left: 24%;
-  top: 4%;
+  top: 3%;
   z-index: 13;
 }
 .triangleDown {
   position: fixed;
   width: 0;
   height: 0;
-  top: 4vh;
+  top: 3vh;
   left: 47.2vw;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;

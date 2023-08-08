@@ -147,12 +147,12 @@ const SpeechGame = (props) => {
     const speechTimer = setTimeout(() => {
       setSpeechBlocked(true);
 
-    }, /* stopTime - 1000 */ 399 * 1000);/* 시연*/
+    }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
     const timer = setTimeout(() => {
       setTimerExpired(true);
       sentenceState="시작";
       bgmSound.stop();
-    }, /* stopTime */ 400 * 1000); /*시연*/
+    }, /* stopTime */ 40 * 1000); /*시연*/
     return () => {
       bgmSound.stop();
       clearTimeout(timer);
