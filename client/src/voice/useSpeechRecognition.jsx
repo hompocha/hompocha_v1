@@ -135,6 +135,8 @@ const UseSpeechRecognition = (props) => {
     for (const themeChangeKeyword of themeChangeKeywords) {
       if (value.includes(themeChangeKeyword)) {
         setExtractedValue(themeChangeKeyword);
+        stop();
+        setStopSign(false);
         let randomNum = Math.floor(Math.random() * 3);
         if (randomNum === props.theme) {
           randomNum = (randomNum + 1) % 3;
@@ -168,7 +170,7 @@ const UseSpeechRecognition = (props) => {
       const timeout = setTimeout(() => {
         setStopSign(true);
         listen({ lang });
-      }, 1000);
+      }, 1500);
       return () => clearTimeout(timeout);
     }
   }, [stopSign]);
