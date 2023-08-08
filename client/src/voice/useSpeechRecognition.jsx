@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./voice.module.css";
 import "regenerator-runtime/runtime";
@@ -139,7 +139,6 @@ const UseSpeechRecognition = (props) => {
         stop();
         setStopSign(false);
         props.sendThemeSignal();
-
       }
     }
     // console.log("Value:", value); // 추가된 부분
@@ -225,31 +224,26 @@ const UseSpeechRecognition = (props) => {
   }, [props.speechBlocked]);
 
   const [animationClass, setAnimationClass] = useState("");
-  
   useEffect(() => {
     if (extractedValue !== "") {
       setAnimationClass("animate__animated animate__fadeIn");
-  
+
       const timeout = setTimeout(() => {
         setAnimationClass("animate__animated animate__fadeOut");
       }, (0.5 + 1.5) * 1000); // backInLeft가 1.5초 동안 진행되고, 2초 동안 정지
-  
+
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
-  
+
 
   return (
     <div>
       {/* {props.mode === "speechGame" && (
         <div className={styles.speechWord}>
-          {value}
           <UserInput onSubmit={handleUserInput} />
-        /* </div>
-      )}    */}
-   
-        </div>
-      )}
+        /* </div> )}    */}
+
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`} > {extractedValue} </div>
