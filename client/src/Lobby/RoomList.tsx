@@ -91,7 +91,7 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
         <div className={styles.roomListWrap}>
           <div className={styles.roomInfo}>
             <div className={styles.roomTitle}>방 제목</div>
-            <div className={styles.roomNumOfUsers}>현재 참여 인원</div>
+            <div className={styles.roomNumOfUsers}>현재 참여 인원</div>
             <div className={styles.roomState}>방 상태</div>
             <div className={styles.btnSpace}></div>
           </div>
