@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import UseSpeechRecognition from "../../voice/useSpeechRecognition";
 import SpeechCam from "./SpeechCam";
 import styles from "./SpeechGame.module.css";
@@ -9,6 +9,7 @@ import speechClock from "../../sounds/speechGameSpeed.mp3";
 import { effectSound } from "../../effectSound";
 import CountDown from "../../Loading/CountDown";
 import Loading from "../../Loading/Loading";
+import { TimerBar } from "../Somaek/timer";
 
 let sentenceState = "시작";
 
@@ -45,6 +46,7 @@ const SpeechGame = (props) => {
   const [loaded, setLoaded] = useState(false);
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
+  const bgmSound = useRef(null);
 
 
 
@@ -142,23 +144,34 @@ const SpeechGame = (props) => {
 
   useEffect(() => {
     if (!start) return;
-    const bgmSound = effectSound(speechClock, true, 0.3);
+    bgmSound.current = effectSound(speechClock, true, 0.3);
     /* 시간 -1초만큼 후에 true(인식X로 변경) */
-    const speechTimer = setTimeout(() => {
-      setSpeechBlocked(true);
+    // const speechTimer = setTimeout(() => {
+    //   setSpeechBlocked(true);
 
-    }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
-    const timer = setTimeout(() => {
-      setTimerExpired(true);
-      sentenceState="시작";
-      bgmSound.stop();
-    }, /* stopTime */ 40 * 1000); /*시연*/
+    // }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
+    // const timer = setTimeout(() => {
+    //   setTimerExpired(true);
+    //   sentenceState="시작";
+    //   bgmSound.stop();
+    // }, /* stopTime */ 40 * 1000); /*시연*/
     return () => {
-      bgmSound.stop();
-      clearTimeout(timer);
-      clearTimeout(speechTimer);
+      if(bgmSound.current)
+      bgmSound.current.stop();
+      // clearTimeout(timer);
+      // clearTimeout(speechTimer);
     };
   }, [stopTime, start]);
+
+  const gameEnd=()=>{
+    setSpeechBlocked(true);
+    setTimeout(()=>{
+      setTimerExpired(true);
+      sentenceState="시작";
+      bgmSound.current.stop();
+    },1500);
+  }
+
 
   useEffect(() => {
     if (props.voice === false) {
@@ -316,6 +329,7 @@ const SpeechGame = (props) => {
               <div className={styles[`speechGameCam__${0}`]}>
                 <SpeechCam key={randomUser} selectId={randomUser} user={props.user} />
               </div>
+            <TimerBar timeMax={10*1000} gameEnd={gameEnd} start={start}/>
 
               {/*=============================딴애들=========================================================*/}
               {findSubscriber(randomUser).map((subscriber, index) => (
