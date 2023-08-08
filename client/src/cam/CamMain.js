@@ -418,13 +418,10 @@ const CamMain = ({
             voice={speechGamevoice}
             voiceOn={onSpeechGame}
           />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => offSpeechGame()}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
+          <div
+            onClick={() => offSpeechGame()}
+            className={styles.toRoomButton}
+          ></div>
         </div>
       )}
       {/*소맥게임*/}
@@ -438,13 +435,10 @@ const CamMain = ({
             conToNick={conToNick}
             end={sendGameTypeSignal}
           />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => sendGameTypeSignal(undefined)}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
+          <div
+            onClick={() => sendGameTypeSignal(undefined)}
+            className={styles.toRoomButton}
+          ></div>
         </div>
       )}
 
@@ -458,13 +452,10 @@ const CamMain = ({
             mode={mode}
             conToNick={conToNick}
           />
-          <form className={styles.ReturnRoom}>
-            <input
-              onClick={() => sendGameTypeSignal(undefined)}
-              type="button"
-              value="방으로 이동"
-            />
-          </form>
+          <div
+            onClick={() => sendGameTypeSignal(undefined)}
+            className={styles.toRoomButton}
+          ></div>
         </div>
       )}
     </div>

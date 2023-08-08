@@ -359,7 +359,7 @@ const AvoidGame = (props) => {
       ) {
         if (obj.type !== "avoid_pill") {
           effectSound(hitEffect);
-          gameState.hpBar.hpLeft -= 10;
+          gameState.hpBar.hpLeft -= 20;
           if(gameState.hpBar.hpLeft <= 0)
             gameState.hpBar.hpLeft = 0;
           setHpLeft(gameState.hpBar.hpLeft);
@@ -381,7 +381,7 @@ const AvoidGame = (props) => {
             console.log(gameState);
           }
         } else {
-          gameState.hpBar.hpLeft += 5;
+          gameState.hpBar.hpLeft += 10;
           if(gameState.hpBar.hpLeft > 100)
             gameState.hpBar.hpLeft = 100;
           setHpLeft(gameState.hpBar.hpLeft);
