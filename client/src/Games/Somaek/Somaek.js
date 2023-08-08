@@ -102,26 +102,6 @@ const Somaek = (props) => {
 
     signalInterval.current = setInterval(() => {
       sendStateSignal();
-      // if (start && timerPrint.current > 0) timerPrint.current -= 1000;
-      // /* 게임이 끝났을 경우 */ else {
-      //   clearInterval(signalInterval.current);
-      //   const sortedScores = Object.entries(scores.current).sort(
-      //     ([, a], [, b]) => b - a
-      //   );
-      //   const lowestScorePerson = sortedScores[sortedScores.length - 1];
-      //   setLowestConId(lowestScorePerson[0]);
-      //   setHandStop(true);
-      //   setTimeout(() => {
-      //     if (!isGameOver) {
-      //       objectRef.current = JSON.parse(JSON.stringify(objectsDefault));
-      //       setIsGameOver(true);
-      //     }
-      //   }, 500);
-      // }
-
-      if(start) {
-
-      }
     }, 1000);
     return () => {
       clearInterval(signalInterval.current);
@@ -341,10 +321,7 @@ const Somaek = (props) => {
     /* score 출력 부분 */
     can_ctx.save(); // 현재 컨텍스트 상태를 저장
     can_ctx.scale(-1, 1); // X 축을 따라 스케일을 반전시킴 (좌우 반전)
-    // can_ctx.fillStyle = "black";
-    // can_ctx.font = "30px Arial";
-    // const fontSize = can_ref.width * speechWidth * 0.1; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
-    // can_ctx.fillText(`점수: ${score}`, -can_ref.width + 20, 50);
+  
 
     const speechLeftX = 0.17; // 원하는 X 위치를 설정하세요 (예시: 0).
     const speechTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
@@ -376,20 +353,7 @@ const Somaek = (props) => {
 
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
-    // const timerLeftX = 0.6; // 원하는 X 위치를 설정하세요 (예시: 0).
-    // const timerTopY = 0.1; // 원하는 Y 위치를 설정하세요 (예시: 0).
-    // const titmerWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
-    // // let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
-    // // if (blink) {
-    // can_ctx.fillStyle = "yellow";
-
-    // const fontSize = can_ref.width * speechWidth * 0.3;
-    // can_ctx.font = `${fontSize}px "Gowun Dodum", sans-serif`;
-    // const timerX = -can_ref.width * timerLeftX;
-    // const timerY = can_ref.height * timerTopY;
-    // can_ctx.fillText(`남은시간: ${timerPrint.current / 1000}초`, timerX, timerY);
-
-    // }
+    
 
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores.current)
