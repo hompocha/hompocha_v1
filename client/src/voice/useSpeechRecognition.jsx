@@ -245,8 +245,9 @@ const UseSpeechRecognition = (props) => {
     <div>
       {props.mode === "speechGame" && (
 
-        <div className={styles.speechWord}> {value}
-          <UserInput onSubmit={handleUserInput} />
+        <div className={styles.speechWord}>
+          {value}
+          {/* <UserInput onSubmit={handleUserInput} /> */}
         </div>
       )} 
       {props.mode !== "speechGame" && shootingStar === true && (

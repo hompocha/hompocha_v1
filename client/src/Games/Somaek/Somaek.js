@@ -12,10 +12,10 @@ import somaekFail from "../../sounds/somaekFail.wav";
 import { effectSound } from "../../effectSound";
 
 const objectsDefault = [
-  { leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5, type: "beer" },
-  { leftX: 0.75, topY: 0.28, lenX: 0.5, lenY: 0.5, type: "mak" },
-  { leftX: 0.75, topY: 0.5, lenX: 0.5, lenY: 0.5, type: "soju" },
-  { leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, type: "cider" },
+  { type: "beer",   leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5,  picked: false }, 
+  { type: "mak",    leftX: 0.75, topY: 0.28, lenX: 0.5, lenY: 0.5, picked: false},
+  { type: "soju",   leftX: 0.75, topY: 0.5, lenX: 0.5, lenY: 0.5, picked: false},
+  { type: "cider",  leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, picked: false},
 ];
 
 /* 물체를 그리는 부분 */
@@ -23,8 +23,12 @@ const images = {
   soju: "../../Drink/soju.png",
   beer: "../../Drink/beer.png",
   mak: "../../Drink/mak.png",
-  container: "../../Drink/empty.png",
   cider: "../../Drink/cider.png",
+  // sojuPicked: "../../Drink/sojuPicked.png",
+  // beerPicked: "../../Drink/beerPicked.png",
+  // makPicked: "../../Drink/makPicked.png",
+  // ciderPicked: "../../Drink/ciderPicked.png",
+  container: "../../Drink/empty.png",
   madam: "../../Madam/madam3.png",
   speechBubble: "../../speechBubble.png",
   rank: "../../rank.png",
@@ -91,7 +95,7 @@ const Somaek = (props) => {
   /* 게임시작, 타이머 주기 */
   useEffect(() => {
     if (!start) return;
-    timerPrint.current = 50 * 1000; /*시연*/
+    timerPrint.current = 25 * 1000; /*시연*/
 
     const sound = effectSound(somaekBGM, true, 0.2);
 
@@ -106,7 +110,6 @@ const Somaek = (props) => {
         const lowestScorePerson = sortedScores[sortedScores.length - 1];
         setLowestConId(lowestScorePerson[0]);
         setHandStop(true);
-
         setTimeout(() => {
           if (!isGameOver) {
             objectRef.current = JSON.parse(JSON.stringify(objectsDefault));
@@ -179,7 +182,6 @@ const Somaek = (props) => {
     if (results.multiHandLandmarks && results.multiHandedness) {
       for (let index = 0; index < results.multiHandLandmarks.length; index++) {
         const landmarks = results.multiHandLandmarks[index];
-
         objDrag(landmarks, canvasRef);
       }
     }
@@ -188,6 +190,7 @@ const Somaek = (props) => {
   };
 
   const loadImages = async (can_ref, can_ctx, objs) => {
+    /* 이미지 로딩 */
     try {
       for (let type in images) {
         const img = new Image();
@@ -212,6 +215,7 @@ const Somaek = (props) => {
     if (!can_ref) return;
     can_ctx.clearRect(0, 0, can_ctx.canvas.width, can_ctx.canvas.height);
 
+    /* 종업원 이미지 */
     const madamImg = imgElements["madam"];
 
     const desiredLeftX = 0.017; // 원하는 X 위치를 설정하세요 (예시: 0).
@@ -227,6 +231,7 @@ const Somaek = (props) => {
       desiredHeight * can_ref.height
     );
 
+    /* 점수판 */
     const signboardImg = imgElements["signboard"];
 
     const signboardLeftX = 0.18; // 원하는 X 위치를 설정하세요 (예시: 0).
@@ -242,6 +247,7 @@ const Somaek = (props) => {
       signboardHeight * can_ref.height
     );
 
+    /* 말풍선 */
     const speechBubbleImg = imgElements["speechBubble"];
 
     const bubbleLeftX = -0.005; // 원하는 X 위치를 설정하세요 (예시: 0).
@@ -259,6 +265,8 @@ const Somaek = (props) => {
 
     for (let i = 0; i < objs.length; i++) {
       let boxLocation = objs[i];
+      const imgPicked = (boxLocation.picked)?boxLocation.type+"Picked":boxLocation.type;
+      // console.log(imgPicked);
       const img = imgElements[boxLocation.type]; // type에 따른 이미지 선택
       can_ctx.drawImage(
         img,
@@ -275,6 +283,7 @@ const Somaek = (props) => {
       container.lenX * can_ref.width,
       container.lenY * can_ref.height
     );
+    
     /* InBucket용 */
     for (let i = 0; i < inBucket.length; i++) {
       let boxLocation = inBucket[i];
@@ -474,8 +483,11 @@ const Somaek = (props) => {
         objTopY + objYLength * (1 / 2 - boxSize) < fingerY &&
         fingerY < objTopY + objYLength * (1 / 2 + boxSize)
       ) {
+        objectRef.current[boxIndex].picked = true;
         objMove(fingerPick, boxIndex);
         return;
+      } else {
+        objectRef.current[boxIndex].picked = false;
       }
     }
   };
