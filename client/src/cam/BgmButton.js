@@ -3,10 +3,13 @@ import styles from "./BgmButton.module.css";
 
 function BgmButton({ musicOn, setMusicOn }) {
   const labelClassName = musicOn
-  ? `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGreen}`
-  : `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGrey}`;
+    ? `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGreen}`
+    : `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGrey}`;
   return (
     <>
+      <div
+        className={`${musicOn ? styles.bgmOnState : styles.bgmOffState}`}
+      ></div>
       <input
         className={styles.reactSwitchCheckbox}
         id={`reactBgmSwitch`}

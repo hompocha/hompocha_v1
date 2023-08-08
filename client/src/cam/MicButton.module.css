@@ -48,3 +48,25 @@
 .reactSwitchLabel:active .reactSwitchButton {
   width: 35px;
 }
+
+.micOnState {
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  width: 45px;
+  height: 45px;
+  background-image: url("../../public/asset/room/micOn.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.micOffState {
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  width: 45px;
+  height: 45px;
+  background-image: url("../../public/asset/room/micOff.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

@@ -370,7 +370,6 @@ const CamMain = ({
   const onMicToggle = (enabled) => {
     console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
   };
-
   console.log("CamMain rendered");
   return (
     <div>
@@ -399,24 +398,18 @@ const CamMain = ({
             <div className={styles.numOfUsers}>
               {user.subscribers.length + 1}명 참여중
             </div>
-            {/* <div className={styles.micToggleWrap}> */}
             <div className={styles.nickName}>{user.getNickname()}</div>
             <div className={styles.mic}>
-              <span>Mic</span>
               <div className={styles.micControl}>
                 <MicButton onMicToggle={onMicToggle} user={user} />
               </div>
             </div>
             <div className={styles.bgm}>
-              <span>BGM</span>
               <div className={styles.bgmControl}>
                 <BgmButton musicOn={musicOn} setMusicOn={setMusicOn} />
               </div>
             </div>
             <div className={styles.toLobbyButton} onClick={returnLobby}></div>
-            {/* <form className={styles.ReturnRoom}>
-              <input onClick={returnLobby} type="button" value="로비로 이동" />
-            </form> */}
           </div>
           <div className={styles.gameListWrap}>
             <div className={styles.gameMenu}>홈술포차 메 뉴 판</div>
