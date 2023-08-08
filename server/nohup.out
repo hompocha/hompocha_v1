@@ -1,0 +1,280 @@
+
+> openvidu-nest@0.0.1 start:dev
+> cross-env NODE_ENV=development nest start --watch
+
+c[[90m5:10:03 AM[0m] Starting compilation in watch mode...
+
+[[90m5:10:09 AM[0m] Found 0 errors. Watching for file changes.
+
+server run!
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +52ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mOpenviduModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +241ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRoomModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRoomlistModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +46ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +9ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mOpenviduController {/openvidu}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/openvidu, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/openvidu/sessions, POST} route[39m[38;5;3m +4ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/openvidu/sessions/:sessionId/connections, POST} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/user}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/signup, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/login, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/:nickname, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRoomlistController {/lobby}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby/create, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby/roomList, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby/roomInfo, POST} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRoomController {/room}:[39m[38;5;3m +2ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/room/status, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/room/roomout, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/room/wow, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1184356  - [39m08/08/2023, 5:10:11 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +8ms[39m
+Application started on port:  8080
+Application server connecting to OpenVidu at https://hompocha.site:8443
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJuaWNrTmFtZSI6IjPrsojsnoQiLCJpZHgiOiIwMUg2UDc0NzVCU0tQTVNDTTcwTldFWllGUCIsImlhdCI6MTY5MTQ3MTQyMywiZXhwIjoxNjkxNTU3ODIzLCJhdWQiOiJob21wb2NoYS5zaXRlIiwiaXNzIjoiaG9tcG9jaGEuc2l0ZSJ9.MUifkgs4Q9yrFijFQ_1VlPBLJzBUSk5KwgqXn4f5y5A
+3번임
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNlbyIsIm5pY2tOYW1lIjoi7ISc7JiBIiwiaWR4IjoiMDFINldSNUE2U0dYRDMyU1RTUVpCUVE4RFMiLCJpYXQiOjE2OTE0NzE2MDcsImV4cCI6MTY5MTU1ODAwNywiYXVkIjoiaG9tcG9jaGEuc2l0ZSIsImlzcyI6ImhvbXBvY2hhLnNpdGUifQ.-QTOzryZcNKbcS31LP23up-Qyp6w66XNLgnhiMPMdws
+서영
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuaWNrTmFtZSI6IuydvOuyiOyeheuLiOuLpCIsImlkeCI6IjAxSDZLQjFHUTZZMFg5QVhFN1A0WVdNQlkyIiwiaWF0IjoxNjkxNDcyNTM2LCJleHAiOjE2OTE1NTg5MzYsImF1ZCI6ImhvbXBvY2hhLnNpdGUiLCJpc3MiOiJob21wb2NoYS5zaXRlIn0.uwlqnP3zgQZG2tf1kHYkx1E0cWIEo9F2N3yRdEluvVU
+일번입니다
+controller: create sessions
+create session https://hompocha.site:8443
+controller: create connection
+createConnection
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InciLCJuaWNrTmFtZSI6IuyjvO2YhCIsImlkeCI6IjAxSDZXUlJUOVo2OFRFWUg5RFdIM045RzRNIiwiaWF0IjoxNjkxNDcyNTYyLCJleHAiOjE2OTE1NTg5NjIsImF1ZCI6ImhvbXBvY2hhLnNpdGUiLCJpc3MiOiJob21wb2NoYS5zaXRlIn0.vh657A-PeqhGcOopsYMbR3HJd8IzfOzIOqa6G-9Gqms
+주현
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRuZ3VzMmVrIiwibmlja05hbWUiOiLsmrDtmITsnbQiLCJpZHgiOiIwMUg2VFY2SkI1S0JIQ1gxNlkxNUY2UkJUMCIsImlhdCI6MTY5MTQ3MjY4MywiZXhwIjoxNjkxNTU5MDgzLCJhdWQiOiJob21wb2NoYS5zaXRlIiwiaXNzIjoiaG9tcG9jaGEuc2l0ZSJ9.LTY2qADLkE6Ee5JkKJNtR00KWNbOmD5IMa5UlCZ_TDQ
+우현이
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNlbyIsIm5pY2tOYW1lIjoi7ISc7JiBIiwiaWR4IjoiMDFINldSNUE2U0dYRDMyU1RTUVpCUVE4RFMiLCJpYXQiOjE2OTE0NzI4MjQsImV4cCI6MTY5MTU1OTIyNCwiYXVkIjoiaG9tcG9jaGEuc2l0ZSIsImlzcyI6ImhvbXBvY2hhLnNpdGUifQ.J57Fpd0MixBStudX6YVJUKbW8UljD5jFLfQkyQkyGC4
+서영
+dmaksdfmaksdfmasdkf 01H79T74ANMEBZ6467BSJMEB6E
+controller: create sessions
+create session https://hompocha.site:8443
+controller: create connection
+createConnection
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imt5dTIiLCJuaWNrTmFtZSI6IuyKueq3nCIsImlkeCI6IjAxSDZXUjRSUVdCVFYwRDExWFRKODhKTUVRIiwiaWF0IjoxNjkxNDcyODczLCJleHAiOjE2OTE1NTkyNzMsImF1ZCI6ImhvbXBvY2hhLnNpdGUiLCJpc3MiOiJob21wb2NoYS5zaXRlIn0.v3wRmU66Oinu6VytiMQ1FnZQTxzdjhGhRjH7Q7zuWPM
+승규
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79T74ANMEBZ6467BSJMEB6E'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H79T74B9KQ2K648XJ1VWATK1',
+  room_idx: '01H79T74ANMEBZ6467BSJMEB6E',
+  user_idx: '01H6WR5A6SGXD32STSQZBQQ8DS'
+}
+서영
+RoomEntity {
+  idx: '01H79T7NMS0H0KRM9218A60FKT',
+  room_idx: '01H79T74ANMEBZ6467BSJMEB6E',
+  user_idx: '01H6WR4RQWBTV0D11XTJ88JMEQ'
+}
+승규
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InciLCJuaWNrTmFtZSI6IuyjvO2YhCIsImlkeCI6IjAxSDZXUlJUOVo2OFRFWUg5RFdIM045RzRNIiwiaWF0IjoxNjkxNDczNDA5LCJleHAiOjE2OTE1NTk4MDksImF1ZCI6ImhvbXBvY2hhLnNpdGUiLCJpc3MiOiJob21wb2NoYS5zaXRlIn0.E_YkSTZ687pyOeR8sBT1rv1FNYM1s4Su94fpl7vDVRU
+주현
+dmaksdfmaksdfmasdkf 01H79TR4MHRMM69YF0PXWGDM61
+controller: create sessions
+create session https://hompocha.site:8443
+controller: create connection
+createConnection
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNlbyIsIm5pY2tOYW1lIjoi7ISc7JiBIiwiaWR4IjoiMDFINldSNUE2U0dYRDMyU1RTUVpCUVE4RFMiLCJpYXQiOjE2OTE0NzM0MjMsImV4cCI6MTY5MTU1OTgyMywiYXVkIjoiaG9tcG9jaGEuc2l0ZSIsImlzcyI6ImhvbXBvY2hhLnNpdGUifQ.nt8aDl30XFAvWp1PXA5sqY0c_JeDKPVnQyiBpunKJ5c
+서영
+승규
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79TR4MHRMM69YF0PXWGDM61'. Any change: true
+controller: create connection
+createConnection
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79TR4MHRMM69YF0PXWGDM61'. Any change: true
+controller: create connection
+createConnection
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRuZ3VzMmVrIiwibmlja05hbWUiOiLsmrDtmIQiLCJpZHgiOiIwMUg2VFY2SkI1S0JIQ1gxNlkxNUY2UkJUMCIsImlhdCI6MTY5MTQ3MzQ3OSwiZXhwIjoxNjkxNTU5ODc5LCJhdWQiOiJob21wb2NoYS5zaXRlIiwiaXNzIjoiaG9tcG9jaGEuc2l0ZSJ9.sBtoWxwut8n-Sz0lVyqw1OyiPrgY26ih7NvL054EW40
+우현
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79TR4MHRMM69YF0PXWGDM61'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H79TT2Z2FQNYGA8YT9BGQGE9',
+  room_idx: '01H79TR4MHRMM69YF0PXWGDM61',
+  user_idx: '01H6TV6JB5KBHCX16Y15F6RBT0'
+}
+RoomEntity {
+  idx: '01H79TREFTVJMR6C1ZF0R4ADQY',
+  room_idx: '01H79TR4MHRMM69YF0PXWGDM61',
+  user_idx: '01H6WR4RQWBTV0D11XTJ88JMEQ'
+}
+RoomEntity {
+  idx: '01H79TR4NQ82J3XQPXR12Q9B0P',
+  room_idx: '01H79TR4MHRMM69YF0PXWGDM61',
+  user_idx: '01H6WRRT9Z68TEYH9DWH3N9G4M'
+}
+주현
+null
+null
+RoomEntity {
+  idx: '01H79TRCYYGRE6069Q4A65HJS1',
+  room_idx: '01H79TR4MHRMM69YF0PXWGDM61',
+  user_idx: '01H6WR5A6SGXD32STSQZBQQ8DS'
+}
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJuaWNrTmFtZSI6IjPrsojsnoQiLCJpZHgiOiIwMUg2UDc0NzVCU0tQTVNDTTcwTldFWllGUCIsImlhdCI6MTY5MTQ3NjM2NCwiZXhwIjoxNjkxNTYyNzY0LCJhdWQiOiJob21wb2NoYS5zaXRlIiwiaXNzIjoiaG9tcG9jaGEuc2l0ZSJ9.ToWNebbuO3EJ8jwJtDtmHTJKOcshPKGZMV1RCfxVRic
+3번임
+dmaksdfmaksdfmasdkf 01H79XJ7052GGFG0AKM6S1KXTJ
+controller: create sessions
+create session https://hompocha.site:8443
+controller: create connection
+createConnection
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InciLCJuaWNrTmFtZSI6IuyjvO2YhCIsImlkeCI6IjAxSDZXUlJUOVo2OFRFWUg5RFdIM045RzRNIiwiaWF0IjoxNjkxNDc2MzY5LCJleHAiOjE2OTE1NjI3NjksImF1ZCI6ImhvbXBvY2hhLnNpdGUiLCJpc3MiOiJob21wb2NoYS5zaXRlIn0.TdYS_q5a4SDrjPIjccMR9yEtk68peyiHd7gYAImgLL4
+주현
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79XJ7052GGFG0AKM6S1KXTJ'. Any change: true
+controller: create connection
+createConnection
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNlbyIsIm5pY2tOYW1lIjoi7ISc7JiBIiwiaWR4IjoiMDFINldSNUE2U0dYRDMyU1RTUVpCUVE4RFMiLCJpYXQiOjE2OTE0NzY0MDMsImV4cCI6MTY5MTU2MjgwMywiYXVkIjoiaG9tcG9jaGEuc2l0ZSIsImlzcyI6ImhvbXBvY2hhLnNpdGUifQ.zBiGp_OPsVhQzjgvW7f161Dxw2gH953dNlf9Xi90E_g
+서영
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79XJ7052GGFG0AKM6S1KXTJ'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H79W5J3MTGBSGGKPW71AKF4V',
+  room_idx: '01H79W5J107GBBT11SQAW7RZH6',
+  user_idx: '01H6WRRT9Z68TEYH9DWH3N9G4M'
+}
+RoomEntity {
+  idx: '01H79XJ715EWGCEJAXE947MNXT',
+  room_idx: '01H79XJ7052GGFG0AKM6S1KXTJ',
+  user_idx: '01H6P7475BSKPMSCM70NWEZYFP'
+}
+일번입니다
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJuaWNrTmFtZSI6IjLrsojsnoQiLCJpZHgiOiIwMUg2TlpBTjdYMkpCME1ZS0s0VEoyNjlHSCIsImlhdCI6MTY5MTQ3NzY4OSwiZXhwIjoxNjkxNTY0MDg5LCJhdWQiOiJob21wb2NoYS5zaXRlIiwiaXNzIjoiaG9tcG9jaGEuc2l0ZSJ9.C44o08n55P77NtqHoVi6-WFBw3Ljd1G-HdOXGZOu4d0
+2번임
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNlbyIsIm5pY2tOYW1lIjoi7ISc7JiBIiwiaWR4IjoiMDFINldSNUE2U0dYRDMyU1RTUVpCUVE4RFMiLCJpYXQiOjE2OTE0Nzc2OTUsImV4cCI6MTY5MTU2NDA5NSwiYXVkIjoiaG9tcG9jaGEuc2l0ZSIsImlzcyI6ImhvbXBvY2hhLnNpdGUifQ.zOINJ2CDVwRU62v50x8tNlpC6MEnhVwFnpylo7JMl74
+서영
+dmaksdfmaksdfmasdkf 01H79YTVYN8FK2KC1D96A7P363
+controller: create sessions
+create session https://hompocha.site:8443
+controller: create connection
+createConnection
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H79YTYB8F8JEJ42NQ5Y3NZB7',
+  room_idx: '01H79YTVYN8FK2KC1D96A7P363',
+  user_idx: '01H6KB1GQ6Y0X9AXE7P4YWMBY2'
+}
+RoomEntity {
+  idx: '01H79YV24MDVQ3H1DZ4C6PKTK2',
+  room_idx: '01H79YTVYN8FK2KC1D96A7P363',
+  user_idx: '01H6NZAN7X2JB0MYKK4TJ269GH'
+}
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+일번입니다
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H79YWPB3QT8TC41TM1E7V8CN',
+  room_idx: '01H79YTVYN8FK2KC1D96A7P363',
+  user_idx: '01H6KB1GQ6Y0X9AXE7P4YWMBY2'
+}
+null
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuaWNrTmFtZSI6IuydvOuyiOyeheuLiOuLpCIsImlkeCI6IjAxSDZLQjFHUTZZMFg5QVhFN1A0WVdNQlkyIiwiaWF0IjoxNjkxNDc3ODEzLCJleHAiOjE2OTE1NjQyMTMsImF1ZCI6ImhvbXBvY2hhLnNpdGUiLCJpc3MiOiJob21wb2NoYS5zaXRlIn0._ZWr0cvn0aDARIv9jwqTS2QU4QnREeKXqiRDqoWqdZI
+일번입니다
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJuaWNrTmFtZSI6IjLrsojsnoQiLCJpZHgiOiIwMUg2TlpBTjdYMkpCME1ZS0s0VEoyNjlHSCIsImlhdCI6MTY5MTQ3NzgxOCwiZXhwIjoxNjkxNTY0MjE4LCJhdWQiOiJob21wb2NoYS5zaXRlIiwiaXNzIjoiaG9tcG9jaGEuc2l0ZSJ9.BIV3hQWD6pANMlhyEk76uDNrEWvAXITtlgaPaObaDCQ
+2번임
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H79YYB0Y7TQQR3AJ6E2W7KQ0',
+  room_idx: '01H79YTVYN8FK2KC1D96A7P363',
+  user_idx: '01H6KB1GQ6Y0X9AXE7P4YWMBY2'
+}
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuaWNrTmFtZSI6IuydvOuyiOyeheuLiOuLpCIsImlkeCI6IjAxSDZLQjFHUTZZMFg5QVhFN1A0WVdNQlkyIiwiaWF0IjoxNjkxNDc3ODkzLCJleHAiOjE2OTE1NjQyOTMsImF1ZCI6ImhvbXBvY2hhLnNpdGUiLCJpc3MiOiJob21wb2NoYS5zaXRlIn0.9x5kg8ZEP9bL4o9hjY7uOYHwPpsTZ1UeVSI2obuNf28
+일번입니다
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H79YYGSJHR9NGN6RF7YVGGDN',
+  room_idx: '01H79YTVYN8FK2KC1D96A7P363',
+  user_idx: '01H6NZAN7X2JB0MYKK4TJ269GH'
+}
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJuaWNrTmFtZSI6IjLrsojsnoQiLCJpZHgiOiIwMUg2TlpBTjdYMkpCME1ZS0s0VEoyNjlHSCIsImlhdCI6MTY5MTQ3OTE5MCwiZXhwIjoxNjkxNTY1NTkwLCJhdWQiOiJob21wb2NoYS5zaXRlIiwiaXNzIjoiaG9tcG9jaGEuc2l0ZSJ9.mDQqXVd3vDnLfMTqDXd3tC9kfu37Tt6122Dfi8ZamJo
+2번임
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+null
+RoomEntity {
+  idx: '01H79XKB8A4EDVDFH7FV9GTQ5Q',
+  room_idx: '01H79XJ7052GGFG0AKM6S1KXTJ',
+  user_idx: '01H6WR5A6SGXD32STSQZBQQ8DS'
+}
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+RoomEntity {
+  idx: '01H7A08DE6S69J3AYT0F5258BZ',
+  room_idx: '01H79YTVYN8FK2KC1D96A7P363',
+  user_idx: '01H6NZAN7X2JB0MYKK4TJ269GH'
+}
+controller: create sessions
+create session https://hompocha.site:8443
+Session info fetched for session '01H79YTVYN8FK2KC1D96A7P363'. Any change: true
+controller: create connection
+createConnection
+null

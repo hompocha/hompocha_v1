@@ -306,7 +306,7 @@ const SpeechGame = (props) => {
         )}
         {!timerExpired ? (
           <div className={!loaded ? styles.hidden : ""}>
-            <h1>{stopTime}</h1>
+            {/* <h1>{stopTime}</h1> */}
             <div className={styles.gameWord}>{sentenceState}</div>
             <div className={styles.speechPosition}>
               <UseSpeechRecognition
