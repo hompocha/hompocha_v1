@@ -1,8 +1,10 @@
+
 import { useState } from "react";
 import styles from "./MicButton.module.css";
 
 export function MicButton({ onMicToggle, user }) {
   const [micEnabled, setMicEnabled] = useState(true);
+
 
   const toggleMic = () => {
     setMicEnabled((prevState) => {
@@ -14,6 +16,7 @@ export function MicButton({ onMicToggle, user }) {
       } else {
         publisher.publishAudio(false);
       }
+
       onMicToggle(enabled);
       return enabled;
     });
