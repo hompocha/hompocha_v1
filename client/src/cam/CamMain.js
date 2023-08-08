@@ -56,7 +56,7 @@ const CamMain = ({
       } else if (data === "speechGame") {
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-            status: "ingame",
+            status: "게임 중",
             room_idx: idx,
           });
         } catch (error) {
@@ -67,7 +67,7 @@ const CamMain = ({
       } else if (data === "somaek") {
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-            status: "ingame",
+            status: "게임 중",
             room_idx: idx,
           });
         } catch (error) {
@@ -78,7 +78,7 @@ const CamMain = ({
       } else if (data === "avoidGame") {
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-            status: "ingame",
+            status: "게임 중",
             room_idx: idx,
           });
         } catch (error) {
@@ -89,7 +89,7 @@ const CamMain = ({
       } else {
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
-            status: "openGame",
+            status: "대화 중",
             room_idx: idx,
           });
         } catch (error) {
@@ -341,7 +341,6 @@ const CamMain = ({
             <div className={styles.numOfUsers}>
               {user.subscribers.length + 1}명 참여중
             </div>
-            <div className={styles.nickName}>{user.getNickname()}</div>
             <div className={styles.mic}>
               <div className={styles.micControl}>
                 <MicButton onMicToggle={onMicToggle} user={user} />

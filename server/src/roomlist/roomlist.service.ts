@@ -29,7 +29,7 @@ export class RoomlistService {
     roomList.idx = room_idx;
     roomList.room_name = room_name;
     roomList.room_max = room_max;
-    roomList.room_status = 'openGame';
+    roomList.room_status = '대화 중';
     roomList.peopleNum = 1;
     await this.roomListEntityRepository.save(roomList);
     return room_idx;
