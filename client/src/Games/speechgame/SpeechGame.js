@@ -11,6 +11,7 @@ import CountDown from "../../Loading/CountDown";
 import Loading from "../../Loading/Loading";
 
 let sentenceState = "시작";
+
 const speech_sentence = [
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",

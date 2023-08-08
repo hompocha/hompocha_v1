@@ -149,7 +149,7 @@ const UseSpeechRecognition = (props) => {
       const timeout = setTimeout(() => {
         setStopSign(true);
         listen({ lang });
-      }, 1000);
+      }, 1500);
       return () => clearTimeout(timeout);
     }
   }, [stopSign]);
@@ -243,6 +243,7 @@ const UseSpeechRecognition = (props) => {
         <div className={styles.speechWord}>
           <UserInput onSubmit={handleUserInput} />
         /* </div> )}    */}
+
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`} > {extractedValue} </div>
