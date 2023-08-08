@@ -360,7 +360,9 @@ const AvoidGame = (props) => {
         if (obj.type !== "avoid_pill") {
           effectSound(hitEffect);
           gameState.hpBar.hpLeft -= 10;
-          setHpLeft((hpLeft)=>(hpLeft-10));
+          if(gameState.hpBar.hpLeft <= 0)
+            gameState.hpBar.hpLeft = 0;
+          setHpLeft(gameState.hpBar.hpLeft);
           gameState.player.state += 1;
           setTimeout(() => {
             gameState.player.state -= 1;
@@ -370,9 +372,6 @@ const AvoidGame = (props) => {
           if (gameState.hpBar.hpLeft <= 0) {
             gameState.gameEnd=true;
             gameState.objects = [];
-            // gameState.hpBar.hpLeft = 100;
-
-            // setHpLeft(100);
             clearInterval(speedInterval.current);
             clearInterval(objInterval.current);
             clearInterval(sendInterval.current);
@@ -383,7 +382,9 @@ const AvoidGame = (props) => {
           }
         } else {
           gameState.hpBar.hpLeft += 5;
-          setHpLeft((hpLeft)=>(hpLeft+5));
+          if(gameState.hpBar.hpLeft > 100)
+            gameState.hpBar.hpLeft = 100;
+          setHpLeft(gameState.hpBar.hpLeft);
           effectSound(healEffect);
         }
         gameState.objects.splice(i, 1);
