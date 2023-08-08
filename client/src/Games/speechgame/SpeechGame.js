@@ -113,38 +113,36 @@ const SpeechGame = (props) => {
         sendStopTime(randomStopTime);
       } else {
         /* 두번째부터는 밑에꺼 실행 */
-        props.user
-          .getStreamManager()
-          .stream.session.on("signal:speech", (event) => {
-            const sentId = event.data;
-            if (sentId === randomUser) {
-              const sentence = getRandomElement(speech_sentence);
-              const selectId = getRandomElement(findSubscriber(randomUser))
-                .stream.connection.connectionId;
-
-              sendIdSentence(selectId, sentence);
-            }
-          });
+        const receivePassedConId = (event) => {
+          const sentId = event.data;
+          if (sentId === randomUser) {
+            const sentence = getRandomElement(speech_sentence);
+            const selectId = getRandomElement(findSubscriber(randomUser))
+              .stream.connection.connectionId;
+            sendIdSentence(selectId, sentence);
+          }
+        };
+        props.user.getStreamManager().stream.session.on("signal:speech",receivePassedConId)
       }
     }
-    /* 받아서 출력 */
-    props.user
-      .getStreamManager()
-      .stream.session.on("signal:randomId", (event) => {
-        const data = JSON.parse(event.data);
-        const { id, sentence } = data;
-        console.log("애가 바껴야함 : ", id);
-        setRandomUser(id);
-        sentenceState = sentence;
-      });
-
-    props.user
-      .getStreamManager()
-      .stream.session.on("signal:stopTime", (event) => {
-        const data = event.data;
-        setStopTime(data);
-      });
+    
   }, [props.user, randomUser, stopTime, start]);
+
+  useEffect(()=>{
+    const receiveRandomId =(event)=>{
+      const data = JSON.parse(event.data);
+      const { id, sentence } = data;
+      console.log("애가 바껴야함 : ", id);
+      setRandomUser(id);
+      sentenceState = sentence;
+    };
+    const receiveStopTime = (event)=>{
+      const data = event.data;
+      setStopTime(data);
+    }
+    props.user.getStreamManager().stream.session.on("signal:randomId",receiveRandomId)
+    props.user.getStreamManager().stream.session.on("signal:stopTime", receiveStopTime)
+  },[props.user])
 
   useEffect(() => {
     if (!start) return;
@@ -173,7 +171,7 @@ const SpeechGame = (props) => {
       setTimerExpired(true);
       sentenceState="시작";
       bgmSound.current.stop();
-    },1000);
+    },1500);
   }
 
 
