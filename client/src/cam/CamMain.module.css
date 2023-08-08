@@ -208,6 +208,18 @@ body {
   cursor: pointer;
 }
 
+.toRoomButton {
+  position: fixed;
+  top: 15px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-image: url("../../public/asset/room/toLobbyButton.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
 .camAndVoice {
   display: flex;
   flex-direction: row;
