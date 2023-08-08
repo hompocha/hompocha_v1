@@ -5,18 +5,17 @@ function Modal(props) {
   return (
     <div className={styles.modalWrap}>
       <div className={styles.modlaInterior}>
-        <input
+        {/* <input
           className={styles.modalClose}
           type="button"
           onClick={() => props.setModalOpen(false)}
           value="❌"
-        />
+        /> */}
         <div className={styles.modalText}>
           {/* <p className={styles.textHeader0}>
             홈술포차는 음성인식을 통해 키보드와 마우스 사용을 최소화하여,
             유저분들이 자유롭게 서비스를 즐기도록 지원하고 있습니다.
           </p> */}
-          <br />
           <span className={styles.textHeader}>테마 변경</span>
           <p className={styles.text}>
             "테마 바꿔 주세요" 키워드를 통해 다양한 테마를 제공합니다.

@@ -8,6 +8,7 @@ import somaekFail from "../sounds/somaekFail.wav";
 import { effectSound } from "../effectSound";
 import styless from "./shootingStar.module.scss";
 import { set } from "mongoose";
+import UserInput from "./UserInput";
 
 const keyword = ["고양이", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
@@ -50,21 +51,24 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
 
-    if (value.includes("우리 한잔할까")) {
-      stop();
-      setStopSign(false);
-      props.sendCheersOnSignal();
-    }
+
     if (value.includes("담배")) {
       stop();
       setStopSign(false);
       props.sendCheersOffSignal();
     }
-    for (const keyword of wheelKeyword) {
-      if (value.includes(keyword)) {
+    if(props.mode === undefined) {
+      for (const keyword of wheelKeyword) {
+        if (value.includes(keyword)) {
+          stop();
+          setStopSign(false);
+          props.hubTospeechFromCamtest();
+        }
+      }
+      if (value.includes("우리 한잔할까")) {
         stop();
         setStopSign(false);
-        props.hubTospeechFromCamtest();
+        props.sendCheersOnSignal();
       }
     }
     if (value.includes("채팅창 보여 줘")) {
@@ -77,6 +81,7 @@ const UseSpeechRecognition = (props) => {
       setStopSign(false);
       props.chatChangeOff();
     }
+
 
 
     /* 발음게임 명령어 */
@@ -191,6 +196,10 @@ const UseSpeechRecognition = (props) => {
     }
   };
 
+  const handleUserInput = (input) => {
+    setValue(input); // Update the value when user submits the form
+  };
+
   const { listen, listening, stop, supported } = useSpeechRecognition({
     onResult,
     onEnd,
@@ -205,8 +214,8 @@ const UseSpeechRecognition = (props) => {
         setListenBlocked(false);
         listen({ lang });
       };
-  // /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
-  // /* 현재 방으로 이동 시 오류 발생, 개선필요 */
+  /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
+  /* 현재 방으로 이동 시 오류 발생, 개선필요 */
   useEffect(() => {
     if (props.speechBlocked === true) {
       stop();
@@ -235,7 +244,10 @@ const UseSpeechRecognition = (props) => {
   return (
     <div>
       {props.mode === "speechGame" && (
-        <div className={styles.speechWord}> {value} </div>
+
+        <div className={styles.speechWord}> {value}
+          <UserInput onSubmit={handleUserInput} />
+        </div>
       )} 
       {props.mode !== "speechGame" && shootingStar === true && (
         <div className={styless.night}>

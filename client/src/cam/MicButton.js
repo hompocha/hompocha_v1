@@ -1,40 +1,47 @@
-import { useState } from 'react';
 
-export function MicButton({user}) {
-  const micOnImageURL = "/Bell/micOn.png";
-  const micOffImageURL = "/Bell/micOff.png";
+import { useState } from "react";
+import styles from "./MicButton.module.css";
 
-  const [micEnabled, setMicEnabled] = useState(false);
+export function MicButton({ onMicToggle, user }) {
+
+  const [micEnabled, setMicEnabled] = useState(true);
+
 
   const toggleMic = () => {
     setMicEnabled((prevState) => {
       const enabled = !prevState;
       const publisher = user.getStreamManager();
+
       if (enabled) {
         publisher.publishAudio(true);
       } else {
         publisher.publishAudio(false);
       }
-      // 부모 컴포넌트에게 micEnabled 상태 변경 알리기
-      // onMicToggle(enabled);
+
+      onMicToggle(enabled);
       return enabled;
     });
   };
 
   return (
-    <button
-      onClick={toggleMic}
-      style={{
-        backgroundImage: `url(${micEnabled ? micOnImageURL : micOffImageURL})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        width: '57px',
-        height: '57px',
-        border: 'none',
-        outline: 'none',
-        cursor: 'pointer',
-        backgroundColor: 'transparent',
-      }}
-    />
+
+
+    <>
+      <input
+        className={styles.reactSwitchCheckbox}
+        id={`reactMicSwtich`}
+        type="checkbox"
+      />
+      <label
+        className={styles.reactSwitchLabel}
+        htmlFor={`reactMicSwtich`}
+        onClick={toggleMic}
+      >
+        <span className={styles.reactSwitchButton}>
+          {micEnabled ? "on" : "off"}
+        </span>
+      </label>
+    </>
+
   );
 }

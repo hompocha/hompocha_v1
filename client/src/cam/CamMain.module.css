@@ -13,6 +13,21 @@ body {
   padding: 0;
 }
 
+.roomName {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.numOfUsers {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  font-size: 35px;
+}
+
 /* 포차 테마일 때 배경 */
 .themePocha {
   position: fixed;
@@ -59,12 +74,13 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_pocha/pocha.png");
   background-repeat: no-repeat;
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
 }
 
 .themePochaItem:hover {
@@ -78,12 +94,13 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_bar/restaurent.png");
   background-repeat: no-repeat;
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
 }
 
 .themeBarItem:hover {
@@ -96,12 +113,13 @@ body {
   position: fixed;
   z-index: 1;
   top: 57vh;
-  left: 3vw;
+  left: 2vw;
   background-image: url("../../public/asset/room/theme_izakaya/ramen.png");
   background-repeat: no-repeat;
   background-size: contain;
   transition: all 1s linear 0.25s;
   animation: ani 1s infinite alternate;
+  cursor: pointer;
 }
 .themeIzakayaItem:hover {
   animation: grow 1300ms ease infinite;
@@ -115,19 +133,79 @@ body {
 }
 
 .camMainHeader {
+  position: fixed;
+  top: 18px;
   color: white;
   width: 100vw;
   height: 5vh;
-  /* border: 1px solid black; */
-  border-radius: 10px;
-  padding: 10px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
 }
-.camMainHeader > * {
+.mic {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: fixed;
+  top: 130px;
+  left: 20px;
+  font-size: 35px;
+  width: 180px;
+}
+.micControl {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+}
+.micControl > * {
   padding-right: 50px;
+}
+.bgm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: fixed;
+  top: 180px;
+  left: 20px;
+  font-size: 35px;
+  width: 180px;
+}
+.bgmControl {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+}
+.bgmControl > * {
+  padding-right: 50px;
+}
+
+/* .camMainHeader > * {
+  padding-right: 50px;
+} */
+
+.nickName {
+  position: fixed;
+  top: 18px;
+  right: 100px;
+  color: white;
+  font-size: 50px;
+}
+
+.toLobbyButton {
+  position: fixed;
+  top: 15px;
+  right: 8px;
+  width: 60px;
+  height: 60px;
+  background-image: url("../../public/asset/room/toLobbyButton.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
 }
 
 .camAndVoice {
@@ -148,7 +226,7 @@ body {
   padding: 0;
   border-radius: 3px;
   position: fixed;
-  top: 7vh;
+  top: 10vh;
   right: 2vw;
   padding-top: 3vh;
   width: 400px;
@@ -184,6 +262,7 @@ body {
 
 .gameButtons {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-evenly;
   margin: 3vh 0;
@@ -193,7 +272,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .gameName {
@@ -233,12 +312,6 @@ body {
   font-size: 40px;
   font-family: "Gowun Dodum", sans-serif;
 }
-.nickName {
-  position: fixed;
-  top: 0vh;
-  right: 10vw;
-  color: white;
-}
 
 @keyframes ani {
   0% {
@@ -265,4 +338,13 @@ body {
   70% {
     transform: scale(1);
   }
+}
+
+.gameButton {
+  width: 45px;
+  height: 45px;
+  z-index: 1;
+  background-image: url("../../public/asset/room/gameButton.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
