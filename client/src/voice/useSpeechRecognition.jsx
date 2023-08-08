@@ -9,6 +9,7 @@ import { effectSound } from "../effectSound";
 import styless from "./shootingStar.module.scss";
 import { set } from "mongoose";
 import UserInput from "./UserInput";
+import 'animate.css';
 
 const keyword = ["고양이", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
@@ -62,23 +63,27 @@ const UseSpeechRecognition = (props) => {
         if (value.includes(keyword)) {
           stop();
           setStopSign(false);
+          setExtractedValue("돌려주세요");
           props.hubTospeechFromCamtest();
         }
       }
       if (value.includes("우리 한잔할까")) {
         stop();
         setStopSign(false);
+        setExtractedValue("우리 한잔할까");
         props.sendCheersOnSignal();
       }
     }
     if (value.includes("채팅창 보여 줘")) {
       stop();
       setStopSign(false);
+      setExtractedValue("채팅창 보여줘");
       props.chatChangeOn();
     }
     if (value.includes("채팅 창 닫아 줘")) {
       stop();
       setStopSign(false);
+      setExtractedValue("채팅창 닫아줘");
       props.chatChangeOff();
     }
 
@@ -177,7 +182,7 @@ const UseSpeechRecognition = (props) => {
     if (extractedValue !== "") {
       const timeout = setTimeout(() => {
         setExtractedValue(" ");
-      }, 500);
+      }, 5000);
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
@@ -241,15 +246,42 @@ const UseSpeechRecognition = (props) => {
     }
   }, [props.speechBlocked]);
 
+  const [animationClass, setAnimationClass] = useState("");
+
+  // useEffect(() => {
+  //   if (extractedValue !== "") {
+  //     setAnimationClass("animate__animated animate__backInLeft");
+  
+  //     const timeout = setTimeout(() => {
+  //       setAnimationClass("animate__animated animate__backOutleft");
+  //     }, (1.5 + 2) * 1000); // backInLeft가 1.5초 동안 진행되고, 2초 동안 정지
+  
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [extractedValue]);
+  
+  useEffect(() => {
+    if (extractedValue !== "") {
+      setAnimationClass("animate__animated animate__fadeIn");
+  
+      const timeout = setTimeout(() => {
+        setAnimationClass("animate__animated animate__fadeOut");
+      }, (0.5 + 1.5) * 1000); // backInLeft가 1.5초 동안 진행되고, 2초 동안 정지
+  
+      return () => clearTimeout(timeout);
+    }
+  }, [extractedValue]);
+  
+
   return (
     <div>
-      {props.mode === "speechGame" && (
+      {/* {props.mode === "speechGame" && (
 
         <div className={styles.speechWord}>
           {value}
           {/* <UserInput onSubmit={handleUserInput} /> */}
         </div>
-      )} 
+      )}  */}
       {props.mode !== "speechGame" && shootingStar === true && (
         <div className={styless.night}>
           {Array.from({ length: 24 }, (_, index) => (
@@ -259,47 +291,10 @@ const UseSpeechRecognition = (props) => {
           ))}
         </div>
       )}
-      {props.mode !== "speechGame" && (
-      <div className={styles.container}>
-        <form id="speech-recognition-form">
-          {!supported && (
-            <p>
-              Oh no, it looks like your browser doesn&#39;t support Speech
-              Recognition.
-            </p>
-          )}
-          {supported && (
-            <>
-              <label htmlFor="transcript">사용자 음성</label>
-              <textarea
-                id="transcript"
-                name="transcript"
-                placeholder="음성 기다리는중..."
-                value={value}
-                rows={3}
-                disabled
-              />
-              <button disabled={listenBlocked} type="button" onClick={toggle}>
-                {listening ? "정지" : "듣기"}
-              </button>
-              {listenBlocked && (
-                <p style={{ color: "red" }}>
-                  The microphone is blocked for this site in your browser.
-                </p>
-              )}
-              <label htmlFor="extractedValue">일치 키워드</label>
-              <textarea
-                id="extractedValue"
-                name="extractedValue"
-                placeholder="..."
-                value={extractedValue}
-                rows={2}
-                disabled
-              />
-            </>
-          )}
-        </form>
-      </div>
+      {props.mode === undefined && (
+        <div className={styles.keywordEffect}>
+          <div className={`${animationClass} ${styles.extractedValue}`} > {extractedValue} </div>
+        </div>
       )}
     </div>
   );
