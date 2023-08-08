@@ -2,6 +2,9 @@ import { useState } from "react";
 import styles from "./BgmButton.module.css";
 
 function BgmButton({ musicOn, setMusicOn }) {
+  const labelClassName = musicOn
+  ? `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGreen}`
+  : `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGrey}`;
   return (
     <>
       <input
@@ -10,7 +13,7 @@ function BgmButton({ musicOn, setMusicOn }) {
         type="checkbox"
       />
       <label
-        className={styles.reactSwitchLabel}
+        className={labelClassName}
         htmlFor={`reactBgmSwitch`}
         onClick={() => {
           if (musicOn === true) setMusicOn(false);

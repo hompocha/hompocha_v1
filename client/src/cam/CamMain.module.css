@@ -267,7 +267,6 @@ body {
   justify-content: space-evenly;
   margin: 3vh 0;
 }
-
 .eachGameMenu {
   display: flex;
   flex-direction: column;
@@ -347,4 +346,8 @@ body {
   background-image: url("../../public/asset/room/gameButton.png");
   background-repeat: no-repeat;
   background-size: cover;
+  cursor: pointer;
+}
+.gameButton:hover {
+  transform: scale(1.1);
 }

@@ -3,7 +3,6 @@ import { useState } from "react";
 import styles from "./MicButton.module.css";
 
 export function MicButton({ onMicToggle, user }) {
-
   const [micEnabled, setMicEnabled] = useState(true);
 
 
@@ -23,9 +22,11 @@ export function MicButton({ onMicToggle, user }) {
     });
   };
 
+  const labelClassName = micEnabled
+    ? `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGreen}`
+    : `${styles.reactSwitchLabel} ${styles.reactSwitchLabelGrey}`;
+
   return (
-
-
     <>
       <input
         className={styles.reactSwitchCheckbox}
@@ -33,7 +34,7 @@ export function MicButton({ onMicToggle, user }) {
         type="checkbox"
       />
       <label
-        className={styles.reactSwitchLabel}
+        className={labelClassName}
         htmlFor={`reactMicSwtich`}
         onClick={toggleMic}
       >
@@ -42,6 +43,5 @@ export function MicButton({ onMicToggle, user }) {
         </span>
       </label>
     </>
-
   );
 }
