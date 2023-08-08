@@ -1,5 +1,5 @@
 .roomListContainer {
-  width: 1000px;
+  width: 900px;
   height: 800px;
   /* border: 1px solid white; */
   backdrop-filter: blur(5px);
@@ -29,7 +29,7 @@
 }
 .roomInfo {
   /* border: 1px solid red; */
-  width: 900px;
+  width: 850px;
   display: flex;
   margin-bottom: 10px;
 }
@@ -41,7 +41,7 @@
   font-weight: bold;
 }
 .roomTitle {
-  width: 400px;
+  width: 350px;
   height: 50px;
 }
 .roomNumOfUsers {
@@ -57,7 +57,7 @@
   height: 50px;
 }
 .roomList {
-  width: 900px;
+  width: 850px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,7 +72,7 @@
 }
 
 .roomName {
-  width: 400px;
+  width: 350px;
   height: 50px;
 }
 .roomPeople {
