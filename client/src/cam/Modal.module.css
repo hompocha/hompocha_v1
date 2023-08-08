@@ -9,7 +9,7 @@
   border-radius: 10px;
 }
 
-.modlaInterior {
+.modalInterior {
   z-index: 17;
   position: fixed;
   width: 48vw;

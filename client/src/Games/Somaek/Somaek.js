@@ -10,6 +10,7 @@ import somaekBGM from "../../sounds/somaekBGM.mp3";
 import somaekSuccess from "../../sounds/somaekSuccess.wav";
 import somaekFail from "../../sounds/somaekFail.wav";
 import { effectSound } from "../../effectSound";
+import { TimerBar } from "./timer";
 
 const objectsDefault = [
   { type: "beer",   leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5,  picked: false }, 
@@ -24,10 +25,10 @@ const images = {
   beer: "../../Drink/beer.png",
   mak: "../../Drink/mak.png",
   cider: "../../Drink/cider.png",
-  // sojuPicked: "../../Drink/sojuPicked.png",
-  // beerPicked: "../../Drink/beerPicked.png",
-  // makPicked: "../../Drink/makPicked.png",
-  // ciderPicked: "../../Drink/ciderPicked.png",
+  sojuPicked: "../../Drink/sojuPicked.png",
+  beerPicked: "../../Drink/beerPicked.png",
+  makPicked: "../../Drink/makPicked.png",
+  ciderPicked: "../../Drink/ciderPicked.png",
   container: "../../Drink/empty.png",
   madam: "../../Madam/madam3.png",
   speechBubble: "../../speechBubble.png",
@@ -52,7 +53,7 @@ const Somaek = (props) => {
   const objectRef = useRef(JSON.parse(JSON.stringify(objectsDefault)));
   const signalInterval = useRef(null);
   const hostId = props.selectId;
-  const timerPrint = useRef(15000);
+  const timerPrint = useRef(25*1000);
   const imgElements = [];
   const subscribers = props.user.subscribers;
   // const scores = {};
@@ -101,22 +102,6 @@ const Somaek = (props) => {
 
     signalInterval.current = setInterval(() => {
       sendStateSignal();
-      if (start && timerPrint.current > 0) timerPrint.current -= 1000;
-      /* 게임이 끝났을 경우 */ else {
-        clearInterval(signalInterval.current);
-        const sortedScores = Object.entries(scores.current).sort(
-          ([, a], [, b]) => b - a
-        );
-        const lowestScorePerson = sortedScores[sortedScores.length - 1];
-        setLowestConId(lowestScorePerson[0]);
-        setHandStop(true);
-        setTimeout(() => {
-          if (!isGameOver) {
-            objectRef.current = JSON.parse(JSON.stringify(objectsDefault));
-            setIsGameOver(true);
-          }
-        }, 500);
-      }
     }, 1000);
     return () => {
       clearInterval(signalInterval.current);
@@ -124,6 +109,25 @@ const Somaek = (props) => {
     };
   }, [start]);
 
+
+  const gameEnd=() => {
+    clearInterval(signalInterval.current);
+    console.log(scores.current);
+    const sortedScores = Object.entries(scores.current).sort(
+      ([, a], [, b]) => b - a
+    );
+    const lowestScorePerson = sortedScores[sortedScores.length - 1];
+    console.log("##########",sortedScores);
+    console.log(lowestScorePerson);
+    setLowestConId(lowestScorePerson[0]);
+    setHandStop(true);
+    setTimeout(() => {
+      if (!isGameOver) {
+        objectRef.current = JSON.parse(JSON.stringify(objectsDefault));
+        setIsGameOver(true);
+      }
+    }, 500);
+  };
   /*======================================================= */
   /*===================손 인식 및 게임 화면 그리기=================== */
   /*======================================================= */
@@ -267,14 +271,14 @@ const Somaek = (props) => {
       let boxLocation = objs[i];
       const imgPicked = (boxLocation.picked)?boxLocation.type+"Picked":boxLocation.type;
       // console.log(imgPicked);
-      const img = imgElements[boxLocation.type]; // type에 따른 이미지 선택
+      const img = imgElements[imgPicked]; // type에 따른 이미지 선택
       can_ctx.drawImage(
         img,
         boxLocation.leftX * can_ref.width,
         boxLocation.topY * can_ref.height,
         boxLocation.lenX * can_ref.width * 0.5,
         boxLocation.lenY * can_ref.height * 0.5
-      );
+      );  
     }
     can_ctx.drawImage(
       imgElements["container"],
@@ -317,10 +321,7 @@ const Somaek = (props) => {
     /* score 출력 부분 */
     can_ctx.save(); // 현재 컨텍스트 상태를 저장
     can_ctx.scale(-1, 1); // X 축을 따라 스케일을 반전시킴 (좌우 반전)
-    // can_ctx.fillStyle = "black";
-    // can_ctx.font = "30px Arial";
-    // const fontSize = can_ref.width * speechWidth * 0.1; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
-    // can_ctx.fillText(`점수: ${score}`, -can_ref.width + 20, 50);
+  
 
     const speechLeftX = 0.17; // 원하는 X 위치를 설정하세요 (예시: 0).
     const speechTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
@@ -352,20 +353,7 @@ const Somaek = (props) => {
 
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
-    const timerLeftX = 0.6; // 원하는 X 위치를 설정하세요 (예시: 0).
-    const timerTopY = 0.1; // 원하는 Y 위치를 설정하세요 (예시: 0).
-    const titmerWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
-    // let blink = Math.floor(Date.now() / 500) % 2; // Change modulus value to control the blinking speed
-    // if (blink) {
-    can_ctx.fillStyle = "yellow";
-
-    const fontSize = can_ref.width * speechWidth * 0.3;
-    can_ctx.font = `${fontSize}px "Gowun Dodum", sans-serif`;
-    const timerX = -can_ref.width * timerLeftX;
-    const timerY = can_ref.height * timerTopY;
-    can_ctx.fillText(`남은시간: ${timerPrint.current / 1000}초`, timerX, timerY);
-
-    // }
+    
 
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores.current)
@@ -465,7 +453,11 @@ const Somaek = (props) => {
 
   const objDrag = (landmarks, canvasRef) => {
     let { distance, fingerPick } = fingerDistance(landmarks);
-    if (distance > 0.01) return;
+    if (distance > 0.01) {
+      objectRef.current.forEach((obj)=>{
+        obj.picked = false;
+      });
+      return;}
     for (let boxIndex = 0; boxIndex < objectRef.current.length; boxIndex++) {
       const {
         leftX: objLeftX,
@@ -528,7 +520,7 @@ const Somaek = (props) => {
 
   function randomDrink() {
     let drinks = [];
-    let randomCount = 1 + Math.floor(Math.random() * 4);
+    let randomCount = 1 + Math.floor(Math.random() * 1);
     for (let i = 0; i < randomCount; i++) {
       let randomValue = Math.random();
       if (randomValue < 0.1) drinks.push("cider");
@@ -628,6 +620,7 @@ const Somaek = (props) => {
 
         // scores.current[props.conToNick[connectionId]] = getScore;
         scores.current[connectionId] = getScore;
+        console.log(scores.current);
       });
 
     props.user
@@ -792,13 +785,14 @@ const Somaek = (props) => {
               autoPlay={true}
               ref={videoRef}
             />
-
             <canvas
               className={`${styles.somaekCanvas} ${!start && styles.hidden}`}
               ref={canvasRef}
               width={"1920px"}
               height={"1080px"}
             />
+            {/* 시연 */}
+            <TimerBar timeMax={25*1000} gameEnd={gameEnd} start={start}/>
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
               <>
