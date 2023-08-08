@@ -86,14 +86,10 @@ const Lobby = () => {
         <div className={styles.lobbyWrap}>
           <div className={styles.lobbyInfo}>
             <RoomList nickName={nickName} />
-            {/* <UserList /> */}
           </div>
         </div>
         <div className={styles.nav}>
           <div className={styles.userName}>{nickName}</div>
-          {/* <div className={styles.logoutBtn}>
-            <input onClick={handleLogout} type="button" value="로그아웃" />
-          </div> */}
           <div onClick={handleLogout} className={styles.logoutBtn}></div>
         </div>
         {flag === 1 && (

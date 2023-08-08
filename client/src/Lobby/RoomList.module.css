@@ -1,31 +1,96 @@
+.roomListContainer {
+  width: 1000px;
+  height: 800px;
+  /* border: 1px solid white; */
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 35px 0 rgba(255, 255, 255, 0.7);
+  font-family: "Gowun Dodum", sans-serif;
+  font-size: 20px;
+  color: white;
+  padding: 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .roomListWrap {
-  width: 50vw;
-  position: absolute;
-  top: 15vh;
-  left: 31vw;
+  margin: 10px 20px;
+  /* width: 50vw; */
+  /* position: absolute; */
+  /* top: 15vh;
+  left: 31vw; */
   /* border: 3px solid black; */
   border-radius: 10px;
   padding: 5px;
   align-items: center;
   z-index: 3;
 }
-.roomList {
+.roomInfo {
+  /* border: 1px solid red; */
+  width: 900px;
   display: flex;
-  width: 50vw;
+  margin-bottom: 10px;
 }
+.roomInfo > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+.roomTitle {
+  width: 400px;
+  height: 50px;
+}
+.roomNumOfUsers {
+  width: 200px;
+  height: 50px;
+}
+.roomState {
+  width: 200px;
+  height: 50px;
+}
+.btnSpace {
+  width: 100px;
+  height: 50px;
+}
+.roomList {
+  width: 900px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.roomList > * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  /* border: 2px solid white; */
+}
+
 .roomName {
-  width: 18vw;
+  width: 400px;
+  height: 50px;
 }
 .roomPeople {
-  width: 11vw;
+  width: 200px;
+  height: 50px;
 }
 .roomStatus {
-  width: 9vw;
+  width: 200px;
+  height: 50px;
 }
 .roomInButton {
-  border-radius: 10%;
-  width: 4vw;
-  height: 4vh;
+  margin: 0;
+  width: 100px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.65);
+  border: none;
+  border-radius: 3px;
+  color: #362100;
 }
 img {
   width: 25vw;
@@ -39,15 +104,4 @@ img {
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-}
-
-.roomListContainer {
-  width: 1000px;
-  height: 800px;
-  /* border: 1px solid white; */
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  box-shadow: 0 10px 35px 0 rgba(255, 255, 255, 0.7);
-  font-family: "Gowun Dodum", sans-serif;
 }

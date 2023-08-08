@@ -87,32 +87,39 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
 
   return (
     <>
-      <div ref={page1Ref} className={styles.roomListContainer}></div>
-      <div className={styles.roomListWrap}>
-        {title.map((t, index) => (
-          <div className={styles.roomList} key={index}>
-            <h4 className={styles.roomName}>방 제목 : {t}</h4>
-            <h4 className={styles.roomPeople}>
-              현재 참여 인원 : 👤{peopleNum[index]} / {room_max[index]}
-            </h4>
-            <h4 className={styles.roomStatus}>상태 : {room_status[index]}</h4>
-            <button
-              type="submit"
-              className={styles.roomInButton}
-              onClick={() =>
-                handleClick(
-                  idx[index],
-                  t,
-                  peopleNum[index],
-                  room_max[index],
-                  room_status[index]
-                )
-              }
-            >
-              방 입장
-            </button>
+      <div ref={page1Ref} className={styles.roomListContainer}>
+        <div className={styles.roomListWrap}>
+          <div className={styles.roomInfo}>
+            <div className={styles.roomTitle}>방 제목</div>
+            <div className={styles.roomNumOfUsers}>현재 참여 인원</div>
+            <div className={styles.roomState}>방 상태</div>
+            <div className={styles.btnSpace}></div>
           </div>
-        ))}
+          {title.map((t, index) => (
+            <div className={styles.roomList} key={index}>
+              <div className={styles.roomName}>{t}</div>
+              <div className={styles.roomPeople}>
+                👤 {peopleNum[index]} / {room_max[index]}
+              </div>
+              <div className={styles.roomStatus}>{room_status[index]}</div>
+              <button
+                type="submit"
+                className={styles.roomInButton}
+                onClick={() =>
+                  handleClick(
+                    idx[index],
+                    t,
+                    peopleNum[index],
+                    room_max[index],
+                    room_status[index]
+                  )
+                }
+              >
+                방 입장
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );

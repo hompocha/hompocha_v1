@@ -208,15 +208,15 @@ const Login: React.FC = () => {
               <div className={styles.buttonContainer}>
                 <button
                   className={styles.loginPageButton}
-                  onClick={handleLogIn}
-                >
-                  로그인
-                </button>
-                <button
-                  className={styles.loginPageButton}
                   onClick={() => setsignupForm(true)}
                 >
                   회원가입
+                </button>
+                <button
+                  className={styles.loginPageButton}
+                  onClick={handleLogIn}
+                >
+                  로그인
                 </button>
               </div>
             </div>
@@ -228,7 +228,7 @@ const Login: React.FC = () => {
         {/* <div className={`${styles.menu} ${styles.il}`}>오 뎅 탕</div>
         <div className={`${styles.menu} ${styles.ee}`}>계란말이</div>
         <div className={`${styles.menu} ${styles.sam}`}>잔치국수</div> */}
-        <div className={`${styles.wave} ${styles.zero} ${styles.even}`}></div>
+        {/* <div className={`${styles.wave} ${styles.zero} ${styles.even}`}></div>
         <div className={`${styles.wave} ${styles.one} ${styles.odd}`}></div>
         <div className={`${styles.wave} ${styles.two} ${styles.even}`}></div>
         <div className={`${styles.wave} ${styles.three} ${styles.odd}`}></div>
@@ -260,7 +260,7 @@ const Login: React.FC = () => {
         <div
           className={`${styles.wave} ${styles.nineteen} ${styles.odd}`}
         ></div>
-        <div className={styles.bottomColor}></div>
+        <div className={styles.bottomColor}></div> */}
       </div>
     </>
   );
