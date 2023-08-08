@@ -11,6 +11,7 @@ const Login: React.FC = () => {
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [signupForm, setsignupForm] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -121,68 +122,105 @@ const Login: React.FC = () => {
           <h1 className={styles.serviceTitle}>홈술포차</h1>
         </div>
         <div className={styles.loginWrap}>
-          <div className={styles.signup}>
-            <div className={styles.eachInput}>
-              <span>ID</span>
-              <input
-                type="text"
-                placeholder="Id"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-              />
+          {signupForm ? (
+            <div className={styles.signup}>
+              <div className={styles.eachInput}>
+                <span>아이디</span>
+                <input
+                  className={styles.loginInput}
+                  type="text"
+                  placeholder="Id"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
+              </div>
+              <div className={styles.eachInput}>
+                <span>비밀번호</span>
+                <input
+                  className={styles.loginInput}
+                  type="Password"
+                  placeholder="비밀번호"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className={styles.eachInput}>
+                <span>비밀번호 확인</span>
+                <input
+                  className={styles.loginInput}
+                  type="Password"
+                  placeholder="비밀번호 확인"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+              <div className={styles.eachInput}>
+                <span>닉네임</span>
+                <input
+                  className={styles.loginInput}
+                  type="text"
+                  placeholder="nickname"
+                  value={nickName}
+                  onChange={(e) => setNickname(e.target.value)}
+                  onKeyPress={hadlePressKeyToSignUp}
+                />
+              </div>
+              <div className={styles.buttonContainer}>
+                <button
+                  className={styles.loginPageButton}
+                  onClick={handleSignUp}
+                >
+                  회원가입
+                </button>
+                <button
+                  className={styles.loginPageButton}
+                  onClick={() => {
+                    setsignupForm(false);
+                  }}
+                >
+                  로그인하기
+                </button>
+              </div>
             </div>
-            <div className={styles.eachInput}>
-              <span>PW</span>
-              <input
-                type="Password"
-                placeholder="비밀번호"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+          ) : (
+            <div className={styles.login}>
+              <div className={styles.eachInput}>
+                <span>아이디</span>
+                <input
+                  className={styles.loginInput}
+                  type="text"
+                  placeholder="Id"
+                  value={loginId}
+                  onChange={(e) => setLoginId(e.target.value)}
+                />
+              </div>
+              <div className={styles.eachInput}>
+                <span>비밀번호</span>
+                <input
+                  className={styles.loginInput}
+                  type="Password"
+                  placeholder="비밀번호"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  onKeyPress={handlePressKeyTosignIn}
+                />
+              </div>
+              <div className={styles.buttonContainer}>
+                <button
+                  className={styles.loginPageButton}
+                  onClick={handleLogIn}
+                >
+                  로그인
+                </button>
+                <button
+                  className={styles.loginPageButton}
+                  onClick={() => setsignupForm(true)}
+                >
+                  회원가입
+                </button>
+              </div>
             </div>
-            <div className={styles.eachInput}>
-              <span>PW확인</span>
-              <input
-                type="Password"
-                placeholder="비밀번호 확인"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            <div className={styles.eachInput}>
-              <span>닉네임</span>
-              <input
-                type="text"
-                placeholder="nickname"
-                value={nickName}
-                onChange={(e) => setNickname(e.target.value)}
-                onKeyPress={hadlePressKeyToSignUp}
-              />
-            </div>
-            <button onClick={handleSignUp}>SIGN UP</button>
-          </div>
-          <div className={styles.login}>
-            <div className={styles.eachInput}>
-              <span>ID</span>
-              <input
-                type="text"
-                placeholder="Id"
-                value={loginId}
-                onChange={(e) => setLoginId(e.target.value)}
-              />
-            </div>
-            <div className={styles.eachInput}>
-              <span>PW</span>
-              <input
-                type="Password"
-                placeholder="비밀번호"
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                onKeyPress={handlePressKeyTosignIn}
-              />
-            </div>
-            <button onClick={handleLogIn}>SIGN IN</button>
-          </div>
+          )}
         </div>
       </div>
       {/* CSS영역 */}
