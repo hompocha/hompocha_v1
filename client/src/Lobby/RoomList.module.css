@@ -92,6 +92,7 @@
   border-radius: 3px;
   color: #362100;
   font-size: 25px;
+  cursor: pointer;
 }
 img {
   width: 25vw;
