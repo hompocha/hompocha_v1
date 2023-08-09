@@ -20,7 +20,15 @@
   width: 800px;
   height: 600px;
 }
-
+.webcam {
+  position: absolute;
+  top: 7%; /* 위쪽으로부터의 거리 */
+  left: -10%; /* 왼쪽으로부터의 거리 */
+  width: 800px;
+  height: 600px;
+  transform: scale(117%);
+  object-fit: contain;
+}
 .webcam1__0 {
   position: absolute;
   top: 7%; /* 위쪽으로부터의 거리 */
@@ -207,25 +215,25 @@
 .avoidGameSub {
   width: 16vw;
   height: auto;
-  position:fixed;
+  position: fixed;
   top: 0;
   left: 0;
   border-radius: 3%;
   background-color: transparent;
 }
 
-.avoidGameSubCan{
+.avoidGameSubCan {
   width: 16vw;
   height: 11vw;
-  position:fixed;
+  position: fixed;
   top: 0;
   left: 0;
   border-radius: 3%;
   background-color: transparent;
 }
 
-.avoidGameSubHp{
-  transform: scale(-1,1);
+.avoidGameSubHp {
+  transform: scale(-1, 1);
 }
 
 .centerCam {
@@ -244,7 +252,6 @@
   height: auto;
   border-radius: 3%;
   background-color: transparent;
-
 }
 /* */
 
@@ -255,14 +262,14 @@
   left: 0;
   border-radius: 3%;
   background-color: transparent;
-  }
-  
-  .somaekGameSubCan{
+}
+
+.somaekGameSubCan {
   width: 16vw;
   height: 11vw;
-  position:fixed;
+  position: fixed;
   top: 0;
   left: 0;
   border-radius: 3%;
   background-color: transparent;
-  }
+}

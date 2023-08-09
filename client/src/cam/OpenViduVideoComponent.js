@@ -4,12 +4,9 @@ import styles from "./OpenViduVideoComponent.module.css";
 import { Camera } from "@mediapipe/camera_utils";
 import { HealthBar } from "../Games/AvoidGame/hpBar";
 
-
-
-
-/*======================================================= */  
-/*=================== 메인 함수 시작=================== */  
-/*======================================================= */  
+/*======================================================= */
+/*=================== 메인 함수 시작=================== */
+/*======================================================= */
 
 const OpenViduVideoComponent = (props) => {
   const [videoReady, setVideoReady] = useState(false);
@@ -32,7 +29,7 @@ const OpenViduVideoComponent = (props) => {
   useEffect(() => {
     const Interval = setInterval(() => {
       sendCheersSignal();
-    }, 1000/60);
+    }, 1000 / 60);
 
     return () => {
       clearInterval(Interval);
@@ -48,17 +45,17 @@ const OpenViduVideoComponent = (props) => {
 
     if (videoRef.current && canvasRef.current) {
       const computedStyle = window.getComputedStyle(videoRef.current);
-      const width=parseFloat(computedStyle.getPropertyValue('width'));
-      const height=parseFloat(computedStyle.getPropertyValue('height'));
-      const left=parseFloat(computedStyle.getPropertyValue('left'));
-      const top=parseFloat(computedStyle.getPropertyValue('top'));
-      let scale = computedStyle.getPropertyValue('transform');
-      if(scale === 'none') return;
-        scale = parseFloat(scale.split('(')[1].split(')')[0].split(',')[0])*(-1);
+      const width = parseFloat(computedStyle.getPropertyValue("width"));
+      const height = parseFloat(computedStyle.getPropertyValue("height"));
+      const left = parseFloat(computedStyle.getPropertyValue("left"));
+      const top = parseFloat(computedStyle.getPropertyValue("top"));
+      let scale = computedStyle.getPropertyValue("transform");
+      if (scale === "none") return;
+      scale = parseFloat(scale.split("(")[1].split(")")[0].split(",")[0]) * -1;
       props.setVideoInfo(streamId, width, height, left, top, scale);
     }
 
-    const loadHandsAndCamera = async() => {
+    const loadHandsAndCamera = async () => {
       const hands = new Hands({
         locateFile: (file) =>
           `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
@@ -76,9 +73,10 @@ const OpenViduVideoComponent = (props) => {
         });
 
         /* onResults: hands가 하나의 프레임을 처리하고 나서 바로 실행될 함수 */
-        if(props.cheers){
+        if (props.cheers) {
           console.log(props.cheers);
-          hands.onResults(onResults); }
+          hands.onResults(onResults);
+        }
         camera = new Camera(videoRef.current, {
           onFrame: async () => {
             if (!didCancel) {
@@ -91,23 +89,21 @@ const OpenViduVideoComponent = (props) => {
         camera.start();
       }
 
-      return () =>{
-        if(camera) {
+      return () => {
+        if (camera) {
           camera.stop();
         }
-      }
+      };
     };
 
-    if(streamId === props.myself){
+    if (streamId === props.myself) {
       loadHandsAndCamera();
     }
 
-    return ()=>{
+    return () => {
       didCancel = true;
     };
   }, [videoReady, canvasRef.current]);
-
-
 
   const onResults = (results) => {
     // if (canvasRef.current && canvasCtx.current) {
@@ -118,27 +114,27 @@ const OpenViduVideoComponent = (props) => {
       /* 패들 구현 */
       if (results.multiHandLandmarks[0]) {
         noHands.current = false;
-        cheersRef.current = {hand5: results.multiHandLandmarks[0][5],
-          hand17: results.multiHandLandmarks[0][17]};
-      }
-      else {
+        cheersRef.current = {
+          hand5: results.multiHandLandmarks[0][5],
+          hand17: results.multiHandLandmarks[0][17],
+        };
+      } else {
         cheersRef.current = undefined;
       }
     }
   };
 
   const sendCheersSignal = () => {
-    if(noHands.current===true) return;
+    if (noHands.current === true) return;
     if (props.streamManager.session) {
       if (!cheersRef.current) {
-        noHands.current=true;
+        noHands.current = true;
       }
-      const data = 
-        {
-          hand: cheersRef.current
-        };
-      props.streamManager
-        .session.signal({
+      const data = {
+        hand: cheersRef.current,
+      };
+      props.streamManager.session
+        .signal({
           data: JSON.stringify(data),
           to: [],
           type: "cheersData",
@@ -165,7 +161,7 @@ const OpenViduVideoComponent = (props) => {
           props.drawGame(
             canvasSubRef.current,
             canvasSubCtx.current,
-            gameStateRef.current,
+            gameStateRef.current
           );
         }
       }, 1000 / 60);
@@ -187,7 +183,7 @@ const OpenViduVideoComponent = (props) => {
           props.drawGame(
             canvasSubRef.current,
             canvasSubCtx.current,
-            gameStateRef.current,
+            gameStateRef.current
           );
         }
       }, 1000 / 20);
@@ -218,11 +214,11 @@ const OpenViduVideoComponent = (props) => {
           </div>
         ) : null
       }
-      
+
       {
         /* 룰렛돌리기할 때 불러와지는 플레이어 캠 */
         props.mode === "roulette" ? (
-          <div>
+          <div className={styles.webcam}>
             <video
               className={styles.rouletteVideo}
               autoPlay={true}
@@ -267,8 +263,7 @@ const OpenViduVideoComponent = (props) => {
             />
             <canvas className={styles.avoidGameSubCan} ref={canvasSubRef} />
             <div className={styles.avoidGameSubHp}>
-
-          <HealthBar hp={hpLeft} maxHp={100} main={false}/>
+              <HealthBar hp={hpLeft} maxHp={100} main={false} />
             </div>
           </>
         ) : null
