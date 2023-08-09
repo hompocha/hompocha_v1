@@ -309,25 +309,11 @@ const CamMain = ({
     };
     window.addEventListener('popstate',handlePopstate);
     return () =>{
-      leaveRoom();
-      localStorage.clear()
-      navigate("/");
+      endSession();
+      navigate("/lobby");
       window.removeEventListener('popstate',handlePopstate)
     };
   },[]);
-
-  const leaveRoom = () => {
-    try {
-      const token = localStorage.getItem("jwtToken");
-      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   /* ====================== return ========================== */
   return (

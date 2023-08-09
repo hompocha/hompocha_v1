@@ -704,13 +704,13 @@ const handleSaveButtonClick = () => {
           height={700}
         >
           {renderCamSlices(setVideoInfo)}
-        </svg>
+      </svg> */}
         <canvas
           className={`${styles.position} ${!cheersMode ? styles.hidden : ""}`}
           ref={canvasRef}
           width={700}
           height={700}
-        /> */}
+        />
       </div>
 
       <div className={`${styles.drinkEffectTimer} ${!cheersMode ? styles.hidden : ""}`}>
