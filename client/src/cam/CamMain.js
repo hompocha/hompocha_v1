@@ -18,6 +18,7 @@ const CamMain = ({
   onModeChange,
   sessionConnected,
   idx,
+  ovvSpeech,
 }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
@@ -385,6 +386,7 @@ const CamMain = ({
               sendCheersOffSignal={sendCheersOffSignal}
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
+              ovvSpeech ={ovvSpeech}
             />
             <CamTest
               user={user}
