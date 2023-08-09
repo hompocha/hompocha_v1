@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./voice.module.css";
 import "regenerator-runtime/runtime";
 import somaekSuccess from "../sounds/somaekSuccess.wav";
 import { effectSound } from "../effectSound";
 import UserInput from "./UserInput";
-import 'animate.css';
+import "animate.css";
 import FunctionContext from "../FunctionContext";
 
 const keyword = ["고양이", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
@@ -32,7 +32,7 @@ const gameStartKeywords = [
   "발음 게임이요",
   "피하기 게임 이요",
 ];
-const wheelKeyword = ["돌려주세요","돌려 주세요"];
+const wheelKeyword = ["돌려주세요", "돌려 주세요"];
 
 const themeChangeKeywords = ["테마 바꿔 주세요"];
 const UseSpeechRecognition = (props) => {
@@ -52,30 +52,30 @@ const UseSpeechRecognition = (props) => {
     }
 
     /* 대화모드일때만 발동*/
-    if(props.mode === undefined) {
+    if (props.mode === undefined) {
       for (const keyword of wheelKeyword) {
         if (value.includes(keyword)) {
           stop();
           setStopSign(false);
-          setExtractedValue("돌려주세요");
+          sendKeywordSignal("돌려주세요");
           props.hubTospeechFromCamtest();
         }
       }
       if (value.includes("우리 한잔할까")) {
         stop();
         setStopSign(false);
-        setExtractedValue("우리 한잔할까");
+        sendKeywordSignal("우리 한잔할까");
         props.sendCheersOnSignal();
       }
 
       /* 키워드 명령어 */
       for (const word of keyword) {
         if (value.includes(word)) {
-          if(word === extractedValue){
-            setExtractedValue("")
-            setExtractedValue(word);
+          if (word === extractedValue) {
+            sendKeywordSignal("");
+            sendKeywordSignal(word);
           }
-          setExtractedValue(word);
+          sendKeywordSignal(word);
           stop();
           setStopSign(false);
           props.sendEffectSignal(word);
@@ -85,7 +85,7 @@ const UseSpeechRecognition = (props) => {
       /* 게임시작 명령어 */
       for (const gameStartKeyword of gameStartKeywords) {
         if (value.includes(gameStartKeyword)) {
-          setExtractedValue(gameStartKeyword);
+          sendKeywordSignal(gameStartKeyword);
           switch (gameStartKeyword) {
             case "발음 게임이요":
               stop();
@@ -110,22 +110,22 @@ const UseSpeechRecognition = (props) => {
     if (value.includes("채팅창 보여 줘")) {
       stop();
       setStopSign(false);
-      setExtractedValue("채팅창 보여줘");
+      sendKeywordSignal("채팅창 보여줘");
       toggleChat();
     }
     if (value.includes("채팅 창 닫아 줘")) {
       stop();
       setStopSign(false);
-      setExtractedValue("채팅창 닫아줘");
+      sendKeywordSignal("채팅창 닫아줘");
       toggleChat();
     }
 
     /* 발음게임 명령어 */
-    if(props.mode === "speechGame") {
+    if (props.mode === "speechGame") {
       for (const sentence of speech_sentence) {
         if (value.includes(sentence)) {
           effectSound(somaekSuccess);
-          setExtractedValue(sentence);
+          sendKeywordSignal(sentence);
           props.sendSpeech(
             props.user.streamManager.stream.connection.connectionId
           );
@@ -133,12 +133,10 @@ const UseSpeechRecognition = (props) => {
       }
     }
 
-
-
     /* 테마 변경을 위한 음성 인식 */
     for (const themeChangeKeyword of themeChangeKeywords) {
       if (value.includes(themeChangeKeyword)) {
-        setExtractedValue(themeChangeKeyword);
+        sendKeywordSignal(themeChangeKeyword);
         stop();
         setStopSign(false);
         props.sendThemeSignal();
@@ -160,7 +158,7 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     if (extractedValue !== "") {
       const timeout = setTimeout(() => {
-        setExtractedValue(" ");
+        sendKeywordSignal(" ");
       }, 3000);
       return () => clearTimeout(timeout);
     }
@@ -228,6 +226,14 @@ const UseSpeechRecognition = (props) => {
 
   const [animationClass, setAnimationClass] = useState("");
   useEffect(() => {
+    /* 다른 유저가 키워드 언급했을 때 신호 받아서 모든 유저에게 전달 */
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:keyword", (event) => {
+        let keyword = event.data;
+        setExtractedValue(keyword);
+      });
+
     if (extractedValue !== "") {
       setAnimationClass("animate__animated animate__fadeIn");
 
@@ -240,12 +246,29 @@ const UseSpeechRecognition = (props) => {
   }, [extractedValue]);
 
   /*Context 성균*/
-  const context= useContext(FunctionContext);
-  const toggleChat = () =>{
-    context.setChatToggleSwitch((prevState)=> !prevState);
+  const context = useContext(FunctionContext);
+  const toggleChat = () => {
+    context.setChatToggleSwitch((prevState) => !prevState);
   };
 
-
+  /* 키워드를 인식하면 신호를 보냄 */
+  const sendKeywordSignal = (string) => {
+    if (props.user.getStreamManager().session) {
+      props.user
+        .getStreamManager()
+        .session.signal({
+          data: string,
+          to: [],
+          type: "keyword",
+        })
+        .then(() => {
+          console.log("다른 유저들에게도 키워드가 출력되도록 전송합니다.");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
 
   return (
     <div>
@@ -256,7 +279,10 @@ const UseSpeechRecognition = (props) => {
 
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
-          <div className={`${animationClass} ${styles.extractedValue}`} > {extractedValue} </div>
+          <div className={`${animationClass} ${styles.extractedValue}`}>
+            {" "}
+            {extractedValue}{" "}
+          </div>
         </div>
       )}
     </div>

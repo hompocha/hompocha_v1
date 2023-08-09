@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext} from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
@@ -12,13 +12,7 @@ import { MicButton } from "./MicButton";
 import Theme from "./Theme";
 import FunctionContext from "../FunctionContext";
 
-const CamMain = ({
-  user,
-  roomName,
-  onModeChange,
-  sessionConnected,
-  idx,
-}) => {
+const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [conToNick] = useState({});
@@ -298,10 +292,10 @@ const CamMain = ({
   const sendThemeSignal = () => {
     user
       .getStreamManager()
-      .session.signal({to: [], type: "theme" })
+      .session.signal({ to: [], type: "theme" })
       .then(() => {
-        console.log("테마 변경 명령을 보냄 !!")
-      })
+        console.log("테마 변경 명령을 보냄 !!");
+      });
     console.log("sendCheersOffSignal 실행");
   };
 
@@ -311,13 +305,13 @@ const CamMain = ({
   };
   console.log("CamMain rendered");
 
-  const fnChat=useContext(FunctionContext);
+  const fnChat = useContext(FunctionContext);
 
   /* ====================== return ========================== */
   return (
     <div>
       {/* Main Room */}
-      <Theme mode={mode} camMainLoaded={loaded} user={user}/>
+      <Theme mode={mode} camMainLoaded={loaded} user={user} />
       {mode === undefined && !loaded && (
         <div>
           <Loading mode={mode} />
@@ -330,7 +324,6 @@ const CamMain = ({
             !loaded ? styles.hidden : ""
           }`}
         >
-
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title" className={styles.roomName}>
               {roomName}
@@ -385,6 +378,7 @@ const CamMain = ({
               sendCheersOffSignal={sendCheersOffSignal}
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
+              user={user}
             />
             <CamTest
               user={user}
@@ -398,7 +392,6 @@ const CamMain = ({
           </div>
         </div>
       )}
-
 
       {/* 발음 게임 */}
       {mode === "speechGame" && (
