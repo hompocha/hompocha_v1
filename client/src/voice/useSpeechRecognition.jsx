@@ -151,7 +151,6 @@ const UseSpeechRecognition = (props) => {
     console.log("Value:", value); // 추가된 부분
   }, [value]);
 
-
   useEffect(() => {
     let isMounted = true;
     if (!stopSign) {
