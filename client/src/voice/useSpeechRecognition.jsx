@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./useSpeechRecognition.module.css";
 import "regenerator-runtime/runtime";
@@ -42,11 +42,11 @@ const UseSpeechRecognition = (props) => {
   const [listenBlocked, setListenBlocked] = useState(false);
   const [extractedValue, setExtractedValue] = useState("");
   const [stopSign, setStopSign] = useState(true);
+  const [keywordFromOthers, setKeywordFromOthers] = useState("");
+
   const lang = "ko-Kr";
   useEffect(() => {
     /* 건배 명령어 */
-
-
 
     /* 대화모드일때만 발동*/
     if (props.mode === undefined) {
@@ -87,11 +87,6 @@ const UseSpeechRecognition = (props) => {
       /* 게임시작 명령어 */
       for (const gameStartKeyword of gameStartKeywords) {
         if (value.includes(gameStartKeyword)) {
-          if(gameStartKeyword === "다른 게임 이요")
-            setExtractedValue("발음 게임이요");
-          else {
-            setExtractedValue(gameStartKeyword);
-          }
           sendKeywordSignal(gameStartKeyword);
           switch (gameStartKeyword) {
             case "발음 게임이요":
@@ -156,11 +151,6 @@ const UseSpeechRecognition = (props) => {
     console.log("Value:", value); // 추가된 부분
   }, [value]);
 
-  useEffect(()=>{
-    if(!props.ovvSpeech){
-      stop()
-    }
-  },[props.ovvSpeech])
 
   useEffect(() => {
     let isMounted = true;
@@ -178,10 +168,11 @@ const UseSpeechRecognition = (props) => {
     }
   }, [stopSign]);
 
+  /* */
   useEffect(() => {
     if (extractedValue !== "") {
       const timeout = setTimeout(() => {
-        sendKeywordSignal(" ");
+        sendKeywordSignal("");
       }, 3000);
       return () => clearTimeout(timeout);
     }
@@ -215,11 +206,11 @@ const UseSpeechRecognition = (props) => {
   const toggle = listening
     ? stop
     : () => {
-        console.log(props.speechBlocked);
-        console.log("asdf");
-        setListenBlocked(false);
-        listen({ lang });
-      };
+      console.log(props.speechBlocked);
+      console.log("asdf");
+      setListenBlocked(false);
+      listen({ lang });
+    };
   /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
   /* 현재 방으로 이동 시 오류 발생, 개선필요 */
   useEffect(() => {
@@ -248,15 +239,30 @@ const UseSpeechRecognition = (props) => {
   }, [props.speechBlocked]);
 
   const [animationClass, setAnimationClass] = useState("");
+
+  /* 누군가가 키워드 언급했을 때 신호 받아서 출력 */
+  /* 나일 경우 ExtractedValue, 남일경우 ValueFromOthers*/
   useEffect(() => {
-    /* 다른 유저가 키워드 언급했을 때 신호 받아서 모든 유저에게 전달 */
     props.user
       .getStreamManager()
       .stream.session.on("signal:keyword", (event) => {
-        let keyword = event.data;
-        setExtractedValue(keyword);
-      });
+      const keywordSignalData = JSON.parse(event.data);
 
+      if (keywordSignalData.nickname === props.user.getNickname()) {
+        setExtractedValue(keywordSignalData.keyword);
+        setKeywordFromOthers("");
+      } else {
+        if (keywordSignalData.keyword !== "") {
+          const tempKeyword =
+            keywordSignalData.nickname + " : " + keywordSignalData.keyword;
+          setKeywordFromOthers(tempKeyword);
+          setExtractedValue("");
+        }
+      }
+    });
+  }, [props.user]);
+
+  useEffect(() => {
     if (extractedValue !== "") {
       setAnimationClass("animate__animated animate__fadeIn");
 
@@ -267,6 +273,18 @@ const UseSpeechRecognition = (props) => {
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
+
+  useEffect(() => {
+    if (keywordFromOthers !== "") {
+      setAnimationClass("animate__animated animate__fadeIn");
+
+      const timeout = setTimeout(() => {
+        setAnimationClass("animate__animated animate__fadeOut");
+      }, (0.5 + 1.5) * 1000); // backInLeft가 1.5초 동안 진행되고, 2초 동안 정지
+
+      return () => clearTimeout(timeout);
+    }
+  }, [keywordFromOthers]);
 
   /*Context 성균*/
   const context = useContext(FunctionContext);
@@ -280,10 +298,13 @@ const UseSpeechRecognition = (props) => {
       props.user
         .getStreamManager()
         .session.signal({
-          data: string,
-          to: [],
-          type: "keyword",
-        })
+        data: JSON.stringify({
+          keyword: string,
+          nickname: props.user.getNickname(),
+        }),
+        to: [],
+        type: "keyword",
+      })
         .then(() => {
           console.log("다른 유저들에게도 키워드가 출력되도록 전송합니다.");
         })
@@ -295,15 +316,21 @@ const UseSpeechRecognition = (props) => {
 
   return (
     <div>
-      {/* {props.mode === "speechGame" && (
-        <div className={styles.speechWord}>
-          <UserInput onSubmit={handleUserInput} />
-        /* </div> )}    */}
+      {/*{props.mode === "speechGame" && (*/}
+      {/*  <div className={styles.speechWord}>*/}
+      {/*    <UserInput onSubmit={handleUserInput} />*/}
+      {/*   </div> )}    */}
+      <div className={styles.speechWord}>
+        <UserInput onSubmit={handleUserInput} />
+      </div>
 
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`}>
             {extractedValue}
+          </div>
+          <div className={`${animationClass} ${styles.keywordFromOthers}`}>
+            {keywordFromOthers}
           </div>
         </div>
       )}

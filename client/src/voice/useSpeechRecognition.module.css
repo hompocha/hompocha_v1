@@ -90,3 +90,10 @@
 .keywordEffect {
   font-family: "Gowun Dodum", sans-serif;
 }
+.keywordFromOthers {
+  position: fixed;
+  left: 5vh;
+  top: 30vh;
+  font-size: 40px;
+  color: tomato;
+}
