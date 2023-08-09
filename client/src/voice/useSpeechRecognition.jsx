@@ -151,7 +151,6 @@ const UseSpeechRecognition = (props) => {
     console.log("Value:", value); // 추가된 부분
   }, [value]);
 
-
   useEffect(() => {
     let isMounted = true;
     if (!stopSign) {
@@ -207,37 +206,37 @@ const UseSpeechRecognition = (props) => {
   const toggle = listening
     ? stop
     : () => {
-      console.log(props.speechBlocked);
-      console.log("asdf");
-      setListenBlocked(false);
-      listen({ lang });
-    };
+        console.log(props.speechBlocked);
+        console.log("asdf");
+        setListenBlocked(false);
+        listen({ lang });
+      };
   /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
   /* 현재 방으로 이동 시 오류 발생, 개선필요 */
-  // useEffect(() => {
-  //   if (props.speechBlocked === true) {
-  //     stop();
-  //   } else {
-  //     setTimeout(() => {
-  //       setListenBlocked(false);
-  //       listen({ lang });
-  //     }, 1000);
+  useEffect(() => {
+    if (props.speechBlocked === true) {
+      stop();
+    } else {
+      setTimeout(() => {
+        setListenBlocked(false);
+        listen({ lang });
+      }, 1000);
 
-  //     let voiceRecog = setInterval(() => {
-  //       setTimeout(stop, 29 * 1000);
+      let voiceRecog = setInterval(() => {
+        setTimeout(stop, 29 * 1000);
 
-  //       setListenBlocked(false);
-  //       listen({ lang });
+        setListenBlocked(false);
+        listen({ lang });
 
-  //       console.log(listenBlocked);
-  //     }, 30 * 1000);
-  //     return () => {
-  //       clearInterval(voiceRecog);
-  //       stop();
-  //       console.log("음성인식 종료");
-  //     };
-  //   }
-  // }, [props.speechBlocked]);
+        console.log(listenBlocked);
+      }, 30 * 1000);
+      return () => {
+        clearInterval(voiceRecog);
+        stop();
+        console.log("음성인식 종료");
+      };
+    }
+  }, [props.speechBlocked]);
 
   const [animationClass, setAnimationClass] = useState("");
 
@@ -247,20 +246,20 @@ const UseSpeechRecognition = (props) => {
     props.user
       .getStreamManager()
       .stream.session.on("signal:keyword", (event) => {
-      const keywordSignalData = JSON.parse(event.data);
+        const keywordSignalData = JSON.parse(event.data);
 
-      if (keywordSignalData.nickname === props.user.getNickname()) {
-        setExtractedValue(keywordSignalData.keyword);
-        setKeywordFromOthers("");
-      } else {
-        if (keywordSignalData.keyword !== "") {
-          const tempKeyword =
-            keywordSignalData.nickname + " : " + keywordSignalData.keyword;
-          setKeywordFromOthers(tempKeyword);
-          setExtractedValue("");
+        if (keywordSignalData.nickname === props.user.getNickname()) {
+          setExtractedValue(keywordSignalData.keyword);
+          setKeywordFromOthers("");
+        } else {
+          if (keywordSignalData.keyword !== "") {
+            const tempKeyword =
+              keywordSignalData.nickname + " : " + keywordSignalData.keyword;
+            setKeywordFromOthers(tempKeyword);
+            setExtractedValue("");
+          }
         }
-      }
-    });
+      });
   }, [props.user]);
 
   useEffect(() => {
@@ -299,13 +298,13 @@ const UseSpeechRecognition = (props) => {
       props.user
         .getStreamManager()
         .session.signal({
-        data: JSON.stringify({
-          keyword: string,
-          nickname: props.user.getNickname(),
-        }),
-        to: [],
-        type: "keyword",
-      })
+          data: JSON.stringify({
+            keyword: string,
+            nickname: props.user.getNickname(),
+          }),
+          to: [],
+          type: "keyword",
+        })
         .then(() => {
           console.log("다른 유저들에게도 키워드가 출력되도록 전송합니다.");
         })
