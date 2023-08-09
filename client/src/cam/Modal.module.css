@@ -43,6 +43,19 @@
   line-height: 37px;
 }
 
+.text{
+  z-index: 17;
+  position: fixed;
+  width: 43.5vw;
+  height: 65vh;
+  left: 25.5vw;
+  top: 75vh;
+  padding: 0 3vw;
+  color: white;
+  font-size: 20px;
+  line-height: 37px;
+}
+
 .textHeader {
   font-size: 40px;
 }

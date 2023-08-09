@@ -172,6 +172,7 @@ const UseSpeechRecognition = (props) => {
     if (extractedValue !== "") {
       const timeout = setTimeout(() => {
         sendKeywordSignal("");
+        // setExtractedValue("");
       }, 3000);
       return () => clearTimeout(timeout);
     }
