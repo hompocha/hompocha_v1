@@ -10,7 +10,6 @@ import CountDown from "../../Loading/CountDown";
 import Loading from "../../Loading/Loading";
 import { TimerBar } from "../Somaek/timer";
 
-
 const speech_sentence = [
   "간장 공장 공장장은 강 공장장이다",
   "내가 그린 기린 그림은 긴 기린 그림이다",
@@ -43,14 +42,10 @@ const SpeechGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [sentenceState,setSentenceState] = useState("시작");
+  const [sentenceState, setSentenceState] = useState("시작");
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const bgmSound = useRef(null);
-
-
-
-
 
   /* 준비 신호 받는 세션을 열기위한 useEffect */
   useEffect(() => {
@@ -100,7 +95,7 @@ const SpeechGame = (props) => {
     /* 만약에 내가 방장이면 이 밑에서 처리를 해줌 */
     if (firstTime === true) {
       if (props.user.streamManager.stream.connection.connectionId === hostId) {
-      /* 처음이면 첫번째 랜덤을 돌린다. 시간도 설정한다 . 첫번째 랜덤 문제도 뽑음*/
+        /* 처음이면 첫번째 랜덤을 돌린다. 시간도 설정한다 . 첫번째 랜덤 문제도 뽑음*/
         setFirstTime(false);
         const firstMembers = [...props.user.subscribers];
         firstMembers.push(props.user.streamManager);
@@ -113,39 +108,45 @@ const SpeechGame = (props) => {
         sendStopTime(randomStopTime);
       }
     }
-  }, [props.user, start,firstTime]);
+  }, [props.user, start, firstTime]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (props.user.streamManager.stream.connection.connectionId === hostId) {
       /* 두번째부터는 밑에꺼 실행 */
       const receivePassedConId = (event) => {
         const sentId = event.data;
         if (sentId === id.current) {
           const sentence = getRandomElement(speech_sentence);
-          const selectId = getRandomElement(findSubscriber(id.current))
-            .stream.connection.connectionId;
+          const selectId = getRandomElement(findSubscriber(id.current)).stream
+            .connection.connectionId;
           id.current = selectId;
           sendIdSentence(selectId, sentence);
-          console.log("woo",sentId)
+          console.log("woo", sentId);
           console.log("wooodasdf");
         }
       };
-      props.user.getStreamManager().stream.session.on("signal:speech",receivePassedConId)
+      props.user
+        .getStreamManager()
+        .stream.session.on("signal:speech", receivePassedConId);
     }
-    const receiveRandomId =(event)=>{
+    const receiveRandomId = (event) => {
       const data = JSON.parse(event.data);
       const { id, sentence } = data;
       console.log("애가 바껴야함 : ", id);
       setRandomUser(id);
       setSentenceState(sentence);
     };
-    const receiveStopTime = (event)=>{
+    const receiveStopTime = (event) => {
       const data = event.data;
       setStopTime(data);
-    }
-    props.user.getStreamManager().stream.session.on("signal:randomId",receiveRandomId)
-    props.user.getStreamManager().stream.session.on("signal:stopTime", receiveStopTime)
-  },[props.user])
+    };
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:randomId", receiveRandomId);
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:stopTime", receiveStopTime);
+  }, [props.user]);
 
   useEffect(() => {
     if (!start) return;
@@ -161,22 +162,20 @@ const SpeechGame = (props) => {
     //   bgmSound.stop();
     // }, /* stopTime */ 40 * 1000); /*시연*/
     return () => {
-      if(bgmSound.current)
-      bgmSound.current.stop();
+      if (bgmSound.current) bgmSound.current.stop();
       // clearTimeout(timer);
       // clearTimeout(speechTimer);
     };
   }, [stopTime, start]);
 
-  const gameEnd=()=>{
+  const gameEnd = () => {
     setSpeechBlocked(true);
-    setTimeout(()=>{
+    setTimeout(() => {
       setTimerExpired(true);
       setSentenceState("시작");
       bgmSound.current.stop();
-    },1500);
-  }
-
+    }, 1500);
+  };
 
   useEffect(() => {
     if (props.voice === false) {
@@ -278,8 +277,6 @@ const SpeechGame = (props) => {
       });
   };
 
-
-
   /* 랜덤요소 고르는 함수 */
   function getRandomElement(list) {
     if (list.length === 0) {
@@ -308,9 +305,7 @@ const SpeechGame = (props) => {
       <div>
         {props.mode === "speechGame" && !loaded && (
           <div>
-
-            <Loading mode={props.mode}/>
-
+            <Loading mode={props.mode} />
           </div>
         )}
         {props.mode === "speechGame" && countDown && (
@@ -326,22 +321,23 @@ const SpeechGame = (props) => {
                 sendSpeech={checkPass}
                 user={props.user}
                 speechBlocked={speechBlocked}
-                mode = {props.mode}
+                mode={props.mode}
               />
             </div>
             <div className={styles.camPosition}>
               <div className={styles.mainUserCamBorder}></div>
               <div className={styles[`speechGameCam__${0}`]}>
-                <SpeechCam key={randomUser} selectId={randomUser} user={props.user} />
+                <SpeechCam
+                  key={randomUser}
+                  selectId={randomUser}
+                  user={props.user}
+                />
               </div>
-            <TimerBar timeMax={600*1000} gameEnd={gameEnd} start={start}/>
+              <TimerBar timeMax={600 * 1000} gameEnd={gameEnd} start={start} />
 
               {/*=============================딴애들=========================================================*/}
               {findSubscriber(randomUser).map((subscriber, index) => (
                 <>
-                  <div
-                    className={`${styles[`GameSubBorder${index + 1}`]}`}
-                  ></div>
                   <div className={styles[`speechGameCam__${index + 1}`]}>
                     <OpenViduVideoComponent
                       key={randomUser}

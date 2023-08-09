@@ -43,31 +43,11 @@
   left: 3vw;
 }
 
-.gameSubBorder1 {
-  position: fixed;
-  top: 9vh;
-  left: 2vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
 .speechGameCam__2 {
   transform: rotateY(180deg);
   position: fixed;
   top: 39.25vh;
   left: 3vw;
-}
-
-.gameSubBorder2 {
-  position: fixed;
-  top: 38.25vh;
-  left: 2vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .speechGameCam__3 {
@@ -77,31 +57,11 @@
   left: 3vw;
 }
 
-.gameSubBorder3 {
-  position: fixed;
-  top: 67.5vh;
-  left: 2vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
 .speechGameCam__4 {
   transform: rotateY(180deg);
   position: fixed;
   top: 10vh;
   left: 81vw;
-}
-
-.gameSubBorder4 {
-  position: fixed;
-  top: 9vh;
-  left: 80vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .speechGameCam__5 {
@@ -111,38 +71,43 @@
   left: 81vw;
 }
 
-.gameSubBorder5 {
-  position: fixed;
-  top: 38.25vh;
-  left: 80vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
 .userNick1 {
   position: fixed;
   top: 32vh;
   left: 3vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick2 {
   position: fixed;
-  top: 62vh;
+  top: 61vh;
   left: 3vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick3 {
   position: fixed;
-  top: 92vh;
+  top: 90vh;
   left: 3vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick4 {
   position: fixed;
   top: 32vh;
   left: 81vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick5 {
   position: fixed;
   top: 62vh;
   left: 81vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
