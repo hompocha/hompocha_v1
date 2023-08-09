@@ -36,6 +36,7 @@ export default class OpenViduSession extends Component {
   componentDidMount() {
     window.addEventListener("beforeunload", this.leaveRoom);
     this.unlistenHistoryEvent = history.listen(({ action }) => {
+      /* 우현피셜: 뒤로가기 */
       if (action === "POP") {
         this.leaveRoom();
         localStorage.removeItem("jwtToken");

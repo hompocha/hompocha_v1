@@ -31,7 +31,8 @@ const CamMain = ({
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
-    setSpeechBlocked(false);
+    if(speechBlocked)
+      setSpeechBlocked(false);
   }, [mode]);
 
   const canvasRef = useRef(null);
@@ -50,11 +51,7 @@ const CamMain = ({
 
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {
       const data = event.data;
-      if (data === "airHockey") {
-        enterAirHockey();
-      } else if (data === "movingDuck") {
-        enterMovingDuck();
-      } else if (data === "speechGame") {
+      if (data === "speechGame") {
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
             status: "게임 중",
@@ -135,17 +132,6 @@ const CamMain = ({
         setLoaded(true);
       }, 2000);
     }, 1500);
-  };
-
-  const enterAirHockey = () => {
-    setSpeechBlocked(true);
-    setMode("airHockey");
-    onModeChange("airHockey");
-  };
-
-  const enterMovingDuck = () => {
-    setMode("movingDuck");
-    onModeChange("movingDuck");
   };
 
   const enterSpeech = () => {
@@ -254,8 +240,8 @@ const CamMain = ({
     }
   };
   const handleClick = (event) => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
+    // const mouseX = event.clientX;
+    // const mouseY = event.clientY;
     // console.log("마우스 클릭 좌표:", mouseX, mouseY);
   };
 
@@ -307,17 +293,16 @@ const CamMain = ({
     console.log("sendCheersOffSignal 실행");
   };
 
-  /*MicToggle*/
+  /*마이크 토글 */
   const onMicToggle = (enabled) => {
-    console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
+    console.log(`마이크 ${enabled ? "켜짐" : "꺼짐"}`);
   };
   console.log("CamMain rendered");
-
-  const fnChat = useContext(FunctionContext);
 
   /* ====================== return ========================== */
   return (
     <div>
+      <div className={styles.nickName}>{user.getNickname()}</div>
       {/* Main Room */}
       <Theme mode={mode} camMainLoaded={loaded} user={user} />
       {mode === undefined && !loaded && (

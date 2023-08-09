@@ -13,6 +13,7 @@ const Parent2 = ({ roomName, idx }) => {
   const [chatToggle,setChatToggle] = useState(false);
   const [speech, setSpeech]= useState(true);
 
+
   const ovvSpeechOff = ()=>{
     setSpeech(false);
   }
@@ -22,7 +23,7 @@ const Parent2 = ({ roomName, idx }) => {
     console.log("parent mode = ", newMode, mode);
   };
   const fnFromChat = () => {
-    console.log("chat에 있는 함수, 딴데서 부름!!");
+    console.log("chatcomponent 함수 다른 Component부름!!");
   };
   const handleSessionConnected = (localUser) => {
     setSessionConnected(true);
