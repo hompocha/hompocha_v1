@@ -12,7 +12,15 @@ import { MicButton } from "./MicButton";
 import Theme from "./Theme";
 import FunctionContext from "../FunctionContext";
 
-const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
+
+const CamMain = ({
+  user,
+  roomName,
+  onModeChange,
+  sessionConnected,
+  idx,
+  ovvSpeech,
+}) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
   const [conToNick] = useState({});
@@ -379,6 +387,7 @@ const CamMain = ({ user, roomName, onModeChange, sessionConnected, idx }) => {
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
               user={user}
+              ovvSpeech ={ovvSpeech}
             />
             <CamTest
               user={user}

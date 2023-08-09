@@ -11,9 +11,12 @@ const Parent2 = ({ roomName, idx }) => {
   const [userStream, setUserStream] = useState(null);
   const [mode, setMode] = useState(undefined);
   const [chatToggle,setChatToggle] = useState(false);
+  const [speech, setSpeech]= useState(true);
 
-
-
+  const ovvSpeechOff = ()=>{
+    setSpeech(false);
+  }
+  
   const onModeChange = (newMode) => {
     setMode(newMode);
     console.log("parent mode = ", newMode, mode);
@@ -34,6 +37,7 @@ const Parent2 = ({ roomName, idx }) => {
         setUserStream={setUserStream}
         roomName={roomName}
         idx={idx}
+        ovvSpeechOff={ovvSpeechOff}
       />
       {sessionConnected && userStream && (
         <>
@@ -47,6 +51,7 @@ const Parent2 = ({ roomName, idx }) => {
                   onModeChange={onModeChange}
                   roomName={roomName}
                   idx={idx}
+                  ovvSpeech = {speech}
                 />
               </div>
               <div className={styles.zindex}>

@@ -145,6 +145,12 @@ const UseSpeechRecognition = (props) => {
     // console.log("Value:", value); // 추가된 부분
   }, [value]);
 
+  useEffect(()=>{
+    if(!props.ovvSpeech){
+      stop()
+    }
+  },[props.ovvSpeech])
+
   useEffect(() => {
     if (!stopSign) {
       const timeout = setTimeout(() => {
