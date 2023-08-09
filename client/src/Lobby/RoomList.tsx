@@ -102,21 +102,40 @@ const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
                 👤 {peopleNum[index]} / {room_max[index]}
               </div>
               <div className={styles.roomStatus}>{room_status[index]}</div>
-              <button
-                type="submit"
-                className={styles.roomInButton}
-                onClick={() =>
-                  handleClick(
-                    idx[index],
-                    t,
-                    peopleNum[index],
-                    room_max[index],
-                    room_status[index]
-                  )
-                }
-              >
-                방 입장
-              </button>
+              {/* 게임 중, 풀방일 때 */}
+              {room_status[index] === "게임 중" &&
+              peopleNum[index] === room_max[index] ? (
+                <button className={styles.gamePlayingButton}>게임 중</button>
+              ) : null}
+              {/* 게임 중, 풀방아닐 때 */}
+              {room_status[index] === "게임 중" &&
+              peopleNum[index] < room_max[index] ? (
+                <button className={styles.gamePlayingButton}>게임 중</button>
+              ) : null}
+              {/* 대화 중, 풀방일 때 */}
+              {room_status[index] === "대화 중" &&
+              peopleNum[index] === room_max[index] ? (
+                <button className={styles.fullOfUsers}>가득 참</button>
+              ) : null}
+              {/* 대화 중, 풀방아닐 때 */}
+              {room_status[index] === "대화 중" &&
+              peopleNum[index] < room_max[index] ? (
+                <button
+                  type="submit"
+                  className={styles.roomInButton}
+                  onClick={() =>
+                    handleClick(
+                      idx[index],
+                      t,
+                      peopleNum[index],
+                      room_max[index],
+                      room_status[index]
+                    )
+                  }
+                >
+                  방 입장
+                </button>
+              ) : null}
             </div>
           ))}
         </div>
