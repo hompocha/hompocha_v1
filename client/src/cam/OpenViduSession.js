@@ -40,7 +40,13 @@ export default class OpenViduSession extends Component {
       if (action === "POP") {
         this.leaveRoom();
         localStorage.removeItem("jwtToken");
-        history.push('/');
+        this.props.ovvSpeechOff();
+        const timer = setTimeout(()=>{
+          history.push('/');
+        },1500);
+        return()=>{
+          clearTimeout(timer);
+        }
       }
     });
     this.joinSession();

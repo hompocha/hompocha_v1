@@ -79,10 +79,14 @@
   background-color: rgba(54, 39, 110, 0.3);
   border-radius: 10px;
 }
-.extractedValue{
+.extractedValue {
   position: fixed;
   left: 5vh;
   top: 50vh;
   font-size: 40px;
   color: white;
+}
+
+.keywordEffect {
+  font-family: "Gowun Dodum", sans-serif;
 }

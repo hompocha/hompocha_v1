@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext} from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
@@ -12,12 +12,14 @@ import { MicButton } from "./MicButton";
 import Theme from "./Theme";
 import FunctionContext from "../FunctionContext";
 
+
 const CamMain = ({
   user,
   roomName,
   onModeChange,
   sessionConnected,
   idx,
+  ovvSpeech,
 }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
@@ -284,10 +286,10 @@ const CamMain = ({
   const sendThemeSignal = () => {
     user
       .getStreamManager()
-      .session.signal({to: [], type: "theme" })
+      .session.signal({ to: [], type: "theme" })
       .then(() => {
-        console.log("테마 변경 명령을 보냄 !!")
-      })
+        console.log("테마 변경 명령을 보냄 !!");
+      });
     console.log("sendCheersOffSignal 실행");
   };
 
@@ -302,7 +304,7 @@ const CamMain = ({
     <div>
       <div className={styles.nickName}>{user.getNickname()}</div>
       {/* Main Room */}
-      <Theme mode={mode} camMainLoaded={loaded} user={user}/>
+      <Theme mode={mode} camMainLoaded={loaded} user={user} />
       {mode === undefined && !loaded && (
         <div>
           <Loading mode={mode} />
@@ -315,7 +317,6 @@ const CamMain = ({
             !loaded ? styles.hidden : ""
           }`}
         >
-
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title" className={styles.roomName}>
               {roomName}
@@ -370,6 +371,8 @@ const CamMain = ({
               sendCheersOffSignal={sendCheersOffSignal}
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
+              user={user}
+              ovvSpeech ={ovvSpeech}
             />
             <CamTest
               user={user}
@@ -383,7 +386,6 @@ const CamMain = ({
           </div>
         </div>
       )}
-
 
       {/* 발음 게임 */}
       {mode === "speechGame" && (
