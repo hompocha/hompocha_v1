@@ -803,7 +803,7 @@ const Somaek = (props) => {
               height={"1080px"}
             />
             {/* 시연 */}
-            <div className={`${!start && styles.hidden}`}>
+            <div className={`${!loaded && styles.hidden}`}>
               <TimerBar timeMax={25 * 1000} gameEnd={gameEnd} start={start} />
             </div>
             {/* subscribers Cam */}

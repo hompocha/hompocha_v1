@@ -333,7 +333,7 @@ const SpeechGame = (props) => {
                   user={props.user}
                 />
               </div>
-              <TimerBar timeMax={600 * 1000} gameEnd={gameEnd} start={start} />
+              <TimerBar timeMax={40 * 1000} gameEnd={gameEnd} start={start} />
 
               {/*=============================딴애들=========================================================*/}
               {findSubscriber(randomUser).map((subscriber, index) => (

@@ -316,9 +316,11 @@ const UseSpeechRecognition = (props) => {
 
   return (
     <div>
-      {/*<div className={styles.speechWord}>*/}
-      {/*  <UserInput onSubmit={handleUserInput} />*/}
-      {/*</div>*/}
+      {props.mode === "speechGame" && (
+        <div className={styles.speechWord}>
+          {value}
+          {/* <UserInput onSubmit={handleUserInput} /> */}
+        </div> )}  
 
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>

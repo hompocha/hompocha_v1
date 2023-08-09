@@ -570,7 +570,9 @@ const AvoidGame = (props) => {
               width={"960px"}
               height={"720px"}
             />
-            <HealthBar hp={hpLeft} maxHp={100} />
+            <div className={`${!loaded && styles.hidden}`}>
+              <HealthBar hp={hpLeft} maxHp={100} />
+            </div>
           </div>
           {/* <HealthBar hp={gameState.current.hpBar.hpLeft} maxHp={100}/> */}
           {/* subscribers Cam */}
