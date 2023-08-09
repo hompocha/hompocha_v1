@@ -222,30 +222,30 @@ const UseSpeechRecognition = (props) => {
       };
   /* Room 입장 후 음성인식이 바로 실행되고, 30초에 한번씩 음성인식 기능 on/off 반복 구현 */
   /* 현재 방으로 이동 시 오류 발생, 개선필요 */
-  useEffect(() => {
-    if (props.speechBlocked === true) {
-      stop();
-    } else {
-      setTimeout(() => {
-        setListenBlocked(false);
-        listen({ lang });
-      }, 1000);
+  // useEffect(() => {
+  //   if (props.speechBlocked === true) {
+  //     stop();
+  //   } else {
+  //     setTimeout(() => {
+  //       setListenBlocked(false);
+  //       listen({ lang });
+  //     }, 1000);
 
-      let voiceRecog = setInterval(() => {
-        setTimeout(stop, 29 * 1000);
+  //     let voiceRecog = setInterval(() => {
+  //       setTimeout(stop, 29 * 1000);
 
-        setListenBlocked(false);
-        listen({ lang });
+  //       setListenBlocked(false);
+  //       listen({ lang });
 
-        console.log(listenBlocked);
-      }, 30 * 1000);
-      return () => {
-        clearInterval(voiceRecog);
-        stop();
-        console.log("음성인식 종료");
-      };
-    }
-  }, [props.speechBlocked]);
+  //       console.log(listenBlocked);
+  //     }, 30 * 1000);
+  //     return () => {
+  //       clearInterval(voiceRecog);
+  //       stop();
+  //       console.log("음성인식 종료");
+  //     };
+  //   }
+  // }, [props.speechBlocked]);
 
   const [animationClass, setAnimationClass] = useState("");
   useEffect(() => {

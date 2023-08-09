@@ -616,6 +616,8 @@ useEffect(() => {
     
     const timer = setTimeout(() => {
       setIsCaptureClicked(false);
+      setCaptured(false);          // 추가
+      setCapturedImageUrl(null);   // 추가
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -623,8 +625,7 @@ useEffect(() => {
 }, [captured]);
 
 const [showShutterEffect, setShowShutterEffect] = useState(false); // 상태 변수 추가
-const [countdownText, setCountdownText] = useState(""); // 상태 변수 추가
-
+const [countdownText,setCountdownText] = useState("3");
 // 현재 handleButtonClick 함수 안에서 captureSvg 함수 호출 부분을 변경하세요:
 const handleButtonClick = async () => {
   let counter = 3;
@@ -651,7 +652,6 @@ const handleButtonClick = async () => {
   }, 1000);
 };
 
-
 const handleSaveButtonClick = () => {
   if (capturedImageUrl) {
     const link = document.createElement("a");
@@ -659,22 +659,22 @@ const handleSaveButtonClick = () => {
     link.download = "captured_image.png";
     link.click();
   }
+  return () =>  setCapturedImageUrl(capturedImageUrl);
 };
-
 
   return (
     <div>
       <button onClick={handleButtonClick}>  카메라 </button>
-      {isCaptureClicked && (<div className={styles.countdownText}>{countdownText}</div>)}
+      <div className={styles.countdownText}>{countdownText}</div>
 
-      {showShutterEffect && <div className={styles.shutterEffect}></div>}
       {
-        capturedImageUrl &&  isCaptureClicked && (
+        capturedImageUrl && (
           <div className={styles.capture}>
             <img src={capturedImageUrl} alt="Captured"/>
           </div>
         )
       }
+      {showShutterEffect && <div className={styles.shutterEffect}></div>}
       <div className={styles.circleLight}> </div>
       {dark && (
         <>
