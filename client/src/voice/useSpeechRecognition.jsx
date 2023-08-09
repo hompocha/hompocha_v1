@@ -30,6 +30,7 @@ const gameStartKeywords = [
   "사장님 피하기 게임이요",
   "소맥 게임이요",
   "발음 게임이요",
+  "다른 게임 이요",
   "피하기 게임 이요",
 ];
 const wheelKeyword = ["돌려주세요","돌려 주세요"];
@@ -45,11 +46,7 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
 
-    if (value.includes("담배")) {
-      stop();
-      setStopSign(false);
-      props.sendCheersOffSignal();
-    }
+
 
     /* 대화모드일때만 발동*/
     if(props.mode === undefined) {
@@ -66,6 +63,11 @@ const UseSpeechRecognition = (props) => {
         setStopSign(false);
         setExtractedValue("우리 한잔할까");
         props.sendCheersOnSignal();
+      }
+      if (value.includes("담배")) {
+        stop();
+        setStopSign(false);
+        props.sendCheersOffSignal();
       }
 
       /* 키워드 명령어 */
@@ -85,9 +87,17 @@ const UseSpeechRecognition = (props) => {
       /* 게임시작 명령어 */
       for (const gameStartKeyword of gameStartKeywords) {
         if (value.includes(gameStartKeyword)) {
-          setExtractedValue(gameStartKeyword);
+          if(gameStartKeyword === "다른 게임 이요")
+            setExtractedValue("발음 게임이요");
+          else {
+            setExtractedValue(gameStartKeyword);
+          }
           switch (gameStartKeyword) {
             case "발음 게임이요":
+              stop();
+              props.sendGameTypeSignal("speechGame");
+              break;
+            case "다른 게임 이요":
               stop();
               props.sendGameTypeSignal("speechGame");
               break;
@@ -144,16 +154,22 @@ const UseSpeechRecognition = (props) => {
         props.sendThemeSignal();
       }
     }
-    // console.log("Value:", value); // 추가된 부분
+    console.log("Value:", value); // 추가된 부분
   }, [value]);
 
   useEffect(() => {
+    let isMounted = true;
     if (!stopSign) {
       const timeout = setTimeout(() => {
-        setStopSign(true);
-        listen({ lang });
+        if (isMounted) {
+          setStopSign(true);
+          listen({ lang });
+        }
       }, 1500);
-      return () => clearTimeout(timeout);
+      return () => {
+        isMounted = false;
+        clearTimeout(timeout);
+      };
     }
   }, [stopSign]);
 
