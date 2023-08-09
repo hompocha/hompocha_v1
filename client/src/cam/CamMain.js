@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
@@ -10,6 +10,7 @@ import axios from "axios";
 import Loading from "../Loading/Loading";
 import { MicButton } from "./MicButton";
 import Theme from "./Theme";
+import FunctionContext from "../FunctionContext";
 
 const CamMain = ({
   user,
@@ -17,8 +18,6 @@ const CamMain = ({
   onModeChange,
   sessionConnected,
   idx,
-  chatChangeOn,
-  chatChangeOff,
 }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
@@ -279,9 +278,6 @@ const CamMain = ({
     user
       .getStreamManager()
       .session.signal({ to: [], type: "cheersOn" })
-      .then(() => {
-        // console.log("one more user is ready to drink");
-      })
       .catch((error) => {
         console.log(error);
       });
@@ -292,9 +288,6 @@ const CamMain = ({
     user
       .getStreamManager()
       .session.signal({ to: [], type: "cheersOff" })
-      .then(() => {
-        // console.log("one more user is ready to drink");
-      })
       .catch((error) => {
         console.log(error);
       });
@@ -317,6 +310,10 @@ const CamMain = ({
     console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
   };
   console.log("CamMain rendered");
+
+  const fnChat=useContext(FunctionContext);
+
+  /* ====================== return ========================== */
   return (
     <div>
       {/* Main Room */}
@@ -388,8 +385,6 @@ const CamMain = ({
               sendCheersOffSignal={sendCheersOffSignal}
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
-              chatChangeOn={chatChangeOn}
-              chatChangeOff={chatChangeOff}
             />
             <CamTest
               user={user}
