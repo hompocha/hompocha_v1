@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity('User')
+@Entity('Users')
 export class UsersEntity {
   @PrimaryColumn()
   idx: string;
