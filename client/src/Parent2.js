@@ -11,14 +11,12 @@ const Parent2 = ({ roomName, idx }) => {
   const [userStream, setUserStream] = useState(null);
   const [mode, setMode] = useState(undefined);
   const [chatToggle,setChatToggle] = useState(false);
-
-  
   const onModeChange = (newMode) => {
     setMode(newMode);
     console.log("parent mode = ", newMode, mode);
   };
   const fnFromChat = () => {
-    console.log("chat에 있는 함수, 딴데서 부름!!");
+    console.log("chatcomponent 함수 다른 Component부름!!");
   };
   const handleSessionConnected = (localUser) => {
     setSessionConnected(true);

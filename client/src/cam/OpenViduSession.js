@@ -35,17 +35,11 @@ export default class OpenViduSession extends Component {
   }
   componentDidMount() {
     window.addEventListener("beforeunload", this.leaveRoom);
-    // this.unlistenHistoryEvent = history.listen(({ action }) => {
-    //   this.leaveRoom();
-    //   localStorage.removeItem("jwtToken");
-    //   history.push('/');
-    // });
     this.joinSession();
   }
   componentWillUnmount() {
     /*윈도우 창 끄는거임*/
     window.removeEventListener("beforeunload", this.leaveRoom);
-    // this.unlistenHistoryEvent();
     this.leaveSession();
   }
   leaveRoom = () => {

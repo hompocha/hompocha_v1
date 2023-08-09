@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext} from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UseSpeechRecognition from "../voice/useSpeechRecognition";
 import CamTest from "./CamTest";
@@ -30,7 +30,7 @@ const CamMain = ({
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
-    setSpeechBlocked(false);
+    if (speechBlocked) setSpeechBlocked(false);
   }, [mode]);
 
   const canvasRef = useRef(null);
@@ -49,11 +49,7 @@ const CamMain = ({
 
     user.getStreamManager().stream.session.on("signal:gameType", (event) => {
       const data = event.data;
-      if (data === "airHockey") {
-        enterAirHockey();
-      } else if (data === "movingDuck") {
-        enterMovingDuck();
-      } else if (data === "speechGame") {
+      if (data === "speechGame") {
         try {
           axios.post(`${process.env.REACT_APP_API_URL}/room/status`, {
             status: "게임 중",
@@ -134,17 +130,6 @@ const CamMain = ({
         setLoaded(true);
       }, 2000);
     }, 1500);
-  };
-
-  const enterAirHockey = () => {
-    setSpeechBlocked(true);
-    setMode("airHockey");
-    onModeChange("airHockey");
-  };
-
-  const enterMovingDuck = () => {
-    setMode("movingDuck");
-    onModeChange("movingDuck");
   };
 
   const enterSpeech = () => {
@@ -253,8 +238,8 @@ const CamMain = ({
     }
   };
   const handleClick = (event) => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
+    // const mouseX = event.clientX;
+    // const mouseY = event.clientY;
     // console.log("마우스 클릭 좌표:", mouseX, mouseY);
   };
 
@@ -299,18 +284,19 @@ const CamMain = ({
   const sendThemeSignal = () => {
     user
       .getStreamManager()
-      .session.signal({to: [], type: "theme" })
+      .session.signal({ to: [], type: "theme" })
       .then(() => {
-        console.log("테마 변경 명령을 보냄 !!")
-      })
+        console.log("테마 변경 명령을 보냄 !!");
+      });
     console.log("sendCheersOffSignal 실행");
   };
 
-  /*MicToggle*/
+  /*마이크 토글 */
   const onMicToggle = (enabled) => {
-    console.log(`Microphone is now ${enabled ? "enabled" : "disabled"}`);
+    console.log(`마이크 ${enabled ? "켜짐" : "꺼짐"}`);
   };
   console.log("CamMain rendered");
+
 
   const fnChat=useContext(FunctionContext);
 
@@ -345,9 +331,11 @@ const CamMain = ({
 
   /* ====================== return ========================== */
   return (
+
     <div>
+      <div className={styles.nickName}>{user.getNickname()}</div>
       {/* Main Room */}
-      <Theme mode={mode} camMainLoaded={loaded} user={user}/>
+      <Theme mode={mode} camMainLoaded={loaded} user={user} />
       {mode === undefined && !loaded && (
         <div>
           <Loading mode={mode} />
@@ -360,7 +348,6 @@ const CamMain = ({
             !loaded ? styles.hidden : ""
           }`}
         >
-
           <div id="session-header" className={styles.camMainHeader}>
             <div id="session-title" className={styles.roomName}>
               {roomName}
@@ -415,6 +402,8 @@ const CamMain = ({
               sendCheersOffSignal={sendCheersOffSignal}
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
+              user={user}
+
             />
             <CamTest
               user={user}
@@ -428,7 +417,6 @@ const CamMain = ({
           </div>
         </div>
       )}
-
 
       {/* 발음 게임 */}
       {mode === "speechGame" && (

@@ -23,7 +23,7 @@ const EffectComponent = ({ user, sessionConnected }) => {
           ...prevKeywordList,
           뭐먹을까: [
             ...prevKeywordList.뭐먹을까,
-            { x: Math.random() * 100, y: Math.random() * 100 },
+            { x: 30+(Math.random() * 70), y: Math.random() * 100 },
           ],
         }));
       } else {

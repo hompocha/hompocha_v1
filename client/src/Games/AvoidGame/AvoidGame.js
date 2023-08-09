@@ -271,10 +271,10 @@ const AvoidGame = (props) => {
     const h = can_ref.height;
     can_ctx.save();
     can_ctx.clearRect(0, 0, w, h);
-    if (gameState.gameEnd){
-      can_ctx.fillStyle = 'black';
+    if (gameState.gameEnd) {
+      can_ctx.fillStyle = "black";
       can_ctx.globalAlpha = "0.7"; // 채우기 투명도 설정
-      can_ctx.fillRect(0,0,w,h);
+      can_ctx.fillRect(0, 0, w, h);
       can_ctx.restore();
       return;
     }
@@ -360,30 +360,28 @@ const AvoidGame = (props) => {
         if (obj.type !== "avoid_pill") {
           effectSound(hitEffect);
           gameState.hpBar.hpLeft -= 20;
-          if(gameState.hpBar.hpLeft <= 0)
-            gameState.hpBar.hpLeft = 0;
+          if (gameState.hpBar.hpLeft <= 0) gameState.hpBar.hpLeft = 0;
           setHpLeft(gameState.hpBar.hpLeft);
           gameState.player.state += 1;
           setTimeout(() => {
             gameState.player.state -= 1;
           }, 200);
-          
+
           // if (hpLeft <= 0) {
           if (gameState.hpBar.hpLeft <= 0) {
-            gameState.gameEnd=true;
+            gameState.gameEnd = true;
             gameState.objects = [];
             clearInterval(speedInterval.current);
             clearInterval(objInterval.current);
             clearInterval(sendInterval.current);
             sendGameState(gameState);
             sendGameResult();
-            gameState=JSON.parse(JSON.stringify(defaultGameState));
+            gameState = JSON.parse(JSON.stringify(defaultGameState));
             console.log(gameState);
           }
         } else {
           gameState.hpBar.hpLeft += 10;
-          if(gameState.hpBar.hpLeft > 100)
-            gameState.hpBar.hpLeft = 100;
+          if (gameState.hpBar.hpLeft > 100) gameState.hpBar.hpLeft = 100;
           setHpLeft(gameState.hpBar.hpLeft);
           effectSound(healEffect);
         }
@@ -557,29 +555,27 @@ const AvoidGame = (props) => {
         <>
           <div className={styles.mainUserCamBorder}></div>
           <div>
-          <video
-            className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
-            // className={styles.avoidVideo}
-            autoPlay={true}
-            ref={(el) => {
-              videoRef.current = el;
-              setVideoReady(el);
-            }}
-          />
-          <canvas
-            className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
-            ref={canvasRef}
-            width={"960px"}
-            height={"720px"}
-          />
-          <HealthBar hp={hpLeft} maxHp={100}/>
+            <video
+              className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
+              // className={styles.avoidVideo}
+              autoPlay={true}
+              ref={(el) => {
+                videoRef.current = el;
+                setVideoReady(el);
+              }}
+            />
+            <canvas
+              className={`${styles.avoidCanvas} ${!start && styles.hidden}`}
+              ref={canvasRef}
+              width={"960px"}
+              height={"720px"}
+            />
+            <HealthBar hp={hpLeft} maxHp={100} />
           </div>
           {/* <HealthBar hp={gameState.current.hpBar.hpLeft} maxHp={100}/> */}
           {/* subscribers Cam */}
           {subscribers.map((subscriber, index) => (
             <>
-              
-              <div className={`${styles[`gameSubBorder${index + 1}`]}`}></div>
               <div
                 className={`${styles[`avoidGameSub${index + 1}`]} ${
                   !loaded && styles.hidden
