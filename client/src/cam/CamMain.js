@@ -18,7 +18,7 @@ const CamMain = ({
   sessionConnected,
   idx,
   chatChangeOn,
-  chatChangeOff,
+  chatChangeOff,ovvSpeech,
 }) => {
   const [mode, setMode] = useState(undefined);
   const navigate = useNavigate();
@@ -390,6 +390,7 @@ const CamMain = ({
               hubTospeechFromCamtest={hubTospeechFromCamtest}
               chatChangeOn={chatChangeOn}
               chatChangeOff={chatChangeOff}
+              ovvSpeech ={ovvSpeech}
             />
             <CamTest
               user={user}
