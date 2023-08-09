@@ -534,7 +534,7 @@ const Somaek = (props) => {
 
   function randomDrink() {
     let drinks = [];
-    let randomCount = 1 + Math.floor(Math.random() * 1);
+    let randomCount = 1 + Math.floor(Math.random() * 4);
     for (let i = 0; i < randomCount; i++) {
       let randomValue = Math.random();
       if (randomValue < 0.1) drinks.push("cider");
@@ -790,7 +790,7 @@ const Somaek = (props) => {
         )}
         {props.mode === "somaek" && !isGameOver ? (
           <>
-            <div className={styles.mainUserCamBorder}></div>
+            <div className={`${styles.mainUserCamBorder} ${!loaded && styles.hidden}`}></div>
             <video
               className={`${styles.somaekVideo} ${!loaded && styles.hidden}`}
               autoPlay={true}

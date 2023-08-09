@@ -553,7 +553,7 @@ const AvoidGame = (props) => {
       )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
-          <div className={styles.mainUserCamBorder}></div>
+          <div className={`${styles.mainUserCamBorder} ${!loaded && styles.hidden}`}></div>
           <div>
             <video
               className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
