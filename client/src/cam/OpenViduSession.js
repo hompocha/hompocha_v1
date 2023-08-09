@@ -35,30 +35,14 @@ export default class OpenViduSession extends Component {
   }
   componentDidMount() {
     window.addEventListener("beforeunload", this.leaveRoom);
-    this.unlistenHistoryEvent = history.listen(({ action }) => {
-      /* 우현피셜: 뒤로가기 */
-      if (action === "POP") {
-        this.leaveRoom();
-        localStorage.removeItem("jwtToken");
-        this.props.ovvSpeechOff();
-        const timer = setTimeout(()=>{
-          history.push('/');
-        },1500);
-        return()=>{
-          clearTimeout(timer);
-        }
-      }
-    });
     this.joinSession();
   }
   componentWillUnmount() {
     /*윈도우 창 끄는거임*/
     window.removeEventListener("beforeunload", this.leaveRoom);
-    this.unlistenHistoryEvent();
     this.leaveSession();
   }
   leaveRoom = () => {
-
     try {
       const token = localStorage.getItem("jwtToken");
       axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`, {
@@ -72,7 +56,6 @@ export default class OpenViduSession extends Component {
     if (this.state.session) {
       this.leaveSession();
     }
-
   };
   handleSessionConnected = () => {
     this.setState({ sessionConnected: true });
