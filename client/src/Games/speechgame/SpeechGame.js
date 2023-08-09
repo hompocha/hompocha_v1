@@ -4,14 +4,12 @@ import SpeechCam from "./SpeechCam";
 import styles from "./SpeechGame.module.css";
 import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 import LoserCam from "../loserCam/LoserCam";
-// import speechClock from "../../sounds/speechClock.wav";
 import speechClock from "../../sounds/speechGameSpeed.mp3";
 import { effectSound } from "../../effectSound";
 import CountDown from "../../Loading/CountDown";
 import Loading from "../../Loading/Loading";
 import { TimerBar } from "../Somaek/timer";
 
-let sentenceState = "시작";
 
 const speech_sentence = [
   "간장 공장 공장장은 강 공장장이다",
@@ -37,6 +35,7 @@ const SpeechGame = (props) => {
 
   const [stopTime, setStopTime] = useState(10000);
   const [randomUser, setRandomUser] = useState(props.selectID);
+  const id = useRef(props.selectID);
   const hostId = props.selectID;
   const subscribers = props.user.subscribers;
   const [timerExpired, setTimerExpired] = useState(false);
@@ -44,6 +43,7 @@ const SpeechGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [sentenceState,setSentenceState] = useState("시작");
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const bgmSound = useRef(null);
@@ -108,31 +108,36 @@ const SpeechGame = (props) => {
           getRandomElement(firstMembers).stream.connection.connectionId;
         const sentence = getRandomElement(speech_sentence);
         const randomStopTime = getRandomElement(time);
+        id.current = selectId;
         sendIdSentence(selectId, sentence);
         sendStopTime(randomStopTime);
-      } else {
-        /* 두번째부터는 밑에꺼 실행 */
-        const receivePassedConId = (event) => {
-          const sentId = event.data;
-          if (sentId === randomUser) {
-            const sentence = getRandomElement(speech_sentence);
-            const selectId = getRandomElement(findSubscriber(randomUser))
-              .stream.connection.connectionId;
-            sendIdSentence(selectId, sentence);
-          }
-        };
-        props.user.getStreamManager().stream.session.on("signal:speech",receivePassedConId)
       }
     }
-  }, [props.user, randomUser, stopTime, start]);
+  }, [props.user, start,firstTime]);
 
   useEffect(()=>{
+    if (props.user.streamManager.stream.connection.connectionId === hostId) {
+      /* 두번째부터는 밑에꺼 실행 */
+      const receivePassedConId = (event) => {
+        const sentId = event.data;
+        if (sentId === id.current) {
+          const sentence = getRandomElement(speech_sentence);
+          const selectId = getRandomElement(findSubscriber(id.current))
+            .stream.connection.connectionId;
+          id.current = selectId;
+          sendIdSentence(selectId, sentence);
+          console.log("woo",sentId)
+          console.log("wooodasdf");
+        }
+      };
+      props.user.getStreamManager().stream.session.on("signal:speech",receivePassedConId)
+    }
     const receiveRandomId =(event)=>{
       const data = JSON.parse(event.data);
       const { id, sentence } = data;
       console.log("애가 바껴야함 : ", id);
       setRandomUser(id);
-      sentenceState = sentence;
+      setSentenceState(sentence);
     };
     const receiveStopTime = (event)=>{
       const data = event.data;
@@ -167,7 +172,7 @@ const SpeechGame = (props) => {
     setSpeechBlocked(true);
     setTimeout(()=>{
       setTimerExpired(true);
-      sentenceState="시작";
+      setSentenceState("시작");
       bgmSound.current.stop();
     },1500);
   }
@@ -327,9 +332,10 @@ const SpeechGame = (props) => {
             <div className={styles.camPosition}>
               <div className={styles.mainUserCamBorder}></div>
               <div className={styles[`speechGameCam__${0}`]}>
+                <h1 style={{ color: "white" }}>{props.conToNick[randomUser]}</h1>
                 <SpeechCam key={randomUser} selectId={randomUser} user={props.user} />
               </div>
-            <TimerBar timeMax={10*1000} gameEnd={gameEnd} start={start}/>
+            <TimerBar timeMax={600*1000} gameEnd={gameEnd} start={start}/>
 
               {/*=============================딴애들=========================================================*/}
               {findSubscriber(randomUser).map((subscriber, index) => (
@@ -338,6 +344,7 @@ const SpeechGame = (props) => {
                     className={`${styles[`GameSubBorder${index + 1}`]}`}
                   ></div>
                   <div className={styles[`speechGameCam__${index + 1}`]}>
+                    <h2 style={{ color: "white" }}>{props.conToNick[randomUser]}</h2>
                     <OpenViduVideoComponent
                       key={randomUser}
                       mode={"speechGame"}
