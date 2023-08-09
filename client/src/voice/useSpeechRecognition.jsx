@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
 import styles from "./voice.module.css";
 import "regenerator-runtime/runtime";
@@ -6,6 +6,7 @@ import somaekSuccess from "../sounds/somaekSuccess.wav";
 import { effectSound } from "../effectSound";
 import UserInput from "./UserInput";
 import 'animate.css';
+import FunctionContext from "../FunctionContext";
 
 const keyword = ["고양이", "벚꽃", "강아지", "그만해", "뭐 먹을까"];
 const speech_sentence = [
@@ -70,6 +71,10 @@ const UseSpeechRecognition = (props) => {
       /* 키워드 명령어 */
       for (const word of keyword) {
         if (value.includes(word)) {
+          if(word === extractedValue){
+            setExtractedValue("")
+            setExtractedValue(word);
+          }
           setExtractedValue(word);
           stop();
           setStopSign(false);
@@ -106,16 +111,14 @@ const UseSpeechRecognition = (props) => {
       stop();
       setStopSign(false);
       setExtractedValue("채팅창 보여줘");
-      props.chatChangeOn();
+      toggleChat();
     }
     if (value.includes("채팅 창 닫아 줘")) {
       stop();
       setStopSign(false);
       setExtractedValue("채팅창 닫아줘");
-      props.chatChangeOff();
+      toggleChat();
     }
-
-
 
     /* 발음게임 명령어 */
     if(props.mode === "speechGame") {
@@ -164,7 +167,7 @@ const UseSpeechRecognition = (props) => {
     if (extractedValue !== "") {
       const timeout = setTimeout(() => {
         setExtractedValue(" ");
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
@@ -241,6 +244,13 @@ const UseSpeechRecognition = (props) => {
       return () => clearTimeout(timeout);
     }
   }, [extractedValue]);
+
+  /*Context 성균*/
+  const context= useContext(FunctionContext);
+  const toggleChat = () =>{
+    context.setChatToggleSwitch((prevState)=> !prevState);
+  };
+
 
 
   return (
