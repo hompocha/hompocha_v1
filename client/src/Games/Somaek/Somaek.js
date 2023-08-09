@@ -776,9 +776,6 @@ const Somaek = (props) => {
         )}
         {props.mode === "somaek" && !isGameOver ? (
           <>
-            <span className={!loaded ? styles.hidden : ""}>
-              {loaded ? null : "소맥"}
-            </span>
             <div className={styles.mainUserCamBorder}></div>
             <video
               className={`${styles.somaekVideo} ${!loaded && styles.hidden}`}
@@ -792,7 +789,9 @@ const Somaek = (props) => {
               height={"1080px"}
             />
             {/* 시연 */}
-            <TimerBar timeMax={25*1000} gameEnd={gameEnd} start={start}/>
+            <div className={`${!start && styles.hidden}`}>
+              <TimerBar timeMax={25*1000} gameEnd={gameEnd} start={start}/>
+            </div>
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
               <>
