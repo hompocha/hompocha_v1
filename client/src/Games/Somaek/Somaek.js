@@ -826,7 +826,6 @@ const Somaek = (props) => {
                     !loaded && styles.hidden
                   }`}
                 >
-                  닉네임 :
                   {props.conToNick[subscriber.stream.connection.connectionId]}
                 </div>
               </>

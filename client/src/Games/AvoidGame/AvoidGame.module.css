@@ -74,26 +74,41 @@ h1 {
 
 .userNick1 {
   position: fixed;
-  top: 31.5vh;
+  top: 32vh;
   left: 3vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick2 {
   position: fixed;
-  top: 61.5vh;
+  top: 61vh;
   left: 3vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick3 {
   position: fixed;
-  top: 91.5vh;
+  top: 90vh;
   left: 3vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick4 {
   position: fixed;
-  top: 31.5vh;
+  top: 32vh;
   left: 81vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
 .userNick5 {
   position: fixed;
-  top: 61.5vh;
+  top: 62vh;
   left: 81vw;
+  font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  font-size: 30px;
 }
