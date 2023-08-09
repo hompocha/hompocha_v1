@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import useSpeechRecognition from "./useSpeechRecognitions";
-import styles from "./voice.module.css";
+import styles from "./useSpeechRecognition.module.css";
 import "regenerator-runtime/runtime";
 import somaekSuccess from "../sounds/somaekSuccess.wav";
 import { effectSound } from "../effectSound";
@@ -280,8 +280,7 @@ const UseSpeechRecognition = (props) => {
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`}>
-            {" "}
-            {extractedValue}{" "}
+            {extractedValue}
           </div>
         </div>
       )}

@@ -218,7 +218,7 @@ const OpenViduVideoComponent = (props) => {
       {
         /* 룰렛돌리기할 때 불러와지는 플레이어 캠 */
         props.mode === "roulette" ? (
-          <div className={styles.webcam1__0}>
+          <div className={styles.webcam}>
             <video
               className={styles.rouletteVideo}
               autoPlay={true}
