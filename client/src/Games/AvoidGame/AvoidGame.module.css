@@ -44,31 +44,11 @@ h1 {
   left: 3vw;
 }
 
-.gameSubBorder1 {
-  position: fixed;
-  top: 9vh;
-  left: 2vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
 .avoidGameSub2 {
   transform: rotateY(180deg);
   position: fixed;
   top: 39.25vh;
   left: 3vw;
-}
-
-.gameSubBorder2 {
-  position: fixed;
-  top: 38.25vh;
-  left: 2vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .avoidGameSub3 {
@@ -78,17 +58,6 @@ h1 {
   left: 3vw;
 }
 
-.gameSubBorder3 {
-  position: fixed;
-  top: 67.5vh;
-  left: 2vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
-
 .avoidGameSub4 {
   transform: rotateY(180deg);
   position: fixed;
@@ -96,33 +65,11 @@ h1 {
   left: 81vw;
 }
 
-
-.gameSubBorder4 {
-  position: fixed;
-  top: 9vh;
-  left: 80vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
-
 .avoidGameSub5 {
   transform: rotateY(180deg);
   position: fixed;
   top: 40vh;
   left: 81vw;
-}
-
-.gameSubBorder5 {
-  position: fixed;
-  top: 38.25vh;
-  left: 80vw;
-  width: 18vw;
-  height: 24vh;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .userNick1 {

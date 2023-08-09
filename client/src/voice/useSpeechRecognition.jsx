@@ -46,8 +46,6 @@ const UseSpeechRecognition = (props) => {
   useEffect(() => {
     /* 건배 명령어 */
 
-
-
     /* 대화모드일때만 발동*/
     if (props.mode === undefined) {
       for (const keyword of wheelKeyword) {
@@ -87,7 +85,7 @@ const UseSpeechRecognition = (props) => {
       /* 게임시작 명령어 */
       for (const gameStartKeyword of gameStartKeywords) {
         if (value.includes(gameStartKeyword)) {
-          if(gameStartKeyword === "다른 게임 이요")
+          if (gameStartKeyword === "다른 게임 이요")
             setExtractedValue("발음 게임이요");
           else {
             setExtractedValue(gameStartKeyword);
@@ -155,12 +153,6 @@ const UseSpeechRecognition = (props) => {
     }
     console.log("Value:", value); // 추가된 부분
   }, [value]);
-
-  useEffect(()=>{
-    if(!props.ovvSpeech){
-      stop()
-    }
-  },[props.ovvSpeech])
 
   useEffect(() => {
     let isMounted = true;

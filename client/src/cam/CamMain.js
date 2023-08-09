@@ -12,7 +12,6 @@ import { MicButton } from "./MicButton";
 import Theme from "./Theme";
 import FunctionContext from "../FunctionContext";
 
-
 const CamMain = ({
   user,
   roomName,
@@ -31,8 +30,7 @@ const CamMain = ({
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
-    if(speechBlocked)
-      setSpeechBlocked(false);
+    if (speechBlocked) setSpeechBlocked(false);
   }, [mode]);
 
   const canvasRef = useRef(null);
@@ -372,7 +370,6 @@ const CamMain = ({
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
               user={user}
-              ovvSpeech ={ovvSpeech}
             />
             <CamTest
               user={user}

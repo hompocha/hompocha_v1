@@ -13,10 +13,24 @@ import { effectSound } from "../../effectSound";
 import { TimerBar } from "./timer";
 
 const objectsDefault = [
-  { type: "beer",   leftX: 0.75, topY: 0.05, lenX: 0.5, lenY: 0.5,  picked: false }, 
-  { type: "mak",    leftX: 0.75, topY: 0.28, lenX: 0.5, lenY: 0.5, picked: false},
-  { type: "soju",   leftX: 0.75, topY: 0.5, lenX: 0.5, lenY: 0.5, picked: false},
-  { type: "cider",  leftX: 0.75, topY: 0.73, lenX: 0.5, lenY: 0.5, picked: false},
+  {
+    type: "beer",
+    leftX: 0.75,
+    topY: 0.05,
+    lenX: 0.5,
+    lenY: 0.5,
+    picked: false,
+  },
+  { type: "mak", leftX: 0.75, topY: 0.28, lenX: 0.5, lenY: 0.5, picked: false },
+  { type: "soju", leftX: 0.75, topY: 0.5, lenX: 0.5, lenY: 0.5, picked: false },
+  {
+    type: "cider",
+    leftX: 0.75,
+    topY: 0.73,
+    lenX: 0.5,
+    lenY: 0.5,
+    picked: false,
+  },
 ];
 
 /* 물체를 그리는 부분 */
@@ -53,7 +67,7 @@ const Somaek = (props) => {
   const objectRef = useRef(JSON.parse(JSON.stringify(objectsDefault)));
   const signalInterval = useRef(null);
   const hostId = props.selectId;
-  const timerPrint = useRef(25*1000);
+  const timerPrint = useRef(25 * 1000);
   const imgElements = [];
   const subscribers = props.user.subscribers;
   // const scores = {};
@@ -109,15 +123,14 @@ const Somaek = (props) => {
     };
   }, [start]);
 
-
-  const gameEnd=() => {
+  const gameEnd = () => {
     clearInterval(signalInterval.current);
     console.log(scores.current);
     const sortedScores = Object.entries(scores.current).sort(
       ([, a], [, b]) => b - a
     );
     const lowestScorePerson = sortedScores[sortedScores.length - 1];
-    console.log("##########",sortedScores);
+    console.log("##########", sortedScores);
     console.log(lowestScorePerson);
     setLowestConId(lowestScorePerson[0]);
     setHandStop(true);
@@ -269,7 +282,9 @@ const Somaek = (props) => {
 
     for (let i = 0; i < objs.length; i++) {
       let boxLocation = objs[i];
-      const imgPicked = (boxLocation.picked)?boxLocation.type+"Picked":boxLocation.type;
+      const imgPicked = boxLocation.picked
+        ? boxLocation.type + "Picked"
+        : boxLocation.type;
       // console.log(imgPicked);
       const img = imgElements[imgPicked]; // type에 따른 이미지 선택
       can_ctx.drawImage(
@@ -278,7 +293,7 @@ const Somaek = (props) => {
         boxLocation.topY * can_ref.height,
         boxLocation.lenX * can_ref.width * 0.5,
         boxLocation.lenY * can_ref.height * 0.5
-      );  
+      );
     }
     can_ctx.drawImage(
       imgElements["container"],
@@ -287,7 +302,7 @@ const Somaek = (props) => {
       container.lenX * can_ref.width,
       container.lenY * can_ref.height
     );
-    
+
     /* InBucket용 */
     for (let i = 0; i < inBucket.length; i++) {
       let boxLocation = inBucket[i];
@@ -321,7 +336,6 @@ const Somaek = (props) => {
     /* score 출력 부분 */
     can_ctx.save(); // 현재 컨텍스트 상태를 저장
     can_ctx.scale(-1, 1); // X 축을 따라 스케일을 반전시킴 (좌우 반전)
-  
 
     const speechLeftX = 0.17; // 원하는 X 위치를 설정하세요 (예시: 0).
     const speechTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
@@ -353,7 +367,6 @@ const Somaek = (props) => {
 
     can_ctx.fillStyle = "black";
     can_ctx.font = "bold 20px Arial";
-    
 
     /* 점수가 높은사람부터 출력 */
     Object.entries(scores.current)
@@ -454,10 +467,11 @@ const Somaek = (props) => {
   const objDrag = (landmarks, canvasRef) => {
     let { distance, fingerPick } = fingerDistance(landmarks);
     if (distance > 0.01) {
-      objectRef.current.forEach((obj)=>{
+      objectRef.current.forEach((obj) => {
         obj.picked = false;
       });
-      return;}
+      return;
+    }
     for (let boxIndex = 0; boxIndex < objectRef.current.length; boxIndex++) {
       const {
         leftX: objLeftX,
@@ -790,14 +804,11 @@ const Somaek = (props) => {
             />
             {/* 시연 */}
             <div className={`${!start && styles.hidden}`}>
-              <TimerBar timeMax={25*1000} gameEnd={gameEnd} start={start}/>
+              <TimerBar timeMax={25 * 1000} gameEnd={gameEnd} start={start} />
             </div>
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
               <>
-                <div
-                  className={`${styles[`GameSubBorder${index + 1}`]}`}
-                ></div>
                 <div
                   className={`${styles[`somaekGameSub${index + 1}`]} ${
                     !loaded && styles.hidden
