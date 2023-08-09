@@ -625,23 +625,25 @@ useEffect(() => {
 }, [captured]);
 
 const [showShutterEffect, setShowShutterEffect] = useState(false); // 상태 변수 추가
+const [showCountdownText, setShowCountdownText] = useState(false); // 상태 변수 추가
 const [countdownText,setCountdownText] = useState("3");
 // 현재 handleButtonClick 함수 안에서 captureSvg 함수 호출 부분을 변경하세요:
 const handleButtonClick = async () => {
   let counter = 3;
-
   // 카운트다운 텍스트 출력
   const timer = setInterval(() => {
+    setShowCountdownText(true);
     if (counter === 0) {
       clearInterval(timer);
       setShowShutterEffect(true);
-
+      
       // 셔터 효과 이후 이미지 캡처 진행
       setTimeout(async () => {
         await captureSvg();
         setShowShutterEffect(false);
         setTimeout(() => {
           setCaptured(true);
+          setShowCountdownText(false);
         }, 3000);
       }, 500);
     } else {
@@ -664,8 +666,10 @@ const handleSaveButtonClick = () => {
 
   return (
     <div>
-      <button onClick={handleButtonClick}>  카메라 </button>
-      <div className={styles.countdownText}>{countdownText}</div>
+      <div className={styles.cameraIcon}>
+        <button onClick={handleButtonClick} style={{ padding: 0, border: "none", background: "transparent" ,cursor : "pointer"}}> <img src="/camera1.png" style={{width:"70px", height : "70px"}}></img> </button>
+      </div>
+      {showCountdownText && (<div className={styles.countdownText}>{countdownText}</div>)}
 
       {
         capturedImageUrl && (
