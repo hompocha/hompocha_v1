@@ -548,19 +548,6 @@ const CamTest = (props: any) => {
       });
   }, []);
 
-  const sendCheersReadySignal = () => {
-    if (props.user.getStreamManager().session) {
-      props.user
-        .getStreamManager()
-        .session.signal({ data: "cheersReady", to: [], type: "cheersSignal" })
-        .then(() => {
-          console.log("one more user is ready to drink");
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
-    }
-  };
 
   /* ========================================================= */
 
