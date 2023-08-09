@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import UserVideoComponent from "./UserVideoComponent";
 import styles from "./CamTest.module.scss";
 import { event } from "jquery";
@@ -10,7 +10,8 @@ import { effectSound } from "../effectSound";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { RenderTime } from "./RoundTimer";
-
+import html2canvas from "html2canvas";
+import axios from "axios";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 
@@ -539,9 +540,145 @@ const CamTest = (props: any) => {
       props.hubForWheelFalse();
     }
   }, [props.wheel]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [capturedImageUrl, setCapturedImageUrl] = useState<string | null >(null);
+
+  const foreignObjectRef = useRef(null);
+
+  const captureSvg = async () => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+
+    const tempElement = document.createElement('div');
+    tempElement.style.width = `${container.offsetWidth}px`;
+    tempElement.style.height = `${container.offsetHeight}px`;
+    tempElement.style.position = 'fixed';
+    // tempElement.style.visibility = 'hidden';
+
+    container.appendChild(tempElement);
+
+    try {
+      const clonedSvg = container.cloneNode(true);
+      tempElement.appendChild(clonedSvg);
+
+      const videoElements = container.querySelectorAll('video');
+      const tempVideoElements = (clonedSvg as HTMLElement).querySelectorAll('video');
+
+      videoElements.forEach((video, index) => {
+        if (video.currentTime && video.readyState >= 2) {
+          const tempCanvas = document.createElement("canvas");
+          tempCanvas.width = video.offsetWidth || video.videoWidth;
+          tempCanvas.height = video.offsetHeight || video.videoHeight;
+          const tempCtx = tempCanvas.getContext('2d');
+          if(!tempCtx) return;
+          tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+
+          // 기존 비디오 태그에 대한 인라인 스타일 가져오기 및 적용
+          const srcVideoStyles = window.getComputedStyle(video);
+          const tempImg = document.createElement('img');
+          Array.from(srcVideoStyles).forEach((styleName) => {
+            const styleValue = srcVideoStyles.getPropertyValue(styleName);
+            tempImg.style.setProperty(styleName, styleValue);
+          });
+
+          tempImg.src = tempCanvas.toDataURL('image/png');
+          // tempImg.style.position = 'absolute';
+          // tempImg.style.top = `${video.offsetTop}px`;
+          // tempImg.style.left = `${video.offsetLeft}px`;
+          tempElement.style.width = `${video.offsetWidth}px`;
+          tempElement.style.height = `${video.offsetHeight}px`;
+
+          tempVideoElements[index].replaceWith(tempImg);
+        }
+      });
+
+    const capturedCanvas = await html2canvas(tempElement, { backgroundColor: null });
+    const dataUrl = capturedCanvas.toDataURL('image/png');
+    setCapturedImageUrl(dataUrl);
+    console.log("생성!");
+  } catch (err) {
+    console.error("Error capturing SVG:", err);
+  } finally {
+    container.style.visibility = '';
+    tempElement.remove();
+  }
+};
+
+const [isCaptureClicked, setIsCaptureClicked] = useState(false);
+const [captured, setCaptured] = useState(false);
+
+useEffect(() => {
+  if (captured) {
+    handleSaveButtonClick();
+    setIsCaptureClicked(true);
+    
+    const timer = setTimeout(() => {
+      setIsCaptureClicked(false);
+      setCaptured(false);          // 추가
+      setCapturedImageUrl(null);   // 추가
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }
+}, [captured]);
+
+const [showShutterEffect, setShowShutterEffect] = useState(false); // 상태 변수 추가
+const [showCountdownText, setShowCountdownText] = useState(false); // 상태 변수 추가
+const [countdownText,setCountdownText] = useState("3");
+// 현재 handleButtonClick 함수 안에서 captureSvg 함수 호출 부분을 변경하세요:
+const handleButtonClick = async () => {
+  let counter = 3;
+  // 카운트다운 텍스트 출력
+  const timer = setInterval(() => {
+    setShowCountdownText(true);
+    if (counter === 0) {
+      clearInterval(timer);
+      setShowShutterEffect(true);
+      
+      // 셔터 효과 이후 이미지 캡처 진행
+      setTimeout(async () => {
+        await captureSvg();
+        setShowShutterEffect(false);
+        setTimeout(() => {
+          setCaptured(true);
+          setShowCountdownText(false);
+        }, 3000);
+      }, 500);
+    } else {
+      setCountdownText(counter.toString());
+    }
+
+    counter--;
+  }, 1000);
+};
+
+const handleSaveButtonClick = () => {
+  if (capturedImageUrl) {
+    const link = document.createElement("a");
+    link.href = capturedImageUrl;
+    link.download = "captured_image.png";
+    link.click();
+  }
+  return () =>  setCapturedImageUrl(capturedImageUrl);
+};
 
   return (
     <div>
+      <div className={styles.cameraIcon}>
+        <button onClick={handleButtonClick} style={{ padding: 0, border: "none", background: "transparent" ,cursor : "pointer"}}> <img src="/camera1.png" style={{width:"70px", height : "70px"}}></img> </button>
+      </div>
+      {showCountdownText && (<div className={styles.countdownText}>{countdownText}</div>)}
+
+      {
+        capturedImageUrl && (
+          <div className={styles.capture}>
+            <img src={capturedImageUrl} alt="Captured"/>
+          </div>
+        )
+      }
+      {showShutterEffect && <div className={styles.shutterEffect}></div>}
       <div className={styles.circleLight}> </div>
       {dark && (
         <>
@@ -553,7 +690,14 @@ const CamTest = (props: any) => {
       )}
 
       <div className={styles.scale}>
-        <svg
+      <div ref={containerRef} className={styles.position}>
+          <foreignObject ref={foreignObjectRef} width="100%" height="100%">
+            <svg ref={svgRef} width={700} height={700}>
+              {renderCamSlices(setVideoInfo)}
+            </svg>
+          </foreignObject>
+          </div>
+        {/* <svg
           ref={svgRef}
           className={styles.position}
           width={700}
@@ -566,7 +710,7 @@ const CamTest = (props: any) => {
           ref={canvasRef}
           width={700}
           height={700}
-        />
+        /> */}
       </div>
 
       <div className={`${styles.drinkEffectTimer} ${!cheersMode ? styles.hidden : ""}`}>
