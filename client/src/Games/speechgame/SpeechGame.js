@@ -332,7 +332,6 @@ const SpeechGame = (props) => {
             <div className={styles.camPosition}>
               <div className={styles.mainUserCamBorder}></div>
               <div className={styles[`speechGameCam__${0}`]}>
-                <h1 style={{ color: "white" }}>{props.conToNick[randomUser]}</h1>
                 <SpeechCam key={randomUser} selectId={randomUser} user={props.user} />
               </div>
             <TimerBar timeMax={600*1000} gameEnd={gameEnd} start={start}/>
@@ -344,7 +343,6 @@ const SpeechGame = (props) => {
                     className={`${styles[`GameSubBorder${index + 1}`]}`}
                   ></div>
                   <div className={styles[`speechGameCam__${index + 1}`]}>
-                    <h2 style={{ color: "white" }}>{props.conToNick[randomUser]}</h2>
                     <OpenViduVideoComponent
                       key={randomUser}
                       mode={"speechGame"}
