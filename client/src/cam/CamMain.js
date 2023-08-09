@@ -314,6 +314,35 @@ const CamMain = ({
 
   const fnChat=useContext(FunctionContext);
 
+
+  useEffect(()=>{
+      window.history.pushState({},'');
+    const handlePopstate=(event)=>{
+      setSpeechBlocked(true);
+      alert("잘못된 접근입니다");
+    };
+    window.addEventListener('popstate',handlePopstate);
+    return () =>{
+      leaveRoom();
+      localStorage.clear()
+      navigate("/");
+      window.removeEventListener('popstate',handlePopstate)
+    };
+  },[]);
+
+  const leaveRoom = () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      axios.get(`${process.env.REACT_APP_API_URL}/room/roomout`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   /* ====================== return ========================== */
   return (
     <div>
@@ -386,7 +415,6 @@ const CamMain = ({
               sendCheersOffSignal={sendCheersOffSignal}
               sendThemeSignal={sendThemeSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
-              ovvSpeech ={ovvSpeech}
             />
             <CamTest
               user={user}

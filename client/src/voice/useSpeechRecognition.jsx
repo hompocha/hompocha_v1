@@ -147,11 +147,6 @@ const UseSpeechRecognition = (props) => {
     // console.log("Value:", value); // 추가된 부분
   }, [value]);
 
-  useEffect(()=>{
-    if(!props.ovvSpeech){
-      stop()
-    }
-  },[props.ovvSpeech])
 
   useEffect(() => {
     if (!stopSign) {
@@ -255,10 +250,10 @@ const UseSpeechRecognition = (props) => {
 
   return (
     <div>
-      {/* {props.mode === "speechGame" && (
-        <div className={styles.speechWord}>
-          <UserInput onSubmit={handleUserInput} />
-        /* </div> )}    */}
+       {/*{props.mode === "speechGame" && (*/}
+       {/* <div className={styles.speechWord}>{value}*/}
+       {/*  /!*<UserInput onSubmit={handleUserInput} />*!/*/}
+       {/* </div> )}    */}
 
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
