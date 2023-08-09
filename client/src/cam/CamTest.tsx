@@ -9,6 +9,10 @@ import cheers_sample from "../sounds/cheers_sample.wav";
 import { effectSound } from "../effectSound";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
+import { RenderTime } from "./RoundTimer";
+
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+
 
 const images: { [name: string]: string } = {
   beer: "../../Drink/beerForCheers.png",
@@ -32,6 +36,7 @@ const CamTest = (props: any) => {
   const [loaded, setLoaded] = useState(false);
   const [cheersMode, setCheersMode] = useState(false);
   const [wheelStart, setWheelStart] = useState(false);
+  const key = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const videoInfosRef = useRef<{ [id: string]: any }>({});
@@ -182,10 +187,15 @@ const CamTest = (props: any) => {
   useEffect(() => {
     const session = props.user.getStreamManager().session;
 
+
     const onCheersOn = (event: any) => {
       // if(!cheersMode)
       setCheersMode(true);
       console.log("건배모드 켜기");
+      setTimeout(()=>{
+        setCheersMode(false);
+        key.current+=1;
+      }, 15*1000);
     };
 
     const onCheersOff = (event: any) => {
@@ -431,53 +441,25 @@ const CamTest = (props: any) => {
     };
   };
 
-  // useEffect(() => {
-  //   setAngle(360 / num);
-  // }, [num]);
-
-  function cheersImg() {
-    const cheersImgGroup = [];
-    for (let i = 0; i < 4; i++) {
-      const img_class = `${styles.cheersImgVer} ${styles[`bottom${i}`]}`;
-      const img_src = "asset/cheers/cheers0" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
-    }
-    for (let i = 10; i < 15; i++) {
-      const img_class = `${styles.cheersImgVer} ${styles[`top${i}`]}`;
-      const img_src = "asset/cheers/cheers" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
-    }
-    for (let i = 20; i < 24; i++) {
-      const img_class = `${styles.cheersImgHor} ${styles[`left${i}`]}`;
-      const img_src = "asset/cheers/cheers" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
-    }
-    for (let i = 30; i < 32; i++) {
-      const img_class = `${styles.cheersImgHor} ${styles[`right${i}`]}`;
-      const img_src = "asset/cheers/cheers" + i + ".png";
-      cheersImgGroup.push(<img className={img_class} src={img_src} key={i} />);
-    }
-    return cheersImgGroup;
-  }
 
   /* ========================================================= */
 
-  // drinkEffect : 0 => 건배 모드 X 평소 상태,
-  // drinkEffect : 0 => 건배 모드
-  const [drinkEffect, setDrinkEffect] = useState(0);
-  // 건배를 누른 인원의 수
-  let count = 0;
+  // // drinkEffect : 0 => 건배 모드 X 평소 상태,
+  // // drinkEffect : 0 => 건배 모드
+  // const [drinkEffect, setDrinkEffect] = useState(0);
+  // // 건배를 누른 인원의 수
+  // let count = 0;
 
-  // 모든 유저가 건배 버튼을 눌렀을 때 실행되는 함수
-  // 이펙트 호출을 위한 setDrinkEffect(1)
-  // count 초기화
-  function readyToDrink() {
-    setDrinkEffect(1);
-    count = 0;
-    setTimeout(() => {
-      setDrinkEffect(0);
-    }, 2000);
-  }
+  // // 모든 유저가 건배 버튼을 눌렀을 때 실행되는 함수
+  // // 이펙트 호출을 위한 setDrinkEffect(1)
+  // // count 초기화
+  // function readyToDrink() {
+  //   setDrinkEffect(1);
+  //   count = 0;
+  //   setTimeout(() => {
+  //     setDrinkEffect(0);
+  //   }, 2000);
+  // }
 
   //
   useEffect(() => {
@@ -531,14 +513,14 @@ const CamTest = (props: any) => {
         }
       });
 
-    props.user
-      .getStreamManager()
-      .session.on("signal:cheersSignal", (event: any) => {
-        count += 1;
-        if (count === props.user.getSubscriber().length + 1) {
-          readyToDrink();
-        }
-      });
+    // props.user
+    //   .getStreamManager()
+    //   .session.on("signal:cheersSignal", (event: any) => {
+    //     count += 1;
+    //     if (count === props.user.getSubscriber().length + 1) {
+    //       readyToDrink();
+    //     }
+    //   });
 
     props.user
       .getStreamManager()
@@ -547,7 +529,6 @@ const CamTest = (props: any) => {
         roulette(event.data);
       });
   }, []);
-
 
   /* ========================================================= */
 
@@ -571,26 +552,10 @@ const CamTest = (props: any) => {
         </>
       )}
 
-      {/* <div>
-        <button type="submit" onClick={sendRouletteSignal}>
-          돌려
-        </button>
-      </div>
-      <div>
-        <button type="submit" onClick={props.sendCheersOnSignal}>
-          건배준비
-        </button>
-      </div> */}
       <div className={styles.scale}>
         <svg
           ref={svgRef}
           className={styles.position}
-          // style={{
-          //   position: "absolute",
-          //   left: "28%",
-          //   top: "13%",
-          //   zIndex: "15",
-          // }}
           width={700}
           height={700}
         >
@@ -603,7 +568,18 @@ const CamTest = (props: any) => {
           height={700}
         />
       </div>
-      {drinkEffect === 1 ? cheersImg() : null}
+
+      <div className={`${styles.drinkEffectTimer} ${!cheersMode ? styles.hidden : ""}`}>
+        <CountdownCircleTimer
+          key={key.current}
+          isPlaying={cheersMode}
+          duration={15}
+          colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+          colorsTime={[15, 6, 3, 0]}
+        >
+          {RenderTime}
+        </CountdownCircleTimer>
+      </div>
     </div>
   );
 };
