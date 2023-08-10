@@ -553,7 +553,7 @@ const AvoidGame = (props) => {
       )}
       {props.mode === "avoidGame" && !isGameOver ? (
         <>
-          <div className={styles.mainUserCamBorder}></div>
+          <div className={`${styles.mainUserCamBorder} ${!loaded && styles.hidden}`}></div>
           <div>
             <video
               className={`${styles.avoidVideo} ${!loaded && styles.hidden}`}
@@ -570,7 +570,9 @@ const AvoidGame = (props) => {
               width={"960px"}
               height={"720px"}
             />
-            <HealthBar hp={hpLeft} maxHp={100} />
+            <div className={`${!loaded && styles.hidden}`}>
+              <HealthBar hp={hpLeft} maxHp={100} />
+            </div>
           </div>
           {/* <HealthBar hp={gameState.current.hpBar.hpLeft} maxHp={100}/> */}
           {/* subscribers Cam */}

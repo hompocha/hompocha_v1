@@ -626,13 +626,14 @@ useEffect(() => {
 
 const [showShutterEffect, setShowShutterEffect] = useState(false); // 상태 변수 추가
 const [showCountdownText, setShowCountdownText] = useState(false); // 상태 변수 추가
-const [countdownText,setCountdownText] = useState("3");
+const [countdown, setCountdown] = useState<number>(3);
+
 // 현재 handleButtonClick 함수 안에서 captureSvg 함수 호출 부분을 변경하세요:
 const handleButtonClick = async () => {
   let counter = 3;
   // 카운트다운 텍스트 출력
   const timer = setInterval(() => {
-    setShowCountdownText(true);
+    setCountdown(counter);
     if (counter === 0) {
       clearInterval(timer);
       setShowShutterEffect(true);
@@ -647,7 +648,7 @@ const handleButtonClick = async () => {
         }, 3000);
       }, 500);
     } else {
-      setCountdownText(counter.toString());
+      setShowCountdownText(true);
     }
 
     counter--;
@@ -669,7 +670,7 @@ const handleSaveButtonClick = () => {
       <div className={styles.cameraIcon}>
         <button onClick={handleButtonClick} style={{ padding: 0, border: "none", background: "transparent" ,cursor : "pointer"}}> <img src="/camera1.png" style={{width:"70px", height : "70px"}}></img> </button>
       </div>
-      {showCountdownText && (<div className={styles.countdownText}>{countdownText}</div>)}
+      {showCountdownText && (<div className={styles.countdownText}>{countdown}</div>)}
 
       {
         capturedImageUrl && (
@@ -697,14 +698,6 @@ const handleSaveButtonClick = () => {
             </svg>
           </foreignObject>
           </div>
-        {/*<svg*/}
-        {/*  ref={svgRef}*/}
-        {/*  className={styles.position}*/}
-        {/*  width={700}*/}
-        {/*  height={700}*/}
-        {/*>*/}
-        {/*  {renderCamSlices(setVideoInfo)}*/}
-        {/*</svg> */}
         <canvas
           className={`${styles.position} ${!cheersMode ? styles.hidden : ""}`}
           ref={canvasRef}

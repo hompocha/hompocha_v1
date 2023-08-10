@@ -42,7 +42,6 @@ const LoserCam = (props) => {
           alt={"woo"}
         />
         <div>
-          <h2> {props.conToNick[props.selectId]}</h2>
           <OpenViduVideoComponent mode={props.mode} streamManager={selectStreamManager} />
         </div>
       </>
@@ -58,7 +57,6 @@ const LoserCam = (props) => {
           alt={"woo"}
         />
         <div>
-          <h2> {props.conToNick[props.selectId]}</h2>
           <OpenViduVideoComponent
             mode={props.mode}
             streamManager={props.user.streamManager}
