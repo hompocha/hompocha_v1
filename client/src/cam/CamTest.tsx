@@ -16,6 +16,10 @@ import html2canvas from "html2canvas";
 import axios from "axios";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
+import threeBgm from "../sounds/camera/three.mp3";
+import twoBgm from "../sounds/camera/two.mp3";
+import oneBgm from "../sounds/camera/one.mp3";
+import cameraBgm from "../sounds/camera/cameraBgm.mp3";
 
 const images: { [name: string]: string } = {
   beer: "../../Drink/beerForCheers.png",
@@ -207,13 +211,18 @@ const CamTest = (props: any) => {
       console.log("건배모드 끄기");
       console.log("cheersMode:", cheersMode);
     };
-
+    const onCaptureSignal = (event: any) => {
+      Screenshot(); // 캡처 신호를 받으면 Screenshot 함수 호출
+    };
+  
     session.on("signal:cheersOn", onCheersOn);
     session.on("signal:cheersOff", onCheersOff);
-
+    session.on("signal:capture", onCaptureSignal);
+    
     return () => {
       session.off("signal:cheersOn", onCheersOn);
       session.off("signal:cheersOff", onCheersOff);
+      session.off("signal:capture", onCaptureSignal);
     };
   }, []);
 
@@ -608,16 +617,13 @@ const CamTest = (props: any) => {
   }
 };
 
-const [isCaptureClicked, setIsCaptureClicked] = useState(false);
 const [captured, setCaptured] = useState(false);
 
 useEffect(() => {
   if (captured) {
     handleSaveButtonClick();
-    setIsCaptureClicked(true);
     
     const timer = setTimeout(() => {
-      setIsCaptureClicked(false);
       setCaptured(false);          // 추가
       setCapturedImageUrl(null);   // 추가
     }, 3000);
@@ -630,16 +636,26 @@ const [showShutterEffect, setShowShutterEffect] = useState(false); // 상태 변
 const [showCountdownText, setShowCountdownText] = useState(false); // 상태 변수 추가
 const [countdown, setCountdown] = useState<number>(3);
 
-// 현재 handleButtonClick 함수 안에서 captureSvg 함수 호출 부분을 변경하세요:
-const handleButtonClick = async () => {
+const Screenshot = async () => {
   let counter = 3;
   // 카운트다운 텍스트 출력
   const timer = setInterval(() => {
+    switch (counter){
+      case 3:
+        effectSound(threeBgm,false,0.1);
+        break;
+      case 2:
+        effectSound(twoBgm,false,0.1);
+        break;
+      case 1:
+        effectSound(oneBgm,false,0.1);
+        break;
+    }
     setCountdown(counter);
     if (counter === 0) {
       clearInterval(timer);
       setShowShutterEffect(true);
-      
+      effectSound(cameraBgm,false,0.1);
       // 셔터 효과 이후 이미지 캡처 진행
       setTimeout(async () => {
         await captureSvg();
@@ -670,7 +686,7 @@ const handleSaveButtonClick = () => {
   return (
     <div>
       <div className={styles.cameraIcon}>
-        <button onClick={handleButtonClick} style={{ padding: 0, border: "none", background: "transparent" ,cursor : "pointer"}}> <img src="/camera1.png" style={{width:"70px", height : "70px"}}></img> </button>
+        <button onClick={Screenshot} style={{ padding: 0, border: "none", background: "transparent" ,cursor : "pointer"}}> <img src="/camera1.png" style={{width:"70px", height : "70px"}}></img> </button>
       </div>
       {showCountdownText && (<div className={styles.countdownText}>{countdown}</div>)}
 
