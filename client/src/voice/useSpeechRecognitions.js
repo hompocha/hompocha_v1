@@ -78,14 +78,18 @@ const useSpeechRecognition = (props = {}) => {
       }
       // SpeechRecognition stops automatically after inactivity
       // We want it to keep going until we tell it to stop
-      recognition.current.onend = () => recognition.current.start();
+      recognition.current.onend = () => {
+        if (recognition.current) {
+          recognition.current.start();
+        }
+      };
       recognition.current.start();
     },
     [listening, supported, recognition]
   );
 
   const stop = useEventCallback(() => {
-    if (!listening || !supported) return;
+    if (!listening || !supported || !recognition.current) return;
     recognition.current.onresult = () => {};
     recognition.current.onend = () => {};
     recognition.current.onerror = () => {};
@@ -103,7 +107,12 @@ const useSpeechRecognition = (props = {}) => {
       recognition.current = new window.SpeechRecognition();
     }
     return () => {
-      recognition.current = null;
+      if (recognition.current) {
+        recognition.current.onresult = null;
+        recognition.current.onend = null;
+        recognition.current.onerror = null;
+        recognition.current = null;
+      }
     };
   }, []);
 
