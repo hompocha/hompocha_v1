@@ -48,8 +48,19 @@ const Login: React.FC = () => {
     }
   };
   const handleSignUp = async (e: React.FormEvent) => {
-    if (!id || !password || !confirmPassword || !nickName) {
-      alert("모든 정보를 입력해주세요.");
+    const whiteSpaceRegex = /\s/;
+
+    if (
+      !id ||
+      !password ||
+      !confirmPassword ||
+      !nickName ||
+      whiteSpaceRegex.test(id) ||
+      whiteSpaceRegex.test(password) ||
+      whiteSpaceRegex.test(confirmPassword) ||
+      whiteSpaceRegex.test(nickName)
+    ) {
+      alert("공백이 없는 모든 정보를 입력해주세요.");
       return;
     } else if (password !== confirmPassword) {
       alert("비밀번호가 다릅니다.");

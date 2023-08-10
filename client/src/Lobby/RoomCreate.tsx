@@ -12,9 +12,14 @@ const RoomCreate: React.FC<NickNameProps> = ({ nickName }) => {
   const navigate = useNavigate();
 
   const handleRoomCreate = async (e: React.FormEvent) => {
+    const whiteSpaceRegex = /\s/;
     e.preventDefault();
     if (room_name.length > 15) {
       alert("방 제목을 15글자 이하로 해주세요");
+      return;
+    }
+    if (!room_name || whiteSpaceRegex.test(room_name)){
+      alert("공백이 없는 방 제목으로 해주세요");
       return;
     }
     try {
