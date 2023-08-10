@@ -122,6 +122,18 @@ const CamMain = ({
       });
   }, [user]);
 
+  /* 나갔을 경우 대기화면으로 넘어가버림 */
+  useEffect(()=>{
+    if(mode === "speechGame"){
+      offSpeechGame();
+      setTimeout(()=>{
+        enterMainRoom();
+      },500);
+    }else if(mode !== undefined){
+      enterMainRoom();
+    }
+  }, [user]);
+
   const enterMainRoom = () => {
     setSpeechBlocked(true);
     setTimeout(() => {
@@ -290,9 +302,19 @@ const CamMain = ({
       .then(() => {
         console.log("테마 변경 명령을 보냄 !!");
       });
-    console.log("sendCheersOffSignal 실행");
+      console.log("sendThemeSignal 실행");
+    };
+  
+  const sendCaptureSignal = () => {
+    user
+      .getStreamManager()
+      .session.signal({ to: [], type: "capture" })
+      .then(() => {
+        console.log("캡처하는 명령을 보냄 !!");
+      });
+    console.log("sendCaptureSignal 실행");
   };
-
+  
   /*마이크 토글 */
   const onMicToggle = (enabled) => {
     console.log(`마이크 ${enabled ? "켜짐" : "꺼짐"}`);
@@ -389,6 +411,7 @@ const CamMain = ({
               sendCheersOnSignal={sendCheersOnSignal}
               sendCheersOffSignal={sendCheersOffSignal}
               sendThemeSignal={sendThemeSignal}
+              sendCaptureSignal={sendCaptureSignal}
               hubTospeechFromCamtest={hubTospeechFromCamtest}
               user={user}
 
