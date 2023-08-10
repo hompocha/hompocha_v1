@@ -47,7 +47,7 @@ const LoserCam = (props) => {
             streamManager={selectStreamManager}
           />
         </div>
-        <div className={styles.loserNick}>{props.user.getNickname()}</div>
+        <div className={styles.loserNick}>{props.conToNick[selectStreamManager.stream.connection.connectionId]}</div>
       </>
     );
   } else {

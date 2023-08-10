@@ -360,7 +360,8 @@ const UseSpeechRecognition = (props) => {
           {value}
 
         </div> )}
-       {/*<UserInput onSubmit={handleUserInput} />*/}
+
+       {/* <UserInput onSubmit={handleUserInput} /> */}
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`}>
