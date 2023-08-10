@@ -57,10 +57,12 @@ const Login: React.FC = () => {
       !nickName ||
       whiteSpaceRegex.test(id) ||
       whiteSpaceRegex.test(password) ||
-      whiteSpaceRegex.test(confirmPassword) ||
-      whiteSpaceRegex.test(nickName)
+      whiteSpaceRegex.test(confirmPassword)
     ) {
       alert("공백이 없는 모든 정보를 입력해주세요.");
+      return;
+    } else if (/^\s/.test(nickName) || !nickName.trim()) {
+      alert("닉네임 처음에는 공백이 없어야 합니다.");
       return;
     } else if (password !== confirmPassword) {
       alert("비밀번호가 다릅니다.");
