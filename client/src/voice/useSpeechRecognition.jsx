@@ -87,7 +87,11 @@ const UseSpeechRecognition = (props) => {
       /* 게임시작 명령어 */
       for (const gameStartKeyword of gameStartKeywords) {
         if (value.includes(gameStartKeyword)) {
-          sendKeywordSignal(gameStartKeyword);
+          if(gameStartKeyword ==="다른 게임 이요")
+              sendKeywordSignal("발음 게임이요");
+          else {
+            sendKeywordSignal(gameStartKeyword);
+          }
           switch (gameStartKeyword) {
             case "발음 게임이요":
               stop();
@@ -319,9 +323,9 @@ const UseSpeechRecognition = (props) => {
       {props.mode === "speechGame" && (
         <div className={styles.speechWord}>
           {value}
-          {/* <UserInput onSubmit={handleUserInput} /> */}
-        </div> )}  
 
+        </div> )}
+       <UserInput onSubmit={handleUserInput} />
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`}>
