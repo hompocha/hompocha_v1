@@ -3,19 +3,19 @@ import OpenViduVideoComponent from "../../cam/OpenViduVideoComponent";
 import styles from "./LoserCam.module.css";
 import { effectSound } from "../../effectSound";
 import laughing from "../../sounds/laughing.wav";
-import loserSound from "../../sounds/Loser.mp3"
-import stampSound from "../../sounds/StampSound.wav"
+import loserSound from "../../sounds/Loser.mp3";
+import stampSound from "../../sounds/StampSound.wav";
 const LoserCam = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       props.end(undefined);
-    }, 6200);
+    }, 6.2 * 1000);
 
     const laughingSound = setTimeout(() => {
       effectSound(loserSound, false, 1);
-      setTimeout(()=>{
-        effectSound(stampSound,false,1);
-      },1500)
+      setTimeout(() => {
+        effectSound(stampSound, false, 1);
+      }, 1500);
     }, 1000);
 
     return () => {
@@ -42,13 +42,16 @@ const LoserCam = (props) => {
           alt={"woo"}
         />
         <div>
-          <OpenViduVideoComponent mode={props.mode} streamManager={selectStreamManager} />
+          <OpenViduVideoComponent
+            mode={props.mode}
+            streamManager={selectStreamManager}
+          />
         </div>
+        <div className={styles.loserNick}>{props.user.getNickname()}</div>
       </>
     );
-  }
-  /*루저가 나일때*/
-  else {
+  } else {
+    /*루저가 나일때*/
     return (
       <>
         <img
@@ -61,6 +64,7 @@ const LoserCam = (props) => {
             mode={props.mode}
             streamManager={props.user.streamManager}
           />
+          <div className={styles.loserNick}>{props.user.getNickname()}</div>
         </div>
       </>
     );
