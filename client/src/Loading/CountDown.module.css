@@ -5,13 +5,13 @@
   left: 33.5vw;
   transform: scale(170%);
   width: 33vw;
-  height: 45.5vh;
+  height: 45vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
-  /*background-size: cover;*/
+  border-radius: 3%;
 }
 
 .loading-image {
