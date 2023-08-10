@@ -1,17 +1,32 @@
 .countDown {
   position: fixed;
   z-index: 9;
-  top: 25.75vh;
+  top: 10vh;
+  left: 22vw;
+  width: 56vw;
+  height: 42vw;
+  /* top: 25.75vh;
   left: 33.5vw;
-  transform: scale(170%);
   width: 33vw;
-  height: 45vh;
+  height: 45vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 3%;
+  /* transform: scale(170%); */
+}
+
+.countDownText {
+  font-family: "Gowun Dodum", sans-serif;
+  font-size: 70px;
+  color: white;
+}
+
+.sojuCountDown {
+  margin-top: 120px;
+  transform: scale(170%);
 }
 
 .loading-image {
