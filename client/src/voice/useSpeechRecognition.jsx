@@ -27,9 +27,9 @@ const speech_sentence = [
   "특허 허가과 허가 과장 허 과장",
   "신분당선 환승역은 신논현역 사이",
   "청단풍잎 홍단풍잎 흑단풍잎 백단풍잎",
+  "청 단풍잎 홍 단풍잎 흑 단풍잎 백 단풍잎",
   "창경원 창살은 쌍 창살",
   "분당 운중동 한국학중앙연구원",
-  "항만청 항만청 청사 항만청 청사 쇠창살",
   "명계남 명장면 명대사는 명품 연기이다",
   "7월 7일은 평창 친구 진정 칠순잔치 날",
   "삼성 설립 사장의 회사 자산 상속자",
@@ -56,6 +56,10 @@ const UseSpeechRecognition = (props) => {
   const [extractedValue, setExtractedValue] = useState("");
   const [stopSign, setStopSign] = useState(true);
   const [keywordFromOthers, setKeywordFromOthers] = useState("");
+  const [isListening, setIsListening] = useState(true);
+  const [firstListening, setFirstListening] = useState(true);
+
+
 
   const lang = "ko-Kr";
   useEffect(() => {
@@ -180,13 +184,16 @@ const UseSpeechRecognition = (props) => {
   }, [stopSign]);
 
   useEffect(()=>{
-    if (!props.checkvoice&& listening){
-      stop();
+    if (props.mode === "speechGame") {
+      if (!props.checkvoice && isListening) {
+        stop();
+        setIsListening(false);
+      } else if (props.checkvoice && !isListening) {
+        listen({lang});
+        setIsListening(true);
+      }
     }
-    else{
-      listen({ lang });
-    }
-  })
+  },[props.checkvoice])
 
   /* */
   useEffect(() => {
