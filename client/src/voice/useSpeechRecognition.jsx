@@ -82,10 +82,10 @@ const UseSpeechRecognition = (props) => {
         setStopSign(false);
         props.sendCheersOffSignal();
       }
-      if (value.includes("사진 찍어줘")) {
+      if (value.includes("사진 찍어 주세요")) {
         stop();
         setStopSign(false);
-        sendKeywordSignal("사진 찍어줘");
+        sendKeywordSignal("사진 찍어 주세요");
         props.sendCaptureSignal();
       }
 
@@ -344,7 +344,7 @@ const UseSpeechRecognition = (props) => {
           {value}
 
         </div> )}
-       <UserInput onSubmit={handleUserInput} />
+       {/*<UserInput onSubmit={handleUserInput} />*/}
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`}>
