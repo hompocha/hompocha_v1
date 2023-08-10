@@ -82,6 +82,12 @@ const UseSpeechRecognition = (props) => {
         setStopSign(false);
         props.sendCheersOffSignal();
       }
+      if (value.includes("사진 찍어줘")) {
+        stop();
+        setStopSign(false);
+        sendKeywordSignal("사진 찍어줘");
+        props.sendCaptureSignal();
+      }
 
       /* 키워드 명령어 */
       for (const word of keyword) {
