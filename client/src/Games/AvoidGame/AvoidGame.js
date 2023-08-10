@@ -613,7 +613,6 @@ const AvoidGame = (props) => {
           />
         </>
       )}
-      ;
     </>
   );
 };
