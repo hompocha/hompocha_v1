@@ -189,14 +189,6 @@ const UseSpeechRecognition = (props) => {
     }
   }, [stopSign]);
 
-  // useEffect(()=>{
-  //   if (!props.checkvoice&& listening){
-  //     stop();
-  //   }
-  //   else{
-  //     listen({ lang });
-  //   }
-  // })
 
   /* */
   useEffect(() => {
