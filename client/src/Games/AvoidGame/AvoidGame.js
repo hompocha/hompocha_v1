@@ -72,6 +72,7 @@ const AvoidGame = (props) => {
   const [countDown, setCountDown] = useState(false);
   const [start, setStart] = useState(false);
   const [lowestConId, setLowestConId] = useState(undefined);
+  const [handStop, setHandStop] = useState(false);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -163,6 +164,9 @@ const AvoidGame = (props) => {
     let didCancel = false;
 
     const loadHandsAndCamera = async () => {
+      if (!videoRef.current || !canvasRef.current || handStop) {
+        return;
+      }
       const hands = new Hands({
         locateFile: (file) =>
           `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
@@ -173,7 +177,7 @@ const AvoidGame = (props) => {
         canvasCtx.current = canvasRef.current.getContext("2d");
 
         hands.setOptions({
-          maxNumHands: 2,
+          maxNumHands: 1,
           modelComplexity: 1,
           minDetectionConfidence: 0.7,
           minTrackingConfidence: 0.7,
@@ -206,10 +210,14 @@ const AvoidGame = (props) => {
     return () => {
       didCancel = true;
     };
-  }, [videoReady, canvasRef.current]);
+  },[handStop]);
+  // }, [videoReady, canvasRef.current]);
 
   /* 손 위치 인식 + 패들 위치 업데이트 + 패들 캔버스에 그림 */
   const onResults = (results) => {
+    if (!canvasRef.current || !canvasCtx.current) {
+      return; // 캔버스 또는 컨텍스트가 존재하지 않으면 함수를 종료
+    }
     /* 패들 위치 감지 */
     if (results.multiHandLandmarks && results.multiHandedness) {
       if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
@@ -227,7 +235,8 @@ const AvoidGame = (props) => {
     /* 공 및 패들 위치 업데이트 */
     updateGameState(canvasRef.current, gameState.current);
     /* 공 및 패들 캔버스에 그리기*/
-    loadImages(canvasRef.current, canvasCtx.current, gameState.current);
+    if (!handStop)
+      loadImages(canvasRef.current, canvasCtx.current, gameState.current);
   };
 
   const setObjInterval = (time) => {
@@ -327,17 +336,17 @@ const AvoidGame = (props) => {
     );
   };
 
-  const drawHpBar = (can_ref, can_ctx, hp) => {
-    const w = can_ref.width;
-    const h = can_ref.height;
-    can_ctx.fillStyle = hp > 30 ? "lime" : "yellow";
-    can_ctx.fillRect(
-      gameState.current.hpBar.location.x * w,
-      gameState.current.hpBar.location.y * h,
-      (hp / 100) * gameState.current.hpBar.length * w,
-      gameState.current.hpBar.height * h
-    );
-  };
+  // const drawHpBar = (can_ref, can_ctx, hp) => {
+  //   const w = can_ref.width;
+  //   const h = can_ref.height;
+  //   can_ctx.fillStyle = hp > 30 ? "lime" : "yellow";
+  //   can_ctx.fillRect(
+  //     gameState.current.hpBar.location.x * w,
+  //     gameState.current.hpBar.location.y * h,
+  //     (hp / 100) * gameState.current.hpBar.length * w,
+  //     gameState.current.hpBar.height * h
+  //   );
+  // };
 
   /* 받은 데이터 기반으로 전체 게임 state 업데이트 */
   const updateGameState = (can_ref, gameState) => {
@@ -374,6 +383,7 @@ const AvoidGame = (props) => {
             clearInterval(speedInterval.current);
             clearInterval(objInterval.current);
             clearInterval(sendInterval.current);
+            setHandStop(true);
             sendGameState(gameState);
             sendGameResult();
             gameState = JSON.parse(JSON.stringify(defaultGameState));
@@ -418,7 +428,11 @@ const AvoidGame = (props) => {
           if (result.length >= subscribers.length + 1) {
             console.log(result[0]);
             setLowestConId(result[0]);
-            setIsGameOver(true);
+            setTimeout(()=>{
+              if(!isGameOver) {
+                setIsGameOver(true);
+              }
+            }, 500);
           }
         });
 
