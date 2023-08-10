@@ -121,6 +121,18 @@ const CamMain = ({
       });
   }, [user]);
 
+  /* 나갔을 경우 대기화면으로 넘어가버림 */
+  useEffect(()=>{
+    if(mode === "speechGame"){
+      offSpeechGame();
+      setTimeout(()=>{
+        enterMainRoom();
+      },500);
+    }else if(mode !== undefined){
+      enterMainRoom();
+    }
+  }, [user]);
+
   const enterMainRoom = () => {
     setSpeechBlocked(true);
     setTimeout(() => {
