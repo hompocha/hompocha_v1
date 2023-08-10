@@ -37,7 +37,7 @@
   width: 0;
   height: 0;
   top: 3vh;
-  left: 49vw;
+  left: 47.2vw;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 50px solid rgb(210, 18, 18);
@@ -241,7 +241,6 @@
     opacity: 1;
   }
 }
-
 .cameraIcon{
   position: fixed;
   top: 13.4vh;
@@ -250,6 +249,7 @@
 .cameraIcon:hover{
   transform: scale(1.1);
 }
+
 .capture{
   position: fixed;
   top :19vh;
