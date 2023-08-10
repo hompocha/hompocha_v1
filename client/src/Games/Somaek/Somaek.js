@@ -162,7 +162,7 @@ const Somaek = (props) => {
         canvasCtx.current = canvasRef.current.getContext("2d");
 
         hands.setOptions({
-          maxNumHands: 2,
+          maxNumHands: 1,
           modelComplexity: 1,
           minDetectionConfidence: 0.7,
           minTrackingConfidence: 0.7,
@@ -802,7 +802,7 @@ const Somaek = (props) => {
               width={"1920px"}
               height={"1080px"}
             />
-            {/* 시연 */}
+            {/* 시연 25sec */}
             <div className={`${!loaded && styles.hidden}`}>
               <TimerBar timeMax={25 * 1000} gameEnd={gameEnd} start={start} />
             </div>

@@ -4,7 +4,9 @@ import styles from "./CamTest.module.scss";
 import { event } from "jquery";
 import BGM from "../sounds/roomBGM.wav";
 import useSound from "../useSound";
-import rouletteSound from "../sounds/rouletteEffect.wav";
+// import rouletteSound from "../sounds/rouletteEffect.wav";
+import rouletteSound from "../sounds/catSpin.mp3";
+
 import cheers_sample from "../sounds/cheers_sample.wav";
 import { effectSound } from "../effectSound";
 import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
@@ -430,8 +432,8 @@ const CamTest = (props: any) => {
         setCounts(0);
         console.log(flag, counts);
         setDark(false);
-      }, 5000);
-    }, 5000);
+      }, 5000); /*끝나고 사람 띄우는 시간*/
+    }, 4500); /*룰렛 돌아가는 시간*/
     const reset = () => {
       if (svgRef.current) {
         svgRef.current.style.transform = "rotate(0deg)";

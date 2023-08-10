@@ -27,6 +27,7 @@ const CamMain = ({
   const [speechGamevoice, setspeechGamevoice] = useState(true);
   const [wheel, setWheel] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [clickUnable, setClickUnable] = useState(true);
 
   /* 모드변경되면 음성인식 재시작 하도록 */
   useEffect(() => {
@@ -254,6 +255,7 @@ const CamMain = ({
 
   const returnLobby = () => {
     setSpeechBlocked(true);
+    setClickUnable(false);
     setTimeout(() => {
       endSession();
       navigate("/lobby");
@@ -346,7 +348,7 @@ const CamMain = ({
                 <MicButton onMicToggle={onMicToggle} user={user} />
               </div>
             </div>
-            <div className={styles.toLobbyButton} onClick={returnLobby}></div>
+            {clickUnable ? <><div className={styles.toLobbyButton} onClick={returnLobby}></div></>: null}
           </div>
           <div className={styles.gameListWrap}>
             <div className={styles.gameMenu}>홈술포차 메 뉴 판</div>

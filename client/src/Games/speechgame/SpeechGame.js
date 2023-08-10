@@ -9,6 +9,7 @@ import { effectSound } from "../../effectSound";
 import CountDown from "../../Loading/CountDown";
 import Loading from "../../Loading/Loading";
 import { TimerBar } from "../Somaek/timer";
+import somaekSuccess from "../../sounds/somaekSuccess.wav";
 
 const speech_sentence = [
   "간장 공장 공장장은 강 공장장이다",
@@ -24,6 +25,19 @@ const speech_sentence = [
   "빼빼 마른 빼빼로",
   "난방 방법 변경",
   "상담 담당 선생님",
+  "새우 로얄 뉴 로얄",
+  "특허 허가과 허가 과장 허 과장",
+  "신분당선 환승역은 신논현역 사이",
+  "청단풍잎 홍단풍잎 흑단풍잎 백단풍잎",
+  "창경원 창살은 쌍 창살",
+  "분당 운중동 한국학중앙연구원",
+  "항만청 항만청 청사 항만청 청사 쇠창살",
+  "명계남 명장면 명대사는 명품 연기이다",
+  "7월 7일은 평창 친구 진정 칠순잔치 날",
+  "삼성 설립 사장의 회사 자산 상속자",
+  "고려고 교복은 고급 교복",
+  "콩깍지는 깐 콩깍지인가 안깐 콩깍지인가",
+  "상표 붙인 큰 깡통은 깐 깡통"
 ];
 const time = [];
 for (let i = 20000; i < 50001; i += 100) {
@@ -46,6 +60,9 @@ const SpeechGame = (props) => {
   /* 음성인식 on/off를 위한 flag */
   const [speechBlocked, setSpeechBlocked] = useState(false);
   const bgmSound = useRef(null);
+
+
+  const checkvoice = useRef(false);
 
   /* 준비 신호 받는 세션을 열기위한 useEffect */
   useEffect(() => {
@@ -121,8 +138,6 @@ const SpeechGame = (props) => {
             .connection.connectionId;
           id.current = selectId;
           sendIdSentence(selectId, sentence);
-          console.log("woo", sentId);
-          console.log("wooodasdf");
         }
       };
       props.user
@@ -134,7 +149,10 @@ const SpeechGame = (props) => {
       const { id, sentence } = data;
       console.log("애가 바껴야함 : ", id);
       setRandomUser(id);
+      effectSound(somaekSuccess);
       setSentenceState(sentence);
+      // 뒤에꺼 boolean으로 받음
+      checkvoice.current = props.user.getStreamManager().stream.connection.connectionId === id;
     };
     const receiveStopTime = (event) => {
       const data = event.data;
@@ -151,20 +169,8 @@ const SpeechGame = (props) => {
   useEffect(() => {
     if (!start) return;
     bgmSound.current = effectSound(speechClock, true, 0.3);
-    /* 시간 -1초만큼 후에 true(인식X로 변경) */
-    // const speechTimer = setTimeout(() => {
-    //   setSpeechBlocked(true);
-
-    // }, /* stopTime - 1000 */ 39 * 1000);/* 시연*/
-    // const timer = setTimeout(() => {
-    //   setTimerExpired(true);
-    //   sentenceState="시작";
-    //   bgmSound.stop();
-    // }, /* stopTime */ 40 * 1000); /*시연*/
     return () => {
       if (bgmSound.current) bgmSound.current.stop();
-      // clearTimeout(timer);
-      // clearTimeout(speechTimer);
     };
   }, [stopTime, start]);
 
@@ -322,6 +328,7 @@ const SpeechGame = (props) => {
                 user={props.user}
                 speechBlocked={speechBlocked}
                 mode={props.mode}
+                checkvoice = {checkvoice}
               />
             </div>
             <div className={styles.camPosition}>
