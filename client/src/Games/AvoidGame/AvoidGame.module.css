@@ -9,6 +9,7 @@
   width: 56vw;
   height: 42vw;
   transform: rotateY(180deg);
+  border-radius: 3%;
 }
 
 .mainUserCamBorder {
