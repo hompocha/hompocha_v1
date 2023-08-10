@@ -969,3 +969,48 @@ RoomEntity {
   room_idx: '01H7FT9KW3E9WM64JF81BDBDFM',
   user_idx: '01H7D5MF4GQZAKM7CP1X3CQTXK'
 }
+c[[90m1:40:14 PM[0m] File change detected. Starting incremental compilation...
+
+[[90m1:40:16 PM[0m] Found 0 errors. Watching for file changes.
+
+server run!
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +46ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mOpenviduModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +238ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRoomModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRoomlistModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +15ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mOpenviduController {/openvidu}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/openvidu, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/openvidu/sessions, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/openvidu/sessions/:sessionId/connections, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/user}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/signup, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/login, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user/:nickname, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRoomlistController {/lobby}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby/create, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby/roomList, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/lobby/roomInfo, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRoomController {/room}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/room/status, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/room/roomout, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/room/wow, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1352780  - [39m08/10/2023, 1:40:21 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +3ms[39m
+Application started on port:  8080
+Application server connecting to OpenVidu at https://hompocha.site:8443
+우현이
+Killed

@@ -162,7 +162,7 @@ const Somaek = (props) => {
         canvasCtx.current = canvasRef.current.getContext("2d");
 
         hands.setOptions({
-          maxNumHands: 1,
+          maxNumHands: 2,
           modelComplexity: 1,
           minDetectionConfidence: 0.7,
           minTrackingConfidence: 0.7,
@@ -347,7 +347,7 @@ const Somaek = (props) => {
       const fontSize = can_ref.width * speechWidth * 0.2; // 원하는 폰트 크기 비율을 적용 (0.04는 예시적인 값입니다.)
       can_ctx.font = `${fontSize}px Arial`; // 폰트와 크기를 설정
       const textX = -can_ref.width * speechLeftX;
-      const textY = can_ref.height * speechTopY + (index + 1) * 47;
+      const textY = can_ref.height * speechTopY + (index + 1) * 60;
       const maxWidth = can_ref.width * speechWidth; // 텍스트의 최대 너비를 캔버스 너비의 비율로 설정
       can_ctx.fillText(text, textX, textY, maxWidth); // 텍스트를 캔버스에 쓰기
     });
@@ -361,7 +361,7 @@ const Somaek = (props) => {
       const maxWidth = can_ref.width * speechWidth; // 텍스트의 최대 너비를 캔버스 너비의 비율로 설정
       can_ctx.fillText("사장님", textX, textY, maxWidth);
       const orderTextY =
-        can_ref.height * speechTopY + (orderKorean.length + 1) * 47;
+        can_ref.height * speechTopY + (orderKorean.length + 1) * 60;
       can_ctx.fillText("주문이요~", textX, orderTextY, maxWidth);
     }
 
@@ -534,7 +534,7 @@ const Somaek = (props) => {
 
   function randomDrink() {
     let drinks = [];
-    let randomCount = 1 + Math.floor(Math.random() * 4);
+    let randomCount = 1 + Math.floor(Math.random() * 3);
     for (let i = 0; i < randomCount; i++) {
       let randomValue = Math.random();
       if (randomValue < 0.1) drinks.push("cider");
@@ -802,7 +802,7 @@ const Somaek = (props) => {
               width={"1920px"}
               height={"1080px"}
             />
-            {/* 시연 25sec */}
+            {/* 시연 */}
             <div className={`${!loaded && styles.hidden}`}>
               <TimerBar timeMax={25 * 1000} gameEnd={gameEnd} start={start} />
             </div>

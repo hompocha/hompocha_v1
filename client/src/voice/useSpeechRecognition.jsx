@@ -183,14 +183,16 @@ const UseSpeechRecognition = (props) => {
     }
   }, [stopSign]);
 
-  useEffect(()=>{
-    if (!props.checkvoice&& listening){
-      stop();
-    }
-    else{
-      listen({ lang });
-    }
-  })
+  // useEffect(()=>{
+  //   if(props.mode ==="speechGame"){
+  //     if (!props.checkvoice&& listening){
+  //       stop();
+  //     }
+  //     else{
+  //       listen({ lang });
+  //     }
+  //   }
+  // }, [props.checkvoice]);
 
   /* */
   useEffect(() => {
@@ -346,7 +348,7 @@ const UseSpeechRecognition = (props) => {
           {value}
 
         </div> )}
-       <UserInput onSubmit={handleUserInput} />
+       {/* <UserInput onSubmit={handleUserInput} /> */}
       {props.mode === undefined && (
         <div className={styles.keywordEffect}>
           <div className={`${animationClass} ${styles.extractedValue}`}>

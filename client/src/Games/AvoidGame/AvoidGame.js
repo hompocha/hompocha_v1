@@ -177,7 +177,7 @@ const AvoidGame = (props) => {
         canvasCtx.current = canvasRef.current.getContext("2d");
 
         hands.setOptions({
-          maxNumHands: 1,
+          maxNumHands: 2,
           modelComplexity: 1,
           minDetectionConfidence: 0.7,
           minTrackingConfidence: 0.7,
@@ -213,19 +213,19 @@ const AvoidGame = (props) => {
   },[handStop]);
   // }, [videoReady, canvasRef.current]);
 
-  /* 손 위치 인식 + 패들 위치 업데이트 + 패들 캔버스에 그림 */
+  /* 손 위치 인식 + 게임 state 업데이트, 게임 이미지 로드 및 캔버스에 그림 */
   const onResults = (results) => {
     if (!canvasRef.current || !canvasCtx.current) {
       return; // 캔버스 또는 컨텍스트가 존재하지 않으면 함수를 종료
     }
-    /* 패들 위치 감지 */
+    /* 검지손가락 끝(캐릭터 위치) 감지 */
     if (results.multiHandLandmarks && results.multiHandedness) {
       if (results.multiHandLandmarks[0] && results.multiHandLandmarks[0][8]) {
         let finger = results.multiHandLandmarks[0][8].x;
         if (finger > 0.98) {
-          gameState.current.player.position.x = 0.95;
+          gameState.current.player.position.x = 0.98;
         } else if (finger < 0.02) {
-          gameState.current.player.position.x = 0.05;
+          gameState.current.player.position.x = 0.02;
         } else {
           gameState.current.player.position.x = finger;
         }
@@ -336,17 +336,6 @@ const AvoidGame = (props) => {
     );
   };
 
-  // const drawHpBar = (can_ref, can_ctx, hp) => {
-  //   const w = can_ref.width;
-  //   const h = can_ref.height;
-  //   can_ctx.fillStyle = hp > 30 ? "lime" : "yellow";
-  //   can_ctx.fillRect(
-  //     gameState.current.hpBar.location.x * w,
-  //     gameState.current.hpBar.location.y * h,
-  //     (hp / 100) * gameState.current.hpBar.length * w,
-  //     gameState.current.hpBar.height * h
-  //   );
-  // };
 
   /* 받은 데이터 기반으로 전체 게임 state 업데이트 */
   const updateGameState = (can_ref, gameState) => {
