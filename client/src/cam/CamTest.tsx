@@ -697,20 +697,20 @@ const handleSaveButtonClick = () => {
             </svg>
           </foreignObject>
           </div>
-        {/* <svg
-          ref={svgRef}
-          className={styles.position}
-          width={700}
-          height={700}
-        >
-          {renderCamSlices(setVideoInfo)}
-        </svg>
+        {/*<svg*/}
+        {/*  ref={svgRef}*/}
+        {/*  className={styles.position}*/}
+        {/*  width={700}*/}
+        {/*  height={700}*/}
+        {/*>*/}
+        {/*  {renderCamSlices(setVideoInfo)}*/}
+        {/*</svg> */}
         <canvas
           className={`${styles.position} ${!cheersMode ? styles.hidden : ""}`}
           ref={canvasRef}
           width={700}
           height={700}
-        /> */}
+        />
       </div>
 
       <div className={`${styles.drinkEffectTimer} ${!cheersMode ? styles.hidden : ""}`}>

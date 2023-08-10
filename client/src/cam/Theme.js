@@ -36,15 +36,15 @@ const Theme = ({mode, camMainLoaded,user}) => {
     switch (theme) {
       case 0:
         if (mode === undefined) mainBGM = effectSound(pochaBGM, true, 0.1);
-        if (musicOn === false) mainBGM.stop();
+        if (musicOn === false && mainBGM) mainBGM.stop();
         break;
       case 1:
         if (mode === undefined) mainBGM = effectSound(barBGM, true, 0.1);
-        if (musicOn === false) mainBGM.stop();
+        if (musicOn === false && mainBGM) mainBGM.stop();
         break;
       case 2:
         if (mode === undefined) mainBGM = effectSound(izakayaBGM, true, 0.1);
-        if (musicOn === false) mainBGM.stop();
+        if (musicOn === false && mainBGM) mainBGM.stop();
         break;
 
       default:
