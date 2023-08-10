@@ -698,7 +698,6 @@ const handleSaveButtonClick = () => {
             </svg>
           </foreignObject>
           </div>
-
         <canvas
           className={`${styles.position} ${!cheersMode ? styles.hidden : ""}`}
           ref={canvasRef}
