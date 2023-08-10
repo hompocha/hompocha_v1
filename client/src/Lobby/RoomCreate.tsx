@@ -18,8 +18,8 @@ const RoomCreate: React.FC<NickNameProps> = ({ nickName }) => {
       alert("방 제목을 15글자 이하로 해주세요");
       return;
     }
-    if (!room_name || whiteSpaceRegex.test(room_name)){
-      alert("공백이 없는 방 제목으로 해주세요");
+    if (!room_name || !room_name.trim()){
+      alert("방 제목으로 입력해 주세요");
       return;
     }
     try {
