@@ -267,10 +267,10 @@ const Somaek = (props) => {
     /* 말풍선 */
     const speechBubbleImg = imgElements["speechBubble"];
 
-    const bubbleLeftX = -0.005; // 원하는 X 위치를 설정하세요 (예시: 0).
-    const bubbleTopY = -0.01; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const bubbleLeftX = 0.005; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const bubbleTopY = 0.01; // 원하는 Y 위치를 설정하세요 (예시: 0).
     const bubbleWidth = 0.24; // 원하는 너비값을 설정하세요 (예시: 100).
-    const bubbleHeight = 0.38; // 원하는 높이값을 설정하세요 (예시: 100).
+    const bubbleHeight = 0.35; // 원하는 높이값을 설정하세요 (예시: 100).
 
     can_ctx.drawImage(
       speechBubbleImg,
@@ -337,8 +337,8 @@ const Somaek = (props) => {
     can_ctx.save(); // 현재 컨텍스트 상태를 저장
     can_ctx.scale(-1, 1); // X 축을 따라 스케일을 반전시킴 (좌우 반전)
 
-    const speechLeftX = 0.17; // 원하는 X 위치를 설정하세요 (예시: 0).
-    const speechTopY = 0.06; // 원하는 Y 위치를 설정하세요 (예시: 0).
+    const speechLeftX = 0.18; // 원하는 X 위치를 설정하세요 (예시: 0).
+    const speechTopY = 0.08; // 원하는 Y 위치를 설정하세요 (예시: 0).
     const speechWidth = 0.13; // 원하는 너비값을 설정하세요 (예시: 100).
 
     /* 소주1병, 맥주1명 주문내역 텍스트 캔버스에 출력 */
@@ -804,7 +804,7 @@ const Somaek = (props) => {
             />
             {/* 시연 */}
             <div className={`${!loaded && styles.hidden}`}>
-              <TimerBar timeMax={25 * 1000} gameEnd={gameEnd} start={start} />
+              <TimerBar timeMax={100000 * 1000} gameEnd={gameEnd} start={start} />
             </div>
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
