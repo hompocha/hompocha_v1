@@ -4,6 +4,6 @@ import { OpenviduService } from './openvidu.service';
 
 @Module({
   controllers: [OpenviduController],
-  providers: [OpenviduService]
+  providers: [OpenviduService],
 })
 export class OpenviduModule {}

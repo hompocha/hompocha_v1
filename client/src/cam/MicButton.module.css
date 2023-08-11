@@ -1,0 +1,72 @@
+.reactSwitchCheckbox {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+.reactSwitchLabelGreen {
+  background-color: green;
+}
+
+.reactSwitchLabelGrey {
+  background-color: grey;
+}
+.reactSwitchLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.reactSwitchLabel .reactSwitchButton {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 40px;
+  height: 40px;
+  border-radius: 45px;
+  transition: 0.5s;
+  background: #fff;
+  box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.reactSwitchCheckbox:checked + .reactSwitchLabel .reactSwitchButton {
+  left: calc(100%);
+  transform: translateX(-100%);
+}
+
+.reactSwitchLabel:active .reactSwitchButton {
+  width: 35px;
+}
+
+.micOnState {
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  width: 45px;
+  height: 45px;
+  background-image: url("../../public/asset/room/micOn.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.micOffState {
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  width: 45px;
+  height: 45px;
+  background-image: url("../../public/asset/room/micOff.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

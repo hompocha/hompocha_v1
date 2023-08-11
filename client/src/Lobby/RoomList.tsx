@@ -1,92 +1,146 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./RoomList.module.css";
 import axios from "axios";
-import RoomInfo from "./RoomInfo";
-import RoomCreate from "./RoomCreate";
+import { useNavigate } from "react-router-dom";
+import CamTest from "../cam/CamTest";
+
 interface RoomData {
   idx: string;
   room_name: string;
+  room_max: number;
+  room_status: string;
+  peopleNum: number;
 }
 
-const RoomList = () => {
+interface NickNameProps {
+  nickName: string;
+}
+const RoomList: React.FC<NickNameProps> = ({ nickName }) => {
   const [title, setTitle] = useState<string[]>([""]);
-  const [selectedTitle, setSelectedTitle] = useState("");
   const [idx, setIdx] = useState("");
-  const [flag, setFlag] = useState<number>(0);
-  const [currentRoomIdx, setCurrentRoomIdx] = useState(0);
-  const [currentIdx, setCurrentIdx] = useState("");
+  const [peopleNum, setPeopleNum] = useState<number[]>([]);
+  const [room_max, setRoom_Max] = useState<number[]>([]); // 배열로 변경
+  const [room_status, setRoom_Status] = useState<string[]>([""]);
+  const navigate = useNavigate();
+  const page1Ref = useRef<HTMLDivElement>(null);
+
+  const handleClick = async (
+    idx: string,
+    room_name: string,
+    peopleNum: number,
+    room_max: number,
+    room_status: string
+  ) => {
+    if (peopleNum === room_max) {
+      alert("최대 인원 초과!!");
+      return;
+    }
+    if (room_status === "게임 중") {
+      alert("게임중입니다!!");
+      return;
+    }
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/lobby/roomInfo`,
+        { room_name, idx },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 포함하여 서버에 전송
+          },
+        }
+      );
+      console.log(response.data);
+      navigate("/room", {
+        state: { roomName: room_name, idx: idx, nickName: nickName },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     handleRoomList();
+    const interval = setInterval(handleRoomList, 1500); // 1분(60,000ms) 간격으로 호출
+    return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    if (title.length > 0 && idx.length > 0) {
-      setSelectedTitle(title[0]);
-      setCurrentIdx(idx[0]);
-    }
-  }, [title, idx]);
 
   const handleRoomList = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/lobby/roomList`
       );
-      console.log(response.data);
-
+      console.log(idx);
       setTitle(response.data.map((room: RoomData) => room.room_name));
       setIdx(response.data.map((idx: RoomData) => idx.idx));
+      setPeopleNum(
+        response.data.map((peopleNum: RoomData) => peopleNum.peopleNum)
+      );
+      setRoom_Max(response.data.map((room_max: RoomData) => room_max.room_max));
+      setRoom_Status(
+        response.data.map((room_status: RoomData) => room_status.room_status)
+      );
     } catch (error) {
       console.error("방 정보 출력 오류:", error);
     }
   };
 
-  const RoomListOrCreate = () => {
-    setFlag((prevFlag) => (prevFlag === 0 ? 1 : 0));
-  };
-
-  const handleNextClick = () => {
-    if (currentRoomIdx < title.length - 1) {
-      setSelectedTitle(title[currentRoomIdx + 1]);
-      setCurrentRoomIdx((prevIdx) => prevIdx + 1);
-      setCurrentIdx(idx[currentRoomIdx + 1]);
-    }
-  };
-  const handlePrevClick = () => {
-    if (currentRoomIdx > 0) {
-      setSelectedTitle(title[currentRoomIdx - 1]);
-      setCurrentRoomIdx((prevIdx) => prevIdx - 1);
-      setCurrentIdx(idx[currentRoomIdx - 1]);
-    }
-  };
   return (
-    <div className={styles.roomListWrap}>
-      <div className={styles.leftRoomInfo}>
-        <button onClick={handlePrevClick}>이전</button>
-        <div className={styles.container}>
-          <span key={currentRoomIdx}>방 제목 : {title[currentRoomIdx]}</span>
-        </div>
-        <button onClick={handleNextClick}>다음</button>
-      </div>
-      {flag === 0 && (
-        <div className={styles.roomDetail}>
-          <RoomInfo selectedTitle={selectedTitle} currentIdx={currentIdx} />
-          <button type="submit" onClick={RoomListOrCreate}>
-            방 생성
-          </button>
-        </div>
-      )}
-      <div>
-        {flag !== 0 && (
-          <div className={styles.roomCreate}>
-            <RoomCreate />
-            <button type="submit" onClick={RoomListOrCreate}>
-              닫기
-            </button>
+    <>
+      <div ref={page1Ref} className={styles.roomListContainer}>
+        <div className={styles.roomListWrap}>
+          <div className={styles.roomInfo}>
+            <div className={styles.roomTitle}>방 제목</div>
+            <div className={styles.roomNumOfUsers}>현재 참여 인원</div>
+            <div className={styles.roomState}>방 상태</div>
+            <div className={styles.btnSpace}></div>
           </div>
-        )}
+          {title.map((t, index) => (
+            <div className={styles.roomList} key={index}>
+              <div className={styles.roomName}>{t}</div>
+              <div className={styles.roomPeople}>
+                👤 {peopleNum[index]} / {room_max[index]}
+              </div>
+              <div className={styles.roomStatus}>{room_status[index]}</div>
+              {/* 게임 중, 풀방일 때 */}
+              {room_status[index] === "게임 중" &&
+              peopleNum[index] === room_max[index] ? (
+                <button className={styles.gamePlayingButton}>게임 중</button>
+              ) : null}
+              {/* 게임 중, 풀방아닐 때 */}
+              {room_status[index] === "게임 중" &&
+              peopleNum[index] < room_max[index] ? (
+                <button className={styles.gamePlayingButton}>게임 중</button>
+              ) : null}
+              {/* 대화 중, 풀방일 때 */}
+              {room_status[index] === "대화 중" &&
+              peopleNum[index] === room_max[index] ? (
+                <button className={styles.fullOfUsers}>가득 참</button>
+              ) : null}
+              {/* 대화 중, 풀방아닐 때 */}
+              {room_status[index] === "대화 중" &&
+              peopleNum[index] < room_max[index] ? (
+                <button
+                  type="submit"
+                  className={styles.roomInButton}
+                  onClick={() =>
+                    handleClick(
+                      idx[index],
+                      t,
+                      peopleNum[index],
+                      room_max[index],
+                      room_status[index]
+                    )
+                  }
+                >
+                  방 입장
+                </button>
+              ) : null}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

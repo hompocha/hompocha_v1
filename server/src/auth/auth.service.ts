@@ -4,7 +4,8 @@ import * as jwt from 'jsonwebtoken';
 import authConfig from '../config/auth.config';
 interface User {
   id: string;
-  name: string;
+  nickName: string;
+  idx: string;
 }
 
 @Injectable()
@@ -17,8 +18,8 @@ export class AuthService {
     const payload = { ...user };
     return jwt.sign(payload, this.config.jwtSecret, {
       expiresIn: '1d',
-      audience: 'example.com',
-      issuer: 'example.com',
+      audience: 'hompocha.site',
+      issuer: 'hompocha.site',
     });
   }
   verify(jwtString: string) {
@@ -29,10 +30,11 @@ export class AuthService {
       ) &
         User;
 
-      const { id, name } = payload;
+      const { id, nickName, idx } = payload;
       return {
         userId: id,
-        name,
+        nickname: nickName,
+        idx: idx,
       };
     } catch (e) {
       throw new UnauthorizedException();

@@ -1,30 +1,75 @@
 @import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap");
 
-.container {
+body {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.loginWholeWrap {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: url("../../public/asset/pocha.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+}
+
+/* white: #fefefe, */
+/* brown: #362100, */
+.container {
+  padding: 30px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(0, 0, 0, 0.6); */
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 35px 0 rgba(255, 255, 255, 0.7);
+  font-family: "Gowun Dodum", sans-serif;
 }
 
 .serviceTitleDiv {
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 50px;
+  z-index: 1;
+}
+
+.serviceTitle {
+  margin: 0;
+  position: relative;
+  font-size: 100px;
   font-family: "Gowun Dodum", sans-serif;
+  color: white;
+  text-shadow: 1px 1px 1px rgb(255, 255, 255);
 }
 
 .loginWrap {
   width: 600px;
-  height: 300px;
+  height: 400px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .signup {
   padding: 20px;
-  width: 250px;
+  width: 400px;
   height: 250px;
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -33,9 +78,9 @@
 
 .login {
   padding: 20px;
-  width: 250px;
+  width: 400px;
   height: 250px;
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -46,9 +91,42 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  color: white;
+  width: 380px;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 button {
   margin-top: 10px;
+}
+
+.loginPageButton {
+  background: rgba(255, 255, 255, 0.65);
+  border: none;
+  border-radius: 3px;
+  color: #362100;
+  width: 150px;
+  height: 50px;
+  margin: 10px auto;
+  /* margin: 15px auto 0 auto; */
+  padding: 8px 20px;
+  font-family: "Gowun Dodum", sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.loginInput {
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: block;
+  font-size: 1rem;
+  letter-spacing: 0.15rem;
+  padding: 10px;
+  width: 200px;
+  color: white;
 }
 
 .bottomColor {
@@ -63,10 +141,19 @@ button {
   border-top-right-radius: 10px;
 }
 
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.buttonContainer > button {
+  cursor: pointer;
+}
+
 .menu {
   position: fixed;
   text-align: center;
-  top: 9%;
+  top: 11%;
   width: 45px;
   height: 170px;
   font-size: xx-large;
@@ -79,14 +166,14 @@ button {
   z-index: auto;
 }
 .il {
-  left: 17vw;
+  left: 19vw;
   rotate: -3deg;
 }
 .ee {
   left: 9vw;
 }
 .sam {
-  left: 13vw;
+  left: 14vw;
 }
 
 .wave {

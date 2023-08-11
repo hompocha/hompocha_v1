@@ -5,11 +5,14 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from './users/users.entity';
-import { RoomsModule } from './rooms/rooms.module';
-import { RoomsEntity } from './rooms/rooms.entity';
+import { RoomlistModule } from './roomlist/roomlist.module';
+import { RoomlistEntity } from './roomlist/roomlist.entity';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import authConfig from './config/auth.config';
+import { RoomEntity } from './room/room.entity';
+
+import { RoomModule } from './room/room.module';
 
 @Module({
   controllers: [AppController],
@@ -22,7 +25,8 @@ import authConfig from './config/auth.config';
     }),
     OpenviduModule,
     UsersModule,
-    RoomsModule,
+    RoomlistModule,
+    RoomModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,10 +34,10 @@ import authConfig from './config/auth.config';
         type: 'mysql',
         host: configService.get('DATABASE_HOST'),
         port: 3306,
-        username: 'admin',
-        password: 'hompocha229',
+        username: configService.get('DATABASE_USERNAME'),
+        password: configService.get('DATABASE_PASSWORD'),
         database: 'test_db',
-        entities: [UsersEntity, RoomsEntity],
+        entities: [UsersEntity, RoomlistEntity, RoomEntity],
         synchronize: true,
       }),
     }),

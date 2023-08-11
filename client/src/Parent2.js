@@ -3,19 +3,21 @@ import ChatComponent from "./Chat/ChatComponent";
 import EffectComponent from "./Chat/EffectComponent";
 import CamMain from "./cam/CamMain";
 import OpenViduSession from "./cam/OpenViduSession";
-import UserModel from "./models/user-model";
 import styles from "./Parent2.module.css";
+import FunctionContext from "./FunctionContext";
 
 const Parent2 = ({ roomName, idx }) => {
   const [sessionConnected, setSessionConnected] = useState(false);
   const [userStream, setUserStream] = useState(null);
   const [mode, setMode] = useState(undefined);
-
+  const [chatToggle,setChatToggle] = useState(false);
   const onModeChange = (newMode) => {
     setMode(newMode);
     console.log("parent mode = ", newMode, mode);
   };
-
+  const fnFromChat = () => {
+    console.log("chatcomponent 함수 다른 Component부름!!");
+  };
   const handleSessionConnected = (localUser) => {
     setSessionConnected(true);
     setUserStream(localUser);
@@ -33,23 +35,28 @@ const Parent2 = ({ roomName, idx }) => {
       {sessionConnected && userStream && (
         <>
           <div className={styles.camChatWrap}>
-            <div className={styles.zindex1}>
-              <CamMain
-                user={userStream}
-                sessionConnected={sessionConnected}
-                setUserStream={setUserStream}
-                onModeChange={onModeChange}
-                roomName={roomName}
-              />
-            </div>
-            <div className={styles.zindex}>
-              <ChatComponent
-                user={userStream}
-                sessionConnected={sessionConnected}
-                roomName={roomName}
-              />
+            <FunctionContext.Provider value={fnFromChat}>
+              <div className={styles.zindex1}>
+                <CamMain
+                  user={userStream}
+                  sessionConnected={sessionConnected}
+                  setUserStream={setUserStream}
+                  onModeChange={onModeChange}
+                  roomName={roomName}
+                  idx={idx}
+                />
+              </div>
+              <div className={styles.zindex}>
+                <ChatComponent
+                  user={userStream}
+                  sessionConnected={sessionConnected}
+                  roomName={roomName}
+                  chatToggle={chatToggle}
+                  setChatToggle={setChatToggle}
+                />
 
-            </div>
+              </div>
+            </FunctionContext.Provider>
           </div>
           <div className={styles.effectWrap}>
             <EffectComponent

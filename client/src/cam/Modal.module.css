@@ -1,0 +1,61 @@
+.modalWrap {
+  z-index: 16;
+  position: fixed;
+  width: 52vw;
+  height: 85vh;
+  left: 24vw;
+  top: 7vh;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+}
+
+.modalInterior {
+  z-index: 17;
+  position: fixed;
+  width: 48vw;
+  height: 75vh;
+  left: 26vw;
+  top: 12.5vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+}
+
+.modalClose {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  top: 5%;
+  left: 95%;
+  border: none;
+  background-color: transparent;
+}
+
+.modalText {
+  z-index: 17;
+  position: fixed;
+  width: 43.5vw;
+  height: 65vh;
+  left: 25.5vw;
+  top: 15vh;
+  padding: 0 3vw;
+  color: white;
+  font-size: 34px;
+  line-height: 37px;
+}
+
+.text{
+  z-index: 17;
+  position: fixed;
+  width: 43.5vw;
+  height: 65vh;
+  left: 25.5vw;
+  top: 80vh;
+  padding: 0 3vw;
+  color: white;
+  font-size: 20px;
+  line-height: 37px;
+}
+
+.textHeader {
+  font-size: 40px;
+}

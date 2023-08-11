@@ -3,3 +3,88 @@
   display: flex;
   justify-content: space-evenly;
 }
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  height: 50px;
+  padding: 0 20px;
+}
+.userName {
+  position: absolute;
+  right: 8vw;
+  color: white;
+}
+.option {
+  cursor: pointer;
+  width: 120px;
+  height: 50px;
+  position: fixed;
+  top: 11.5vh;
+  left: 75vw;
+  border: 3px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  /* position: fixed; */
+
+  font-size: 35px;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  font-family: "Gowun Dodum", sans-serif;
+  z-index: 1;
+}
+.roomCreateWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  position: absolute;
+  top: 30vh;
+  right: 1.5vw;
+  background-color: bisque;
+  border-radius: 1vw;
+}
+
+/* 포차 테마일 때 배경 */
+.themePocha {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-image: url("../../public/asset/room/theme_pocha/roomPochaBackground.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all 1s linear 0.25s;
+}
+
+.logoutBtn {
+  position: fixed;
+  top: 25px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-image: url("../../public/asset/lobby/logout.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.userName {
+  position: fixed;
+  top: 8px;
+  right: 140px;
+  color: white;
+  font-size: 50px;
+  font-family: "Gowun Dodum", sans-serif;
+}

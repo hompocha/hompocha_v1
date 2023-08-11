@@ -38,10 +38,10 @@ export function CatCanvas() {
         const direction = Math.random() < 0.5 ? -1 : 1;
 
         if (direction === -1) {
-            x = 1500;
+            x = 3300;
             y = 200;
         } else {
-            x = -1000;
+            x = -200;
             y = 200;
         }
 
