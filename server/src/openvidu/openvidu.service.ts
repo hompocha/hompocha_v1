@@ -1,22 +1,21 @@
 import { OpenVidu } from 'openvidu-node-client';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 //환경변수;
-const OPENVIDU_URL = 'https://hompocha.site:8443';
-// const OPENVIDU_URL = 'http://localhost:4443';
-const OPENVIDU_SECRET = '229';
 
 @Injectable()
 export class OpenviduService {
   private openvidu: OpenVidu;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
+    const OPENVIDU_SECRET = this.configService.get('OPENVIDU_SECRET');
+    const OPENVIDU_URL = this.configService.get('OPENVIDU_URL');
     this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
   }
 
   async createSession(body: any) {
     try {
-      console.log('create session', OPENVIDU_URL);
       const session = await this.openvidu.createSession(body);
       return session.sessionId;
     } catch (err) {

@@ -11,8 +11,7 @@ import { RoomlistEntity } from './roomlist/roomlist.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import authConfig from './config/auth.config';
 import { RoomEntity } from './room/room.entity';
-import { RoomService } from './room/room.service';
-import { RoomController } from './room/room.controller';
+
 import { RoomModule } from './room/room.module';
 
 @Module({
@@ -35,8 +34,8 @@ import { RoomModule } from './room/room.module';
         type: 'mysql',
         host: configService.get('DATABASE_HOST'),
         port: 3306,
-        username: 'admin',
-        password: 'hompocha229',
+        username: configService.get('DATABASE_USERNAME'),
+        password: configService.get('DATABASE_PASSWORD'),
         database: 'test_db',
         entities: [UsersEntity, RoomlistEntity, RoomEntity],
         synchronize: true,
