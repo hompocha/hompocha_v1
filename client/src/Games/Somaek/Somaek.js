@@ -65,6 +65,8 @@ const Somaek = (props) => {
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
   const objectRef = useRef(JSON.parse(JSON.stringify(objectsDefault)));
+  const rankCanvasRef = useRef(null);
+  const rankCanvasCtx = useRef(null);
   const signalInterval = useRef(null);
   const hostId = props.selectId;
   const timerPrint = useRef(25 * 1000);
@@ -588,6 +590,7 @@ const Somaek = (props) => {
     return drinkPrintList;
   }
 
+
   /*======================================================= */
   /*===================시그널 관련=================== */
   /*======================================================= */
@@ -635,6 +638,8 @@ const Somaek = (props) => {
         // scores.current[props.conToNick[connectionId]] = getScore;
         scores.current[connectionId] = getScore;
         console.log(scores.current);
+
+
       });
 
     props.user
@@ -802,6 +807,7 @@ const Somaek = (props) => {
               width={"1920px"}
               height={"1080px"}
             />
+            <canvas ref={rankCanvasRef} />
             {/* 시연 */}
             <div className={`${!loaded && styles.hidden}`}>
               <TimerBar timeMax={25 * 1000} gameEnd={gameEnd} start={start} />

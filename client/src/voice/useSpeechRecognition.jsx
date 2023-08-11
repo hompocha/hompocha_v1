@@ -193,18 +193,6 @@ const UseSpeechRecognition = (props) => {
     }
   }, [stopSign]);
 
-  useEffect(()=>{
-    if (props.mode === "speechGame") {
-      if (!props.checkvoice && isListening) {
-        stop();
-        setIsListening(false);
-      } else if (props.checkvoice && !isListening) {
-        listen({lang});
-        setIsListening(true);
-      }
-    }
-  },[props.checkvoice])
-
 
   /* */
   useEffect(() => {
@@ -259,7 +247,7 @@ const UseSpeechRecognition = (props) => {
       setTimeout(() => {
         setListenBlocked(false);
         listen({ lang });
-      }, 1000);
+      }, 1000); 
 
       let voiceRecog = setInterval(() => {
         setTimeout(stop, 29 * 1000);
