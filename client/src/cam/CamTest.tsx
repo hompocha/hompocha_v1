@@ -654,6 +654,7 @@ const Screenshot = async () => {
     setCountdown(counter);
     if (counter === 0) {
       clearInterval(timer);
+      setShowCountdownText(false);
       setShowShutterEffect(true);
       effectSound(cameraBgm,false,0.1);
       // 셔터 효과 이후 이미지 캡처 진행
@@ -662,7 +663,6 @@ const Screenshot = async () => {
         setShowShutterEffect(false);
         setTimeout(() => {
           setCaptured(true);
-          setShowCountdownText(false);
         }, 3000);
       }, 500);
     } else {
