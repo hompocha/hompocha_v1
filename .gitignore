@@ -1,5 +1,11 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+#env
+/client/.env.development
+/client/.env.production
+
+/server/src/config/env/.development.env
+/server/src/config/env/.production.env
 # dependencies
 /client/node_modules
 
