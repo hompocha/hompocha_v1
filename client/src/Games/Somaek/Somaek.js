@@ -804,7 +804,7 @@ const Somaek = (props) => {
             />
             {/* 시연 */}
             <div className={`${!loaded && styles.hidden}`}>
-              <TimerBar timeMax={100000 * 1000} gameEnd={gameEnd} start={start} />
+              <TimerBar timeMax={25 * 1000} gameEnd={gameEnd} start={start} />
             </div>
             {/* subscribers Cam */}
             {subscribers.map((subscriber, index) => (
