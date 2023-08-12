@@ -61,7 +61,8 @@
 ![KakaoTalk_Photo_2023-08-11-22-18-35 002](https://github.com/hompocha/hompocha_v1/assets/58359639/96997ab0-a12f-4b35-9893-54d1c1a6084d)
 
 ### 아키텍처
-![image](https://github.com/hompocha/hompocha_v1/assets/58359639/6a669943-0079-49f8-b730-45b679813a18)
+![image](https://github.com/hompocha/hompocha_v1/assets/58359639/632e4171-c17f-4976-b21c-78ab83fe97aa)
+
 
 
 ### 기술적챌린지
